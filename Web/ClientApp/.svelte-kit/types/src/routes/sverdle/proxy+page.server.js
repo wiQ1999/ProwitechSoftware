@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { invalid } from '@sveltejs/kit';
 import { words, allowed } from './words.server';
 
-/** @type {import('./$types').PageServerLoad} */
+/** @param {Parameters<import('./$types').PageServerLoad>[0]} event */
 export const load = ({ cookies }) => {
 	const game = new Game(cookies.get('sverdle'));
 
@@ -24,13 +25,13 @@ export const load = ({ cookies }) => {
 	};
 };
 
-/** @type {import('./$types').Actions} */
+/** */
 export const actions = {
 	/**
 	 * Modify game state in reaction to a keypress. If client-side JavaScript
 	 * is available, this will happen in the browser instead of here
 	 */
-	update: async ({ request, cookies }) => {
+	update:/** @param {import('./$types').RequestEvent} event */  async ({ request, cookies }) => {
 		const game = new Game(cookies.get('sverdle'));
 
 		const data = await request.formData();
@@ -51,7 +52,7 @@ export const actions = {
 	 * Modify game state in reaction to a guessed word. This logic always runs on
 	 * the server, so that people can't cheat by peeking at the JavaScript
 	 */
-	enter: async ({ request, cookies }) => {
+	enter:/** @param {import('./$types').RequestEvent} event */  async ({ request, cookies }) => {
 		const game = new Game(cookies.get('sverdle'));
 
 		const data = await request.formData();
@@ -64,7 +65,7 @@ export const actions = {
 		cookies.set('sverdle', game.toString());
 	},
 
-	restart: async ({ cookies }) => {
+	restart:/** @param {import('./$types').RequestEvent} event */  async ({ cookies }) => {
 		cookies.delete('sverdle');
 	}
 };

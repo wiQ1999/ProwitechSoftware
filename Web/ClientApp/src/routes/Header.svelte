@@ -19,11 +19,11 @@
 			<li class:active={$page.url.pathname === '/'}>
 				<a href="/">Home</a>
 			</li>
-			<li class:active={$page.url.pathname === '/about'}>
-				<a href="/about">About</a>
+			<li class:active={$page.url.pathname === '/Users'}>
+				<a href="/Users">Users</a>
 			</li>
 			<li class:active={$page.url.pathname.startsWith('/sverdle')}>
-				<a href="/sverdle">Sverdle</a>
+				<a href="/sverdle">Gra</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
