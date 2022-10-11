@@ -1,3 +1,8 @@
+<script>
+	
+</script>
+
+<main>
 <div class="text-column">
 	<h1>How to play Sverdle</h1>
 
@@ -37,6 +42,7 @@
 		even play with JavaScript disabled!
 	</p>
 </div>
+</main>
 
 <style>
 	span {
