@@ -24,11 +24,7 @@
 			</li>
 			<li class:active={$page.url.pathname === "/Users"}>
 				<a href="/Users">Użytkownicy</a>
-			</li>
-			<li class:active={$page.url.pathname.startsWith("/sverdle")}>
-				<a href="/sverdle">Gra</a>
-			</li>
-			
+			</li>		
 			<li class:active={$page.url.pathname === "/przeglady"}>
 				<a href="/przeglady">Przeglądy</a>
 			</li>

@@ -16,5 +16,8 @@
 	],
 	"rejestracja": [
 		"src/routes/rejestracja/+page.js"
+	],
+	"przeglady": [
+		"src/routes/przeglady/+page.js"
 	]
 }

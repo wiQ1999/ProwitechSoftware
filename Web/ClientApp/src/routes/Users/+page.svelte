@@ -48,7 +48,12 @@
 			fullName: "Testowa teściowa",
 			id: 8,
 		},
-		{ login: "test3", password: "test3", fullName: "Testowy zięć", id: 9 },
+		{ 
+			login: "test3", 
+			password: "test3", 
+			fullName: "Testowy zięć", 
+			id: 9 
+		},
 	];
 
 	const deleteUser = (/** @type {number} */ id) => {

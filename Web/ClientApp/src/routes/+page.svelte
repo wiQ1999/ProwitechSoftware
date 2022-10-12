@@ -2,6 +2,8 @@
 	import welcome from "$lib/images/prowitechlogo.jpg";
 	import welcome_fallback from "$lib/images/prowitechlogo.jpg";
 
+	let login = '';
+	let pwd = '';
 </script>
 
 <main>
@@ -22,14 +24,16 @@
 						placeholder="Podaj nazwę użytkownika"
 						id="username"
 						required
-					>
+						bind:value={login}
+					/>
 					<label for="password">Hasło:</label>
 					<input
 						type="password"
 						placeholder="Podaj hasło"
 						id="password"
 						required
-					>
+						bind:value={pwd}
+					/>
 					<div id="lower">
 						<input type="submit" value="Loguj!" />
 					</div>
