@@ -6,18 +6,16 @@ export { matchers } from './client-matchers.js';
 	() => import('./nodes/3'),
 	() => import('./nodes/4'),
 	() => import('./nodes/5'),
-	() => import('./nodes/6'),
-	() => import('./nodes/7')];
+	() => import('./nodes/6')];
 
 			export const server_loads = [];
 
 			export const dictionary = {
 	"": [2],
-	"about": [3],
-	"rejestracja": [4],
-	"sverdle": [~5],
-	"Users": [7],
-	"sverdle/how-to-play": [6]
+	"rejestracja": [3],
+	"sverdle": [~4],
+	"Users": [6],
+	"sverdle/how-to-play": [5]
 };
 
 			export const hooks = {

@@ -1,7 +1,7 @@
 <script>
-	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+	import { page } from "$app/stores";
+	import logo from "$lib/images/svelte-logo.svg";
+	import github from "$lib/images/github.svg";
 </script>
 
 <header>
@@ -16,14 +16,21 @@
 			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 		</svg>
 		<ul>
-			<li class:active={$page.url.pathname === '/'}>
-				<a href="/">Home</a>
+			<li class:active={$page.url.pathname === "/"}>
+				<a href="/">Logowanie</a>
 			</li>
-			<li class:active={$page.url.pathname === '/Users'}>
-				<a href="/Users">Users</a>
+			<li class:active={$page.url.pathname === "/rejestracja"}>
+				<a href="/rejestracja">Rejestracja</a>
 			</li>
-			<li class:active={$page.url.pathname.startsWith('/sverdle')}>
+			<li class:active={$page.url.pathname === "/Users"}>
+				<a href="/Users">Użytkownicy</a>
+			</li>
+			<li class:active={$page.url.pathname.startsWith("/sverdle")}>
 				<a href="/sverdle">Gra</a>
+			</li>
+			
+			<li class:active={$page.url.pathname === "/przeglady"}>
+				<a href="/przeglady">Przeglądy</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
@@ -99,7 +106,7 @@
 
 	li.active::before {
 		--size: 6px;
-		content: '';
+		content: "";
 		width: 0;
 		height: 0;
 		position: absolute;

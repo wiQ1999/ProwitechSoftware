@@ -1,12 +1,8 @@
 <script>
 	import welcome from "$lib/images/prowitechlogo.jpg";
 	import welcome_fallback from "$lib/images/prowitechlogo.jpg";
-</script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+</script>
 
 <main>
 	<section>
@@ -19,23 +15,21 @@
 			</span>
 
 			<div id="panel">
-				<form name="logowanie">
+				<form>
 					<label for="username">Nazwa użytkownika:</label>
 					<input
 						type="text"
-						id="username"
-						name="username"
 						placeholder="Podaj nazwę użytkownika"
+						id="username"
 						required
-					/>
+					>
 					<label for="password">Hasło:</label>
 					<input
 						type="password"
-						id="password"
-						name="password"
 						placeholder="Podaj hasło"
+						id="password"
 						required
-					/>
+					>
 					<div id="lower">
 						<input type="submit" value="Loguj!" />
 					</div>
@@ -72,11 +66,13 @@
 		width: 50%;
 		height: 100%;
 		top: 0;
+		margin: 0 auto;
+		padding-left: 15%;
 		display: block;
 	}
 
 	#panel {
-		width: 60%;
+		width: 75%;
 		margin: 0 auto;
 		padding: 15px 0 0;
 		background: #fff;
@@ -93,8 +89,10 @@
 
 	label {
 		display: block;
-		width: 350px;
+		width: 50%;
 		padding: 10px 10px;
+		margin: 0 20%;
+		text-align: left;
 		color: #696969;
 		font-size: 16px;
 		text-shadow: 0 0 1px silver;
@@ -103,8 +101,8 @@
 	#username,
 	#password {
 		display: block;
-		width: 350px;
-		margin: 0 auto;
+		width: 50%;
+		margin: 0 20%;
 		padding: 10px 5px;
 		border: 1px solid silver;
 		outline: 5px solid #ebebeb;
@@ -131,6 +129,6 @@
 		text-shadow: 0 0 1px black;
 		background: #98c9dc;
 		position: relative;
-		left: 180px;
+		left: 40%;
 	}
 </style>
