@@ -1,7 +1,4 @@
 <script>
-	import welcome from "$lib/images/prowitechlogo.jpg";
-	import welcome_fallback from "$lib/images/prowitechlogo.jpg";
-
 	let login = '';
 	let pwd = '';
 </script>
@@ -9,12 +6,7 @@
 <main>
 	<section>
 		<h1>
-			<span class="welcome">
-				<picture>
-					<source srcset={welcome} type="image/webp" />
-					<img src={welcome_fallback} alt="Welcome" />
-				</picture>
-			</span>
+			<p> ProwitechApp </p>
 
 			<div id="panel">
 				<form>
@@ -54,25 +46,6 @@
 
 	h1 {
 		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 50%;
-		height: 0;
-		margin: auto;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 50%;
-		height: 100%;
-		top: 0;
-		margin: 0 auto;
-		padding-left: 15%;
-		display: block;
 	}
 
 	#panel {
@@ -120,7 +93,7 @@
 
 	#lower {
 		background: #ecf2f5;
-		width: 96%;
+		width: 100%;
 		padding: 1% 2%;
 		margin-top: 20px;
 	}
