@@ -16,11 +16,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseExceptionHandler("/ErrorDev");
-}
-else if (app.Environment.IsProduction())
-{
-    app.UseExceptionHandler("/ErrorProd");
+    app.UseExceptionHandler("/Error");
 }
 app.UseHsts();
 

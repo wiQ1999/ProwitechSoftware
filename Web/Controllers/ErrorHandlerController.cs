@@ -1,5 +1,4 @@
-﻿using Infrastructure.Models.ExceptionResponses;
-using Infrastructure.Models.Exceptions;
+﻿using Application.Errors.Queries.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -10,25 +9,19 @@ namespace Web.Controllers;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorHandlerController : ApiControllerBase
 {
-    [Route("ErrorDev")]
-    public DetailExceptionResponse ReturnDevelopmentError() =>
-        new(HandleExcpoetion());
-
-    private Exception HandleExcpoetion()
+    [Route("Error")]
+    public async Task<IActionResult> ReturnDevelopmentError()
     {
-        Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+        Exception? exception = 
+            HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
         if (exception == null)
-            return null!;
+            return Problem();
 
-        if (exception is NotFoundInDbExcption)
-            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        // ...
-        else HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-        return exception;
+        var response = await Mediator.Send(
+            new GetHandledExceptionResponseQuerie(exception));
+        return Problem(
+            title: response.Title, 
+            statusCode: (int)response.StatusCode, 
+            detail: response.Detail);
     }
-
-    [Route("ErrorProd")]
-    public BaseExceptionResponse ReturnProductionError() =>
-        new(HandleExcpoetion());
 }
