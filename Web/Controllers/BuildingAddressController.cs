@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [ApiController]
     [Route("[controller]")] // mapuje nazwe z nazwy kontrolera
     public class BuildingAddressController : ApiControllerBase
     {
