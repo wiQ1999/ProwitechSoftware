@@ -10,7 +10,7 @@ public class DataSeeder
     {
         ModelBuilder = modelBuilder;
     }
-
+    
     public void Seed()
     {
         Role adminRole = CreateRole("Administrator");
