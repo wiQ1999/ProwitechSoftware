@@ -1,7 +1,5 @@
-﻿using Infrastructure.Database.Configurations;
-using Infrastructure.Models.Domain;
+﻿using Infrastructure.Models.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
 
 namespace Infrastructure.Database;
 public class ProwitechDbContext : DbContext
@@ -25,7 +23,7 @@ public class ProwitechDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        new BuildingConfiguration().Configure(modelBuilder.Entity<Building>());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProwitechDbContext).Assembly);
         new DataSeeder(modelBuilder).Seed();
     }
 }
