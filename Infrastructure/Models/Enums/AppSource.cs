@@ -3,5 +3,6 @@ public enum AppSource
 {
     Roles,
     Users,
-    Permissions
+    Permissions,
+    Building
 }
