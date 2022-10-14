@@ -32,7 +32,7 @@ public class UsersRepository : IUsersRepository
             throw new Exception($"Istnieje już użytkownik o loginie {user.Login}.");
         if (!string.IsNullOrEmpty(user.Email) && await _dbContext.Users.AnyAsync(u => u.Email == user.Email, cancellationToken))
             throw new Exception($"Istnieje już użytkownik o adresie email {user.Email}.");
-        _dbContext.Users.Add(user);
+        await _dbContext.Users.AddAsync(user, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return user.Id;
     }
