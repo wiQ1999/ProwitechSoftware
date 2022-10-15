@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database;
@@ -27,17 +28,17 @@ public class DataSeeder
         User apprentice1 = CreateUser("a1", string.Empty, "Bartosz", "Smyk", "b.smyk@gmail.com", "213-546-879", apprenticeRole);
         ModelBuilder.Entity<User>().HasData(admin, boss, worker1, worker2, worker3, apprentice1);
 
-        Permission adminR_Roles = CreatePermission("Role", null, adminRole, true, true, true, true);
-        Permission adminR_Users = CreatePermission("Użytkownicy", null, adminRole, true, true, true, true);
-        Permission bossR_Roles = CreatePermission("Role", null, bossRole, true, true, true, true);
-        Permission bossR_Users = CreatePermission("Użytkownicy", null, bossRole, true, true, true, true);
-        Permission workerR_Roles = CreatePermission("Role", null, workerRole, false, false, false, false);
-        Permission workerR_Users = CreatePermission("Użytkownicy", null, workerRole, false, false, false, false);
-        Permission apprenticeR_Roles = CreatePermission("Role", null, apprenticeRole, false, false, false, false);
-        Permission apprenticeR_Users = CreatePermission("Użytkownicy", null, apprenticeRole, false, false, false, false);
-        Permission worker2Roles = CreatePermission("Role", worker2, null, null, true, null, null);
-        Permission worker2Users = CreatePermission("Użytkownicy", worker2, null, null, true, null, null);
-        Permission worker3Users = CreatePermission("Użytkownicy", worker3, null, null, true, true, null);
+        Permission adminR_Roles = CreatePermission(null, adminRole, AppSource.Roles, true, true, true, true);
+        Permission adminR_Users = CreatePermission(null, adminRole, AppSource.Users, true, true, true, true);
+        Permission bossR_Roles = CreatePermission(null, bossRole, AppSource.Roles, true, true, true, true);
+        Permission bossR_Users = CreatePermission(null, bossRole, AppSource.Users, true, true, true, true);
+        Permission workerR_Roles = CreatePermission(null, workerRole, AppSource.Roles, false, false, false, false);
+        Permission workerR_Users = CreatePermission(null, workerRole, AppSource.Users, false, false, false, false);
+        Permission apprenticeR_Roles = CreatePermission(null, apprenticeRole, AppSource.Roles, false, false, false, false);
+        Permission apprenticeR_Users = CreatePermission(null, apprenticeRole, AppSource.Users, false, false, false, false);
+        Permission worker2Roles = CreatePermission(worker2, null, AppSource.Roles, null, true, null, null);
+        Permission worker2Users = CreatePermission(worker2, null, AppSource.Users, null, true, null, null);
+        Permission worker3Users = CreatePermission(worker3, null, AppSource.Users, null, true, true, null);
         ModelBuilder.Entity<Permission>().HasData(
             adminR_Roles, adminR_Users, bossR_Roles, bossR_Users,
             workerR_Roles, workerR_Users, apprenticeR_Roles, apprenticeR_Users,
@@ -61,10 +62,10 @@ public class DataSeeder
             RoleId = role.Id
         };
 
-    private Permission CreatePermission(string name, User? user, Role? role,
+    private Permission CreatePermission(User? user, Role? role, AppSource source,
         bool? c, bool? r, bool? u, bool? d) => new() { 
             Id = Guid.NewGuid(),
-            Source = name,
+            Source = source,
             UserId = user?.Id,
             RoleId = role?.Id,
             Create = c,
