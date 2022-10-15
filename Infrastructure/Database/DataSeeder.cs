@@ -64,7 +64,7 @@ public class DataSeeder
     private Permission CreatePermission(string name, User? user, Role? role,
         bool? c, bool? r, bool? u, bool? d) => new() { 
             Id = Guid.NewGuid(),
-            Name = name,
+            Source = name,
             UserId = user?.Id,
             RoleId = role?.Id,
             Create = c,

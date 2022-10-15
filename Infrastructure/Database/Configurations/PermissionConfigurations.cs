@@ -7,7 +7,9 @@ public class PermissionConfigurations : IEntityTypeConfiguration<Permission>
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.Property(pp => pp.Name).HasMaxLength(100).IsRequired();
+        builder.Property(pp => pp.Source)
+            .HasConversion<string>()
+            .IsRequired();
 
         builder
             .HasOne(p => p.Role)
