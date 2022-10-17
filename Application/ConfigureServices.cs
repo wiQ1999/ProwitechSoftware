@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Interfaces;
+using Application.Permissions.Services;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -9,7 +11,7 @@ public static class ConfigureServices
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
-
+        services.AddScoped<IPermissionsSelector, PermissionsSelector>();
 
         return services;
     }

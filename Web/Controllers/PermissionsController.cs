@@ -1,6 +1,5 @@
 ﻿using Application.Permissions.Commands.Requests;
 using Application.Permissions.Queries.Requests;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -8,15 +7,21 @@ namespace Web.Controllers;
 [Route("[controller]")]
 public class PermissionsController : ApiControllerBase
 {
-    [HttpGet("{id:Guid}")]
-    public async Task<IActionResult> Get(Guid id) =>
-        Ok(await Mediator.Send(new GetUserPermissionsQuery(id)));
+    [HttpGet("Role/{roleId:Guid}")]
+    public async Task<IActionResult> GetRolePermissions(Guid roleId) =>
+        Ok(await Mediator.Send(new GetRolePermissionsQuery(roleId)));
 
-    [HttpPut("{id:Guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserPermissionsCommand command)
+    [HttpPost("Role/{roleId:Guid}")]
+    public async Task<IActionResult> AddOrUpdateRolePermissions(Guid roleId, [FromBody] UpdateUserPermissionsCommand command)
     {
-        if (id != command.Id)
+        if (roleId != command.Id)
             return BadRequest();
         return Ok(await Mediator.Send(command));
     }
+
+    [HttpGet("User/{userId:Guid}")]
+    public async Task<IActionResult> GetUserPermissions(Guid userId, Guid? userRoleId) =>
+        Ok(await Mediator.Send(new GetUserPermissionsQuery(userId, userRoleId)));
+
+    
 }

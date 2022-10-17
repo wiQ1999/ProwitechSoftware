@@ -27,7 +27,7 @@ public class UsersController : ApiControllerBase
         return Ok(await Mediator.Send(command));
     }
 
-    [HttpPut("security/{id:Guid}")]
+    [HttpPut("Security/{id:Guid}")]
     public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangeUserPasswordCommand command)
     {
         if (id != command.Id)

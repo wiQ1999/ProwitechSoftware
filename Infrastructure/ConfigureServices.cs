@@ -14,7 +14,7 @@ public static class ConfigureServices
             options.UseSqlServer(configuration.GetConnectionString("ProwitechConnection")));
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IPermissionsRepository, PermissionRepository>();
         services.AddScoped<IBuildingAddressRepository, BuildingAddressRepository>();
 
         return services;

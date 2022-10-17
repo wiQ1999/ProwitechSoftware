@@ -1,7 +1,10 @@
-﻿namespace Infrastructure.Models.Exceptions;
+﻿using Infrastructure.Common.Helpers;
+using Infrastructure.Models.Enums;
+
+namespace Infrastructure.Models.Exceptions;
 public class NotFoundInDbExcption : Exception
 {
-    public NotFoundInDbExcption(string source, string identifier)
-        : base($"Nie znaleziono obiektu '{source}' dla identyfikaotra '{identifier}'.")
+    public NotFoundInDbExcption(AppSource source, Guid id)
+        : base($"Nie znaleziono obiektu w zasobie {source.GetDescription()} dla identyfikaotra \"{id}\"")
     { }
 }
