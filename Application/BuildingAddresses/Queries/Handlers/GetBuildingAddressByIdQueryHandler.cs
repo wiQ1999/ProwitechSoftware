@@ -26,6 +26,8 @@ namespace Application.BuildingAddresses.Queries.Handlers
         public async Task<BuildingAddressDTO> Handle(GetBuildingAddressByIdQuery request, CancellationToken cancellationToken)
         {
             var address = await buildingAddressRepository.GetAsync(request.Id, cancellationToken);
+            if (address == null)
+                throw new Exception($"Nie znaleziono adresu budynku o identyfikatorze {request.Id}");
             var addressDTO = mapper.Map<BuildingAddressDTO>(address);
             return addressDTO;
         }
