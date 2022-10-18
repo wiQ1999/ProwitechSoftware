@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.BuildingAddresses.DTOs
 {
-    public record AddBuildingAddressDTO
+    public record UpdateBuildingAddressDTO
     {
         [Required]
         public string CityName { get; set; }
@@ -19,4 +19,3 @@ namespace Application.BuildingAddresses.DTOs
         public double? Latitude { get; set; }
     }
 }
-

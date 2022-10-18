@@ -1,4 +1,5 @@
-﻿using Infrastructure.GoogleAPI.Responses;
+﻿using Application.Responses;
+using Infrastructure.GoogleAPI.Responses;
 using Infrastructure.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Responses.BuildingAddressController
+namespace Infrastructure.Responses.BuildingAddressController
 {
-    public class AddBuildingAddressResponse
+    public class AddUpdateBuildingAddressReponse
     {
         public BuildingAddress AddedBuildingAddress { get; set; }
         public string GoogleApiStatus { get; set; }
@@ -16,7 +17,7 @@ namespace Application.Responses.BuildingAddressController
         public string HttpStatusResponse { get; set; }
         public int HttpStatusCode { get; set; }
         public string WebApiStatus { get; set; }
-        public AddBuildingAddressResponse(GoogleGeocodeAPIData googleGeocodeAPIData, BuildingAddress buildingAddress, ProwitechWebAPIStatus status = ProwitechWebAPIStatus.UNKNOWN)
+        public AddUpdateBuildingAddressReponse(GoogleGeocodeAPIData googleGeocodeAPIData, BuildingAddress buildingAddress, ProwitechWebAPIStatus status = ProwitechWebAPIStatus.UNKNOWN)
         {
             AddedBuildingAddress = buildingAddress.DeepCopy();
             AddedBuildingAddress.Longitude = googleGeocodeAPIData.Longitude;
@@ -30,7 +31,7 @@ namespace Application.Responses.BuildingAddressController
             HttpStatusCode = (int)googleGeocodeAPIData.HttpStatusCode;
             WebApiStatus = status.ToString();
         }
-        public AddBuildingAddressResponse()
+        public AddUpdateBuildingAddressReponse()
         {
 
         }

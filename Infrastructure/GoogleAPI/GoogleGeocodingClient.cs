@@ -7,9 +7,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Application.Responses.BuildingAddressController;
 using Application.Responses;
 using Microsoft.AspNetCore.WebUtilities;
+using Infrastructure.Responses.BuildingAddressController;
 
 namespace Infrastructure.GoogleAPI
 {
@@ -21,20 +21,20 @@ namespace Infrastructure.GoogleAPI
         private HttpClient client;
         private BuildingAddress postedAddress;
 
-        public async Task<AddBuildingAddressResponse> SetCoordinatesAndPostalCode(bool force, string outputFormat = "json")
+        public async Task<AddUpdateBuildingAddressReponse> SetCoordinatesAndPostalCode(bool force, string outputFormat = "json")
         {
             GoogleAPIResponse APIresult = await GeocodeGET(outputFormat);
 
             GoogleGeocodeAPIData googleGeocodeAPIData = GoogleGeocodeAPIData.GetData(APIresult);
 
-            AddBuildingAddressResponse addBuildingAddressResponse = new AddBuildingAddressResponse();
+            AddUpdateBuildingAddressReponse addBuildingAddressResponse = new AddUpdateBuildingAddressReponse();
 
-            addBuildingAddressResponse = new AddBuildingAddressResponse(googleGeocodeAPIData, postedAddress);
+            addBuildingAddressResponse = new AddUpdateBuildingAddressReponse(googleGeocodeAPIData, postedAddress);
 
             addBuildingAddressResponse.WebApiStatus = SetStatus(addBuildingAddressResponse, googleGeocodeAPIData, force).ToString();
             return addBuildingAddressResponse;
         }
-        private ProwitechWebAPIStatus SetStatus(AddBuildingAddressResponse addBuildingAddressResponse, GoogleGeocodeAPIData googleGeocodeAPIData, bool force)
+        private ProwitechWebAPIStatus SetStatus(AddUpdateBuildingAddressReponse addBuildingAddressResponse, GoogleGeocodeAPIData googleGeocodeAPIData, bool force)
         {
             // błąd po stronie googleAPI
             if (googleGeocodeAPIData.HttpStatusCode != HttpStatusCode.OK || googleGeocodeAPIData.GoogleApiStatus != "OK")
@@ -58,7 +58,7 @@ namespace Infrastructure.GoogleAPI
                     && addBuildingAddressResponse.AddedBuildingAddress.Longitude == postedAddress.Longitude
                     && addBuildingAddressResponse.AddedBuildingAddress.Latitude == postedAddress.Latitude)
                 {
-                    return ProwitechWebAPIStatus.ADDED_TO_DB;
+                    return ProwitechWebAPIStatus.ADDED_DESPITE_COORDINATE_ISSUE;
                 }
                 else return ProwitechWebAPIStatus.NOT_ADDED_ERROR;
             }

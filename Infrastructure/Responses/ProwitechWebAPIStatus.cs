@@ -12,6 +12,8 @@ namespace Application.Responses
         ADDED_TO_DB,
         NOT_ADDED_COORDINATES_TYPE_ISSUE,
         NOT_ADDED_ERROR,
-        UNKNOWN
+        UNKNOWN,
+        ADDED_DESPITE_COORDINATE_ISSUE,
+        ADDED_TO_DB_WITHOUT_COORDINATES
     };
 }

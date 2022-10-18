@@ -3,16 +3,18 @@ using Infrastructure.Responses.BuildingAddressController;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.BuildingAddresses.Commands.Requests
 {
-    public record CreateBuildingAddressCommand : IRequest<AddUpdateBuildingAddressReponse>
+    public record UpdateBuildingAddressCommand: IRequest<AddUpdateBuildingAddressReponse>
     {
-        public AddBuildingAddressDTO AddressDTO;
-        public bool ForceDespiteCoordIssue;
-        public bool AddAddressWithoutCoordinates;
+        public Guid Id;
+        public UpdateBuildingAddressDTO AddressDTO;
+        public bool UpdateWithNotAccurateCoords;
+        public bool UpdateWithoutCoords;
     }
 }

@@ -17,6 +17,7 @@ namespace Application.BuildingAddresses.Profiles
             //    .ForMember(dest=>dest.Id, options=>options.MapFrom(src=>src.Id));
             CreateMap<BuildingAddress, BuildingAddressDTO>().ReverseMap();
             CreateMap<BuildingAddress, AddBuildingAddressDTO>().ReverseMap();
+            CreateMap<BuildingAddress, UpdateBuildingAddressDTO>().ReverseMap();
         }
     }
 }

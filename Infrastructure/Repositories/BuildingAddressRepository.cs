@@ -34,6 +34,11 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
             return address;
         }
+        public async Task UpdateBuildingAddressAsync(BuildingAddress address, CancellationToken cancellationToken)
+        {
+            _dbContext.Entry(address).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
 
     }
 }

@@ -19,7 +19,7 @@ namespace Infrastructure.Models.Domain
         public double? Longitude { get; set; }
         public double? Latitude { get; set; }
         [MaxLength(100)]
-        public string CoordinateType { get; set; }
+        public string? CoordinateType { get; set; }
         [MaxLength(10)]
         public string PostalCode { get; set; }
         public BuildingAddress DeepCopy()

@@ -12,5 +12,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task<IEnumerable<BuildingAddress>> GetAllAsync(CancellationToken cancellationToken);
         Task<BuildingAddress> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<BuildingAddress> AddAsync(BuildingAddress address, CancellationToken cancellationToken);
+        Task UpdateBuildingAddressAsync(BuildingAddress address, CancellationToken cancellationToken);
     }
 }
