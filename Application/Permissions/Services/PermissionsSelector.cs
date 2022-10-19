@@ -9,18 +9,21 @@ using Infrastructure.Models.Exceptions;
 namespace Application.Permissions.Services;
 public class PermissionsSelector : IPermissionsSelector
 {
-    private readonly IPermissionsRepository _permissionsRepository;
+    private readonly IRoleRepository _roleRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IPermissionsRepository _permissionsRepository;
     private readonly IMapper _mapper;
     private readonly List<AppSource> _sources;
 
     public PermissionsSelector(
-        IPermissionsRepository permissionRepository, 
-        IUsersRepository usersRepository, 
+        IRoleRepository roleRepository, 
+        IUsersRepository usersRepository,
+        IPermissionsRepository permissionRepository,
         IMapper mapper)
     {
-        _permissionsRepository = permissionRepository;
+        _roleRepository = roleRepository;
         _usersRepository = usersRepository;
+        _permissionsRepository = permissionRepository;
         _mapper = mapper;
         _sources = Enum.GetValues(typeof(AppSource))
             .Cast<AppSource>().ToList();
@@ -29,6 +32,7 @@ public class PermissionsSelector : IPermissionsSelector
     public async Task<IEnumerable<PermissionDto>> GetCompleteRolePermissions(
         Guid roleId, CancellationToken cancellationToken)
     {
+        await _roleRepository.GetRoleByIdAsync(roleId, cancellationToken);
         var permissions = await GetCompleteRolePermissionsWithoutMapping(
             roleId, cancellationToken);
         return SetOrderAndMapPermissions(permissions);
@@ -116,10 +120,8 @@ public class PermissionsSelector : IPermissionsSelector
         Guid userId, Guid userRoleId, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
-        if (user == null)
-            throw new NotFoundInDbExcption(AppSource.Users, userId);
         if (user.RoleId != userRoleId)
-            throw new InvalidForeignKeyException();
+            throw new Exception($"Użytkownik nie posiada przypisanej roli o identyfikatorze \"{userRoleId}\"");
 
         var userPermissions = (await GetCompleteUserPermissionsWithoutMapping(
             userId, cancellationToken)).ToList();
