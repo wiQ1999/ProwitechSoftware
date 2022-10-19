@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Application.BuildingAddresses.Queries.Handlers
 {
-    public class GetBuildingAddressesQueryHandler : IRequestHandler<GetBuildingAddressesQuery, IEnumerable<BuildingAddressDTO>>
+    public class GetAllBuildingAddressesQueryHandler : IRequestHandler<GetAllBuildingAddressesQuery, IEnumerable<BuildingAddressDTO>>
     {
         private readonly IBuildingAddressRepository buildingAddressRepository;
         private readonly IMapper mapper;
 
-        public GetBuildingAddressesQueryHandler(IBuildingAddressRepository buildingAddressRepository, IMapper mapper)
+        public GetAllBuildingAddressesQueryHandler(IBuildingAddressRepository buildingAddressRepository, IMapper mapper)
         {
             this.buildingAddressRepository = buildingAddressRepository;
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<BuildingAddressDTO>> Handle(GetBuildingAddressesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BuildingAddressDTO>> Handle(GetAllBuildingAddressesQuery request, CancellationToken cancellationToken)
         {
             var buildingAddresses = await buildingAddressRepository.GetAllAsync(cancellationToken);
 

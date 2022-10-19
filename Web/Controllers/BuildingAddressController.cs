@@ -10,7 +10,7 @@ namespace Web.Controllers
     {
         [HttpGet]
         public async Task<IActionResult> Get() =>
-           Ok(await Mediator.Send(new GetBuildingAddressesQuery()));
+           Ok(await Mediator.Send(new GetAllBuildingAddressesQuery()));
 
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> Get(Guid id) =>

@@ -18,9 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Building\Commands\" />
-    <Folder Include="Building\Queries\" />
+    <Folder Include="Buildings\Commands\Handlers\" />
     <Folder Include="Permissions\Commands\Handlers\" />
+    <Folder Include="PropertyManager\Commands\Handlers\" />
+    <Folder Include="PropertyManager\Commands\Requests\" />
+    <Folder Include="PropertyManager\DTOs\" />
+    <Folder Include="PropertyManager\Profiles\" />
+    <Folder Include="PropertyManager\Queries\Handlers\" />
+    <Folder Include="PropertyManager\Queries\Requests\" />
   </ItemGroup>
 
 </Project>
