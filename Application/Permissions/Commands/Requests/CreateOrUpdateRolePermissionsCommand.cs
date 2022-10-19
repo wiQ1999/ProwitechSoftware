@@ -2,8 +2,8 @@
 using MediatR;
 
 namespace Application.Permissions.Commands.Requests;
-public record UpdateUserPermissionsCommand : IRequest
+public record CreateOrUpdateRolePermissionsCommand : IRequest
 {
-    public Guid Id { get; set; }
+    public Guid RoleId { get; set; }
     public IEnumerable<PermissionDto> Permissions { get; set; } = null!;
 }
