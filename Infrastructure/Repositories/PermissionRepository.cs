@@ -1,6 +1,8 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
+using Infrastructure.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -15,14 +17,14 @@ public class PermissionRepository : IPermissionsRepository
     }
 
     public async Task<IEnumerable<Permission>> GetRolePermissionsAsync(
-        Guid roleId, CancellationToken cancellationToken) =>
-        await _dbContext.Permissions
+        Guid roleId, CancellationToken cancellationToken)
+        => await _dbContext.Permissions
         .Where(p => p.RoleId == roleId)
         .ToArrayAsync(cancellationToken);
 
     public async Task<IEnumerable<Permission>> GetUserPermissionsAsync(
-        Guid userId, CancellationToken cancellationToken) =>
-        await _dbContext.Permissions
+        Guid userId, CancellationToken cancellationToken)
+        => await _dbContext.Permissions
         .Where(p => p.UserId == userId)
         .ToArrayAsync(cancellationToken);
 
@@ -42,7 +44,21 @@ public class PermissionRepository : IPermissionsRepository
     public async Task UpdatePermissionsAsync(
         Permission permission, CancellationToken cancellationToken)
     {
+        await TryGetPermissionsByIdAsync(permission.Id, cancellationToken);
         _dbContext.Entry(permission).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task<Permission> TryGetPermissionsByIdAsync(
+        Guid id, CancellationToken cancellationToken)
+        => (await _dbContext.Permissions.FirstOrDefaultAsync(p
+            => p.Id == id, cancellationToken)) ??
+                throw new NotFoundInDbExcption(AppSource.Permissions, id);
+
+    public async Task DeletePermissionsAsync(Guid id, CancellationToken cancellationToken)
+    {
+        Permission permission = await TryGetPermissionsByIdAsync(id, cancellationToken);
+        _dbContext.Permissions.Remove(permission);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

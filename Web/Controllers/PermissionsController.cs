@@ -12,7 +12,7 @@ public class PermissionsController : ApiControllerBase
         Ok(await Mediator.Send(new GetRolePermissionsQuery(roleId)));
 
     [HttpPost("Role/{roleId:Guid}")]
-    public async Task<IActionResult> AddOrUpdateForRole(Guid roleId, [FromBody] UpdateUserPermissionsCommand command)
+    public async Task<IActionResult> AddOrUpdateForRole(Guid roleId, UpdateUserPermissionsCommand command)
     {
         if (roleId != command.Id)
             return BadRequest();
