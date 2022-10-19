@@ -8,11 +8,11 @@ namespace Web.Controllers;
 public class PermissionsController : ApiControllerBase
 {
     [HttpGet("Role/{roleId:Guid}")]
-    public async Task<IActionResult> GetRolePermissions(Guid roleId) =>
+    public async Task<IActionResult> GetForRole(Guid roleId) =>
         Ok(await Mediator.Send(new GetRolePermissionsQuery(roleId)));
 
     [HttpPost("Role/{roleId:Guid}")]
-    public async Task<IActionResult> AddOrUpdateRolePermissions(Guid roleId, [FromBody] UpdateUserPermissionsCommand command)
+    public async Task<IActionResult> AddOrUpdateForRole(Guid roleId, [FromBody] UpdateUserPermissionsCommand command)
     {
         if (roleId != command.Id)
             return BadRequest();
@@ -20,7 +20,7 @@ public class PermissionsController : ApiControllerBase
     }
 
     [HttpGet("User/{userId:Guid}")]
-    public async Task<IActionResult> GetUserPermissions(Guid userId, Guid? userRoleId) =>
+    public async Task<IActionResult> GetForUser(Guid userId, Guid? userRoleId) =>
         Ok(await Mediator.Send(new GetUserPermissionsQuery(userId, userRoleId)));
 
     
