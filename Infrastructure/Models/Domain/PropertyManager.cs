@@ -10,8 +10,9 @@ namespace Infrastructure.Models.Domain
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid ContactInfoId { get; set; }
-        public ContactInfo Contact { get; set; }
+        public string PhoneNumber { get; set; }
+        public Guid FullAddressId { get; set; }
+        public FullAddress? FullAddress { get; set; }
         public ICollection<Building> Buildings { get; set; }
     }
 }

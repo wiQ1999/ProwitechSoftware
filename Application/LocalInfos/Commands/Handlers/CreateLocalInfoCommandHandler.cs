@@ -12,19 +12,23 @@ namespace Application.LocalInfos.Commands.Handlers
 {
     public class CreateLocalInfoCommandHandler : IRequestHandler<CreateLocalInfoCommand, Guid>
     {
-        private readonly ILocalInfoRepository _localInfoRepository;
+        //private readonly ILocalInfoRepository _localInfoRepository;
 
-        public CreateLocalInfoCommandHandler(ILocalInfoRepository localInfoRepository)
-        {
-            _localInfoRepository = localInfoRepository;
-        }
+        //public CreateLocalInfoCommandHandler(ILocalInfoRepository localInfoRepository)
+        //{
+        //    _localInfoRepository = localInfoRepository;
+        //}
 
-        public async Task<Guid> Handle(CreateLocalInfoCommand request, CancellationToken cancellationToken)
+        //public async Task<Guid> Handle(CreateLocalInfoCommand request, CancellationToken cancellationToken)
+        //{
+        //    LocalInfo localInfo = new LocalInfo();
+        //    if (request.StaircaseNumber != null) localInfo.StaircaseNumber = request.StaircaseNumber;
+        //    localInfo.LocalNumber = request.LocalNumber;
+        //    return await _localInfoRepository.AddAsync(localInfo, cancellationToken);
+        //}
+        public Task<Guid> Handle(CreateLocalInfoCommand request, CancellationToken cancellationToken)
         {
-            LocalInfo localInfo = new LocalInfo();
-            if (request.StaircaseNumber != null) localInfo.StaircaseNumber = request.StaircaseNumber;
-            localInfo.LocalNumber = request.LocalNumber;
-            return await _localInfoRepository.AddAsync(localInfo, cancellationToken);
+            throw new NotImplementedException();
         }
     }
 }

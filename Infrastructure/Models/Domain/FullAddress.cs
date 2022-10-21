@@ -11,9 +11,8 @@ namespace Infrastructure.Models.Domain
         public Guid Id { get; set; }
         public Guid BuildingAddressId { get; set; }
         public BuildingAddress BuildingAddress { get; set; }
-        public Guid? LocalInfoId { get; set; }
-        public LocalInfo? LocalInfo { get; set; }
-
+        public string? LocalNumber { get; set; }
+        public string? StaircaseNumber { get; set; }
 
     }
 }

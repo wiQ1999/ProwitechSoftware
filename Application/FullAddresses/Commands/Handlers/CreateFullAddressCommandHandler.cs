@@ -24,16 +24,21 @@ namespace Application.FullAddresses.Commands.Handlers
             _fullAddressRepository = fullAddressRepository;
         }
 
-        public async Task<Guid> Handle(CreateFullAddressCommand request, CancellationToken cancellationToken)
+        public Task<Guid> Handle(CreateFullAddressCommand request, CancellationToken cancellationToken)
         {
-            FullAddress fullAddress = new FullAddress();
-            fullAddress.BuildingAddressId = request.BuildingAddressId;
-            if(request.LocalInfo != null)
-            {
-                fullAddress.LocalInfoId = request.LocalInfo.Id;
-            }
-            return await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            throw new NotImplementedException();
         }
+
+        //public async Task<Guid> Handle(CreateFullAddressCommand request, CancellationToken cancellationToken)
+        //{
+        //    FullAddress fullAddress = new FullAddress();
+        //    fullAddress.BuildingAddressId = request.BuildingAddressId;
+        //    if(request.LocalInfo != null)
+        //    {
+        //        fullAddress.LocalInfoId = request.LocalInfo.Id;
+        //    }
+        //    return await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
+        //}
     }
     
     

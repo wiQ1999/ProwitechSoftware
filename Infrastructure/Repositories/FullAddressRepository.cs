@@ -19,9 +19,9 @@ namespace Infrastructure.Repositories
         }
         public async Task<Guid> AddAsync(FullAddress fullAddress, CancellationToken cancellationToken)
         {
-            if (await _dbContext.FullAddresses.AnyAsync(
-                fa=>fa.BuildingAddressId==fullAddress.BuildingAddressId && fa.LocalInfoId==fullAddress.LocalInfoId))
-                throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
+            //if (await _dbContext.FullAddresses.AnyAsync(
+            //    fa=>fa.BuildingAddressId==fullAddress.BuildingAddressId && fa.LocalInfoId==fullAddress.LocalInfoId))
+            //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
             fullAddress.Id = Guid.NewGuid();
             await _dbContext.AddAsync(fullAddress);
             await _dbContext.SaveChangesAsync(cancellationToken);

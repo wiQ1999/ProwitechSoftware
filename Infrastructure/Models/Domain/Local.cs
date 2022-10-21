@@ -9,8 +9,8 @@ namespace Infrastructure.Models.Domain
     public class Local
     {
         public Guid Id { get; set; }
-        public Guid LocalInfoId { get; set; }
-        public LocalInfo LocalInfo { get; set; }
+        public Guid FullAddressId { get; set; }
+        public FullAddress FullAddress { get; set; }
 
         public Guid BuildingId { get; set; }
         public Building Building { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,13 +14,13 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StreetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BuildingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    StreetName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    BuildingNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Longitude = table.Column<double>(type: "float", nullable: true),
                     Latitude = table.Column<double>(type: "float", nullable: true),
-                    CoordinateType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CoordinateType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,24 +28,11 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LocalInfos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StaircaseNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LocalInfos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +45,8 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BuildingAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocalInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LocalNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StaircaseNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +56,7 @@ namespace Infrastructure.Migrations
                         column: x => x.BuildingAddressId,
                         principalTable: "BuildingAddresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FullAddresses_LocalInfos_LocalInfoId",
-                        column: x => x.LocalInfoId,
-                        principalTable: "LocalInfos",
-                        principalColumn: "Id");
+                        onDelete: ReferentialAction.Cascade); // TUTAJ ZMIANA
                 });
 
             migrationBuilder.CreateTable(
@@ -81,12 +64,12 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -97,25 +80,6 @@ namespace Infrastructure.Migrations
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ContactInfos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FullAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContactInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContactInfos_FullAddresses_FullAddressId",
-                        column: x => x.FullAddressId,
-                        principalTable: "FullAddresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,7 +97,27 @@ namespace Infrastructure.Migrations
                         column: x => x.FullAddressId,
                         principalTable: "FullAddresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade); // TUTAJ ZMIANA
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PropertyManagers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PropertyManagers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PropertyManagers_FullAddresses_FullAddressId",
+                        column: x => x.FullAddressId,
+                        principalTable: "FullAddresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);//TUTAJ ZMIANA
                 });
 
             migrationBuilder.CreateTable(
@@ -143,7 +127,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Create = table.Column<bool>(type: "bit", nullable: true),
                     Read = table.Column<bool>(type: "bit", nullable: true),
                     Update = table.Column<bool>(type: "bit", nullable: true),
@@ -165,31 +149,12 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyManagers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PropertyManagers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PropertyManagers_ContactInfos_ContactInfoId",
-                        column: x => x.ContactInfoId,
-                        principalTable: "ContactInfos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Buildings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BuildingAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PropertyManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -200,7 +165,7 @@ namespace Infrastructure.Migrations
                         column: x => x.BuildingAddressId,
                         principalTable: "BuildingAddresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);//TUTAJ ZMIANA
                     table.ForeignKey(
                         name: "FK_Buildings_PropertyManagers_PropertyManagerId",
                         column: x => x.PropertyManagerId,
@@ -213,7 +178,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocalInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FullAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BuildingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -224,13 +189,13 @@ namespace Infrastructure.Migrations
                         column: x => x.BuildingId,
                         principalTable: "Buildings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade); // TUTAJ ZMIANA
                     table.ForeignKey(
-                        name: "FK_Locals_LocalInfos_LocalInfoId",
-                        column: x => x.LocalInfoId,
-                        principalTable: "LocalInfos",
+                        name: "FK_Locals_FullAddresses_FullAddressId",
+                        column: x => x.FullAddressId,
+                        principalTable: "FullAddresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade); // TUTAJ ZMIANA
                 });
 
             migrationBuilder.CreateTable(
@@ -268,13 +233,13 @@ namespace Infrastructure.Migrations
                         column: x => x.PropertiesId,
                         principalTable: "Properties",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);//ZMIANA
                     table.ForeignKey(
                         name: "FK_PropertyResident_Residents_ResidentsId",
                         column: x => x.ResidentsId,
                         principalTable: "Residents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);//ZMIANA
                 });
 
             migrationBuilder.InsertData(
@@ -282,10 +247,10 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("071fabb5-cfd9-421c-8f2f-683fd55e231e"), "Szef" },
-                    { new Guid("c2ed58e7-2742-4359-a765-88b8df925ff5"), "Administrator" },
-                    { new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16"), "Pracownik" },
-                    { new Guid("cbd1ceba-b59b-4c2b-9f23-cb7e0e2a06e4"), "Praktykant" }
+                    { new Guid("5093d954-ce66-44d8-9b31-d0341c0634a2"), "Administrator" },
+                    { new Guid("8b941392-dd5b-44ed-91fb-ac65e78c1d4e"), "Szef" },
+                    { new Guid("bb17f303-f11d-4d99-8b1b-ea28ada0c2b5"), "Praktykant" },
+                    { new Guid("cec08606-5378-401f-9c51-80f5680b7493"), "Pracownik" }
                 });
 
             migrationBuilder.InsertData(
@@ -293,14 +258,14 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Create", "Delete", "Name", "Read", "RoleId", "Update", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("0c812423-8dbf-46ba-bf10-3540f3db0893"), true, true, "Użytkownicy", true, new Guid("c2ed58e7-2742-4359-a765-88b8df925ff5"), true, null },
-                    { new Guid("20597e4f-b8fe-4d38-9027-e28e5253d243"), false, false, "Użytkownicy", false, new Guid("cbd1ceba-b59b-4c2b-9f23-cb7e0e2a06e4"), false, null },
-                    { new Guid("42ba9083-58bd-4886-9e93-da74fe9a22a9"), false, false, "Role", false, new Guid("cbd1ceba-b59b-4c2b-9f23-cb7e0e2a06e4"), false, null },
-                    { new Guid("57f3c612-6661-48b8-91d0-a11ee058788f"), true, true, "Użytkownicy", true, new Guid("071fabb5-cfd9-421c-8f2f-683fd55e231e"), true, null },
-                    { new Guid("5b399227-2774-4a53-8816-ab1900892d59"), false, false, "Role", false, new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16"), false, null },
-                    { new Guid("9c9728f0-678f-4a33-aae3-89962488320f"), true, true, "Role", true, new Guid("c2ed58e7-2742-4359-a765-88b8df925ff5"), true, null },
-                    { new Guid("ab922881-e9df-4465-8f7f-573c8b2f412f"), true, true, "Role", true, new Guid("071fabb5-cfd9-421c-8f2f-683fd55e231e"), true, null },
-                    { new Guid("c78e868b-4e51-46d0-a931-a3c424ac16c8"), false, false, "Użytkownicy", false, new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16"), false, null }
+                    { new Guid("25826a19-de8f-427a-bcf9-66f3a14c1e28"), true, true, "Użytkownicy", true, new Guid("8b941392-dd5b-44ed-91fb-ac65e78c1d4e"), true, null },
+                    { new Guid("61c38b90-c0d5-428b-b9d1-7847ac734243"), false, false, "Role", false, new Guid("bb17f303-f11d-4d99-8b1b-ea28ada0c2b5"), false, null },
+                    { new Guid("6d75007e-2de4-47f3-be20-5bf0917a4719"), false, false, "Użytkownicy", false, new Guid("cec08606-5378-401f-9c51-80f5680b7493"), false, null },
+                    { new Guid("753f8395-e9d9-4752-893c-3a0f6f2eba91"), false, false, "Użytkownicy", false, new Guid("bb17f303-f11d-4d99-8b1b-ea28ada0c2b5"), false, null },
+                    { new Guid("a4c1298b-3795-4d06-ad5e-c8820fa29aec"), true, true, "Role", true, new Guid("8b941392-dd5b-44ed-91fb-ac65e78c1d4e"), true, null },
+                    { new Guid("b3405004-b3ff-43b7-aa61-865b1a14d93a"), true, true, "Użytkownicy", true, new Guid("5093d954-ce66-44d8-9b31-d0341c0634a2"), true, null },
+                    { new Guid("c9411af4-c030-438d-a369-b5583736eab8"), true, true, "Role", true, new Guid("5093d954-ce66-44d8-9b31-d0341c0634a2"), true, null },
+                    { new Guid("cc0bc8aa-1992-454a-8084-8d8d405e4ea2"), false, false, "Role", false, new Guid("cec08606-5378-401f-9c51-80f5680b7493"), false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -308,28 +273,28 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Login", "Password", "PhoneNumber", "RoleId" },
                 values: new object[,]
                 {
-                    { new Guid("21f9bdee-2114-49dc-9c07-2342bd8a6c79"), "m.wioslo@gmail.com", "Marek", "Wiosło", "w3", "", "+48 312645978", new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16") },
-                    { new Guid("5adbbeb9-4c28-4a2b-a75d-af65e9c0d173"), "", "admin", "", "admin", "admin", "", new Guid("c2ed58e7-2742-4359-a765-88b8df925ff5") },
-                    { new Guid("ae06153b-bde6-49c8-991d-f555ee95ccb7"), "b.smyk@gmail.com", "Bartosz", "Smyk", "a1", "", "213-546-879", new Guid("cbd1ceba-b59b-4c2b-9f23-cb7e0e2a06e4") },
-                    { new Guid("f4db7085-c59e-44a2-83a1-b3fd57e3d2f6"), "j.kowalski@gmail.com", "Jan", "Kowalski", "w1", "", "+48 321 654 987", new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16") },
-                    { new Guid("f7ed246d-e7db-4ed7-ab38-da8e3bc82cca"), "z.pietka@gmail.com", "Zdzisław", "Piętka", "w2", "", "987654321", new Guid("c89bafcd-6d31-4f62-900a-4370e03bff16") },
-                    { new Guid("fa963995-ead7-4474-beb6-7fcb65db56c0"), "k.tumiel@gmail.com", "Krzysztof", "Tumiel", "k.tumiel", "", "123 456 789", new Guid("071fabb5-cfd9-421c-8f2f-683fd55e231e") }
+                    { new Guid("238f32c2-5b07-4cce-9721-aabee0da1c7b"), "b.smyk@gmail.com", "Bartosz", "Smyk", "a1", "", "213-546-879", new Guid("bb17f303-f11d-4d99-8b1b-ea28ada0c2b5") },
+                    { new Guid("779e4a65-a60a-48b2-97e2-4d753b4464fa"), "k.tumiel@gmail.com", "Krzysztof", "Tumiel", "k.tumiel", "", "123 456 789", new Guid("8b941392-dd5b-44ed-91fb-ac65e78c1d4e") },
+                    { new Guid("891f52f8-0e7e-4ce2-a568-b5d3a645dd1a"), "j.kowalski@gmail.com", "Jan", "Kowalski", "w1", "", "+48 321 654 987", new Guid("cec08606-5378-401f-9c51-80f5680b7493") },
+                    { new Guid("c10cfae4-5bc7-48d6-a1aa-a53c29782fad"), "z.pietka@gmail.com", "Zdzisław", "Piętka", "w2", "", "987654321", new Guid("cec08606-5378-401f-9c51-80f5680b7493") },
+                    { new Guid("ce3321f2-241f-47bf-ad0c-8b90524ca2f5"), "m.wioslo@gmail.com", "Marek", "Wiosło", "w3", "", "+48 312645978", new Guid("cec08606-5378-401f-9c51-80f5680b7493") },
+                    { new Guid("ef9c4202-e052-452e-8c52-69ec99881f3e"), "", "admin", "", "admin", "admin", "", new Guid("5093d954-ce66-44d8-9b31-d0341c0634a2") }
                 });
 
             migrationBuilder.InsertData(
                 table: "Permissions",
                 columns: new[] { "Id", "Create", "Delete", "Name", "Read", "RoleId", "Update", "UserId" },
-                values: new object[] { new Guid("85450373-fc8f-4889-8365-9a6d8bf161cd"), null, null, "Użytkownicy", true, null, null, new Guid("f7ed246d-e7db-4ed7-ab38-da8e3bc82cca") });
+                values: new object[] { new Guid("9583e591-067c-49c6-b02b-81014cfe75b3"), null, null, "Role", true, null, null, new Guid("c10cfae4-5bc7-48d6-a1aa-a53c29782fad") });
 
             migrationBuilder.InsertData(
                 table: "Permissions",
                 columns: new[] { "Id", "Create", "Delete", "Name", "Read", "RoleId", "Update", "UserId" },
-                values: new object[] { new Guid("996934de-149c-44fa-ae88-0d156eb35590"), null, null, "Role", true, null, null, new Guid("f7ed246d-e7db-4ed7-ab38-da8e3bc82cca") });
+                values: new object[] { new Guid("ebb81b8b-9134-45d3-89d1-1ed6fc64ff76"), null, null, "Użytkownicy", true, null, true, new Guid("ce3321f2-241f-47bf-ad0c-8b90524ca2f5") });
 
             migrationBuilder.InsertData(
                 table: "Permissions",
                 columns: new[] { "Id", "Create", "Delete", "Name", "Read", "RoleId", "Update", "UserId" },
-                values: new object[] { new Guid("e17f5553-8e0d-43ef-a6b6-0e0489cee633"), null, null, "Użytkownicy", true, null, true, new Guid("21f9bdee-2114-49dc-9c07-2342bd8a6c79") });
+                values: new object[] { new Guid("f6a39d89-1f39-403f-bb60-6100342f0cc0"), null, null, "Użytkownicy", true, null, null, new Guid("c10cfae4-5bc7-48d6-a1aa-a53c29782fad") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Buildings_BuildingAddressId",
@@ -342,19 +307,9 @@ namespace Infrastructure.Migrations
                 column: "PropertyManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContactInfos_FullAddressId",
-                table: "ContactInfos",
-                column: "FullAddressId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FullAddresses_BuildingAddressId",
                 table: "FullAddresses",
                 column: "BuildingAddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FullAddresses_LocalInfoId",
-                table: "FullAddresses",
-                column: "LocalInfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locals_BuildingId",
@@ -362,9 +317,9 @@ namespace Infrastructure.Migrations
                 column: "BuildingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Locals_LocalInfoId",
+                name: "IX_Locals_FullAddressId",
                 table: "Locals",
-                column: "LocalInfoId");
+                column: "FullAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permissions_RoleId",
@@ -382,9 +337,9 @@ namespace Infrastructure.Migrations
                 column: "FullAddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PropertyManagers_ContactInfoId",
+                name: "IX_PropertyManagers_FullAddressId",
                 table: "PropertyManagers",
-                column: "ContactInfoId");
+                column: "FullAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PropertyResident_ResidentsId",
@@ -395,6 +350,18 @@ namespace Infrastructure.Migrations
                 name: "IX_Residents_LocalId",
                 table: "Residents",
                 column: "LocalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Name",
+                table: "Roles",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Login",
+                table: "Users",
+                column: "Login",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -432,16 +399,10 @@ namespace Infrastructure.Migrations
                 name: "PropertyManagers");
 
             migrationBuilder.DropTable(
-                name: "ContactInfos");
-
-            migrationBuilder.DropTable(
                 name: "FullAddresses");
 
             migrationBuilder.DropTable(
                 name: "BuildingAddresses");
-
-            migrationBuilder.DropTable(
-                name: "LocalInfos");
         }
     }
 }

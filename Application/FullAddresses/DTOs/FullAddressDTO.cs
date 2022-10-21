@@ -10,6 +10,6 @@ namespace Application.FullAddresses.DTOs
     public record FullAddressDTO
     {
         public Guid BuildingAddressId { get; set; }
-        public LocalInfo? LocalInfo { get; set; }
+        //public LocalInfo? LocalInfo { get; set; }
     }
 }
