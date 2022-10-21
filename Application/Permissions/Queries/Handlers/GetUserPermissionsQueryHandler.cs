@@ -18,9 +18,9 @@ public class GetUserPermissionsQueryHandler
         GetUserPermissionsQuery request, CancellationToken cancellationToken)
     {
         if (request.UserRoleId == null)
-            return await _selector.GetCompleteUserPermissions(
+            return await _selector.GetCompleteUserPermissionsWithMapping(
                 request.UserId, cancellationToken);
-        return await _selector.GetCompleteUserAndRolePermissions(
+        return await _selector.GetCompleteUserAndRolePermissionsWithMapping(
             request.UserId, (Guid)request.UserRoleId, cancellationToken);
     }
 }

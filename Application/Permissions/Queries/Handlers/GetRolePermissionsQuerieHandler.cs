@@ -16,5 +16,5 @@ public class GetRolePermissionsQuerieHandler
 
     public async Task<IEnumerable<PermissionDto>> Handle(
         GetRolePermissionsQuery request, CancellationToken cancellationToken) => 
-        await _selector.GetCompleteRolePermissions(request.RoleId, cancellationToken);
+        await _selector.GetCompleteRolePermissionsWithMapping(request.RoleId, cancellationToken);
 }
