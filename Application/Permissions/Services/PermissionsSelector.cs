@@ -29,18 +29,19 @@ public class PermissionsSelector : IPermissionsSelector
             .Cast<AppSource>().ToList();
     }
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteRolePermissions(
+    public async Task<IEnumerable<PermissionDto>> GetCompleteRolePermissionsWithMapping(
+        Guid roleId, CancellationToken cancellationToken)
+    {
+        var permissions =
+            await GetCompleteRolePermissionsWithoutMapping(roleId, cancellationToken);
+        return permissions.Select(p => _mapper.Map<PermissionDto>(p));
+    }
+
+    public async Task<IEnumerable<Permission>> GetCompleteRolePermissionsWithoutMapping(
         Guid roleId, CancellationToken cancellationToken)
     {
         await _roleRepository.GetRoleByIdAsync(roleId, cancellationToken);
-        var permissions = await GetCompleteRolePermissionsWithoutMapping(
-            roleId, cancellationToken);
-        return SetOrderAndMapPermissions(permissions);
-    }
 
-    private async Task<IEnumerable<Permission>> GetCompleteRolePermissionsWithoutMapping(
-        Guid roleId, CancellationToken cancellationToken)
-    {
         var permissions = (await _permissionsRepository
             .GetRolePermissionsAsync(roleId, cancellationToken)).ToList();
 
@@ -58,13 +59,8 @@ public class PermissionsSelector : IPermissionsSelector
             if (!permissions.Any(p => p.Source == source))
                 permissions.Add(CreateRolePermission(roleId, source));
 
-        return permissions;
+        return permissions.OrderBy(p => p.Source);
     }
-
-    private IEnumerable<PermissionDto> SetOrderAndMapPermissions(
-        IEnumerable<Permission> permissions) =>
-        permissions.OrderBy(p => p.Source).Select(p =>
-            _mapper.Map<PermissionDto>(p)).ToList();
 
     private Permission CreateRolePermission(Guid roleId, AppSource source)
     {
@@ -73,8 +69,9 @@ public class PermissionsSelector : IPermissionsSelector
         return permission;
     }
 
-    private Permission CreateNewPermission(AppSource source) => 
-        new() {
+    private Permission CreateNewPermission(AppSource source) =>
+        new()
+        {
             Id = Guid.NewGuid(),
             Source = source,
             Create = null,
@@ -83,12 +80,12 @@ public class PermissionsSelector : IPermissionsSelector
             Delete = null
         };
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteUserPermissions(
+    public async Task<IEnumerable<PermissionDto>> GetCompleteUserPermissionsWithMapping(
         Guid userId, CancellationToken cancellationToken)
     {
-        var permissions = await GetCompleteRolePermissionsWithoutMapping(
-            userId, cancellationToken);
-        return SetOrderAndMapPermissions(permissions);
+        var permissions = 
+            await GetCompleteRolePermissionsWithoutMapping(userId, cancellationToken);
+        return permissions.Select(p => _mapper.Map<PermissionDto>(p));
     }
 
     public async Task<IEnumerable<Permission>> GetCompleteUserPermissionsWithoutMapping(
@@ -116,7 +113,15 @@ public class PermissionsSelector : IPermissionsSelector
         return permission;
     }
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteUserAndRolePermissions(
+    public async Task<IEnumerable<PermissionDto>> GetCompleteUserAndRolePermissionsWithMapping(
+        Guid userId, Guid userRoleId, CancellationToken cancellationToken)
+    {
+        var permissions = await GetCompleteUserAndRolePermissionsWithoutMapping(
+            userId, userRoleId, cancellationToken);
+        return permissions.Select(p => _mapper.Map<PermissionDto>(p));
+    }
+
+    public async Task<IEnumerable<Permission>> GetCompleteUserAndRolePermissionsWithoutMapping(
         Guid userId, Guid userRoleId, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
@@ -139,6 +144,6 @@ public class PermissionsSelector : IPermissionsSelector
             userPerm.Delete ??= rolePerm.Delete;
         }
 
-        return SetOrderAndMapPermissions(userPermissions);
+        return userPermissions.OrderBy(p => p.Source);
     }
 }
