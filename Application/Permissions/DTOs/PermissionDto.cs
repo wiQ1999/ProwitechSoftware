@@ -1,9 +1,6 @@
 ﻿namespace Application.Permissions.DTOs;
 public class PermissionDto
 {
-    public Guid Id { get; set; }
-    public Guid? UserId { get; set; }
-    public Guid? RoleId { get; set; }
     public string Source { get; set; } = null!;
     public bool Create { get; set; }
     public bool Read { get; set; }
