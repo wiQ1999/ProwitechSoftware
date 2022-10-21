@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class BuildingAddressConfiguration : IEntityTypeConfiguration<BuildingAddress>
+    
+    public class LocalInfoConfiguration : IEntityTypeConfiguration<LocalInfo>
     {
-        public void Configure(EntityTypeBuilder<BuildingAddress> builder)
+        public void Configure(EntityTypeBuilder<LocalInfo> builder)
         {
-           //builder.HasOne(ba=>ba.)
+            //builder.HasOne(l=>l.BuildingAddress).WithMany().OnDelete(DeleteBehavior.)
         }
     }
 }

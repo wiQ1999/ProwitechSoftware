@@ -14,18 +14,19 @@ namespace Web.Controllers
         public async Task<IActionResult> Get() =>
             Ok(await Mediator.Send(new GetAllBuildingsQuery()));
         
-        [HttpPost]
-        public async Task<IActionResult> Create()
-        {
-            //bool forceNotNull = force.HasValue ? force.Value : false;
-            //bool onlyAddressNotNull = onlyAddress.HasValue ? onlyAddress.Value : false;
-            //return Ok(await Mediator.Send(new CreateBuildingAddressCommand
-            //{
-            //    AddressDTO = addressDTO,
-            //    ForceDespiteCoordIssue = forceNotNull,
-            //    AddAddressWithoutCoordinates = onlyAddressNotNull
-            //}));
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create()
+        //{
+        //    //bool forceNotNull = force.HasValue ? force.Value : false;
+        //    //bool onlyAddressNotNull = onlyAddress.HasValue ? onlyAddress.Value : false;
+        //    //return Ok(await Mediator.Send(new CreateBuildingAddressCommand
+        //    //{
+        //    //    AddressDTO = addressDTO,
+        //    //    ForceDespiteCoordIssue = forceNotNull,
+        //    //    AddAddressWithoutCoordinates = onlyAddressNotNull
+        //    //}));
+
+        //}
 
     }
     //[Route("[controller]")] // mapuje nazwe z nazwy kontrolera

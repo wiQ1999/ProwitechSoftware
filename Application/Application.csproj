@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <Folder Include="Buildings\Commands\Handlers\" />
+    <Folder Include="FullAddresses\Profiles\" />
+    <Folder Include="LocalInfos\Queries\" />
     <Folder Include="Permissions\Commands\Handlers\" />
     <Folder Include="PropertyManager\Commands\Handlers\" />
     <Folder Include="PropertyManager\Commands\Requests\" />

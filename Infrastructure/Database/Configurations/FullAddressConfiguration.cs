@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class BuildingAddressConfiguration : IEntityTypeConfiguration<BuildingAddress>
+    public class FullAddressConfiguration: IEntityTypeConfiguration<FullAddress>
     {
-        public void Configure(EntityTypeBuilder<BuildingAddress> builder)
+        public void Configure(EntityTypeBuilder<FullAddress> builder)
         {
-           //builder.HasOne(ba=>ba.)
+            builder.HasOne(ba => ba.BuildingAddress).WithMany().OnDelete(DeleteBehavior.Cascade);
         }
     }
+    
 }
