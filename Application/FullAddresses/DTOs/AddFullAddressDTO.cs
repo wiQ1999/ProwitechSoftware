@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.FullAddresses.DTOs
 {
-    public record FullAddressDTO
+    public record AddFullAddressDTO
     {
         [Required]
         public Guid BuildingAddressId { get; set; }

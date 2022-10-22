@@ -35,14 +35,15 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<PropertyManager> GetAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<PropertyManager> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
         }
 
-        public Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)
+        public async Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(propMan).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -14,6 +14,6 @@ namespace Application.PropertyManagers.Commands.Requests
         [Required]
         public string Name { get; set; }
         public string? PhoneNumber { get; set; }
-        public FullAddressDTO FullAddressesDTO { get; set; }
+        public AddFullAddressDTO FullAddressesDTO { get; set; }
     }
 }

@@ -39,9 +39,10 @@ namespace Infrastructure.Repositories
             return await _dbContext.FullAddresses.FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
         }
 
-        public Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)
+        public async Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(address).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

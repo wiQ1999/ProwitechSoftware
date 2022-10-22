@@ -14,6 +14,13 @@ namespace Web.Controllers
         {
             return Ok(await Mediator.Send(command));
         }
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> Update (Guid id, UpdatePropertyManagerCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+            return Ok(await Mediator.Send(command));
+        }
 
     }
 
