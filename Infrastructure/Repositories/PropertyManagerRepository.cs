@@ -22,8 +22,8 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.Name == propMan.Name))
                 throw new Exception($"Istnieje już Zarządca Nieruchomości o nazwie {propMan.Name}");
-            if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.FullAddress.Equals(propMan.FullAddress)))
-                throw new Exception($"Istnieje już Zarządca Nieruchomości o adresie {propMan.FullAddress.ToString()}");
+            //if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.FullAddress.Equals(propMan.FullAddress)))
+            //    throw new Exception($"Istnieje już Zarządca Nieruchomości o adresie {propMan.FullAddress.ToString()}");
             await _dbContext.AddAsync(propMan, cancellationToken);
             await _dbContext.SaveChangesAsync();
             return propMan.Id;
