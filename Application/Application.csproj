@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PropertyManager\**" />
+    <EmbeddedResource Remove="PropertyManager\**" />
+    <None Remove="PropertyManager\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
@@ -19,15 +25,10 @@
 
   <ItemGroup>
     <Folder Include="Buildings\Commands\Handlers\" />
-    <Folder Include="FullAddresses\Profiles\" />
     <Folder Include="LocalInfos\Queries\" />
     <Folder Include="Permissions\Commands\Handlers\" />
-    <Folder Include="PropertyManager\Commands\Handlers\" />
-    <Folder Include="PropertyManager\Commands\Requests\" />
-    <Folder Include="PropertyManager\DTOs\" />
-    <Folder Include="PropertyManager\Profiles\" />
-    <Folder Include="PropertyManager\Queries\Handlers\" />
-    <Folder Include="PropertyManager\Queries\Requests\" />
+    <Folder Include="PropertyManagers\DTOs\" />
+    <Folder Include="PropertyManagers\Queries\" />
   </ItemGroup>
 
 </Project>

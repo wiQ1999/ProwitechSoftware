@@ -1,0 +1,17 @@
+﻿using Application.FullAddresses.DTOs;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.PropertyManagers.Commands.Requests
+{
+    public record CreatePropertyManagerCommand : IRequest<Guid>
+    {
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public FullAddressDTO FullAddressesDTO { get; set; }
+    }
+}

@@ -2,8 +2,7 @@
 using Application.BuildingAddresses.Commands.Requests;
 using Application.BuildingAddresses.DTOs;
 using Application.BuildingAddresses.Queries.Requests;
-using Application.FullAddresses.Commands.Requests;
-using Application.FullAddresses.DTOs;
+using Application.PropertyManagers.Commands.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -14,19 +13,15 @@ namespace Web.Controllers
         //[HttpGet]
         //public async Task<IActionResult> Get() =>
         //    Ok(await Mediator.Send(new GetAllFullAddressesQuery));
-        
+
         //[HttpGet("{id:Guid}")]
         //public async Task<IActionResult> Get(Guid id) =>
         //    Ok(await Mediator.Send(new GetFullAddressByIdQuery(id)));
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateFullAddressCommand command)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreatePropertyManagerCommand command)
         {
-            if (command.LocalInfo != null)
-            {
-                var localInfoId = await Mediator.Send(command.LocalInfo);
-                command.LocalInfo.Id = localInfoId;
-            }
             return Ok(await Mediator.Send(command));
         }
         //[HttpPut("{id:Guid}")]

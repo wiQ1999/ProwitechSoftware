@@ -38,5 +38,12 @@ namespace Infrastructure.Models.Domain
         {
 
         }
+        public override bool Equals(object? obj)
+        {
+            return obj is BuildingAddress address &&
+                   CityName.ToUpper() == address.CityName.ToUpper() &&
+                   StreetName.ToUpper() == address.StreetName.ToUpper() &&
+                   BuildingNumber == address.BuildingNumber;
+        }
     }
 }
