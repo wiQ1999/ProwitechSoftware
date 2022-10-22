@@ -25,10 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Buildings\Commands\Handlers\" />
-    <Folder Include="LocalInfos\Queries\" />
     <Folder Include="Permissions\Commands\Handlers\" />
-    <Folder Include="PropertyManagers\DTOs\" />
-    <Folder Include="PropertyManagers\Queries\" />
   </ItemGroup>
 
 </Project>

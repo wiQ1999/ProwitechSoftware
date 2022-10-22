@@ -1,4 +1,5 @@
 ﻿using Application.PropertyManagers.Commands.Requests;
+using Application.PropertyManagers.Queries.Requests;
 using Application.Roles.Commands.Requests;
 using Application.Roles.Queries.Requests;
 using MediatR;
@@ -21,7 +22,9 @@ namespace Web.Controllers
                 return BadRequest();
             return Ok(await Mediator.Send(command));
         }
-
+        [HttpGet]
+        public async Task<IActionResult> Get() =>
+            Ok(await Mediator.Send(new GetAllPropertyManagersQuery()));
     }
 
     //[HttpGet]

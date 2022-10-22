@@ -36,7 +36,7 @@ namespace Infrastructure.Repositories
 
         public async Task<FullAddress?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.FullAddresses.FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
+            return await _dbContext.FullAddresses.Include(fa=>fa.BuildingAddress).FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)

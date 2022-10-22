@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Infrastructure.Repositories
 {
     public class PropertyManagerRepository : IPropertyManagerRepository
@@ -30,14 +31,15 @@ namespace Infrastructure.Repositories
 
         }
 
-        public Task<IEnumerable<PropertyManager>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<PropertyManager>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).ToArrayAsync(cancellationToken);
         }
 
-        public async Task<PropertyManager> GetAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<PropertyManager?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
+            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).
+                ThenInclude(pm=>pm.BuildingAddress).FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)

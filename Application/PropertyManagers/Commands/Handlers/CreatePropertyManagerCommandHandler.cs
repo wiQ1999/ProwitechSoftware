@@ -27,6 +27,7 @@ namespace Application.PropertyManagers.Commands.Handlers
         public async Task<Guid> Handle(CreatePropertyManagerCommand request, CancellationToken cancellationToken)
         {
             var faDTO = request.FullAddressesDTO;
+
             var fullAddres = new FullAddress()
             {
                 BuildingAddressId = faDTO.BuildingAddressId,
@@ -35,12 +36,14 @@ namespace Application.PropertyManagers.Commands.Handlers
             };
 
             var fullAddressId = await _fullAddressRepository.AddAsync(fullAddres, cancellationToken);
+            var faFromDB = await _fullAddressRepository.GetAsync(fullAddressId, cancellationToken);//SPRAWDZIĆ BEZ TEGO
 
             PropertyManager propertyManager = new()
             {
                 Name = request.Name,
                 PhoneNumber = request.PhoneNumber,
-                FullAddressId = fullAddressId
+                FullAddressId = faFromDB.Id,
+                
             };
             return await _propertyManagerRepository.AddAsync(propertyManager, cancellationToken);
         }
