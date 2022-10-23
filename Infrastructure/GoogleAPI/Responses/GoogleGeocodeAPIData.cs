@@ -40,7 +40,10 @@ namespace Infrastructure.GoogleAPI.Responses
 
                 var addressComponents = results.results[0].address_components;
                 List<GoogleAddressComponent> components = addressComponents.ToObject<List<GoogleAddressComponent>>();
-                googleGeocodeAPIData.PostalCode = components.Where(o => o.types.Contains("postal_code")).FirstOrDefault().long_name;
+
+                var postalCodeResult = components.Where(o => o.types.Contains("postal_code")).FirstOrDefault();
+                if(postalCodeResult!=null && postalCodeResult.long_name!=null)
+                    googleGeocodeAPIData.PostalCode = postalCodeResult.long_name;
 
             }
             return googleGeocodeAPIData;
