@@ -26,6 +26,13 @@ namespace Web.Controllers
         public async Task<IActionResult> Get() =>
             Ok(await Mediator.Send(new GetAllPropertyManagersQuery()));
 
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> Get(Guid id) =>
+            Ok(await Mediator.Send(new GetPropertyManagerByIdQuery
+            {
+                Id = id
+            }));
+
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id) =>
             Ok(await Mediator.Send(new DeletePropertyManagerCommand() { Id=id}));
