@@ -15,6 +15,7 @@ namespace Infrastructure.GoogleAPI.Responses
         public string PostalCode { get; set; }
         public string GoogleApiStatus { get; set; }
         public string CoordinateType { get; set; }
+        public string FormattedAddress { get; set; }
         public HttpStatusCode HttpStatusCode { get; set; }
         public GoogleGeocodeAPIData()
         {
@@ -34,6 +35,7 @@ namespace Infrastructure.GoogleAPI.Responses
             googleGeocodeAPIData.GoogleApiStatus = results.status;
             if (googleGeocodeAPIData.GoogleApiStatus == "OK")
             {
+                googleGeocodeAPIData.FormattedAddress = results.results[0].formatted_address;
                 googleGeocodeAPIData.CoordinateType = results.results[0].geometry.location_type;
                 googleGeocodeAPIData.Latitude = results.results[0].geometry.location.lat;
                 googleGeocodeAPIData.Longitude = results.results[0].geometry.location.lng;
