@@ -2,11 +2,10 @@
 using Application.Permissions.DTOs;
 using Application.Permissions.Queries.Requests;
 using Infrastructure.Interfaces.Repositories;
-using Infrastructure.Models.Enums;
-using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Permissions.Queries.Handlers;
+
 public class GetUserPermissionsQueryHandler 
     : IRequestHandler<GetUserPermissionsQuery, IEnumerable<NullablePermissionDto>>
 {

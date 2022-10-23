@@ -4,6 +4,7 @@ using Application.Permissions.Queries.Requests;
 using MediatR;
 
 namespace Application.Permissions.Queries.Handlers;
+
 public class GetRolePermissionsQuerieHandler
     : IRequestHandler<GetRolePermissionsQuery, IEnumerable<PermissionDto>>
 {
