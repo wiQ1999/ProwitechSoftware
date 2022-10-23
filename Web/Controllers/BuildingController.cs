@@ -26,13 +26,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Get(Guid id) =>
             Ok(await Mediator.Send(new GetBuildingByIdQuery() {Id=id }));
 
-        //[HttpPut("{id:Guid}")]
-        //public async Task<IActionResult> Update(Guid id, UpdatePropertyManagerCommand command)
-        //{
-        //    if (id != command.Id)
-        //        return BadRequest();
-        //    return Ok(await Mediator.Send(command));
-        //}
+        
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, UpdateBuildingCommand command)
         {
@@ -40,33 +34,13 @@ namespace Web.Controllers
                 return BadRequest();
             return Ok(await Mediator.Send(command));
         }
-
+        
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> Detele(Guid id) =>
+            Ok(await Mediator.Send(new DeleteBuildingCommand
+            {
+                Id = id
+            }));
 
     }
-    //[HttpPost]
-    //public async Task<IActionResult> Create(CreatePropertyManagerCommand command)
-    //{
-    //    return Ok(await Mediator.Send(command));
-    //}
-    //[HttpPut("{id:Guid}")]
-    //public async Task<IActionResult> Update(Guid id, UpdatePropertyManagerCommand command)
-    //{
-    //    if (id != command.Id)
-    //        return BadRequest();
-    //    return Ok(await Mediator.Send(command));
-    //}
-    //[HttpGet]
-    //public async Task<IActionResult> Get() =>
-    //    Ok(await Mediator.Send(new GetAllPropertyManagersQuery()));
-
-    //[HttpGet("{id:Guid}")]
-    //public async Task<IActionResult> Get(Guid id) =>
-    //    Ok(await Mediator.Send(new GetPropertyManagerByIdQuery
-    //    {
-    //        Id = id
-    //    }));
-
-    //[HttpDelete("{id:Guid}")]
-    //public async Task<IActionResult> Delete(Guid id) =>
-    //    Ok(await Mediator.Send(new DeletePropertyManagerCommand() { Id = id }));
-}
+    }
