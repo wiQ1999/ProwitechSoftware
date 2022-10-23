@@ -32,9 +32,11 @@ public class PermissionRepository : IPermissionsRepository
         Permission permission, CancellationToken cancellation)
     {
         if (permission.RoleId == null && permission.UserId == null)
-            throw new Exception("Uprawnienie musi być przypisane do roli lub użytkownika");
+            throw new PermissionCountException("Uprawnienie musi być przypisane do roli lub użytkownika");
+
         await _dbContext.Permissions.AddAsync(permission, cancellation);
         await _dbContext.SaveChangesAsync(cancellation);
+
         return permission.Id;
     }
 
@@ -56,6 +58,7 @@ public class PermissionRepository : IPermissionsRepository
     {
         Permission permission = await TryGetPermissionsByIdAsync(id, cancellationToken);
         _dbContext.Permissions.Remove(permission);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

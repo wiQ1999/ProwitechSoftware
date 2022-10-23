@@ -31,8 +31,10 @@ public class RoleRepository : IRoleRepository
     {
         if (await _dbContext.Roles.AnyAsync(r => r.Name == role.Name, cancellationToken))
             throw new NotUniqueInDbException(AppSource.Roles, nameof(role.Name), role.Name);
+
         await _dbContext.Roles.AddAsync(role, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
         return role.Id;
     }
 
@@ -47,6 +49,7 @@ public class RoleRepository : IRoleRepository
     {
         Role role = await TryGetRoleByIdAsync(id, cancellationToken);
         _dbContext.Roles.Remove(role);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
