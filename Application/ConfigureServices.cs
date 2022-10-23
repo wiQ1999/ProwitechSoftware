@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Services;
 using Application.Permissions.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

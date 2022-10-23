@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Services;
 using Application.Permissions.DTOs;
 using Application.Permissions.Queries.Requests;
 using MediatR;

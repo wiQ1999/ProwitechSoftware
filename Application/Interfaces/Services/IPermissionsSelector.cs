@@ -1,6 +1,6 @@
 ﻿using Application.Permissions.DTOs;
 
-namespace Application.Interfaces;
+namespace Application.Interfaces.Services;
 public interface IPermissionsSelector
 {
     Task<IEnumerable<PermissionDto>> GetAllRolePermissions(

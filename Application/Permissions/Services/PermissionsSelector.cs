@@ -1,13 +1,13 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Services;
 using Application.Permissions.DTOs;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
-using Infrastructure.Repositories;
 
 namespace Application.Permissions.Services;
+
 public class PermissionsSelector : IPermissionsSelector
 {
     private readonly IRoleRepository _roleRepository;
@@ -33,8 +33,7 @@ public class PermissionsSelector : IPermissionsSelector
     public async Task<IEnumerable<PermissionDto>> GetAllRolePermissions(
         Guid roleId, CancellationToken cancellationToken)
     {
-        var permissions =
-            await GetAllRolePermissionsWithoutMapping(roleId, cancellationToken);
+        var permissions = await GetAllRolePermissionsWithoutMapping(roleId, cancellationToken);
         return permissions.Select(p => _mapper.Map<PermissionDto>(p));
     }
 
@@ -46,19 +45,22 @@ public class PermissionsSelector : IPermissionsSelector
         var permissions = (await _permissionsRepository
             .GetRolePermissionsAsync(roleId, cancellationToken)).ToList();
 
-        var nullPermissionProp = permissions.FirstOrDefault(p =>
-            p.Create == null || p.Read == null || p.Update == null || p.Delete == null);
+        var nullPermissionProp = permissions.FirstOrDefault(p 
+            => p.Create == null || p.Read == null || p.Update == null || p.Delete == null);
         if (nullPermissionProp != null)
             throw new RequiredAllPermissionPropertiesException(nullPermissionProp);
 
         if (permissions.Count == _sources.Count)
             return OrderBySource(permissions);
+
         if (permissions.Count > _sources.Count)
             throw new PermissionCountException();
 
         foreach (var source in _sources)
+        {
             if (!permissions.Any(p => p.Source == source))
                 permissions.Add(CreateRolePermission(roleId, source));
+        }
 
         return OrderBySource(permissions);
     }
@@ -67,12 +69,12 @@ public class PermissionsSelector : IPermissionsSelector
     {
         var permission = CreateNewPermission(source);
         permission.RoleId = roleId;
+
         return permission;
     }
 
     private Permission CreateNewPermission(AppSource source) =>
-        new()
-        {
+        new() {
             Id = Guid.NewGuid(),
             Source = source,
             Create = null,
@@ -87,8 +89,7 @@ public class PermissionsSelector : IPermissionsSelector
     public async Task<IEnumerable<NullablePermissionDto>> GetAllUserPermissions(
         Guid userId, CancellationToken cancellationToken)
     {
-        var permissions = 
-            await GetAllUserPermissionsWithoutMapping(userId, cancellationToken);
+        var permissions = await GetAllUserPermissionsWithoutMapping(userId, cancellationToken);
         return permissions.Select(p => _mapper.Map<NullablePermissionDto>(p));
     }
 
@@ -102,12 +103,15 @@ public class PermissionsSelector : IPermissionsSelector
 
         if (permissions.Count == _sources.Count)
             return OrderBySource(permissions);
+
         if (permissions.Count > _sources.Count)
             throw new PermissionCountException();
 
         foreach (var source in _sources)
+        {
             if (!permissions.Any(p => p.Source == source))
                 permissions.Add(CreateUserPermission(userId, source));
+        }
 
         return OrderBySource(permissions);
     }
@@ -116,14 +120,14 @@ public class PermissionsSelector : IPermissionsSelector
     {
         var permission = CreateNewPermission(source);
         permission.UserId = userId;
+
         return permission;
     }
 
     public async Task<IEnumerable<PermissionDto>> GetCompleteUserAndRolePermissions(
         Guid userId, CancellationToken cancellationToken)
     {
-        var permissions = 
-            await GetCompleteUserAndRolePermissionsWithoutMapping(userId, cancellationToken);
+        var permissions = await GetCompleteUserAndRolePermissionsWithoutMapping(userId, cancellationToken);
         return permissions.Select(p => _mapper.Map<PermissionDto>(p));
     }
 
