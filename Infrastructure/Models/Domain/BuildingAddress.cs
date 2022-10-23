@@ -21,7 +21,7 @@ namespace Infrastructure.Models.Domain
         [MaxLength(100)]
         public string? CoordinateType { get; set; }
         [MaxLength(10)]
-        public string PostalCode { get; set; }
+        public string? PostalCode { get; set; }
         public BuildingAddress DeepCopy()
         {
             BuildingAddress copy = new BuildingAddress(this.CityName, this.StreetName, this.BuildingNumber, this.PostalCode);
