@@ -17,6 +17,7 @@ namespace Infrastructure.Responses.BuildingAddressController
         public string HttpStatusResponse { get; set; }
         public int HttpStatusCode { get; set; }
         public string WebApiStatus { get; set; }
+        public string GoogleAPIFormattedAddress { get; set; }
         public AddUpdateBuildingAddressReponse(GoogleGeocodeAPIData googleGeocodeAPIData, BuildingAddress buildingAddress, ProwitechWebAPIStatus status = ProwitechWebAPIStatus.UNKNOWN)
         {
             AddedBuildingAddress = buildingAddress.DeepCopy();
@@ -24,6 +25,7 @@ namespace Infrastructure.Responses.BuildingAddressController
             AddedBuildingAddress.Latitude = googleGeocodeAPIData.Latitude;
             AddedBuildingAddress.CoordinateType = googleGeocodeAPIData.CoordinateType;
             AddedBuildingAddress.PostalCode = googleGeocodeAPIData.PostalCode;
+            GoogleAPIFormattedAddress = googleGeocodeAPIData.FormattedAddress;
 
             GoogleApiStatus = googleGeocodeAPIData.GoogleApiStatus;
             CoordinateType = googleGeocodeAPIData.CoordinateType;

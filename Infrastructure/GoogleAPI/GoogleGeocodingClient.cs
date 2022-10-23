@@ -71,9 +71,20 @@ namespace Infrastructure.GoogleAPI
         private Uri CreateUrl(BuildingAddress buildingAddress, string outputFormat)
         {
             string baseAddressWithFormat = String.Concat(baseAddress, outputFormat);
+            string address = "";
+
+            string streetName = StringNormalizer.ReturnStringWithoutDiacritics(buildingAddress.StreetName);
+            string cityName = StringNormalizer.ReturnStringWithoutDiacritics(buildingAddress.CityName);
+
+
+            if (streetName == cityName)
+                address = String.Concat(cityName, " ", buildingAddress.BuildingNumber, " ", "Polska");
+            else
+                address = String.Concat(streetName, " ", buildingAddress.BuildingNumber, " ", cityName, " ", "Polska");
+
             var parameters = new Dictionary<string, string>()
             {
-                {"address", HttpUtility.UrlEncode(String.Concat(buildingAddress.StreetName, " ", buildingAddress.BuildingNumber, " ", buildingAddress.CityName)) },
+                {"address", HttpUtility.UrlEncode(address)},
                 { "language", "pl"},
                 {"key", apiKey }
             };
