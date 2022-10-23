@@ -5,6 +5,7 @@ using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
+using Infrastructure.Repositories;
 
 namespace Application.Permissions.Services;
 public class PermissionsSelector : IPermissionsSelector
@@ -29,15 +30,15 @@ public class PermissionsSelector : IPermissionsSelector
             .Cast<AppSource>().ToList();
     }
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteRolePermissionsWithMapping(
+    public async Task<IEnumerable<PermissionDto>> GetAllRolePermissions(
         Guid roleId, CancellationToken cancellationToken)
     {
         var permissions =
-            await GetCompleteRolePermissionsWithoutMapping(roleId, cancellationToken);
+            await GetAllRolePermissionsWithoutMapping(roleId, cancellationToken);
         return permissions.Select(p => _mapper.Map<PermissionDto>(p));
     }
 
-    public async Task<IEnumerable<Permission>> GetCompleteRolePermissionsWithoutMapping(
+    private async Task<IEnumerable<Permission>> GetAllRolePermissionsWithoutMapping(
         Guid roleId, CancellationToken cancellationToken)
     {
         await _roleRepository.GetRoleByIdAsync(roleId, cancellationToken);
@@ -51,7 +52,7 @@ public class PermissionsSelector : IPermissionsSelector
             throw new RequiredAllPermissionPropertiesException(nullPermissionProp);
 
         if (permissions.Count == _sources.Count)
-            return permissions;
+            return OrderBySource(permissions);
         if (permissions.Count > _sources.Count)
             throw new PermissionCountException();
 
@@ -59,7 +60,7 @@ public class PermissionsSelector : IPermissionsSelector
             if (!permissions.Any(p => p.Source == source))
                 permissions.Add(CreateRolePermission(roleId, source));
 
-        return permissions.OrderBy(p => p.Source);
+        return OrderBySource(permissions);
     }
 
     private Permission CreateRolePermission(Guid roleId, AppSource source)
@@ -80,22 +81,27 @@ public class PermissionsSelector : IPermissionsSelector
             Delete = null
         };
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteUserPermissionsWithMapping(
+    private IEnumerable<Permission> OrderBySource(IEnumerable<Permission> permissions)
+        => permissions.OrderBy(p => p.Source);
+
+    public async Task<IEnumerable<NullablePermissionDto>> GetAllUserPermissions(
         Guid userId, CancellationToken cancellationToken)
     {
         var permissions = 
-            await GetCompleteRolePermissionsWithoutMapping(userId, cancellationToken);
-        return permissions.Select(p => _mapper.Map<PermissionDto>(p));
+            await GetAllUserPermissionsWithoutMapping(userId, cancellationToken);
+        return permissions.Select(p => _mapper.Map<NullablePermissionDto>(p));
     }
 
-    public async Task<IEnumerable<Permission>> GetCompleteUserPermissionsWithoutMapping(
+    private async Task<IEnumerable<Permission>> GetAllUserPermissionsWithoutMapping(
         Guid userId, CancellationToken cancellationToken)
     {
+        await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
+
         var permissions = (await _permissionsRepository
             .GetUserPermissionsAsync(userId, cancellationToken)).ToList();
 
         if (permissions.Count == _sources.Count)
-            return permissions;
+            return OrderBySource(permissions);
         if (permissions.Count > _sources.Count)
             throw new PermissionCountException();
 
@@ -103,7 +109,7 @@ public class PermissionsSelector : IPermissionsSelector
             if (!permissions.Any(p => p.Source == source))
                 permissions.Add(CreateUserPermission(userId, source));
 
-        return permissions;
+        return OrderBySource(permissions);
     }
 
     private Permission CreateUserPermission(Guid userId, AppSource source)
@@ -113,25 +119,27 @@ public class PermissionsSelector : IPermissionsSelector
         return permission;
     }
 
-    public async Task<IEnumerable<PermissionDto>> GetCompleteUserAndRolePermissionsWithMapping(
-        Guid userId, Guid userRoleId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<PermissionDto>> GetCompleteUserAndRolePermissions(
+        Guid userId, CancellationToken cancellationToken)
     {
-        var permissions = await GetCompleteUserAndRolePermissionsWithoutMapping(
-            userId, userRoleId, cancellationToken);
+        var permissions = 
+            await GetCompleteUserAndRolePermissionsWithoutMapping(userId, cancellationToken);
         return permissions.Select(p => _mapper.Map<PermissionDto>(p));
     }
 
-    public async Task<IEnumerable<Permission>> GetCompleteUserAndRolePermissionsWithoutMapping(
-        Guid userId, Guid userRoleId, CancellationToken cancellationToken)
+    private async Task<IEnumerable<Permission>> GetCompleteUserAndRolePermissionsWithoutMapping(
+        Guid userId, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
-        if (user.RoleId != userRoleId)
-            throw new Exception($"Użytkownik nie posiada przypisanej roli o identyfikatorze \"{userRoleId}\"");
 
-        var userPermissions = (await GetCompleteUserPermissionsWithoutMapping(
+        var userPermissions = (await GetAllUserPermissionsWithoutMapping(
             userId, cancellationToken)).ToList();
-        var rolePermissions = (await GetCompleteRolePermissionsWithoutMapping(
-            userRoleId, cancellationToken)).ToList();
+
+        if (user.RoleId == null)
+            return OrderBySource(userPermissions);
+
+        var rolePermissions = (await GetAllRolePermissionsWithoutMapping(
+            (Guid)user.RoleId, cancellationToken)).ToList();
 
         for (int i = 0; i < userPermissions.Count; i++)
         {
@@ -144,6 +152,6 @@ public class PermissionsSelector : IPermissionsSelector
             userPerm.Delete ??= rolePerm.Delete;
         }
 
-        return userPermissions.OrderBy(p => p.Source);
+        return OrderBySource(userPermissions);
     }
 }

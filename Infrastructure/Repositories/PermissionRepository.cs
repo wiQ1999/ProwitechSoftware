@@ -33,9 +33,6 @@ public class PermissionRepository : IPermissionsRepository
     {
         if (permission.RoleId == null && permission.UserId == null)
             throw new Exception("Uprawnienie musi być przypisane do roli lub użytkownika");
-        if (permission.Create == null && permission.Read == null &&
-            permission.Update == null && permission.Delete == null)
-            throw new Exception("Należy uzupełnić przynajmniej jedno prawo");
         await _dbContext.Permissions.AddAsync(permission, cancellation);
         await _dbContext.SaveChangesAsync(cancellation);
         return permission.Id;
