@@ -13,7 +13,7 @@ namespace Infrastructure.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<PropertyManager> builder)
         {
-            //builder.HasOne(p => p.FullAddress).WithMany().OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(p => p.FullAddress).WithMany().OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
