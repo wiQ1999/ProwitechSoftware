@@ -11,10 +11,10 @@ namespace Application.Buildings.Commands.Requests
     public record CreateBuildingCommand:IRequest<Guid>
     {
         [Required]
-        Guid BuildingAddressId { get; set; }
+        public Guid BuildingAddressId { get; set; }
         [Required]
-        string Type { get; set; }
+        public string Type { get; set; }
         [Required]
-        Guid PropertyManagerId { get; set; }
+        public Guid PropertyManagerId { get; set; }
     }
 }

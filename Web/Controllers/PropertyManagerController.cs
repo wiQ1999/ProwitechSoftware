@@ -38,13 +38,4 @@ namespace Web.Controllers
             Ok(await Mediator.Send(new DeletePropertyManagerCommand() { Id=id}));
     }
 
-   
-    //[HttpGet("{id:Guid}")]
-    //public async Task<IActionResult> Get(Guid id) =>
-    //    Ok(await Mediator.Send(new GetRoleByIdQuery(id)));
-
-   
-    //[HttpDelete("{id:Guid}")]
-    //public async Task<IActionResult> Delete(Guid id) =>
-    //    Ok(await Mediator.Send(new DeleteRoleCommand(id)));
 }

@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Buildings\Commands\Handlers\" />
     <Folder Include="Permissions\Commands\Handlers\" />
   </ItemGroup>
 

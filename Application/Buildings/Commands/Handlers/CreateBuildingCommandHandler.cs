@@ -1,5 +1,6 @@
 ﻿using Application.Buildings.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Models.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
@@ -23,9 +24,22 @@ namespace Application.Buildings.Commands.Handlers
             _buildingRepository = buildingRepository;
         }
 
-        public Task<Guid> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
+            if (pmFromDB == null)
+                throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
+            var baFromDB = await _buildingAddressRepository.GetAsync(request.BuildingAddressId, cancellationToken);
+            if (baFromDB== null)
+                throw new Exception($"Brak w bazie danych Adresu Budynku o Id: {request.BuildingAddressId}");
+
+            Building building = new Building()
+            {
+                BuildingAddressId = request.BuildingAddressId,
+                PropertyManagerId = request.PropertyManagerId,
+                Type=request.Type
+            };
+            return await _buildingRepository.AddAsync(building, cancellationToken);
         }
     }
 }

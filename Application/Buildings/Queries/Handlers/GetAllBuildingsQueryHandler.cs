@@ -13,22 +13,22 @@ using System.Threading.Tasks;
 
 namespace Application.Buildings.Queries.Handlers
 {
-    public class GetAllBuildingsQueryHandler //: IRequestHandler<GetAllBuildingsQuery, IEnumerable<AllBuildingsDTO>>
+    public class GetAllBuildingsQueryHandler : IRequestHandler<GetAllBuildingsQuery, IEnumerable<AllBuildingsDTO>>
     {
-        //private readonly IBuildingRepository _buildingRepository;
-        //private readonly IMapper _mapper;
+        private readonly IBuildingRepository _buildingRepository;
+        private readonly IMapper _mapper;
 
-        //public GetAllBuildingsQueryHandler(IBuildingRepository buildingRepository, IMapper mapper)
-        //{
-        //    _buildingRepository = buildingRepository;
-        //    _mapper = mapper;
-        //}        
+        public GetAllBuildingsQueryHandler(IBuildingRepository buildingRepository, IMapper mapper)
+        {
+            _buildingRepository = buildingRepository;
+            _mapper = mapper;
+        }
 
-        //public async Task<IEnumerable<AllBuildingsDTO>> Handle(GetAllBuildingsQuery request, CancellationToken cancellationToken)
-        //{
-        //    var buildings = await _buildingRepository.GetAllAsync(cancellationToken);
-        //    var buldingsDTOs = _mapper.Map<List<AllBuildingsDTO>>(buildings);
-        //    return buldingsDTOs;
-        //}
+        public async Task<IEnumerable<AllBuildingsDTO>> Handle(GetAllBuildingsQuery request, CancellationToken cancellationToken)
+        {
+            var buildings = await _buildingRepository.GetAllAsync(cancellationToken);
+            var buldingsDTOs = _mapper.Map<List<AllBuildingsDTO>>(buildings);
+            return buldingsDTOs;
+        }
     }
 }

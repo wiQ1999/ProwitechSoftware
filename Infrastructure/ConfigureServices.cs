@@ -17,8 +17,8 @@ public static class ConfigureServices
         services.AddScoped<IBuildingAddressRepository, BuildingAddressRepository>();
         services.AddScoped<IFullAddressRepository, FullAddressRepository>();
         services.AddScoped<IPropertyManagerRepository, PropertyManagerRepository>();
-        
-        //services.AddScoped<IBuildingRepository, BuildingRepository>();
+
+        services.AddScoped<IBuildingRepository, BuildingRepository>();
 
         return services;
     }
