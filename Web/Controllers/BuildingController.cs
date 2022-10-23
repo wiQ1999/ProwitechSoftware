@@ -22,6 +22,17 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(CreateBuildingCommand comamnd)=>
             Ok(await Mediator.Send(comamnd));
 
+        //[HttpGet("{id:Guid}")]
+        //public async Task<IActionResult> Get(Guid id) =>
+        //    Ok(await Mediator.Send(new GetPropertyManagerByIdQuery
+        //    {
+        //        Id = id
+        //    }));
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> Get(Guid id) =>
+            Ok(await Mediator.Send(new GetBuildingByIdQuery() {Id=id }));
+
+
     }
     //[HttpPost]
     //public async Task<IActionResult> Create(CreatePropertyManagerCommand command)
