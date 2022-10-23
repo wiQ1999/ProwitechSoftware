@@ -13,5 +13,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task<PropertyManager?> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<Guid> AddAsync(PropertyManager propMan, CancellationToken cancellationToken);
         Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

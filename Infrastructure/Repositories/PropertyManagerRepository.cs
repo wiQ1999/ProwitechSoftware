@@ -47,5 +47,13 @@ namespace Infrastructure.Repositories
             _dbContext.Entry(propMan).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            PropertyManager? propMan = await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
+            if(propMan == null)
+                throw new Exception($"Brak Zarządcy Nieruchomości o identyfikatorze {id}.");
+            _dbContext.PropertyManagers.Remove(propMan);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 }

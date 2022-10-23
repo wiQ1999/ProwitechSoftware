@@ -8,7 +8,6 @@ namespace Application.FullAddresses.DTOs
 {
     public record UpdateFullAddressDTO
     {
-        public Guid Id { get; set; }
         public Guid BuildingAddressId { get; set; }
         
         public string? LocalNumber { get; set; }

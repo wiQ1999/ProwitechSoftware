@@ -17,17 +17,22 @@ namespace Application.PropertyManagers.Commands.Handlers
     {
         private readonly IPropertyManagerRepository _propertyManagerRepository;
         private readonly IFullAddressRepository _fullAddressRepository;
+        private readonly IBuildingAddressRepository _buildingAddressRepository;
 
-        public CreatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository, IFullAddressRepository fullAddressRepository)
+        public CreatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository, IFullAddressRepository fullAddressRepository, IBuildingAddressRepository buildingAddressRepository)
         {
             _propertyManagerRepository = propertyManagerRepository;
             _fullAddressRepository = fullAddressRepository;
+            _buildingAddressRepository = buildingAddressRepository;
         }
 
         public async Task<Guid> Handle(CreatePropertyManagerCommand request, CancellationToken cancellationToken)
         {
             var faDTO = request.FullAddressesDTO;
 
+            var baFromDB = await _buildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
+            if (baFromDB == null)
+                throw new Exception($"W bazie danych nie ma adresu budynku o id: {faDTO.BuildingAddressId}");
             var fullAddres = new FullAddress()
             {
                 BuildingAddressId = faDTO.BuildingAddressId,
