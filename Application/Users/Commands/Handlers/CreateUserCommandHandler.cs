@@ -26,7 +26,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
             Password = request.Password,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            Email = string.IsNullOrEmpty(request.Email) ? null : request.Email,
+            Email = string.IsNullOrEmpty(request.Email) ? null! : request.Email,
             PhoneNumber = request.PhoneNumber,
             RoleId = role.Id
         };

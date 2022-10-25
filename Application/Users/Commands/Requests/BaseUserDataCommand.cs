@@ -5,15 +5,15 @@ public record BaseUserDataCommand
 {
     [Required]
     [MinLength(6)]
-    public string? Login { get; set; }
+    public string Login { get; set; } = null!;
     [Required]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string? LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     public Guid RoleId { get; set; }
 }

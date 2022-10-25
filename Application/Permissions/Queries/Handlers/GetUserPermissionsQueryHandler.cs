@@ -1,12 +1,26 @@
-﻿using Application.Permissions.DTOs;
+﻿using Application.Interfaces.Services;
+using Application.Permissions.DTOs;
 using Application.Permissions.Queries.Requests;
+using Infrastructure.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.Permissions.Queries.Handlers;
-public class GetUserPermissionsQueryHandler : IRequestHandler<GetUserPermissionsQuery, IEnumerable<PermissionDto>>
+
+public class GetUserPermissionsQueryHandler 
+    : IRequestHandler<GetUserPermissionsQuery, IEnumerable<NullablePermissionDto>>
 {
-    public Task<IEnumerable<PermissionDto>> Handle(GetUserPermissionsQuery request, CancellationToken cancellationToken)
+    private readonly IUsersRepository _usersRepository;
+    private readonly IPermissionsSelector _selector;
+
+    public GetUserPermissionsQueryHandler(
+        IUsersRepository usersRepository,
+        IPermissionsSelector selector)
     {
-        throw new NotImplementedException();
+        _usersRepository = usersRepository;
+        _selector = selector;
     }
+
+    public async Task<IEnumerable<NullablePermissionDto>> Handle(
+        GetUserPermissionsQuery request, CancellationToken cancellationToken)
+        => await _selector.GetAllUserPermissions(request.UserId, cancellationToken);
 }

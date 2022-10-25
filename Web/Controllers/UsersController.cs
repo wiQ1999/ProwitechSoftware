@@ -16,19 +16,19 @@ public class UsersController : ApiControllerBase
         Ok(await Mediator.Send(new GetUserByIdQuery(id)));
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateUserCommand command) =>
+    public async Task<IActionResult> Create(CreateUserCommand command) =>
         Ok(await Mediator.Send(command));
 
     [HttpPut("{id:Guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command)
+    public async Task<IActionResult> Update(Guid id, UpdateUserCommand command)
     {
         if (id != command.Id)
             return BadRequest();
         return Ok(await Mediator.Send(command));
     }
 
-    [HttpPut("security/{id:Guid}")]
-    public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangeUserPasswordCommand command)
+    [HttpPut("Security/{id:Guid}")]
+    public async Task<IActionResult> ChangePassword(Guid id, ChangeUserPasswordCommand command)
     {
         if (id != command.Id)
             return BadRequest();

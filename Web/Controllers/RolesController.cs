@@ -20,7 +20,7 @@ public class RolesController : ApiControllerBase
         Ok(await Mediator.Send(new CreateRoleCommand(name)));
 
     [HttpPut("{id:Guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRoleCommand command)
+    public async Task<IActionResult> Update(Guid id, UpdateRoleCommand command)
     {
         if (id != command.Id)
             return BadRequest();
