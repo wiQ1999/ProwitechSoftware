@@ -8,9 +8,5 @@ public enum AppSource
     [Description("Użytkownicy")]
     Users,
     [Description("Uprawnienia")]
-    Permissions,
-    [Description("Adresy")]
-    Addresses,
-    [Description("Budynki")]
-    Buildings
+    Permissions
 }

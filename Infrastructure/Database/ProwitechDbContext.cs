@@ -24,6 +24,6 @@ public class ProwitechDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProwitechDbContext).Assembly);
-        new DataSeeder(modelBuilder).Seed();
+        new DataSeeder(modelBuilder).DevSeed();
     }
 }
