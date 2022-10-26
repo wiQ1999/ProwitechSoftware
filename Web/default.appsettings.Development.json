@@ -9,8 +9,9 @@
     "ProwitechConnection": ""
   },
   "Jwt": {
+    "Key": "",
     "Issuer": "",
     "Audience": "",
-    "Key": ""
+    "ExpiryHours": 0
   }
 }
