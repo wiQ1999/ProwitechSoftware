@@ -6,7 +6,7 @@ using MediatR;
 namespace Application.Authentication.Queries.Handlers;
 
 public class LoginQueryHandler
-    : IRequestHandler<LoginQuery, string>
+    : IRequestHandler<LoginQuery, string?>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IPermissionsSelector _permissionsSelector;
@@ -22,7 +22,7 @@ public class LoginQueryHandler
         _jwtTokenGenerator = jwtTokenGenerator;
     }
 
-    public async Task<string> Handle(
+    public async Task<string?> Handle(
         LoginQuery request, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByLoginAndPasswordAsync(
@@ -34,8 +34,7 @@ public class LoginQueryHandler
         var permissions = await _permissionsSelector.GetCompleteUserAndRolePermissions(
             user.Id, cancellationToken);
 
-        var token = _jwtTokenGenerator.GenerateToken(
-            user, permissions, cancellationToken);
+        var token = _jwtTokenGenerator.GenerateToken(user, permissions);
 
         return token;
     }

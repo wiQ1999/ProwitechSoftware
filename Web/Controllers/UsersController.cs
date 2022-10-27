@@ -1,9 +1,11 @@
 ﻿using Application.Users.Commands.Requests;
 using Application.Users.Queries.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
 
+[Authorize]
 [Route("[controller]")]
 public class UsersController : ApiControllerBase
 {
