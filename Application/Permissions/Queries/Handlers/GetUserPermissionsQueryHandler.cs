@@ -7,7 +7,7 @@ using MediatR;
 namespace Application.Permissions.Queries.Handlers;
 
 public class GetUserPermissionsQueryHandler 
-    : IRequestHandler<GetUserPermissionsQuery, IEnumerable<NullablePermissionDto>>
+    : IRequestHandler<GetUserPermissionsQuery, IEnumerable<TranslatedNullablePermissionDto>>
 {
     private readonly IUsersRepository _usersRepository;
     private readonly IPermissionsSelector _selector;
@@ -20,7 +20,7 @@ public class GetUserPermissionsQueryHandler
         _selector = selector;
     }
 
-    public async Task<IEnumerable<NullablePermissionDto>> Handle(
+    public async Task<IEnumerable<TranslatedNullablePermissionDto>> Handle(
         GetUserPermissionsQuery request, CancellationToken cancellationToken)
         => await _selector.GetAllUserPermissions(request.UserId, cancellationToken);
 }

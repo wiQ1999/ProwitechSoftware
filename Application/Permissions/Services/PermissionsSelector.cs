@@ -30,11 +30,11 @@ public class PermissionsSelector : IPermissionsSelector
             .Cast<AppSource>().ToList();
     }
 
-    public async Task<IEnumerable<PermissionDto>> GetAllRolePermissions(
+    public async Task<IEnumerable<TranslatedPermissionDto>> GetAllRolePermissions(
         Guid roleId, CancellationToken cancellationToken)
     {
         var permissions = await GetAllRolePermissionsWithoutMapping(roleId, cancellationToken);
-        return permissions.Select(p => _mapper.Map<PermissionDto>(p));
+        return permissions.Select(p => _mapper.Map<TranslatedPermissionDto>(p));
     }
 
     private async Task<IEnumerable<Permission>> GetAllRolePermissionsWithoutMapping(
@@ -86,11 +86,11 @@ public class PermissionsSelector : IPermissionsSelector
     private IEnumerable<Permission> OrderBySource(IEnumerable<Permission> permissions)
         => permissions.OrderBy(p => p.Source);
 
-    public async Task<IEnumerable<NullablePermissionDto>> GetAllUserPermissions(
+    public async Task<IEnumerable<TranslatedNullablePermissionDto>> GetAllUserPermissions(
         Guid userId, CancellationToken cancellationToken)
     {
         var permissions = await GetAllUserPermissionsWithoutMapping(userId, cancellationToken);
-        return permissions.Select(p => _mapper.Map<NullablePermissionDto>(p));
+        return permissions.Select(p => _mapper.Map<TranslatedNullablePermissionDto>(p));
     }
 
     private async Task<IEnumerable<Permission>> GetAllUserPermissionsWithoutMapping(

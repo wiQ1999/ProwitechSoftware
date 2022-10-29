@@ -1,11 +1,11 @@
 ﻿using Application.Permissions.DTOs;
-using Infrastructure.Models.Domain;
+using Application.Users.DTOs;
 
 namespace Application.Interfaces.Services;
 
 public interface IJwtTokenGenerator
 {
     string GenerateToken(
-        User user, 
+        UserDto user, 
         IEnumerable<PermissionDto> permissions);
 }

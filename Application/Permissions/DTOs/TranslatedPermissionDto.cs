@@ -1,10 +1,7 @@
-﻿using Infrastructure.Models.Enums;
-
-namespace Application.Permissions.DTOs;
-
-public class PermissionDto
+﻿namespace Application.Permissions.DTOs;
+public class TranslatedPermissionDto
 {
-    public AppSource Source { get; set; }
+    public string Source { get; set; } = null!;
     public bool Create { get; set; }
     public bool Read { get; set; }
     public bool Update { get; set; }

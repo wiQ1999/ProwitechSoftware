@@ -2,24 +2,20 @@
 using Application.Roles.DTOs;
 using Application.Users.DTOs;
 using AutoMapper;
-using Infrastructure.Common.Helpers;
 using Infrastructure.Models.Domain;
-using Infrastructure.Models.Enums;
 
 namespace Application.Permissions.Profiles;
+
 public class PermissionProfile : Profile
 {
-    public PermissionProfile()
-    {
+	public PermissionProfile()
+	{
         CreateMap<Permission, PermissionDto>()
-            .ForMember(p => p.Source, mo => mo.MapFrom(p => p.Source.GetDescription()))
             .ForMember(p => p.Create, mo => mo.MapFrom(p => p.Create ?? false))
             .ForMember(p => p.Read, mo => mo.MapFrom(p => p.Read ?? false))
             .ForMember(p => p.Update, mo => mo.MapFrom(p => p.Update ?? false))
-            .ForMember(p => p.Delete, mo => mo.MapFrom(p => p.Delete ?? false));
-
-        CreateMap<PermissionDto, Permission>()
-            .ForMember( p => p.Source, mo => mo.MapFrom(p => p.Source.GetEnumFromDescription<AppSource>()));
+            .ForMember(p => p.Delete, mo => mo.MapFrom(p => p.Delete ?? false))
+            .ReverseMap();
 
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<Role, RoleDto>().ReverseMap();

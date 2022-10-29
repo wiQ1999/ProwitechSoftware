@@ -6,7 +6,7 @@ using MediatR;
 namespace Application.Permissions.Queries.Handlers;
 
 public class GetRolePermissionsQuerieHandler
-    : IRequestHandler<GetRolePermissionsQuery, IEnumerable<PermissionDto>>
+    : IRequestHandler<GetRolePermissionsQuery, IEnumerable<TranslatedPermissionDto>>
 {
     private readonly IPermissionsSelector _selector;
 
@@ -15,7 +15,7 @@ public class GetRolePermissionsQuerieHandler
         _selector = selector;
     }
 
-    public async Task<IEnumerable<PermissionDto>> Handle(
+    public async Task<IEnumerable<TranslatedPermissionDto>> Handle(
         GetRolePermissionsQuery request, CancellationToken cancellationToken) 
         => await _selector.GetAllRolePermissions(request.RoleId, cancellationToken);
 }
