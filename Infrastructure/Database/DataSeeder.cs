@@ -40,7 +40,7 @@ public class DataSeeder
 
         Permission adminRole_Roles = CreatePermissionForRole(adminRole, AppSource.Roles, true, true, true, true);
         Permission adminRole_Users = CreatePermissionForRole(adminRole, AppSource.Users, true, true, true, true);
-        Permission adminRole_Permissions = CreatePermissionForRole(adminRole, AppSource.Users, true, true, true, true);
+        Permission adminRole_Permissions = CreatePermissionForRole(adminRole, AppSource.Permissions, true, true, true, true);
         ModelBuilder.Entity<Permission>().HasData(adminRole_Roles, adminRole_Users, adminRole_Permissions);
 
         Permission bossRole_Roles = CreatePermissionForRole(bossRole, AppSource.Roles, true, true, true, true);
@@ -59,8 +59,8 @@ public class DataSeeder
 
         Permission worker2_Roles = CreatePermissionForUser(worker2, AppSource.Roles, null, false, null, null);
         Permission worker2_Users = CreatePermissionForUser(worker2, AppSource.Users, null, false, null, null);
-        Permission worker3U_Roles = CreatePermissionForUser(worker3, AppSource.Permissions, true, null, true, null);
-        Permission worker3U_Users = CreatePermissionForUser(worker3, AppSource.Permissions, true, null, true, true);
+        Permission worker3U_Roles = CreatePermissionForUser(worker3, AppSource.Roles, true, null, true, null);
+        Permission worker3U_Users = CreatePermissionForUser(worker3, AppSource.Users, true, null, true, true);
         ModelBuilder.Entity<Permission>().HasData(worker2_Roles, worker2_Users, worker3U_Roles, worker3U_Users);
 
         #endregion
