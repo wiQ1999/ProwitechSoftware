@@ -92,7 +92,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     private void AddClaimForPermission(
         PermissionDto permission, PermissionProperty permissionProperty)
     {
-        var claim = new Claim($"{permission.Source}_{permissionProperty}", "true");
+        var claim = new Claim(
+            "Permissions", $"{permission.Source.ToString()}_{permissionProperty.ToString()}");
         _claims.Add(claim);
     }
 }
