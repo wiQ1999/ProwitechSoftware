@@ -13,12 +13,16 @@ namespace Infrastructure.Authentication;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
+    private readonly IClaimProvider _claimProvider;
     private readonly JwtSettings _jwtSettings;
     private SigningCredentials _signingCredentials = null!;
     private List<Claim> _claims = new();
 
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
+    public JwtTokenGenerator(
+        IClaimProvider claimProvider,
+        IOptions<JwtSettings> jwtSettings)
     {
+        _claimProvider = claimProvider;
         _jwtSettings = jwtSettings.Value;
     }
 
@@ -92,8 +96,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     private void AddClaimForPermission(
         PermissionDto permission, PermissionProperty permissionProperty)
     {
-        var claim = new Claim(
-            "Permissions", $"{permission.Source}_{permissionProperty}");
+        var claim = _claimProvider
+            .CreateClaim(permission.Source, permissionProperty);
         _claims.Add(claim);
     }
 }
