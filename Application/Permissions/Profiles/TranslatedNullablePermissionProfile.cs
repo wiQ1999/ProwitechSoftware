@@ -7,14 +7,14 @@ using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 
 namespace Application.Permissions.Profiles;
-public class NullablePermissionProfile : Profile
+public class TranslatedNullablePermissionProfile : Profile
 {
-	public NullablePermissionProfile()
+	public TranslatedNullablePermissionProfile()
 	{
-        CreateMap<Permission, NullablePermissionDto>()
+        CreateMap<Permission, TranslatedNullablePermissionDto>()
             .ForMember(p => p.Source, mo => mo.MapFrom(p => p.Source.GetDescription()));
 
-        CreateMap<NullablePermissionDto, Permission>()
+        CreateMap<TranslatedNullablePermissionDto, Permission>()
             .ForMember(p => p.Source, mo => mo.MapFrom(p => p.Source.GetEnumFromDescription<AppSource>()));
 
         CreateMap<User, UserDto>().ReverseMap();

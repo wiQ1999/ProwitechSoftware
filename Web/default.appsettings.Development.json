@@ -4,5 +4,14 @@
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning"
     }
+  },
+  "ConnectionStrings": {
+    "ProwitechConnection": ""
+  },
+  "Jwt": {
+    "Key": "",
+    "Issuer": "",
+    "Audience": "",
+    "ExpiryHours": 0
   }
 }

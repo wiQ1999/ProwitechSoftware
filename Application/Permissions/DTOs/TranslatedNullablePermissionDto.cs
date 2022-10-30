@@ -1,5 +1,5 @@
 ﻿namespace Application.Permissions.DTOs;
-public class NullablePermissionDto
+public class TranslatedNullablePermissionDto
 {
     public string Source { get; set; } = null!;
     public bool? Create { get; set; }

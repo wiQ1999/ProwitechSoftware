@@ -6,5 +6,5 @@ namespace Application.Permissions.Commands.Requests;
 public record CreateOrUpdateUserPermissionsCommand : IRequest
 {
     public Guid UserId { get; set; }
-    public IEnumerable<NullablePermissionDto> Permissions { get; set; } = null!;
+    public IEnumerable<TranslatedNullablePermissionDto> Permissions { get; set; } = null!;
 }
