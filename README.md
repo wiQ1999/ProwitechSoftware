@@ -27,9 +27,9 @@
   - Swashbuckle.AspNetCore (6.2.3)
 
 ### Uruchomienie aplikacji webowej:
-  >W Konsoli poleceń będąc w lokalizacji projektu "Web" należy wykonać polecenie
+  W Konsoli poleceń będąc w lokalizacji projektu "Web" należy wykonać polecenie
   * Dla wersji developerskiej
-    npm run dev
+    >npm run dev
   
   * Dla wersji produkcyjnej
-    npm run build
+    >npm run build
