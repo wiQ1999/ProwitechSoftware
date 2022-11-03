@@ -4,16 +4,27 @@
     addBuildingAddressDTO,
     postBuildingAddress,
   } from "../../../stores/BuildingAddress.js";
-  import { CreatePropertyManagerCommand } from "../../../stores/PropertyManager";
+  import {
+    CreatePropertyManagerCommand,
+    postPropertyManager,
+  } from "../../../stores/PropertyManager";
   import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
+  import PropertyManagerAddedPopUp from "../../../components/PropertyManagerAddedPopUp.svelte";
   import { onMount } from "svelte";
+  import { genericGetById } from "../../../js-lib/httpMethods.js";
 
   let buildingAddressPostResult = "";
   let corrdinates_not_found_message;
-  let posted;
+  let buildingAddressConfirmPopUpVisibility;
+  let formVisibility;
+  let addedPropertyManagerPopUpVisibility;
   let addedBuildingAddress;
+  let FullAddressDTO;
+  let PropertyManagerDTO;
+  let buildingAddressId = "";
   onMount(() => {
-    posted = false;
+    buildingAddressConfirmPopUpVisibility = false;
+    formVisibility = true;
   });
 
   let cities = [
@@ -36,42 +47,100 @@
       $addBuildingAddressDTO,
       optionalArguments
     );
-    if (buildingAddressPostResult instanceof HttpMethodError) {
-      console.log("/<3");
-      console.log(buildingAddressPostResult);
-    } else if (buildingAddressPostResult instanceof Error) {
-      console.log("buildingAddressPostResult instanceof Error");
-    } else {
-      if (buildingAddressPostResult.webApiStatus == "ADDED_TO_DB") {
+    if (buildingAddressPostResult instanceof Response) {
+      let buildingAddressJSON = await buildingAddressPostResult.json();
+      if (buildingAddressJSON.webApiStatus == "ADDED_TO_DB") {
+        console.log("DODANO");
+        console.log(buildingAddressJSON);
+        buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
+        createPropertyManager();
+        //kontynuuj --> czyli wyślij dane do utworzenia FullAddress i PropertyManagera
       } else {
-        displayPopUp();
+        displayBuildingAddressConfirmPopUp(buildingAddressJSON);
+      }
+    } else {
+      if (buildingAddressPostResult instanceof HttpMethodError) {
+        alert(
+          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
+        );
+      } else if (buildingAddressPostResult instanceof Error) {
+        alert(
+          `Wystąpił inny błąd: ${buildingAddressPostResult.message}\n${buildingAddressPostResult.stack}`
+        );
       }
     }
   }
 
-  function displayPopUp() {
-    addedBuildingAddress = buildingAddressPostResult.addedBuildingAddress;
-    console.log(buildingAddressPostResult);
+  function displayBuildingAddressConfirmPopUp(buildingAddressJSON) {
+    console.log(buildingAddressJSON);
+    addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
+    console.log(addedBuildingAddress);
 
     let cityName = addedBuildingAddress.cityName;
     let streetName = addedBuildingAddress.streetName;
     let buildingNumber = addedBuildingAddress.buildingNumber;
 
     corrdinates_not_found_message = `Nie znaleziono dokładnych współrzędnych dla adresu ${streetName} ${buildingNumber}, ${cityName}
-  \nOdnaleziono współrzędne dla adresu: ${buildingAddressPostResult.googleAPIFormattedAddress}.
+  \nOdnaleziono współrzędne dla adresu: ${buildingAddressJSON.googleAPIFormattedAddress}.
   \nCzy chce je zachować?`;
-    posted = true;
+    buildingAddressConfirmPopUpVisibility = true;
+    formVisibility = false;
+  }
+
+  async function createPropertyManager() {
+    buildingAddressConfirmPopUpVisibility = false;
+    formVisibility = true;
+    console.log("uruchomiona funkcja");
+    // console.log(buildingAddressId);
+    // console.log($CreatePropertyManagerCommand);
+    FullAddressDTO = {
+      buildingAddressId: buildingAddressId,
+      localNumber: $CreatePropertyManagerCommand.localNumber,
+      staircaseNumber: $CreatePropertyManagerCommand.staircaseNumber,
+    };
+    $CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
+    console.log($CreatePropertyManagerCommand);
+    let postPropertyManagerResult = await postPropertyManager(
+      $CreatePropertyManagerCommand
+    );
+    console.log(postPropertyManagerResult);
+    // console.log(postPropertyManagerResultJSON);
+    if (postPropertyManagerResult instanceof Response) {
+      let postPropertyManagerResultJSON =
+        await postPropertyManagerResult.json();
+      // console.log(postPropertyManagerResultJSON);
+      PropertyManagerDTO = await genericGetById(
+        "/PropertyManager",
+        postPropertyManagerResultJSON
+      );
+      console.log(PropertyManagerDTO);
+      formVisibility = false;
+      buildingAddressConfirmPopUpVisibility = false;
+      addedPropertyManagerPopUpVisibility = true;
+    } else {
+      if (postPropertyManagerResult instanceof HttpMethodError) {
+        alert(
+          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
+        );
+      } else if (postPropertyManagerResult instanceof Error) {
+        alert(
+          `Wystąpił inny błąd: ${buildingAddressPostResult.message}\n${buildingAddressPostResult.stack}`
+        );
+      }
+    }
   }
 </script>
 
 <div class="add-property-manager-form">
-  {#if posted}
+  {#if buildingAddressConfirmPopUpVisibility}
     <BuildingAddressPopUp
       {addedBuildingAddress}
       {corrdinates_not_found_message}
+      createPropertyManager={async () => await createPropertyManager()}
+      bind:buildingAddressId
     />
   {/if}
-  {#if !posted}
+  {#if formVisibility}
     <form on:submit|preventDefault={onSubmit}>
       <div>
         <label for={$addBuildingAddressDTO.cityName}>Miejscowość</label>
@@ -114,6 +183,9 @@
       </div>
       <button type="submit">Submit</button>
     </form>
+  {/if}
+  {#if addedPropertyManagerPopUpVisibility}
+    <PropertyManagerAddedPopUp {PropertyManagerDTO} />
   {/if}
 </div>
 
