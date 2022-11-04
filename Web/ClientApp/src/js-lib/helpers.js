@@ -11,6 +11,5 @@ export function addOptionalParameters(url, parametersDictionary) {
     0,
     urlWithParameters.length - 1
   );
-  console.log(urlWithParameters);
   return urlWithParameters;
 }

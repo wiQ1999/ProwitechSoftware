@@ -62,7 +62,7 @@
         buildingAddressId =
           buildingAddressPostResultAgainJSON.addedBuildingAddress.id;
       } else {
-        result_message = `Problem z dodaniem adresu: ${buildingAddressPostResultAgain}`;
+        result_message = `Problem z dodaniem adresu: ${buildingAddressPostResultAgainJSON}`;
       }
     }
     result_window_show = true;

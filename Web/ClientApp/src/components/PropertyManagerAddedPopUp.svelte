@@ -1,26 +1,43 @@
 <script>
-  import { writable } from "svelte/store";
-
-  export const addBuildingAddressDTO = writable({
-    cityName: "",
-    streetName: "",
-    buildingNumber: "",
-  });
-  export const PropertyManagerDTO = writable({
-    id: "",
-    name: "",
-    phoneNumber: "",
-    fullAddress: {
-      buildingAddress: {
-        cityName: "",
-        streetName: "",
-        buildingNumber: "",
-        postalCode: "",
-      },
-      localNumber: "",
-      staircaseNumber: "",
-    },
-  });
+  //struktura PropertyManagerDTO
+  // let PropertyManagerDTO = {
+  //   id: "",
+  //   name: "",
+  //   phoneNumber: "",
+  //   fullAddress: {
+  //     buildingAddress: {
+  //       cityName: "",
+  //       streetName: "",
+  //       buildingNumber: "",
+  //       postalCode: "",
+  //     },
+  //     localNumber: "",
+  //     staircaseNumber: "",
+  //   },
+  // };
+  export let PropertyManagerDTO;
 </script>
 
-<div>hello</div>
+<div>
+  Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:
+  {PropertyManagerDTO.name}
+  <br />
+  {PropertyManagerDTO.fullAddress.buildingAddress.cityName}
+  <br />
+  {PropertyManagerDTO.fullAddress.buildingAddress.streetName}
+  <br />
+  {PropertyManagerDTO.fullAddress.buildingAddress.buildingNumber}
+  <br />
+  {#if PropertyManagerDTO.fullAddress.localNumber != null}
+    {PropertyManagerDTO.fullAddress.localNumber}
+    <br />
+  {/if}
+  {#if PropertyManagerDTO.fullAddress.staircaseNumber != null}
+    {PropertyManagerDTO.fullAddress.staircaseNumber}
+    <br />
+  {/if}
+  {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
+  <br />
+  {PropertyManagerDTO.phoneNumber}
+  <a href="/index" class="button">Powrót do strony głównej</a>
+</div>

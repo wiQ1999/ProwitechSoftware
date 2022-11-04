@@ -11,19 +11,13 @@ export const addBuildingAddressDTO = writable({
 export async function postBuildingAddress(postBody, optionalArguments) {
   let response;
   try {
-    let response = await genericPost(
+    response = await genericPost(
       "/BuildingAddress",
       postBody,
       optionalArguments
     );
     return response;
   } catch (err) {
-    if (err instanceof HttpMethodError) {
-      // alert(
-      //   `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${err.message}`
-      // );
-    }
-    // else alert(`Wystąpił inny błąd: ${err.message}\n${err.stack}`);
     return err;
   }
 }
@@ -51,16 +45,11 @@ async function postBuildingAddressOnly(
   optionalArguments
 ) {
   let addBuildingAddressDTOagain = {
-    cityName: "",
-    streetName: "",
-    buildingNumber: "",
+    cityName: addedBuildingAddress.cityName,
+    streetName: addedBuildingAddress.streetName,
+    buildingNumber: addedBuildingAddress.buildingNumber,
   };
   let response;
-  addBuildingAddressDTOagain.cityName = addedBuildingAddress.cityName;
-  addBuildingAddressDTOagain.streetName = addedBuildingAddress.streetName;
-  addBuildingAddressDTOagain.buildingNumber =
-    addedBuildingAddress.buildingNumber;
-
   response = await postBuildingAddress(
     addBuildingAddressDTOagain,
     optionalArguments
@@ -72,22 +61,13 @@ async function postBuildingAddressWithLongAndLat(
   optionalArguments
 ) {
   let addBuildingAddressDTOWithLongAndLat = {
-    cityName: "",
-    streetName: "",
-    buildingNumber: "",
-    longitude: 0.0,
-    latitude: 0.0,
+    cityName: addedBuildingAddress.cityName,
+    streetName: addedBuildingAddress.streetName,
+    buildingNumber: addedBuildingAddress.buildingNumber,
+    longitude: addedBuildingAddress.longitude,
+    latitude: addedBuildingAddress.latitude,
   };
   let response;
-  addBuildingAddressDTOWithLongAndLat.cityName = addedBuildingAddress.cityName;
-  addBuildingAddressDTOWithLongAndLat.streetName =
-    addedBuildingAddress.streetName;
-  addBuildingAddressDTOWithLongAndLat.buildingNumber =
-    addedBuildingAddress.buildingNumber;
-  addBuildingAddressDTOWithLongAndLat.longitude =
-    addedBuildingAddress.longitude;
-  addBuildingAddressDTOWithLongAndLat.latitude = addedBuildingAddress.latitude;
-
   response = await postBuildingAddress(
     addBuildingAddressDTOWithLongAndLat,
     optionalArguments

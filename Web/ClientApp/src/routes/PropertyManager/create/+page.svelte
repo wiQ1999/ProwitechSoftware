@@ -34,10 +34,6 @@
   ];
 
   async function onSubmit() {
-    console.log(JSON.stringify($addBuildingAddressDTO));
-    console.log(JSON.stringify($CreatePropertyManagerCommand));
-    console.log("--------------------------------------");
-
     let optionalArguments = {
       force: false,
       onlyAddress: false,
@@ -50,11 +46,8 @@
     if (buildingAddressPostResult instanceof Response) {
       let buildingAddressJSON = await buildingAddressPostResult.json();
       if (buildingAddressJSON.webApiStatus == "ADDED_TO_DB") {
-        console.log("DODANO");
-        console.log(buildingAddressJSON);
         buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
         createPropertyManager();
-        //kontynuuj --> czyli wyślij dane do utworzenia FullAddress i PropertyManagera
       } else {
         displayBuildingAddressConfirmPopUp(buildingAddressJSON);
       }
@@ -72,9 +65,7 @@
   }
 
   function displayBuildingAddressConfirmPopUp(buildingAddressJSON) {
-    console.log(buildingAddressJSON);
     addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
-    console.log(addedBuildingAddress);
 
     let cityName = addedBuildingAddress.cityName;
     let streetName = addedBuildingAddress.streetName;
@@ -89,42 +80,52 @@
 
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
-    formVisibility = true;
-    console.log("uruchomiona funkcja");
-    // console.log(buildingAddressId);
-    // console.log($CreatePropertyManagerCommand);
+
     FullAddressDTO = {
       buildingAddressId: buildingAddressId,
       localNumber: $CreatePropertyManagerCommand.localNumber,
       staircaseNumber: $CreatePropertyManagerCommand.staircaseNumber,
     };
+
     $CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
-    console.log($CreatePropertyManagerCommand);
-    let postPropertyManagerResult = await postPropertyManager(
+    let postPropertyManagerId = await postPropertyManager(
       $CreatePropertyManagerCommand
     );
-    console.log(postPropertyManagerResult);
-    // console.log(postPropertyManagerResultJSON);
-    if (postPropertyManagerResult instanceof Response) {
-      let postPropertyManagerResultJSON =
-        await postPropertyManagerResult.json();
-      // console.log(postPropertyManagerResultJSON);
-      PropertyManagerDTO = await genericGetById(
-        "/PropertyManager",
-        postPropertyManagerResultJSON
-      );
-      console.log(PropertyManagerDTO);
+    if (postPropertyManagerId instanceof Response) {
+      let postPropertyManagerIdJSON = await postPropertyManagerId.json();
+      await showPropertyManager(postPropertyManagerIdJSON);
+
       formVisibility = false;
       buildingAddressConfirmPopUpVisibility = false;
       addedPropertyManagerPopUpVisibility = true;
     } else {
-      if (postPropertyManagerResult instanceof HttpMethodError) {
+      if (postPropertyManagerId instanceof HttpMethodError) {
         alert(
           `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
         );
-      } else if (postPropertyManagerResult instanceof Error) {
+      } else if (postPropertyManagerId instanceof Error) {
         alert(
           `Wystąpił inny błąd: ${buildingAddressPostResult.message}\n${buildingAddressPostResult.stack}`
+        );
+      }
+    }
+  }
+  async function showPropertyManager(propertyManagerId) {
+    let getPropertyManagerByIdResult = await genericGetById(
+      "/PropertyManager",
+      propertyManagerId
+    );
+
+    if (getPropertyManagerByIdResult instanceof Response) {
+      PropertyManagerDTO = await getPropertyManagerByIdResult.json();
+    } else {
+      if (getPropertyManagerByIdResult instanceof HttpMethodError) {
+        alert(
+          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
+        );
+      } else if (getPropertyManagerByIdResult instanceof Error) {
+        alert(
+          `Wystąpił inny błąd: ${getPropertyManagerByIdResult.message}\n${getPropertyManagerByIdResult.stack}`
         );
       }
     }
@@ -190,19 +191,11 @@
 </div>
 
 <style>
-  /* select,
-  input {
-    background-color: bisque;
-  }
-  label {
-    color: #decff1;
-  } */
   * {
     box-sizing: border-box;
   }
   form {
     display: flex;
-    /* flex-direction: column; */
     width: 300px;
   }
 </style>
