@@ -40,13 +40,12 @@
 
     question_window_show = false;
 
-    if (buildingAddressPostResultAgain instanceof HttpMethodError) {
-      result_message = buildingAddressPostResultAgain.message;
+    if (buildingAddressPostResultAgain instanceof Error) {
+      result_message =
+        "W wyniku błędu nie udało się dodać adresu budynku do bazy danych";
       buttonErrorVisibility = true;
-    } else if (buildingAddressPostResultAgain instanceof Error) {
-      result_message = `Wystąpił inny błąd: ${buildingAddressPostResultAgain.message}\n${buildingAddressPostResultAgain.stack}`;
-      buttonErrorVisibility = true;
-    } else {
+      buttonContinueVisibility = false;
+    } else if (buildingAddressPostResultAgain instanceof Response) {
       let buildingAddressPostResultAgainJSON =
         await buildingAddressPostResultAgain.json();
       if (
@@ -67,6 +66,8 @@
           buildingAddressPostResultAgainJSON.addedBuildingAddress.id;
       } else {
         result_message = `Problem z dodaniem adresu: ${buildingAddressPostResultAgainJSON}`;
+        buttonErrorVisibility = true;
+        buttonContinueVisibility = false;
       }
     }
     result_window_show = true;
@@ -103,7 +104,9 @@
         >
       {/if}
       {#if buttonErrorVisibility}
-        <a href="PropertyManager/create">Spróbuj ponownie</a>
+        <button on:click|preventDefault={() => window.location.reload()}
+          >Spróbuj ponownie</button
+        >
       {/if}
     </div>
   {/if}

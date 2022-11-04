@@ -1,6 +1,7 @@
 ﻿using Application.BuildingAddresses.Commands.Requests;
 using Application.BuildingAddresses.DTOs;
 using Application.BuildingAddresses.Queries.Requests;
+using Application.PropertyManagers.Commands.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -48,6 +49,8 @@ namespace Web.Controllers
                 return BadRequest();
             return Ok(await Mediator.Send(command));
         }
-
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> Delete(Guid id) =>
+            Ok(await Mediator.Send(new DeleteBuildingAddressCommand() { Id = id }));
     }
 }

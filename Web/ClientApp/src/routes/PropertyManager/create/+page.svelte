@@ -8,6 +8,7 @@
   import {
     CreatePropertyManagerCommand,
     postPropertyManager,
+    showPropertyManager,
   } from "../../../stores/PropertyManager";
   import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
   import PropertyManagerAddedPopUp from "../../../components/PropertyManagerAddedPopUp.svelte";
@@ -88,41 +89,21 @@
 
     if (postPropertyManagerId instanceof Error) {
       //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
-
-      let errorInfo = `Wystąpił inny błąd przy dodawaniu Zarządcy Nieruchomości: ${postPropertyManagerId.message}\n${postPropertyManagerId.stack}`;
-      if (postPropertyManagerId instanceof HttpMethodError)
-        errorInfo = `Błąd HTTP przy dodawaniu Zarządcy Nieruchomości!\nInformacje o błędzie:\n${postPropertyManagerId.message}`;
-
-      alert(errorInfo);
-      // window.location.reload();
+      await deleteBuildingAddress(buildingAddressId);
+      window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {
       let postPropertyManagerIdJSON = await postPropertyManagerId.json();
-      await showPropertyManager(postPropertyManagerIdJSON);
-
+      let getPropertyManagerByIdResult = await showPropertyManager(
+        postPropertyManagerIdJSON
+      );
+      if (getPropertyManagerByIdResult instanceof Response) {
+        PropertyManagerDTO = await getPropertyManagerByIdResult.json();
+      } else {
+        PropertyManagerDTO = null;
+      }
       formVisibility = false;
       buildingAddressConfirmPopUpVisibility = false;
       addedPropertyManagerPopUpVisibility = true;
-    }
-  }
-
-  async function showPropertyManager(propertyManagerId) {
-    let getPropertyManagerByIdResult = await genericGetById(
-      "/PropertyManager",
-      propertyManagerId
-    );
-
-    if (getPropertyManagerByIdResult instanceof HttpMethodError) {
-      alert(
-        `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${getPropertyManagerByIdResult.message}`
-      );
-      // window.location.reload();
-    } else if (getPropertyManagerByIdResult instanceof Error) {
-      alert(
-        `Wystąpił inny błąd: ${getPropertyManagerByIdResult.message}\n${getPropertyManagerByIdResult.stack}`
-      );
-      // window.location.reload();
-    } else if (getPropertyManagerByIdResult instanceof Response) {
-      PropertyManagerDTO = await getPropertyManagerByIdResult.json();
     }
   }
 </script>

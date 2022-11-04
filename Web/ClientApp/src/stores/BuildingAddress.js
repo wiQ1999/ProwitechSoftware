@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { handleError } from "../js-lib/errors.js";
-import { genericPost } from "../js-lib/httpMethods.js";
+import { genericPost, genericDelete } from "../js-lib/httpMethods.js";
 
 export const addBuildingAddressDTO = writable({
   cityName: "",
@@ -14,11 +14,12 @@ export async function deleteBuildingAddress(id) {
     response = await genericDelete("/BuildingAddress", id);
     return response;
   } catch (err) {
+    handleError(err, "usuwanie Adresu Budynku");
     return err;
   }
 }
 
-export async function postBuildingAddress(postBody, optionalArguments) {
+export async function postBuildingAddress(postBody, optionalArguments = null) {
   let response;
   try {
     response = await genericPost(
@@ -28,7 +29,7 @@ export async function postBuildingAddress(postBody, optionalArguments) {
     );
     return response;
   } catch (err) {
-    handleError(err, "dodawanie nowego adresu budynku");
+    handleError(err, "dodawanie nowego Adresu Budynku");
     return err;
   }
 }
@@ -37,14 +38,16 @@ export async function postBuildingAddressAgain(
   optionalArguments,
   onlyAddress = false
 ) {
+  //specjalnie błąd dla sprawdzenia
+  // addedBuildingAddress.cityName = "";
   let postResponse;
   if (onlyAddress)
-    postResponse = postBuildingAddressOnly(
+    postResponse = await postBuildingAddressOnly(
       addedBuildingAddress,
       optionalArguments
     );
   else
-    postResponse = postBuildingAddressWithLongAndLat(
+    postResponse = await postBuildingAddressWithLongAndLat(
       addedBuildingAddress,
       optionalArguments
     );

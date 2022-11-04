@@ -3,7 +3,11 @@ import { HttpMethodError } from "./errors";
 
 const apiAddress = "https://localhost:7186";
 
-export async function genericPost(route, bodyToJsonize, optionalParameters) {
+export async function genericPost(
+  route,
+  bodyToJsonize,
+  optionalParameters = null
+) {
   let response;
   let url = apiAddress.concat(route);
   url = addOptionalParameters(url, optionalParameters);
