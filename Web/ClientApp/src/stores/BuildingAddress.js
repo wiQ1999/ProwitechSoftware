@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { HttpMethodError } from "../js-lib/errors.js";
+import { handleError } from "../js-lib/errors.js";
 import { genericPost } from "../js-lib/httpMethods.js";
 
 export const addBuildingAddressDTO = writable({
@@ -7,6 +7,16 @@ export const addBuildingAddressDTO = writable({
   streetName: "",
   buildingNumber: "",
 });
+
+export async function deleteBuildingAddress(id) {
+  let response;
+  try {
+    response = await genericDelete("/BuildingAddress", id);
+    return response;
+  } catch (err) {
+    return err;
+  }
+}
 
 export async function postBuildingAddress(postBody, optionalArguments) {
   let response;
@@ -18,6 +28,7 @@ export async function postBuildingAddress(postBody, optionalArguments) {
     );
     return response;
   } catch (err) {
+    handleError(err, "dodawanie nowego adresu budynku");
     return err;
   }
 }

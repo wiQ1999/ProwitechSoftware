@@ -3,6 +3,7 @@
   import {
     addBuildingAddressDTO,
     postBuildingAddress,
+    deleteBuildingAddress,
   } from "../../../stores/BuildingAddress.js";
   import {
     CreatePropertyManagerCommand,
@@ -43,23 +44,16 @@
       $addBuildingAddressDTO,
       optionalArguments
     );
-    if (buildingAddressPostResult instanceof Response) {
+
+    if (buildingAddressPostResult instanceof Error) {
+      // window.location.reload();
+    } else if (buildingAddressPostResult instanceof Response) {
       let buildingAddressJSON = await buildingAddressPostResult.json();
       if (buildingAddressJSON.webApiStatus == "ADDED_TO_DB") {
         buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
-        createPropertyManager();
+        await createPropertyManager();
       } else {
         displayBuildingAddressConfirmPopUp(buildingAddressJSON);
-      }
-    } else {
-      if (buildingAddressPostResult instanceof HttpMethodError) {
-        alert(
-          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
-        );
-      } else if (buildingAddressPostResult instanceof Error) {
-        alert(
-          `Wystąpił inny błąd: ${buildingAddressPostResult.message}\n${buildingAddressPostResult.stack}`
-        );
       }
     }
   }
@@ -91,43 +85,44 @@
     let postPropertyManagerId = await postPropertyManager(
       $CreatePropertyManagerCommand
     );
-    if (postPropertyManagerId instanceof Response) {
+
+    if (postPropertyManagerId instanceof Error) {
+      //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
+
+      let errorInfo = `Wystąpił inny błąd przy dodawaniu Zarządcy Nieruchomości: ${postPropertyManagerId.message}\n${postPropertyManagerId.stack}`;
+      if (postPropertyManagerId instanceof HttpMethodError)
+        errorInfo = `Błąd HTTP przy dodawaniu Zarządcy Nieruchomości!\nInformacje o błędzie:\n${postPropertyManagerId.message}`;
+
+      alert(errorInfo);
+      // window.location.reload();
+    } else if (postPropertyManagerId instanceof Response) {
       let postPropertyManagerIdJSON = await postPropertyManagerId.json();
       await showPropertyManager(postPropertyManagerIdJSON);
 
       formVisibility = false;
       buildingAddressConfirmPopUpVisibility = false;
       addedPropertyManagerPopUpVisibility = true;
-    } else {
-      if (postPropertyManagerId instanceof HttpMethodError) {
-        alert(
-          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
-        );
-      } else if (postPropertyManagerId instanceof Error) {
-        alert(
-          `Wystąpił inny błąd: ${buildingAddressPostResult.message}\n${buildingAddressPostResult.stack}`
-        );
-      }
     }
   }
+
   async function showPropertyManager(propertyManagerId) {
     let getPropertyManagerByIdResult = await genericGetById(
       "/PropertyManager",
       propertyManagerId
     );
 
-    if (getPropertyManagerByIdResult instanceof Response) {
+    if (getPropertyManagerByIdResult instanceof HttpMethodError) {
+      alert(
+        `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${getPropertyManagerByIdResult.message}`
+      );
+      // window.location.reload();
+    } else if (getPropertyManagerByIdResult instanceof Error) {
+      alert(
+        `Wystąpił inny błąd: ${getPropertyManagerByIdResult.message}\n${getPropertyManagerByIdResult.stack}`
+      );
+      // window.location.reload();
+    } else if (getPropertyManagerByIdResult instanceof Response) {
       PropertyManagerDTO = await getPropertyManagerByIdResult.json();
-    } else {
-      if (getPropertyManagerByIdResult instanceof HttpMethodError) {
-        alert(
-          `Błąd HTTP przy wysyłaniu danych!\nInformacje o błędzie:\n${buildingAddressPostResult.message}`
-        );
-      } else if (getPropertyManagerByIdResult instanceof Error) {
-        alert(
-          `Wystąpił inny błąd: ${getPropertyManagerByIdResult.message}\n${getPropertyManagerByIdResult.stack}`
-        );
-      }
     }
   }
 </script>

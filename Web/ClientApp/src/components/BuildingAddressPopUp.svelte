@@ -9,6 +9,8 @@
 
   let result_window_show = false;
   let question_window_show = true;
+  let buttonContinueVisibility = true;
+  let buttonErrorVisibility = false;
 
   let result_message = "";
 
@@ -40,8 +42,10 @@
 
     if (buildingAddressPostResultAgain instanceof HttpMethodError) {
       result_message = buildingAddressPostResultAgain.message;
+      buttonErrorVisibility = true;
     } else if (buildingAddressPostResultAgain instanceof Error) {
       result_message = `Wystąpił inny błąd: ${buildingAddressPostResultAgain.message}\n${buildingAddressPostResultAgain.stack}`;
+      buttonErrorVisibility = true;
     } else {
       let buildingAddressPostResultAgainJSON =
         await buildingAddressPostResultAgain.json();
@@ -67,9 +71,9 @@
     }
     result_window_show = true;
   }
-  function continueAdding() {
+  async function continueAdding() {
     result_window_show = false;
-    createPropertyManager();
+    await createPropertyManager();
   }
 </script>
 
@@ -93,8 +97,14 @@
   {#if result_window_show}
     <div class="result-window">
       {result_message}
-      <button on:click|preventDefault={() => continueAdding()}>Kontynuuj</button
-      >
+      {#if buttonContinueVisibility}
+        <button on:click|preventDefault={async () => await continueAdding()}
+          >Kontynuuj</button
+        >
+      {/if}
+      {#if buttonErrorVisibility}
+        <a href="PropertyManager/create">Spróbuj ponownie</a>
+      {/if}
     </div>
   {/if}
 </div>

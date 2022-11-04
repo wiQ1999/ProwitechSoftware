@@ -17,9 +17,14 @@ export async function genericPost(route, bodyToJsonize, optionalParameters) {
   };
 
   response = await fetch(url, fetchData);
-  let json = await response.clone().json();
-
-  if (!response.ok) throw new HttpMethodError(json);
+  if (!response.ok) {
+    let json = await response.clone().json();
+    let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
+    if (json.title == "One or more validation errors occurred.") {
+      throw new HttpMethodError(message, json.errors);
+    }
+    throw new HttpMethodError(message);
+  }
 
   return response;
 }
@@ -36,9 +41,15 @@ export async function genericGetAll(route) {
   };
 
   response = await fetch(url, fetchData);
-  let json = await response.clone().json();
-
-  if (!response.ok) throw new HttpMethodError(json);
+  if (!response.ok) {
+    let json = await response.clone().json();
+    let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
+    if (json.title == "One or more validation errors occurred.") {
+      console.log(json.errors);
+      throw new HttpMethodError(message, json.errors);
+    }
+    throw new HttpMethodError(message);
+  }
   return response;
 }
 export async function genericGetById(route, id) {
@@ -54,8 +65,38 @@ export async function genericGetById(route, id) {
 
   response = await fetch(url, fetchData);
 
-  let json = await response.clone().json();
+  if (!response.ok) {
+    let json = await response.clone().json();
+    let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
+    if (json.title == "One or more validation errors occurred.") {
+      console.log(json.errors);
+      throw new HttpMethodError(message, json.errors);
+    }
+    throw new HttpMethodError(message);
+  }
+  return response;
+}
+export async function genericDelete(route, id) {
+  let halfUrl = route + "/" + id;
+  let url = apiAddress.concat(halfUrl);
+  let response;
+  let fetchData = {
+    method: "DELETE",
+    headers: new Headers({
+      "content-type": "application/json",
+    }),
+  };
 
-  if (!response.ok) throw new HttpMethodError(json);
+  response = await fetch(url, fetchData);
+
+  if (!response.ok) {
+    let json = await response.clone().json();
+    let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
+    if (json.title == "One or more validation errors occurred.") {
+      console.log(json.errors);
+      throw new HttpMethodError(message, json.errors);
+    }
+    throw new HttpMethodError(message);
+  }
   return response;
 }
