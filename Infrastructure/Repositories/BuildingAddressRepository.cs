@@ -39,6 +39,14 @@ namespace Infrastructure.Repositories
             _dbContext.Entry(address).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            BuildingAddress? baFromDB = await _dbContext.BuildingAddresses.FirstOrDefaultAsync(ba => ba.Id == id, cancellationToken);
+            if (baFromDB == null)
+                throw new Exception($"Brak Adresu Budynku o identyfikatorze {id}.");
+            _dbContext.BuildingAddresses.Remove(baFromDB);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
 
     }
 }

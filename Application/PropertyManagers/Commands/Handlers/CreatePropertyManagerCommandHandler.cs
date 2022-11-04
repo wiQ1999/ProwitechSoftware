@@ -28,7 +28,7 @@ namespace Application.PropertyManagers.Commands.Handlers
 
         public async Task<Guid> Handle(CreatePropertyManagerCommand request, CancellationToken cancellationToken)
         {
-            var faDTO = request.FullAddressesDTO;
+            var faDTO = request.FullAddressDTO;
 
             var baFromDB = await _buildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
             if (baFromDB == null)
