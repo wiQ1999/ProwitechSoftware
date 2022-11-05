@@ -1,4 +1,3 @@
-import { writable } from "svelte/store";
 import {
   genericDelete,
   genericGetAll,
@@ -7,15 +6,6 @@ import {
 } from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
-export const CreatePropertyManagerCommand = writable({
-  name: "",
-  phoneNumber: "",
-  fullAddressDTO: {
-    buildingAddressId: "",
-    localNumber: "",
-    staircaseNumber: "",
-  },
-});
 export async function postPropertyManager(propertyManager) {
   let response;
   try {

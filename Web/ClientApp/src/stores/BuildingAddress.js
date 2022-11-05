@@ -1,12 +1,5 @@
-import { writable } from "svelte/store";
 import { handleError } from "../js-lib/errors.js";
 import { genericPost, genericDelete } from "../js-lib/httpMethods.js";
-
-export const addBuildingAddressDTO = writable({
-  cityName: "",
-  streetName: "",
-  buildingNumber: "",
-});
 
 export async function deleteBuildingAddress(id) {
   let response;

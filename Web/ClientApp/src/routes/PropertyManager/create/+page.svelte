@@ -1,20 +1,19 @@
 <script>
-  import { HttpMethodError } from "../../../js-lib/errors.js";
   import {
-    addBuildingAddressDTO,
     postBuildingAddress,
     deleteBuildingAddress,
   } from "../../../stores/BuildingAddress.js";
   import {
-    CreatePropertyManagerCommand,
     postPropertyManager,
     showPropertyManager,
   } from "../../../stores/PropertyManager";
   import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
   import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
-  import { genericGetById } from "../../../js-lib/httpMethods.js";
+  import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
 
+  let addBuildingAddressDTO;
+  let CreatePropertyManagerCommand;
   let buildingAddressPostResult = "";
   let corrdinates_not_found_message;
   let buildingAddressConfirmPopUpVisibility;
@@ -31,12 +30,6 @@
     formVisibility = true;
   });
 
-  let cities = [
-    { id: "Bydgoszcz", name: "Bydgoszcz" },
-    { id: "Poznań", name: "Poznań" },
-    { id: "Wrocław", name: "Wrocław" },
-  ];
-
   async function onSubmit() {
     let optionalArguments = {
       force: false,
@@ -44,7 +37,7 @@
     };
 
     buildingAddressPostResult = await postBuildingAddress(
-      $addBuildingAddressDTO,
+      addBuildingAddressDTO,
       optionalArguments
     );
 
@@ -80,13 +73,13 @@
 
     FullAddressDTO = {
       buildingAddressId: buildingAddressId,
-      localNumber: $CreatePropertyManagerCommand.localNumber,
-      staircaseNumber: $CreatePropertyManagerCommand.staircaseNumber,
+      localNumber: CreatePropertyManagerCommand.localNumber,
+      staircaseNumber: CreatePropertyManagerCommand.staircaseNumber,
     };
 
-    $CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
+    CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
     let postPropertyManagerId = await postPropertyManager(
-      $CreatePropertyManagerCommand
+      CreatePropertyManagerCommand
     );
 
     if (postPropertyManagerId instanceof Error) {
@@ -120,48 +113,11 @@
     />
   {/if}
   {#if formVisibility}
-    <form on:submit|preventDefault={onSubmit}>
-      <div>
-        <label for={$addBuildingAddressDTO.cityName}>Miejscowość</label>
-        <select bind:value={$addBuildingAddressDTO.cityName}>
-          {#each cities as city}
-            <option value={city.id}>{city.name}</option>
-          {/each}
-        </select>
-      </div>
-      <div>
-        <label for={$CreatePropertyManagerCommand.name}
-          >Nazwa Zarządcy Nieruchomości</label
-        >
-        <input type="text" bind:value={$CreatePropertyManagerCommand.name} />
-        <label for={$CreatePropertyManagerCommand.phoneNumber}
-          >Numer telefonu</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.phoneNumber}
-        />
-        <label for={$addBuildingAddressDTO.streetName}>Nazwa ulicy</label>
-        <input type="text" bind:value={$addBuildingAddressDTO.streetName} />
-        <label for={$addBuildingAddressDTO.buildingNumber}>Numer budynku</label>
-        <input type="text" bind:value={$addBuildingAddressDTO.buildingNumber} />
-        <label for={$CreatePropertyManagerCommand.localNumber}
-          >Numer lokalu (opcjonalnie)</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.localNumber}
-        />
-        <label for={$CreatePropertyManagerCommand.staircaseNumber}
-          >Numer klatki schodowej (opcjonalnie)</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.staircaseNumber}
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+    <PropertyManagerForm
+      bind:addBuildingAddressDTO
+      bind:CreatePropertyManagerCommand
+      {onSubmit}
+    />
   {/if}
   {#if addedPropertyManagerPopUpVisibility}
     <ShowPropertyManagerPopUp
@@ -170,13 +126,3 @@
     />
   {/if}
 </div>
-
-<style>
-  * {
-    box-sizing: border-box;
-  }
-  form {
-    display: flex;
-    width: 300px;
-  }
-</style>
