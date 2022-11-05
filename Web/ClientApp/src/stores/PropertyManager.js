@@ -1,5 +1,10 @@
 import { writable } from "svelte/store";
-import { genericGetById, genericPost } from "../js-lib/httpMethods";
+import {
+  genericDelete,
+  genericGetAll,
+  genericGetById,
+  genericPost,
+} from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
 export const CreatePropertyManagerCommand = writable({
@@ -22,9 +27,32 @@ export async function postPropertyManager(propertyManager) {
   }
 }
 export async function showPropertyManager(propertyManagerId) {
-  let getPropertyManagerByIdResult = await genericGetById(
-    "/PropertyManager",
-    propertyManagerId
-  );
+  let getPropertyManagerByIdResult;
+  try {
+    getPropertyManagerByIdResult = await genericGetById(
+      "/PropertyManager",
+      propertyManagerId
+    );
+  } catch (err) {
+    handleError(err, "pobieranie Zarządcy Nieruchomości na podstawie ID");
+  }
   return getPropertyManagerByIdResult;
+}
+export async function getAllPropertyManagers() {
+  let managers;
+  try {
+    managers = await genericGetAll("/PropertyManager");
+  } catch (err) {
+    handleError(err, "pobieranie wszystkich Zarządców Nieruchomości");
+  }
+  return managers;
+}
+export async function deletePropertyManager(id) {
+  let response;
+  try {
+    response = await genericDelete("/PropertyManager", id);
+  } catch (err) {
+    handleError(err, "usuwanie Zarządcy Nieruchomości na podstawie ID");
+  }
+  return response;
 }
