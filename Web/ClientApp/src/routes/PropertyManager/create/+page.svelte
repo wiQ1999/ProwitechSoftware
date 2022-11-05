@@ -11,7 +11,7 @@
     showPropertyManager,
   } from "../../../stores/PropertyManager";
   import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
-  import PropertyManagerAddedPopUp from "../../../components/PropertyManagerAddedPopUp.svelte";
+  import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
   import { genericGetById } from "../../../js-lib/httpMethods.js";
 
@@ -24,6 +24,8 @@
   let FullAddressDTO;
   let PropertyManagerDTO;
   let buildingAddressId = "";
+  let showPropertyManagerPopUpMessage =
+    "Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:";
   onMount(() => {
     buildingAddressConfirmPopUpVisibility = false;
     formVisibility = true;
@@ -162,7 +164,10 @@
     </form>
   {/if}
   {#if addedPropertyManagerPopUpVisibility}
-    <PropertyManagerAddedPopUp {PropertyManagerDTO} />
+    <ShowPropertyManagerPopUp
+      {PropertyManagerDTO}
+      message={showPropertyManagerPopUpMessage}
+    />
   {/if}
 </div>
 
