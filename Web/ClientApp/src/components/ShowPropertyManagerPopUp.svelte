@@ -16,13 +16,15 @@
   //   },
   // };
   export let PropertyManagerDTO;
+  export let message;
 </script>
 
 <div>
   {#if PropertyManagerDTO == null}
     Nie udało się odczytać danych Zarządcy Nieruchomości.
   {:else}
-    Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:
+    
+    {message}
     {PropertyManagerDTO.name}
     <br />
     {PropertyManagerDTO.fullAddress.buildingAddress.cityName}
