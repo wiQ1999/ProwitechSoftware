@@ -90,7 +90,8 @@
     if (postPropertyManagerId instanceof Error) {
       //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
       await deleteBuildingAddress(buildingAddressId);
-      window.location.reload();
+      formVisibility = true;
+      // window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {
       let postPropertyManagerIdJSON = await postPropertyManagerId.json();
       let getPropertyManagerByIdResult = await showPropertyManager(
