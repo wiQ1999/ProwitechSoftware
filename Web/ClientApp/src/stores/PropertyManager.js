@@ -16,7 +16,7 @@ export async function postPropertyManager(propertyManager) {
     return err;
   }
 }
-export async function showPropertyManager(propertyManagerId) {
+export async function getPropertyManagerById(propertyManagerId) {
   let getPropertyManagerByIdResult;
   try {
     getPropertyManagerByIdResult = await genericGetById(

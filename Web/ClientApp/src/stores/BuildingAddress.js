@@ -1,5 +1,21 @@
 import { handleError } from "../js-lib/errors.js";
-import { genericPost, genericDelete } from "../js-lib/httpMethods.js";
+import {
+  genericPost,
+  genericDelete,
+  genericGetById,
+  genericPut,
+} from "../js-lib/httpMethods.js";
+
+export async function getBuildingAddressById(id) {
+  let response;
+  try {
+    response = await genericGetById("/BuildingAddress", id);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Adresu Budynku na podstawie ID");
+    return err;
+  }
+}
 
 export async function deleteBuildingAddress(id) {
   let response;
@@ -8,6 +24,41 @@ export async function deleteBuildingAddress(id) {
     return response;
   } catch (err) {
     handleError(err, "usuwanie Adresu Budynku");
+    return err;
+  }
+}
+export async function updateBuildingAddressAgain(
+  updateBuildingAddressDTO,
+  optionalArguments,
+  onlyAddress = false
+) {
+  if (onlyAddress) {
+    updateBuildingAddressDTO.longitude = null;
+    updateBuildingAddressDTO.latitude = null;
+  }
+  return await putBuildingAddress(
+    updateBuildingAddressDTO.id,
+    updateBuildingAddressDTO,
+    optionalArguments
+  );
+}
+export async function putBuildingAddress(
+  id,
+  buldingAddressDTO,
+  optionalParameters = null
+) {
+  console.log(buldingAddressDTO);
+  let response;
+  try {
+    response = await genericPut(
+      "/BuildingAddress",
+      id,
+      buldingAddressDTO,
+      optionalParameters
+    );
+    return response;
+  } catch (err) {
+    handleError(err, "edycja Adresu Budynku");
     return err;
   }
 }
@@ -80,4 +131,18 @@ async function postBuildingAddressWithLongAndLat(
     optionalArguments
   );
   return response;
+}
+export function checkIfUpdatedBuildingAddressAndOriginalBuildingAddressDiffer(
+  updateBuildingAddressDTO,
+  originalBuildingAddressDTO
+) {
+  if (
+    updateBuildingAddressDTO.cityName != originalBuildingAddressDTO.cityName ||
+    updateBuildingAddressDTO.streetName !=
+      originalBuildingAddressDTO.streetName ||
+    updateBuildingAddressDTO.buildingNumber !=
+      originalBuildingAddressDTO.buildingNumber
+  )
+    return true;
+  return false;
 }

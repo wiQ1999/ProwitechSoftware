@@ -17,9 +17,6 @@
   //   };
   import { onMount } from "svelte";
   import {
-    CreatePropertyManagerCommand,
-    postPropertyManager,
-    showPropertyManager,
     getAllPropertyManagers,
     deletePropertyManager,
   } from "../../../stores/PropertyManager";
@@ -46,8 +43,8 @@
     }
   });
   function edit(id) {
-    localStorage.setItem("manager_to_edit_id", id);
-    window.location.href = "/PropertyManager/create";
+    // localStorage.setItem("manager_to_update_id", id);
+    window.location.href = `/PropertyManager/update/${id}`;
   }
   function displayConfirmPopUp(manager) {
     PropertyManagerDTO = {

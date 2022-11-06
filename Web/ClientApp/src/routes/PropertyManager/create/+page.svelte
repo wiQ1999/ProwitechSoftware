@@ -5,15 +5,15 @@
   } from "../../../stores/BuildingAddress.js";
   import {
     postPropertyManager,
-    showPropertyManager,
+    getPropertyManagerById,
   } from "../../../stores/PropertyManager";
-  import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
+  import BuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
   import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
   import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
 
-  let addBuildingAddressDTO;
-  let CreatePropertyManagerCommand;
+  let buildingAddressDTO;
+  let PropertyManagerCommand;
   let buildingAddressPostResult = "";
   let corrdinates_not_found_message;
   let buildingAddressConfirmPopUpVisibility;
@@ -37,7 +37,7 @@
     };
 
     buildingAddressPostResult = await postBuildingAddress(
-      addBuildingAddressDTO,
+      buildingAddressDTO,
       optionalArguments
     );
 
@@ -49,14 +49,19 @@
         buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
         await createPropertyManager();
       } else {
-        displayBuildingAddressConfirmPopUp(buildingAddressJSON);
+        addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
+        displayBuildingAddressConfirmPopUp(
+          addedBuildingAddress,
+          buildingAddressJSON
+        );
       }
     }
   }
 
-  function displayBuildingAddressConfirmPopUp(buildingAddressJSON) {
-    addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
-
+  function displayBuildingAddressConfirmPopUp(
+    addedBuildingAddress,
+    buildingAddressJSON
+  ) {
     let cityName = addedBuildingAddress.cityName;
     let streetName = addedBuildingAddress.streetName;
     let buildingNumber = addedBuildingAddress.buildingNumber;
@@ -73,13 +78,13 @@
 
     FullAddressDTO = {
       buildingAddressId: buildingAddressId,
-      localNumber: CreatePropertyManagerCommand.localNumber,
-      staircaseNumber: CreatePropertyManagerCommand.staircaseNumber,
+      localNumber: PropertyManagerCommand.localNumber,
+      staircaseNumber: PropertyManagerCommand.staircaseNumber,
     };
 
-    CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
+    PropertyManagerCommand.fullAddressDTO = FullAddressDTO;
     let postPropertyManagerId = await postPropertyManager(
-      CreatePropertyManagerCommand
+      PropertyManagerCommand
     );
 
     if (postPropertyManagerId instanceof Error) {
@@ -88,7 +93,7 @@
       window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {
       let postPropertyManagerIdJSON = await postPropertyManagerId.json();
-      let getPropertyManagerByIdResult = await showPropertyManager(
+      let getPropertyManagerByIdResult = await getPropertyManagerById(
         postPropertyManagerIdJSON
       );
       if (getPropertyManagerByIdResult instanceof Response) {
@@ -114,8 +119,8 @@
   {/if}
   {#if formVisibility}
     <PropertyManagerForm
-      bind:addBuildingAddressDTO
-      bind:CreatePropertyManagerCommand
+      bind:buildingAddressDTO
+      bind:PropertyManagerCommand
       {onSubmit}
     />
   {/if}

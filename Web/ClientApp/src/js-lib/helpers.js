@@ -13,3 +13,7 @@ export function addOptionalParameters(url, parametersDictionary) {
   );
   return urlWithParameters;
 }
+export const AddUpdateBuildingAddressRequestResult = {
+  success: "success",
+  error: "error",
+};
