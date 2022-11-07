@@ -67,7 +67,6 @@
   }
   async function deletePropManager(id) {
     let response = await deletePropertyManager(id);
-    console.log(response);
     if (response instanceof Response) {
       alert("Pomyślnie usunięto Zarządcę Nieruchomości");
     }

@@ -1,15 +1,28 @@
 <script>
   import { updateBuildingAddressAgain } from "../stores/BuildingAddress";
+  import { onMount } from "svelte";
 
   export let corrdinates_not_found_message;
   export let updateBuildingAddressDTO;
   export let continueEdition = async () => {};
   export let buildingAddressId;
+  export let buildingAddressChanged;
 
-  let result_window_show = false;
-  let question_window_show = true;
-  let buttonContinueVisibility = true;
-  let buttonErrorVisibility = false;
+  async function returnToParent() {
+    buildingAddressChanged = true;
+    result_window_show = false;
+    await continueEdition();
+  }
+  onMount(() => {
+    result_window_show = false;
+    question_window_show = true;
+    buttonContinueVisibility = true;
+    buttonErrorVisibility = false;
+  });
+  let result_window_show;
+  let question_window_show;
+  let buttonContinueVisibility;
+  let buttonErrorVisibility;
 
   let result_message = "";
 
@@ -51,26 +64,13 @@
     } else if (updateBuildingAddressResultAgain instanceof Response) {
       let updateBuildingAddressResultAgainJSON =
         await updateBuildingAddressResultAgain.json();
-      let updateBuildingAddressHandled = prepareResultMessageButtonsAndId(
-        updateBuildingAddressResultAgainJSON
-      );
-      result_message = updateBuildingAddressHandled.message;
-      buttonErrorVisibility =
-        updateBuildingAddressHandled.buttonErrorVisibility;
-      buttonContinueVisibility =
-        updateBuildingAddressHandled.buttonContinueVisibility;
-      buildingAddressId = updateBuildingAddressHandled.buildingAddressId;
+      prepareResultMessageButtonsAndId(updateBuildingAddressResultAgainJSON);
     }
-    result_window_show = true;
   }
 
   function prepareResultMessageButtonsAndId(
     updateBuildingAddressResultAgainJSON
   ) {
-    let message;
-    let buttonErrorVisibility;
-    let buttonContinueVisibility;
-    let buildingAddressId;
     if (
       updateBuildingAddressResultAgainJSON.webApiStatus ==
         "ADDED_DESPITE_COORDINATE_ISSUE" ||
@@ -87,29 +87,24 @@
       updateBuildingAddressResultAgainJSON.webApiStatus ==
       "ADDED_DESPITE_COORDINATE_ISSUE"
     ) {
-      message = `Adres budynku po aktualizacji w bazie danych:
+      result_message = `Adres budynku po aktualizacji w bazie danych:
       \n ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.streetName} ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.buildingNumber}, ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.postalCode} ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.cityName}`;
     } else if (
       updateBuildingAddressResultAgainJSON.webApiStatus ==
       "ADDED_TO_DB_WITHOUT_COORDINATES"
     ) {
-      message = `Adres budynku po aktualizacji w bazie danych:
+      result_message = `Adres budynku po aktualizacji w bazie danych:
       \n ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.streetName} ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.buildingNumber}, ${updateBuildingAddressResultAgainJSON.addedBuildingAddress.cityName}`;
       buildingAddressId =
         updateBuildingAddressResultAgainJSON.addedBuildingAddress.id;
     } else {
       console.log(updateBuildingAddressResultAgainJSON);
-      message = `Problem z edycją adresu: ${updateBuildingAddressResultAgainJSON}`;
+      result_message = `Problem z edycją adresu: ${updateBuildingAddressResultAgainJSON}`;
       buildingAddressId = null;
       buttonErrorVisibility = true;
       buttonContinueVisibility = false;
     }
-    return {
-      message: message,
-      buttonErrorVisibility: buttonErrorVisibility,
-      buttonContinueVisibility: buttonContinueVisibility,
-      buildingAddressId: buildingAddressId,
-    };
+    result_window_show = true;
   }
 </script>
 
@@ -139,7 +134,7 @@
     <div class="result-window">
       {result_message}
       {#if buttonContinueVisibility}
-        <button on:click|preventDefault={async () => await continueEdition()}
+        <button on:click|preventDefault={async () => await returnToParent()}
           >Kontynuuj</button
         >
       {/if}

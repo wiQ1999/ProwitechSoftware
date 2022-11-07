@@ -66,11 +66,17 @@
     <input type="text" bind:value={buildingAddressDTO.buildingNumber} />
     <label for="property-manager-local-number">Numer lokalu (opcjonalnie)</label
     >
-    <input type="text" bind:value={PropertyManagerCommand.localNumber} />
+    <input
+      type="text"
+      bind:value={PropertyManagerCommand.fullAddress.localNumber}
+    />
     <label for="property-manager-staircase-number"
       >Numer klatki schodowej (opcjonalnie)</label
     >
-    <input type="text" bind:value={PropertyManagerCommand.staircaseNumber} />
+    <input
+      type="text"
+      bind:value={PropertyManagerCommand.fullAddress.staircaseNumber}
+    />
   </div>
   <button type="submit">Submit</button>
 </form>

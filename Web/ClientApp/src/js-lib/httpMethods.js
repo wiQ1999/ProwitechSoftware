@@ -49,7 +49,6 @@ export async function genericGetAll(route) {
     let json = await response.clone().json();
     let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
     if (json.title == "One or more validation errors occurred.") {
-      console.log(json.errors);
       throw new HttpMethodError(message, json.errors);
     }
     throw new HttpMethodError(message);
@@ -73,7 +72,6 @@ export async function genericGetById(route, id) {
     let json = await response.clone().json();
     let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
     if (json.title == "One or more validation errors occurred.") {
-      console.log(json.errors);
       throw new HttpMethodError(message, json.errors);
     }
     throw new HttpMethodError(message);
@@ -97,7 +95,6 @@ export async function genericDelete(route, id) {
     let json = await response.clone().json();
     let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
     if (json.title == "One or more validation errors occurred.") {
-      console.log(json.errors);
       throw new HttpMethodError(message, json.errors);
     }
     throw new HttpMethodError(message);

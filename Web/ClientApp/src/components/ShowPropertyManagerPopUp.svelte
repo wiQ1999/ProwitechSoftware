@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from "svelte";
+
   //struktura PropertyManagerDTO
   // let PropertyManagerDTO = {
   //   id: "",
@@ -23,7 +25,6 @@
   {#if PropertyManagerDTO == null}
     Nie udało się odczytać danych Zarządcy Nieruchomości.
   {:else}
-    
     {message}
     {PropertyManagerDTO.name}
     <br />

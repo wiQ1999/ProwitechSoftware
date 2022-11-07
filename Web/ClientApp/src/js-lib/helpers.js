@@ -16,4 +16,9 @@ export function addOptionalParameters(url, parametersDictionary) {
 export const AddUpdateBuildingAddressRequestResult = {
   success: "success",
   error: "error",
+  overQueryLimit: "overQueryLimit",
 };
+// export const PropertyManagerUpdatePartialResponse={
+//   buildingAddress_updated:"buildingAddress_updated",
+
+// }

@@ -5,7 +5,7 @@ import {
   genericGetById,
   genericPut,
 } from "../js-lib/httpMethods.js";
-
+import { AddUpdateBuildingAddressRequestResult } from "../js-lib/helpers";
 export async function getBuildingAddressById(id) {
   let response;
   try {
@@ -47,7 +47,6 @@ export async function putBuildingAddress(
   buldingAddressDTO,
   optionalParameters = null
 ) {
-  console.log(buldingAddressDTO);
   let response;
   try {
     response = await genericPut(
@@ -60,6 +59,27 @@ export async function putBuildingAddress(
   } catch (err) {
     handleError(err, "edycja Adresu Budynku");
     return err;
+  }
+}
+export async function tryToUpdateBuildingAddress(updateBuildingAddressDTO) {
+  updateBuildingAddressDTO.longitude = null;
+  updateBuildingAddressDTO.latitude = null;
+
+  let updateBuildingAddressResult = await putBuildingAddress(
+    updateBuildingAddressDTO.id,
+    updateBuildingAddressDTO
+  );
+  if (updateBuildingAddressResult instanceof Response) {
+    let updateBuildingAddressJSON = await updateBuildingAddressResult.json();
+    if (updateBuildingAddressJSON.webApiStatus == "ADDED_TO_DB") {
+      return AddUpdateBuildingAddressRequestResult.success;
+    } else if (updateBuildingAddressJSON.webApiStatus == "OVER_QUERY_LIMIT") {
+      return AddUpdateBuildingAddressRequestResult.overQueryLimit;
+    } else {
+      return updateBuildingAddressJSON;
+    }
+  } else {
+    return AddUpdateBuildingAddressRequestResult.error;
   }
 }
 
