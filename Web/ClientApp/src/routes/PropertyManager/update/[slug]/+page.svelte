@@ -260,7 +260,7 @@
   {#if formVisibility}
     <PropertyManagerForm
       bind:buildingAddressDTO={updateBuildingAddressDTO}
-      bind:PropertyManagerCommand={updatePropertyManagerDTO}
+      bind:propertyManagerDTO={updatePropertyManagerDTO}
       onSubmit={async () =>
         await updatePropertyManagerAllData(
           updateBuildingAddressDTO,

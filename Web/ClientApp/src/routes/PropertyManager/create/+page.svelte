@@ -13,7 +13,7 @@
   import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
 
   let buildingAddressDTO;
-  let PropertyManagerCommand;
+  let propertyManagerDTO;
   let buildingAddressPostResult = "";
   let corrdinates_not_found_message;
   let buildingAddressConfirmPopUpVisibility;
@@ -76,13 +76,16 @@
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
 
-    FullAddressDTO = {
-      buildingAddressId: buildingAddressId,
-      localNumber: PropertyManagerCommand.localNumber,
-      staircaseNumber: PropertyManagerCommand.staircaseNumber,
+    let PropertyManagerCommand = {
+      name: propertyManagerDTO.name,
+      phoneNumber: propertyManagerDTO.phoneNumber,
+      fullAddressDTO: {
+        buildingAddressId: buildingAddressId,
+        localNumber: propertyManagerDTO.fullAddress.localNumber,
+        staircaseNumber: propertyManagerDTO.fullAddress.staircaseNumber,
+      },
     };
 
-    PropertyManagerCommand.fullAddressDTO = FullAddressDTO;
     let postPropertyManagerId = await postPropertyManager(
       PropertyManagerCommand
     );
@@ -121,7 +124,7 @@
   {#if formVisibility}
     <PropertyManagerForm
       bind:buildingAddressDTO
-      bind:PropertyManagerCommand
+      bind:propertyManagerDTO
       {onSubmit}
     />
   {/if}

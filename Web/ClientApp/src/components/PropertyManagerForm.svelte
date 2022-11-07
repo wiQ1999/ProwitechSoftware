@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from "svelte";
+
   // struktura propertyManagera przy GET:
   // {
   //   "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
@@ -28,16 +30,16 @@
     streetName: "",
     buildingNumber: "",
   };
-  export let PropertyManagerCommand = {
+  export let propertyManagerDTO = {
     name: "",
     phoneNumber: "",
-    fullAddressDTO: {
+    fullAddress: {
       buildingAddressId: "",
       localNumber: "",
       staircaseNumber: "",
     },
   };
-  // export let fillBlanks;
+  // onMount({});
 
   let cities = [
     { id: "Bydgoszcz", name: "Bydgoszcz" },
@@ -57,9 +59,9 @@
   </div>
   <div>
     <label for="property-manager-name">Nazwa Zarządcy Nieruchomości</label>
-    <input type="text" bind:value={PropertyManagerCommand.name} />
+    <input type="text" bind:value={propertyManagerDTO.name} />
     <label for="property-manager-phone-number">Numer telefonu</label>
-    <input type="text" bind:value={PropertyManagerCommand.phoneNumber} />
+    <input type="text" bind:value={propertyManagerDTO.phoneNumber} />
     <label for="property-manager-name">Nazwa ulicy</label>
     <input type="text" bind:value={buildingAddressDTO.streetName} />
     <label for="building-address-building-number">Numer budynku</label>
@@ -68,14 +70,14 @@
     >
     <input
       type="text"
-      bind:value={PropertyManagerCommand.fullAddress.localNumber}
+      bind:value={propertyManagerDTO.fullAddress.localNumber}
     />
     <label for="property-manager-staircase-number"
       >Numer klatki schodowej (opcjonalnie)</label
     >
     <input
       type="text"
-      bind:value={PropertyManagerCommand.fullAddress.staircaseNumber}
+      bind:value={propertyManagerDTO.fullAddress.staircaseNumber}
     />
   </div>
   <button type="submit">Submit</button>
