@@ -68,3 +68,34 @@ export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
     return true;
   return false;
 }
+// STRUKTURA UpdatePropertyManagerCommand
+// {
+//   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+//   "name": "string",
+//   "phoneNumber": "string",
+//   "updateFullAddressDTO": {
+//     "buildingAddressId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+//     "localNumber": "string",
+//     "staircaseNumber": "string"
+//   }
+// }
+export async function updatePropertyManager(newPropertyManagerDTO) {
+  let propertyManagerPutBody = {
+    id: newPropertyManagerDTO.id,
+    name: newPropertyManagerDTO.name,
+    phoneNumber: newPropertyManagerDTO.phoneNumber,
+    updateFullAddressDTO: {
+      buildingAddressId: newPropertyManagerDTO.fullAddress.buildingAddressId,
+      localNumber: newPropertyManagerDTO.fullAddress.localNumber,
+      staircaseNumber: newPropertyManagerDTO.fullAddress.staircaseNumber,
+    },
+  };
+  let propManGotUpdated = await putPropertyManager(
+    propertyManagerPutBody.id,
+    propertyManagerPutBody
+  );
+  if (propManGotUpdated instanceof Response) {
+    return true;
+  }
+  return false;
+}

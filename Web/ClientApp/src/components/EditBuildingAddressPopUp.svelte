@@ -34,7 +34,7 @@
     },
   };
   let only_address_option = {
-    info: "NIE - zaktualizuj adres bez współrzędnych i kodu pocztowego",
+    info: "NIE - zaktualizuj adres bez współrzędnych",
     optionalArguments: {
       force: false,
       onlyAddress: true,

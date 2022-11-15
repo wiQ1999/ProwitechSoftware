@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
 
-  // struktura propertyManagera przy GET:
+  // struktura propertyManageraDTO (GET)
   // {
   //   "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
   //   "name": "AZS",

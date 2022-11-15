@@ -29,7 +29,7 @@
   import {
     getPropertyManagerById,
     checkIfPropManagersDiffer,
-    putPropertyManager,
+    updatePropertyManager,
   } from "../../../../stores/PropertyManager";
   import PropertyManagerForm from "../../../../components/PropertyManagerForm.svelte";
   import EditBuildingAddressPopUp from "../../../../components/EditBuildingAddressPopUp.svelte";
@@ -58,14 +58,37 @@
   let buildingAddressUpdateError;
 
   let PropertyManagerDTO;
-  let AddUpdateBuildingAddressReponse;
+  let AddUpdateBuildingAddressResponse;
 
   onMount(async () => {
     updatedPropertyManagerPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
     await prepareForm(data.id);
   });
-
+  //data --> pobierane dane z URLa przez funkcję load (w pliku +page.js w bieżącym folderze)
+  //-----------------------------------------------------------------------------------------
+  // struktura originalPropertyManagerDTO:
+  // {
+  //   "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
+  //   "name": "Klub Sportowy Zawisza",
+  //   "phoneNumber": "+48 999 999 999",
+  //   "fullAddress": {
+  //     "id": "d3bc1437-a363-4d7c-5487-08dabf373e80",
+  //     "buildingAddressId": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //     "buildingAddress": {
+  //       "id": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //       "cityName": "Bydgoszcz",
+  //       "streetName": "Gdańska",
+  //       "buildingNumber": "44",
+  //       "longitude": 18.0075972,
+  //       "latitude": 53.12941739999999,
+  //       "coordinateType": "ROOFTOP",
+  //       "postalCode": "85-008"
+  //     },
+  //     "localNumber": "1",
+  //     "staircaseNumber": "F"
+  //   }
+  // }
   async function prepareForm(propertyManagerId) {
     let propertyManagerResponse = await getPropertyManagerById(
       propertyManagerId
@@ -140,12 +163,12 @@
       buildingAddressChanged = false;
       return;
     } else {
-      //pokaż okno potwierdzające
+      //COORDINATE_TYPE_ISSUE - pokaż okno potwierdzające
       corrdinates_not_found_message = prepareMessage(
         newBuildingAddressDTO,
         addressUpdatedAtOnce
       );
-      AddUpdateBuildingAddressReponse = addressUpdatedAtOnce;
+      AddUpdateBuildingAddressResponse = addressUpdatedAtOnce;
       formVisibility = false;
       editBuildingAddressPopUpVisibility = true;
     }
@@ -173,26 +196,7 @@
       otherPropManagerDataChanged
     );
   }
-  async function updatePropertyManager(newPropertyManagerDTO) {
-    let propertyManagerPutBody = {
-      id: newPropertyManagerDTO.id,
-      name: newPropertyManagerDTO.name,
-      phoneNumber: newPropertyManagerDTO.phoneNumber,
-      updateFullAddressDTO: {
-        buildingAddressId: newPropertyManagerDTO.fullAddress.buildingAddressId,
-        localNumber: newPropertyManagerDTO.fullAddress.localNumber,
-        staircaseNumber: newPropertyManagerDTO.fullAddress.staircaseNumber,
-      },
-    };
-    let propManGotUpdated = await putPropertyManager(
-      propertyManagerPutBody.id,
-      propertyManagerPutBody
-    );
-    if (propManGotUpdated instanceof Response) {
-      return true;
-    }
-    return false;
-  }
+
   async function displayPropertyManagerAfterUpdate(
     id,
     buildingAddressChanged,
@@ -242,7 +246,7 @@
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
-      updateBuildingAddressDTO={AddUpdateBuildingAddressReponse.addedBuildingAddress}
+      updateBuildingAddressDTO={AddUpdateBuildingAddressResponse.addedBuildingAddress}
       {corrdinates_not_found_message}
       continueEdition={async () =>
         await updatePropertyManagerDataWithoutBuildingAddress(

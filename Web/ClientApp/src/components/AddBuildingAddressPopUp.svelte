@@ -22,7 +22,7 @@
     },
   };
   let only_address_option = {
-    info: "NIE - dodaj adres bez współrzędnych i kodu pocztowego",
+    info: "NIE - dodaj adres bez współrzędnych",
     optionalArguments: {
       force: false,
       onlyAddress: true,

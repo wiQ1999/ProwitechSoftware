@@ -1,7 +1,5 @@
 <script>
-  import { onMount } from "svelte";
-
-  //struktura PropertyManagerDTO
+  //struktura propertyManagerDTO
   // let PropertyManagerDTO = {
   //   id: "",
   //   name: "",
@@ -42,7 +40,9 @@
       {PropertyManagerDTO.fullAddress.staircaseNumber}
       <br />
     {/if}
-    {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
+    {#if PropertyManagerDTO.fullAddress.buildingAddress.postalCode != null}
+      {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
+    {/if}
     <br />
     {PropertyManagerDTO.phoneNumber}
     <a href="/index" class="button">Powrót do strony głównej</a>

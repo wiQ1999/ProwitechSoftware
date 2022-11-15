@@ -21,7 +21,7 @@
   let addedPropertyManagerPopUpVisibility;
   let addedBuildingAddress;
   let FullAddressDTO;
-  let PropertyManagerDTO;
+  let PropertyManagerDTOToShow;
   let buildingAddressId = "";
   let showPropertyManagerPopUpMessage =
     "Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:";
@@ -101,9 +101,9 @@
         postPropertyManagerIdJSON
       );
       if (getPropertyManagerByIdResult instanceof Response) {
-        PropertyManagerDTO = await getPropertyManagerByIdResult.json();
+        PropertyManagerDTOToShow = await getPropertyManagerByIdResult.json();
       } else {
-        PropertyManagerDTO = null;
+        PropertyManagerDTOToShow = null;
       }
       formVisibility = false;
       buildingAddressConfirmPopUpVisibility = false;
@@ -130,7 +130,7 @@
   {/if}
   {#if addedPropertyManagerPopUpVisibility}
     <ShowPropertyManagerPopUp
-      {PropertyManagerDTO}
+      PropertyManagerDTO={PropertyManagerDTOToShow}
       message={showPropertyManagerPopUpMessage}
     />
   {/if}

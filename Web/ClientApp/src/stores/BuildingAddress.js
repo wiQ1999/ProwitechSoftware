@@ -62,6 +62,8 @@ export async function putBuildingAddress(
   }
 }
 export async function tryToUpdateBuildingAddress(updateBuildingAddressDTO) {
+  //updateBuildingAddressDTO jest z GETa, więc trzeba mu wynullować coordinates,
+  //żeby mógł być update'owany
   updateBuildingAddressDTO.longitude = null;
   updateBuildingAddressDTO.latitude = null;
 
