@@ -1,5 +1,5 @@
 <script>
-  //struktura PropertyManagerDTO
+  //struktura propertyManagerDTO
   // let PropertyManagerDTO = {
   //   id: "",
   //   name: "",
@@ -16,13 +16,14 @@
   //   },
   // };
   export let PropertyManagerDTO;
+  export let message;
 </script>
 
 <div>
   {#if PropertyManagerDTO == null}
     Nie udało się odczytać danych Zarządcy Nieruchomości.
   {:else}
-    Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:
+    {message}
     {PropertyManagerDTO.name}
     <br />
     {PropertyManagerDTO.fullAddress.buildingAddress.cityName}
@@ -39,7 +40,9 @@
       {PropertyManagerDTO.fullAddress.staircaseNumber}
       <br />
     {/if}
-    {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
+    {#if PropertyManagerDTO.fullAddress.buildingAddress.postalCode != null}
+      {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
+    {/if}
     <br />
     {PropertyManagerDTO.phoneNumber}
     <a href="/index" class="button">Powrót do strony głównej</a>

@@ -1,20 +1,19 @@
 <script>
-  import { HttpMethodError } from "../../../js-lib/errors.js";
   import {
-    addBuildingAddressDTO,
     postBuildingAddress,
     deleteBuildingAddress,
   } from "../../../stores/BuildingAddress.js";
   import {
-    CreatePropertyManagerCommand,
     postPropertyManager,
-    showPropertyManager,
+    getPropertyManagerById,
   } from "../../../stores/PropertyManager";
-  import BuildingAddressPopUp from "../../../components/BuildingAddressPopUp.svelte";
-  import PropertyManagerAddedPopUp from "../../../components/PropertyManagerAddedPopUp.svelte";
+  import BuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
+  import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
-  import { genericGetById } from "../../../js-lib/httpMethods.js";
+  import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
 
+  let buildingAddressDTO;
+  let propertyManagerDTO;
   let buildingAddressPostResult = "";
   let corrdinates_not_found_message;
   let buildingAddressConfirmPopUpVisibility;
@@ -22,18 +21,14 @@
   let addedPropertyManagerPopUpVisibility;
   let addedBuildingAddress;
   let FullAddressDTO;
-  let PropertyManagerDTO;
+  let PropertyManagerDTOToShow;
   let buildingAddressId = "";
+  let showPropertyManagerPopUpMessage =
+    "Dodano do bazy danych Zarządcę Nieruchomości o poniższych danych:";
   onMount(() => {
     buildingAddressConfirmPopUpVisibility = false;
     formVisibility = true;
   });
-
-  let cities = [
-    { id: "Bydgoszcz", name: "Bydgoszcz" },
-    { id: "Poznań", name: "Poznań" },
-    { id: "Wrocław", name: "Wrocław" },
-  ];
 
   async function onSubmit() {
     let optionalArguments = {
@@ -42,7 +37,7 @@
     };
 
     buildingAddressPostResult = await postBuildingAddress(
-      $addBuildingAddressDTO,
+      buildingAddressDTO,
       optionalArguments
     );
 
@@ -54,14 +49,19 @@
         buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
         await createPropertyManager();
       } else {
-        displayBuildingAddressConfirmPopUp(buildingAddressJSON);
+        addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
+        displayBuildingAddressConfirmPopUp(
+          addedBuildingAddress,
+          buildingAddressJSON
+        );
       }
     }
   }
 
-  function displayBuildingAddressConfirmPopUp(buildingAddressJSON) {
-    addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
-
+  function displayBuildingAddressConfirmPopUp(
+    addedBuildingAddress,
+    buildingAddressJSON
+  ) {
     let cityName = addedBuildingAddress.cityName;
     let streetName = addedBuildingAddress.streetName;
     let buildingNumber = addedBuildingAddress.buildingNumber;
@@ -76,30 +76,34 @@
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
 
-    FullAddressDTO = {
-      buildingAddressId: buildingAddressId,
-      localNumber: $CreatePropertyManagerCommand.localNumber,
-      staircaseNumber: $CreatePropertyManagerCommand.staircaseNumber,
+    let PropertyManagerCommand = {
+      name: propertyManagerDTO.name,
+      phoneNumber: propertyManagerDTO.phoneNumber,
+      fullAddressDTO: {
+        buildingAddressId: buildingAddressId,
+        localNumber: propertyManagerDTO.fullAddress.localNumber,
+        staircaseNumber: propertyManagerDTO.fullAddress.staircaseNumber,
+      },
     };
 
-    $CreatePropertyManagerCommand.fullAddressDTO = FullAddressDTO;
     let postPropertyManagerId = await postPropertyManager(
-      $CreatePropertyManagerCommand
+      PropertyManagerCommand
     );
 
     if (postPropertyManagerId instanceof Error) {
       //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
       await deleteBuildingAddress(buildingAddressId);
-      window.location.reload();
+      formVisibility = true;
+      // window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {
       let postPropertyManagerIdJSON = await postPropertyManagerId.json();
-      let getPropertyManagerByIdResult = await showPropertyManager(
+      let getPropertyManagerByIdResult = await getPropertyManagerById(
         postPropertyManagerIdJSON
       );
       if (getPropertyManagerByIdResult instanceof Response) {
-        PropertyManagerDTO = await getPropertyManagerByIdResult.json();
+        PropertyManagerDTOToShow = await getPropertyManagerByIdResult.json();
       } else {
-        PropertyManagerDTO = null;
+        PropertyManagerDTOToShow = null;
       }
       formVisibility = false;
       buildingAddressConfirmPopUpVisibility = false;
@@ -118,60 +122,16 @@
     />
   {/if}
   {#if formVisibility}
-    <form on:submit|preventDefault={onSubmit}>
-      <div>
-        <label for={$addBuildingAddressDTO.cityName}>Miejscowość</label>
-        <select bind:value={$addBuildingAddressDTO.cityName}>
-          {#each cities as city}
-            <option value={city.id}>{city.name}</option>
-          {/each}
-        </select>
-      </div>
-      <div>
-        <label for={$CreatePropertyManagerCommand.name}
-          >Nazwa Zarządcy Nieruchomości</label
-        >
-        <input type="text" bind:value={$CreatePropertyManagerCommand.name} />
-        <label for={$CreatePropertyManagerCommand.phoneNumber}
-          >Numer telefonu</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.phoneNumber}
-        />
-        <label for={$addBuildingAddressDTO.streetName}>Nazwa ulicy</label>
-        <input type="text" bind:value={$addBuildingAddressDTO.streetName} />
-        <label for={$addBuildingAddressDTO.buildingNumber}>Numer budynku</label>
-        <input type="text" bind:value={$addBuildingAddressDTO.buildingNumber} />
-        <label for={$CreatePropertyManagerCommand.localNumber}
-          >Numer lokalu (opcjonalnie)</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.localNumber}
-        />
-        <label for={$CreatePropertyManagerCommand.staircaseNumber}
-          >Numer klatki schodowej (opcjonalnie)</label
-        >
-        <input
-          type="text"
-          bind:value={$CreatePropertyManagerCommand.staircaseNumber}
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+    <PropertyManagerForm
+      bind:buildingAddressDTO
+      bind:propertyManagerDTO
+      {onSubmit}
+    />
   {/if}
   {#if addedPropertyManagerPopUpVisibility}
-    <PropertyManagerAddedPopUp {PropertyManagerDTO} />
+    <ShowPropertyManagerPopUp
+      PropertyManagerDTO={PropertyManagerDTOToShow}
+      message={showPropertyManagerPopUpMessage}
+    />
   {/if}
 </div>
-
-<style>
-  * {
-    box-sizing: border-box;
-  }
-  form {
-    display: flex;
-    width: 300px;
-  }
-</style>

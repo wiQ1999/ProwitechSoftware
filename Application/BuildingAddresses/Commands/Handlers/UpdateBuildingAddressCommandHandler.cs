@@ -69,6 +69,7 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 updateBuildingAddressResponse.WebApiStatus = ProwitechWebAPIStatus.ADDED_TO_DB_WITHOUT_COORDINATES.ToString();
                 await _buildingAddressRepository.UpdateBuildingAddressAsync(buildingAddressFromDB, cancellationToken);
             }
+            updateBuildingAddressResponse.AddedBuildingAddress.Id=buildingAddressFromDB.Id;
             return updateBuildingAddressResponse;
 
 

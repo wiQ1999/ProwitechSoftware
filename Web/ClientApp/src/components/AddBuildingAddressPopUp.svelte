@@ -22,7 +22,7 @@
     },
   };
   let only_address_option = {
-    info: "NIE - dodaj adres bez współrzędnych i kodu pocztowego",
+    info: "NIE - dodaj adres bez współrzędnych",
     optionalArguments: {
       force: false,
       onlyAddress: true,
@@ -78,7 +78,7 @@
   }
 </script>
 
-<div class="Building-address-POP-UP">
+<div class="add-building-address-POP-UP">
   {#if question_window_show}
     <div class="question-window">
       {corrdinates_not_found_message}

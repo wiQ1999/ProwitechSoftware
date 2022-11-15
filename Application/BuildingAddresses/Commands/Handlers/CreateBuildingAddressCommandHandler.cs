@@ -43,7 +43,7 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 addBuildingAddressResponse.AddedBuildingAddress.Longitude = null;
                 addBuildingAddressResponse.AddedBuildingAddress.Latitude = null;
                 addBuildingAddressResponse.AddedBuildingAddress.CoordinateType = null;
-                addBuildingAddressResponse.AddedBuildingAddress.PostalCode = null;
+                //addBuildingAddressResponse.AddedBuildingAddress.PostalCode = null;
                 addBuildingAddressResponse.AddedBuildingAddress
                     = await buildingAddressRepository.AddAsync(addBuildingAddressResponse.AddedBuildingAddress, cancellationToken);
             }
