@@ -22,3 +22,15 @@ export const AddUpdateBuildingAddressRequestResult = {
 //   buildingAddress_updated:"buildingAddress_updated",
 
 // }
+export function prepareCoordinatesNotFoundMessage(
+  addedBuildingAddress,
+  buildingAddressJSON
+) {
+  let cityName = addedBuildingAddress.cityName;
+  let streetName = addedBuildingAddress.streetName;
+  let buildingNumber = addedBuildingAddress.buildingNumber;
+
+  return `Nie znaleziono dokładnych współrzędnych dla adresu ${streetName} ${buildingNumber}, ${cityName}
+  \nOdnaleziono współrzędne dla adresu: ${buildingAddressJSON.googleAPIFormattedAddress}.
+  \nCzy chce je zachować?`;
+}

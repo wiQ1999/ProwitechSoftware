@@ -1,0 +1,123 @@
+<script>
+  //struktura jednego rekordu z getAllPropertyManagers()
+  // {
+  // "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
+  // "name": "Klub Sportowy Zawisza",
+  // "phoneNumber": "",
+  // "fullAddress": {
+  //   "id": "d3bc1437-a363-4d7c-5487-08dabf373e80",
+  //   "buildingAddressId": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //   "buildingAddress": {
+  //     "id": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //     "cityName": "Bydgoszcz",
+  //     "streetName": "Gdańska",
+  //     "buildingNumber": "445",
+  //     "longitude": null,
+  //     "latitude": null,
+  //     "coordinateType": null,
+  //     "postalCode": "86-031"
+  //   },
+  //   "localNumber": "1",
+  //   "staircaseNumber": "F"
+  // }
+  import AddBuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
+  import BuildingForm from "../../../components/BuildingForm.svelte";
+  import { postBuildingAddress } from "../../../stores/BuildingAddress";
+  import { prepareCoordinatesNotFoundMessage } from "../../../js-lib/helpers";
+  import { getAllPropertyManagers } from "../../../stores/PropertyManager";
+  import { onMount } from "svelte";
+  let buildingAddressDTO;
+  let propertyManagerId;
+  let addedBuildingAddress;
+  let corrdinates_not_found_message;
+  let buildingAddressId;
+  let buildingType;
+
+  let propertyManagers = [];
+
+  //zmienne odpowiedzialne za wygląd
+  let formVisibility;
+  let buildingAddressConfirmPopUpVisibility;
+  let addedBuildingPopUpVisibility = false;
+  //---------------------------------------------
+  onMount(async () => {
+    formVisibility = true;
+    buildingAddressConfirmPopUpVisibility = false;
+
+    // let propertyManagersResult = await getAllPropertyManagers();
+    // let propertyManagersResultJSON = await propertyManagersResult.json();
+    // console.log(propertyManagersResultJSON);
+
+    // for (elem of propertyManagersResultJSON) {
+    //   propertyManagers.push({
+    //     id: elem.id,
+    //     name: elem.name,
+    //     fullAddressInShort: {
+    //       cityName: elem.fullAddress.buildingAddress.cityName,
+    //       streetName: elem.fullAddress.buildingAddress.streetName,
+    //       buildingNumber: elem.fullAddress.buildingAddress.buildingNumber,
+    //       postalCode: elem.fullAddress.buildingAddress.postalCode,
+    //       localNumber: elem.fullAddress.localNumber,
+    //       staircaseNumber: elem.fullAddress.staircaseNumber,
+    //     },
+    //   });
+    // }
+
+    // getAllPropertyManagers
+  });
+  async function createBuilding() {}
+  async function tryToAddBuildingAddress(bDTO) {
+    let optionalArguments = {
+      force: false,
+      onlyAddress: false,
+    };
+
+    let buildingAddressPostResult = await postBuildingAddress(
+      bDTO,
+      optionalArguments
+    );
+
+    if (buildingAddressPostResult instanceof Error) {
+      // window.location.reload();
+    } else if (buildingAddressPostResult instanceof Response) {
+      let buildingAddressJSON = await buildingAddressPostResult.json();
+      if (buildingAddressJSON.webApiStatus == "ADDED_TO_DB") {
+        buildingAddressId = buildingAddressJSON.addedBuildingAddress.id;
+        await createBuilding(buildingAddressId);
+      } else {
+        addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
+        corrdinates_not_found_message = prepareCoordinatesNotFoundMessage(
+          addedBuildingAddress,
+          buildingAddressJSON
+        );
+        buildingAddressConfirmPopUpVisibility = true;
+        formVisibility = false;
+      }
+    }
+  }
+</script>
+
+<div>
+  {#if buildingAddressConfirmPopUpVisibility}
+    <AddBuildingAddressPopUp
+      {addedBuildingAddress}
+      {corrdinates_not_found_message}
+      functionToInvokeAfterAdding={async () =>
+        await createBuilding(buildingAddressId, propertyManagerId)}
+      bind:buildingAddressId
+    />
+  {/if}
+  {#if formVisibility}
+    <BuildingForm
+      bind:buildingAddressDTO
+      bind:propertyManagerId
+      bind:buildingType
+      onSubmit={async () => await tryToAddBuildingAddress(buildingAddressDTO)}
+    />{/if}
+  {#if addedBuildingPopUpVisibility}
+    <!-- <ShowPropertyManagerPopUp
+      PropertyManagerDTO={PropertyManagerDTOToShow}
+      message={showPropertyManagerPopUpMessage}
+    /> -->
+  {/if}
+</div>

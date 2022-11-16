@@ -4,7 +4,7 @@
 
   export let corrdinates_not_found_message;
   export let addedBuildingAddress;
-  export let createPropertyManager = () => {};
+  export let functionToInvokeAfterAdding = () => {};
   export let buildingAddressId;
 
   let result_window_show = false;
@@ -74,7 +74,7 @@
   }
   async function continueAdding() {
     result_window_show = false;
-    await createPropertyManager();
+    await functionToInvokeAfterAdding();
   }
 </script>
 
