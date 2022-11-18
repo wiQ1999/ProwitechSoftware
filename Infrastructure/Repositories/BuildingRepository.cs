@@ -1,4 +1,4 @@
-﻿using Infrastructure.Database;
+﻿                using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Microsoft.Data.SqlClient;
@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
             return await _dbContext.Buildings.
                 Include(b => b.BuildingAddress).
                 Include(b => b.PropertyManager).
-                    ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(pm => pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).
                         ToArrayAsync(cancellationToken);
         }
 

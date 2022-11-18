@@ -11,6 +11,7 @@
   export let buildingType;
   export let onSubmit = async () => {};
 
+  let formVisibility;
   let propertyManagers = [];
 
   let cities = [
@@ -31,7 +32,7 @@
     let propertyManagersResultJSON = await propertyManagersResult.json();
     console.log(propertyManagersResultJSON);
 
-    propertyManagersResultJSON.array.forEach((element) => {
+    for (let element of propertyManagersResultJSON) {
       propertyManagers.push({
         id: element.id,
         name: element.name,
@@ -44,47 +45,53 @@
           staircaseNumber: element.fullAddress.staircaseNumber,
         },
       });
-    });
+    }
+    console.log(propertyManagers);
+    formVisibility = true;
 
     // getAllPropertyManagers
   });
 </script>
 
-<form on:submit|preventDefault={async () => await onSubmit()}>
-  <div>
-    <label for="building-address-city-name">Miejscowość</label>
-    <select bind:value={buildingAddressDTO.cityName}>
-      {#each cities as city}
-        <option value={city.id}>{city.name}</option>
+{#if formVisibility}
+  <form on:submit|preventDefault={async () => await onSubmit()}>
+    <div>
+      <label for="building-address-city-name">Miejscowość</label>
+      <select bind:value={buildingAddressDTO.cityName}>
+        {#each cities as city}
+          <option value={city.id}>{city.name}</option>
+        {/each}
+      </select>
+    </div>
+    <div>
+      <label for="property-manager-name">Nazwa ulicy</label>
+      <input type="text" bind:value={buildingAddressDTO.streetName} />
+      <label for="building-address-building-number">Numer budynku</label>
+      <input type="text" bind:value={buildingAddressDTO.buildingNumber} />
+    </div>
+    <div>
+      <select bind:value={buildingType}>
+        {#each buildingTypes as btype}
+          <option value={btype}>{btype}</option>
+        {/each}
+      </select>
+    </div>
+    <select bind:value={propertyManagerId}>
+      {#each propertyManagers as propman}
+        <option value={propman.id}
+          >{propman.name} |
+          {propman.fullAddressInShort.streetName} |
+          {propman.fullAddressInShort.buildingNumber} |
+          {propman.fullAddressInShort.staircaseNumber} |
+          {propman.fullAddressInShort.localNumber} |
+          {propman.fullAddressInShort.postalCode}
+          {propman.fullAddressInShort.cityName}</option
+        >
       {/each}
     </select>
-  </div>
-  <div>
-    <label for="property-manager-name">Nazwa ulicy</label>
-    <input type="text" bind:value={buildingAddressDTO.streetName} />
-    <label for="building-address-building-number">Numer budynku</label>
-    <input type="text" bind:value={buildingAddressDTO.buildingNumber} />
-  </div>
-  <div>
-    <select bind:value={buildingType}>
-      {#each buildingTypes as btype}
-        <option value={btype}>{btype}</option>
-      {/each}
-    </select>
-  </div>
-  <select bind:value={propertyManagerId}>
-    {#each propertyManagers as propman}
-      <option value={propman.id}
-        >{propman.fullAddressInShort.streetName |
-          propman.fullAddressInShort.buildingNumber |
-          propman.fullAddressInShort.staircaseNumber |
-          propman.fullAddressInShort.localNumber |
-          propman.fullAddressInShort.postalCode}</option
-      >
-    {/each}
-  </select>
-  <button type="submit">Submit</button>
-</form>
+    <button type="submit">Submit</button>
+  </form>
+{/if}
 
 <style>
   * {
