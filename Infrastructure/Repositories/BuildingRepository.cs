@@ -56,6 +56,16 @@ namespace Infrastructure.Repositories
             Building? buildingToDelete = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");
+            Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
+            if (buildingAddressIdToDelete != null)
+            {
+                BuildingAddress buildingAddressToDelete=await _dbContext.BuildingAddresses.
+                    FirstOrDefaultAsync(b => b.Id == buildingAddressIdToDelete, cancellationToken);
+
+                _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
+            }
+            if (buildingToDelete == null)
+                throw new Exception($"Brak Budynku o identyfikatorze {id}.");
             _dbContext.Buildings.Remove(buildingToDelete);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
