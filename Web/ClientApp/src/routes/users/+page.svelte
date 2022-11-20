@@ -1,7 +1,11 @@
 <script>
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
-    import { getAllUsers, deleteUser } from "../../stores/Users";
+    import {
+        getAllUsers,
+        getUserById,
+        deleteUser as deleteUserById,
+    } from "../../stores/Users";
 
     let users = [];
     onMount(async () => {
@@ -22,7 +26,7 @@
     }
 </script>
 
-<button on:click={goToAddRow(null)}>Dodaj nowego użytkownika</button>
+<!-- <button on:click={() => goToAddRow("1")}>Dodaj nowego użytkownika</button> -->
 
 <table>
     <tr>
@@ -32,20 +36,16 @@
         <th>Rola</th>
     </tr>
     {#each users as user}
-        <tr on:dblclick|preventDefault={() => goToEditRow(user.id)}>
+        <tr on:dblclick={goToEditRow(user.id)}>
             <td>{user.firstName ?? ""}</td>
             <td>{user.lastName ?? ""}</td>
             <td>{user.email ?? ""}</td>
             <td>{user.role.name ?? ""}</td>
             <td>
-                <button on:click|preventDefault={() => goToEditRow(user.id)}>
-                    Szczegóły
-                </button>
+                <button on:click={getUserById(user.id)}> Szczegóły </button>
             </td>
             <td>
-                <button on:click|preventDefault={() => deleteRow(user)}>
-                    Usuń
-                </button>
+                <button on:click{deleteRow(user)}> Usuń </button>
             </td>
         </tr>
     {/each}
