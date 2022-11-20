@@ -45,7 +45,7 @@
   let buildingsJSON;
   let PropertyManagerDTO;
   let idToDelete;
-  let showPropertyManagerPopUpMessage =
+  let showBuildingPopUpMessage =
     "Jesteś pewny, że chcesz usunąć poniższy Budynek?";
 
   onMount(async () => {
@@ -64,20 +64,7 @@
     window.location.href = `/Building/update/${id}`;
   }
   function displayConfirmPopUp(manager) {
-    PropertyManagerDTO = {
-      name: manager.name,
-      phoneNumber: manager.phoneNumber,
-      fullAddress: {
-        buildingAddress: {
-          cityName: manager.fullAddress.buildingAddress.cityName,
-          streetName: manager.fullAddress.buildingAddress.streetName,
-          buildingNumber: manager.fullAddress.buildingAddress.buildingNumber,
-          postalCode: manager.fullAddress.buildingAddress.postalCode,
-        },
-        localNumber: manager.fullAddress.localNumber,
-        staircaseNumber: manager.fullAddress.staircaseNumber,
-      },
-    };
+    
     idToDelete = manager.id;
     displayAll = false;
     displayPopUp = true;
