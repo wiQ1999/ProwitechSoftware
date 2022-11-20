@@ -27,7 +27,7 @@ namespace Web.Controllers
             Ok(await Mediator.Send(new GetBuildingByIdQuery() {Id=id }));
 
         
-        [HttpPut]
+        [HttpPut("{id:Guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateBuildingCommand command)
         {
             if (id != command.Id)

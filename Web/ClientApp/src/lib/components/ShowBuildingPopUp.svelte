@@ -65,6 +65,7 @@
       {BuildingDTO.buildingAddress.postalCode}
     {/if}
     <br />
+    {BuildingDTO.type}
     {#if BuildingDTO.propertyManager}
       {message2}
       {BuildingDTO.propertyManager.name}

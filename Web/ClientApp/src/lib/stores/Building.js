@@ -63,3 +63,41 @@ export async function deleteBuilding(id) {
     return err;
   }
 }
+export async function updateBuilding(updateBuildingDTO) {
+  let buildingGotUpdated = await putBuilding(updateBuildingDTO);
+  if (buildingGotUpdated instanceof Response) {
+    return true;
+  }
+  return false;
+}
+async function putBuilding(updateBuildingDTO) {
+  console.log(updateBuildingDTO);
+
+  let UpdateBuildingCommand;
+  if (updateBuildingDTO.propertyManagerId) {
+    UpdateBuildingCommand = {
+      id: updateBuildingDTO.id,
+      type: updateBuildingDTO.type,
+      propertyManagerId: updateBuildingDTO.propertyManagerId,
+    };
+  } else {
+    UpdateBuildingCommand = {
+      id: updateBuildingDTO.id,
+      type: updateBuildingDTO.type,
+    };
+  }
+  console.log(UpdateBuildingCommand);
+
+  let response;
+  try {
+    response = await genericPut(
+      "/Building",
+      UpdateBuildingCommand.id,
+      UpdateBuildingCommand
+    );
+    return response;
+  } catch (err) {
+    handleError(err, "Aktualizacja danych Budynku");
+    return err;
+  }
+}

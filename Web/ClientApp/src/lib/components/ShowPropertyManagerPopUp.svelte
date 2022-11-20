@@ -17,6 +17,7 @@
   // };
   export let PropertyManagerDTO;
   export let message;
+  console.log(PropertyManagerDTO);
 </script>
 
 <div>

@@ -34,3 +34,9 @@ export function prepareCoordinatesNotFoundMessage(
   \nOdnaleziono współrzędne dla adresu: ${buildingAddressJSON.googleAPIFormattedAddress}.
   \nCzy chce je zachować?`;
 }
+export function chooseNewStringIfNewDiffersFromOld(oldStr, newStr) {
+  if (oldStr != newStr) {
+    return newStr;
+  }
+  return oldStr;
+}
