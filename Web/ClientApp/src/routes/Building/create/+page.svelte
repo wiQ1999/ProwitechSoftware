@@ -21,43 +21,44 @@
   //   "staircaseNumber": "F"
   // }
   //struktura newBuilding:
-//   {
-//   "id": "472e6029-2cfb-483e-f2ff-08daca1119fe",
-//   "buildingAddress": {
-//     "id": "d24bd875-c5f8-4a7c-a1c3-ff33f67b6c67",
-//     "cityName": "Poznań",
-//     "streetName": "Heweliusza",
-//     "buildingNumber": "3",
-//     "longitude": 16.8725373,
-//     "latitude": 52.394716,
-//     "coordinateType": "ROOFTOP",
-//     "postalCode": "61-001"
-//   },
-//   "type": "wielolokalowy",
-//   "locals": [],
-//   "propertyManager": {
-//     "id": "a9cc9b5b-9f73-4bc6-0f76-08dac7a32061",
-//     "name": "Fruwające krowy",
-//     "phoneNumber": "+48 956 232 125",
-//     "fullAddress": {
-//       "id": "69220a87-62c1-4953-4cde-08dac7a32055",
-//       "buildingAddressId": "c16ec69d-0583-4df6-b00f-6ea20754b392",
-//       "buildingAddress": null,
-//       "localNumber": "15",
-//       "staircaseNumber": "C"
-//     }
-//   }
-// }
-  import AddBuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
-  import BuildingForm from "../../../components/BuildingForm.svelte";
+  //   {
+  //   "id": "472e6029-2cfb-483e-f2ff-08daca1119fe",
+  //   "buildingAddress": {
+  //     "id": "d24bd875-c5f8-4a7c-a1c3-ff33f67b6c67",
+  //     "cityName": "Poznań",
+  //     "streetName": "Heweliusza",
+  //     "buildingNumber": "3",
+  //     "longitude": 16.8725373,
+  //     "latitude": 52.394716,
+  //     "coordinateType": "ROOFTOP",
+  //     "postalCode": "61-001"
+  //   },
+  //   "type": "wielolokalowy",
+  //   "locals": [],
+  //   "propertyManager": {
+  //     "id": "a9cc9b5b-9f73-4bc6-0f76-08dac7a32061",
+  //     "name": "Fruwające krowy",
+  //     "phoneNumber": "+48 956 232 125",
+  //     "fullAddress": {
+  //       "id": "69220a87-62c1-4953-4cde-08dac7a32055",
+  //       "buildingAddressId": "c16ec69d-0583-4df6-b00f-6ea20754b392",
+  //       "buildingAddress": null,
+  //       "localNumber": "15",
+  //       "staircaseNumber": "C"
+  //     }
+  //   }
+  // }
+  
+  import AddBuildingAddressPopUp from "$lib/components/AddBuildingAddressPopUp.svelte";
+  import BuildingForm from "$lib/components/BuildingForm.svelte";
   import {
     getBuildingAddressById,
     postBuildingAddress,
-  } from "../../../stores/BuildingAddress";
-  import { prepareCoordinatesNotFoundMessage } from "../../../js-lib/helpers";
+  } from "$lib/stores/BuildingAddress";
+  import { prepareCoordinatesNotFoundMessage } from "$lib/js-lib/helpers";
   import { onMount } from "svelte";
-  import { postBuilding, getBuildingById } from "../../../stores/Building";
-  import ShowBuildingPopUp from "../../../components/ShowBuildingPopUp.svelte";
+  import { postBuilding, getBuildingById } from "$lib/stores/Building";
+  import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
   let buildingAddressDTO;
   let propertyManagerId;
   let addedBuildingAddress;

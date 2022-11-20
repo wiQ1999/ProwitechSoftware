@@ -22,18 +22,18 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
-  import { tryToUpdateBuildingAddress } from "../../../../stores/BuildingAddress";
-  import { checkIfUpdatedBuildingAddressAndOriginalBuildingAddressDiffer } from "../../../../stores/BuildingAddress";
-  import ShowPropertyManagerPopUp from "../../../../components/ShowPropertyManagerPopUp.svelte";
+  import { tryToUpdateBuildingAddress } from "$lib/stores/BuildingAddress";
+  import { checkIfUpdatedBuildingAddressAndOriginalBuildingAddressDiffer } from "$lib/stores/BuildingAddress";
+  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
   import {
     getPropertyManagerById,
     checkIfPropManagersDiffer,
     updatePropertyManager,
-  } from "../../../../stores/PropertyManager";
-  import PropertyManagerForm from "../../../../components/PropertyManagerForm.svelte";
-  import EditBuildingAddressPopUp from "../../../../components/EditBuildingAddressPopUp.svelte";
-  import { AddUpdateBuildingAddressRequestResult } from "../../../../js-lib/helpers";
+  } from "$lib/stores/PropertyManager";
+  import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
+  import EditBuildingAddressPopUp from "$lib/components/EditBuildingAddressPopUp.svelte";
+  import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
 
   //dane pobrane z getPropertyManagerById - pierwotne i podlegające zmianie
   let updateBuildingAddressDTO;

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getAllPropertyManagers } from "../stores/PropertyManager";
+  import { getAllPropertyManagers } from "$lib/stores/PropertyManager";
 
   export let buildingAddressDTO = {
     cityName: "",

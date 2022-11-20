@@ -36,8 +36,8 @@
   //     }
   //   }
   import { onMount } from "svelte";
-  import { getAllBuildings } from "../../../stores/Building";
-  import ShowBuildingPopUp from "../../../components/ShowBuildingPopUp.svelte";
+  import { getAllBuildings } from "$lib/stores/Building";
+  import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
   let displayAll;
   let displayPopUp;
   let displayGetAllProblem;
@@ -64,7 +64,6 @@
     window.location.href = `/Building/update/${id}`;
   }
   function displayConfirmPopUp(manager) {
-    
     idToDelete = manager.id;
     displayAll = false;
     displayPopUp = true;

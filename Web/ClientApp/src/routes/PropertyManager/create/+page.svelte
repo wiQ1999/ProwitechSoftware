@@ -2,17 +2,16 @@
   import {
     postBuildingAddress,
     deleteBuildingAddress,
-  } from "../../../stores/BuildingAddress.js";
+  } from "$lib/stores/BuildingAddress.js";
   import {
     postPropertyManager,
     getPropertyManagerById,
-  } from "../../../stores/PropertyManager";
-  import { prepareCoordinatesNotFoundMessage } from "../../../js-lib/helpers";
-  import BuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
-  import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
+  } from "$lib/stores/PropertyManager";
+  import { prepareCoordinatesNotFoundMessage } from "$lib/js-lib/helpers";
+  import BuildingAddressPopUp from "$lib/components/AddBuildingAddressPopUp.svelte";
+  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
-  import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
-
+  import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
   let buildingAddressDTO;
   let propertyManagerDTO;
   let buildingAddressPostResult = "";

@@ -1,6 +1,6 @@
 <script>
-  import { HttpMethodError } from "../js-lib/errors.js";
-  import { postBuildingAddressAgain } from "../stores/BuildingAddress.js";
+  import { HttpMethodError } from "$lib/js-lib/errors";
+  import { postBuildingAddressAgain } from "$lib/stores/BuildingAddress.js";
 
   export let corrdinates_not_found_message;
   export let addedBuildingAddress;
