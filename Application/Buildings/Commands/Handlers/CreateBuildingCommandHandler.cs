@@ -26,19 +26,35 @@ namespace Application.Buildings.Commands.Handlers
 
         public async Task<Guid> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
         {
-            var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
-            if (pmFromDB == null)
-                throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
+            if (request.PropertyManagerId != Guid.Empty)
+            {
+                var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
+                if (pmFromDB == null)
+                    throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
+            }
+            
             var baFromDB = await _buildingAddressRepository.GetAsync(request.BuildingAddressId, cancellationToken);
             if (baFromDB== null)
                 throw new Exception($"Brak w bazie danych Adresu Budynku o Id: {request.BuildingAddressId}");
 
-            Building building = new Building()
+            Building building;
+            if(request.PropertyManagerId != Guid.Empty){
+                building = new Building()
+                {
+                    BuildingAddressId = request.BuildingAddressId,
+                    PropertyManagerId = request.PropertyManagerId,
+                    Type = request.Type
+                };
+            }
+            else
             {
-                BuildingAddressId = request.BuildingAddressId,
-                PropertyManagerId = request.PropertyManagerId,
-                Type=request.Type
-            };
+                building = new Building()
+                {
+                    BuildingAddressId = request.BuildingAddressId,
+                    Type = request.Type
+                };
+            }
+            
             return await _buildingRepository.AddAsync(building, cancellationToken);
         }
     }

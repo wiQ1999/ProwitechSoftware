@@ -46,6 +46,18 @@
         },
       });
     }
+    propertyManagers.push({
+      id: null,
+      name: "Brak zarządcy",
+      fullAddressInShort: {
+        cityName: null,
+        streetName: null,
+        buildingNumber: null,
+        postalCode: null,
+        localNumber: null,
+        staircaseNumber: null,
+      },
+    });
     console.log(propertyManagers);
     formVisibility = true;
 
