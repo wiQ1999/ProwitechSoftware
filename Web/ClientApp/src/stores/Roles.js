@@ -7,22 +7,32 @@ import {
 } from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
-export async function getAllUsers() {
+export async function getAllRoles() {
   try {
-    const response = await genericGetAll("/Users");
+    const response = await genericGetAll("/Roles");
     return await response.json();
   }
   catch (err) {
-    handleError(err, "pobieranie wszystkich Użytkowników");
+    handleError(err, "pobieranie wszystkich Ról");
   }
 }
 
-export async function deleteUser(id) {
+export async function postRole(roleDto) {
   try {
-    const response = await genericDelete("/Users", id);
+    const response = await genericPost("/Roles", roleDto);
     return await response.json();
   } catch (err) {
-    handleError(err, "usuwanie Użytkownika na podstawie ID");
+    handleError(err, "dodawanie Roli");
+    return err;
+  }
+}
+
+export async function delteRole(id) {
+  try {
+    const response = await genericDelete("/Roles", id);
+    return await response.json();
+  } catch (err) {
+    handleError(err, "usuwanie Roli na podstawie ID");
   }
   return response;
 }

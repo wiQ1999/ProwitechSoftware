@@ -1,22 +1,28 @@
 <script>
     import { onMount } from "svelte";
-    import { getAllUsers } from "../../stores/Users";
+    import { goto } from "$app/navigation";
+    import { getAllUsers, deleteUser } from "../../stores/Users";
 
     let users = [];
     onMount(async () => {
         users = await getAllUsers();
     });
 
-    function edit(id) {
-        window.location.href = `/roles/details/${id}`;
+    function goToAddRow(id) {
+        goto(`/users/${id}`);
     }
 
-    function deletePopUp(user) {
-        console.log(user);
+    function goToEditRow(id) {
+        goto(`/users/${id}`);
+    }
+
+    async function deleteRow(user) {
+        //await deleteUser(user.id);
+        alert("Nie zaimplementowano");
     }
 </script>
 
-<br />
+<button on:click={goToAddRow(null)}>Dodaj nowego użytkownika</button>
 
 <table>
     <tr>
@@ -26,18 +32,18 @@
         <th>Rola</th>
     </tr>
     {#each users as user}
-        <tr on:dblclick|preventDefault={() => edit(user.id)}>
+        <tr on:dblclick|preventDefault={() => goToEditRow(user.id)}>
             <td>{user.firstName ?? ""}</td>
             <td>{user.lastName ?? ""}</td>
             <td>{user.email ?? ""}</td>
             <td>{user.role.name ?? ""}</td>
             <td>
-                <button on:click|preventDefault={() => edit(user.id)}>
+                <button on:click|preventDefault={() => goToEditRow(user.id)}>
                     Szczegóły
                 </button>
             </td>
             <td>
-                <button on:click|preventDefault={() => deletePopUp(user)}>
+                <button on:click|preventDefault={() => deleteRow(user)}>
                     Usuń
                 </button>
             </td>
