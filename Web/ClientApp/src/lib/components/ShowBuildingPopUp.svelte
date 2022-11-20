@@ -65,8 +65,10 @@
       {BuildingDTO.buildingAddress.postalCode}
     {/if}
     <br />
-    {message2}
-    {BuildingDTO.propertyManager.name}
+    {#if BuildingDTO.propertyManager}
+      {message2}
+      {BuildingDTO.propertyManager.name}
+    {/if}
     <br />
 
     <a href="/index" class="button">Powrót do strony głównej</a>

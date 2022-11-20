@@ -36,14 +36,14 @@
   //     }
   //   }
   import { onMount } from "svelte";
-  import { getAllBuildings } from "$lib/stores/Building";
+  import { getAllBuildings, deleteBuilding } from "$lib/stores/Building";
   import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
   let displayAll;
   let displayPopUp;
   let displayGetAllProblem;
   let errorMessage = "Nie udało się pobrać danych o Budynkach z bazy danych";
   let buildingsJSON;
-  let PropertyManagerDTO;
+  let BuildingDTO;
   let idToDelete;
   let showBuildingPopUpMessage =
     "Jesteś pewny, że chcesz usunąć poniższy Budynek?";
@@ -56,22 +56,28 @@
     } else if (buildings instanceof Response) {
       buildingsJSON = await buildings.json();
       console.log(buildingsJSON);
-      displayAll = true;
+      if (buildingsJSON.length == 0) {
+        errorMessage = "Brak budynków w bazie danych";
+        displayGetAllProblem = true;
+      } else {
+        displayAll = true;
+      }
     }
   });
   function edit(id) {
     // localStorage.setItem("manager_to_update_id", id);
     window.location.href = `/Building/update/${id}`;
   }
-  function displayConfirmPopUp(manager) {
-    idToDelete = manager.id;
+  function displayConfirmPopUp(building) {
+    idToDelete = building.id;
     displayAll = false;
     displayPopUp = true;
+    BuildingDTO = building;
   }
-  async function deleteBuilding(id) {
-    let response = await deletePropertyManager(id);
+  async function deleteChosenBuilding(id) {
+    let response = await deleteBuilding(id);
     if (response instanceof Response) {
-      alert("Pomyślnie usunięto Zarządcę Nieruchomości");
+      alert("Pomyślnie usunięto wybrany Budynek");
     }
     window.location.reload();
   }
@@ -90,22 +96,24 @@
             <td>{building.buildingAddress.postalCode}</td>
             <td>{building.type}</td>
 
-            <td>{building.propertyManager.name}</td>
-            <td>{building.propertyManager.phoneNumber}</td>
-            <td
-              >{building.propertyManager.fullAddress.buildingAddress
-                .streetName}</td
-            >
-            <td
-              >{building.propertyManager.fullAddress.buildingAddress
-                .buildingNumber}</td
-            >
-            <td>{building.propertyManager.fullAddress.localNumber}</td>
-            <td>{building.propertyManager.fullAddress.staircaseNumber}</td>
-            <td
-              >{building.propertyManager.fullAddress.buildingAddress
-                .postalCode}</td
-            >
+            {#if building.propertyManager}
+              <td>{building.propertyManager.name}</td>
+              <td>{building.propertyManager.phoneNumber}</td>
+              <td
+                >{building.propertyManager.fullAddress.buildingAddress
+                  .streetName}</td
+              >
+              <td
+                >{building.propertyManager.fullAddress.buildingAddress
+                  .buildingNumber}</td
+              >
+              <td>{building.propertyManager.fullAddress.localNumber}</td>
+              <td>{building.propertyManager.fullAddress.staircaseNumber}</td>
+              <td
+                >{building.propertyManager.fullAddress.buildingAddress
+                  .postalCode}</td
+              >
+            {/if}
 
             <td
               ><button on:click|preventDefault={() => edit(building.id)}
@@ -129,13 +137,14 @@
     {errorMessage}
   {:else if displayPopUp}
     <div class="delete-building-confirm-pop-up">
-      <!-- <ShowBuildingPopUp
-        {PropertyManagerDTO}
-        message={showPropertyManagerPopUpMessage}
-      /> -->
+      <ShowBuildingPopUp
+        {BuildingDTO}
+        message1="Czy na pewno chcesz usunąć poniższy budynek:"
+        message2="podlegający pod Zarządcę Nieruchomości:"
+      />
       <button
-        on:click|preventDefault={async () => await deleteBuilding(idToDelete)}
-        >TAK, USUŃ</button
+        on:click|preventDefault={async () =>
+          await deleteChosenBuilding(idToDelete)}>TAK, USUŃ</button
       >
       <button on:click|preventDefault={() => window.location.reload()}
         >ANULUJ</button
