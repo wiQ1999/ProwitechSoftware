@@ -13,11 +13,20 @@ export async function postBuilding(
   buildingType
 ) {
   let response;
-  let createBuildingCommand = {
-    buildingAddressId: buildingAddressId,
-    type: buildingType,
-    propertyManagerId: propertyManagerId,
-  };
+
+  let createBuildingCommand;
+  if (propertyManagerId == null) {
+    createBuildingCommand = {
+      buildingAddressId: buildingAddressId,
+      type: buildingType,
+    };
+  } else {
+    createBuildingCommand = {
+      buildingAddressId: buildingAddressId,
+      type: buildingType,
+      propertyManagerId: propertyManagerId,
+    };
+  }
   try {
     response = await genericPost("/Building", createBuildingCommand);
     return response;
@@ -43,4 +52,14 @@ export async function getAllBuildings() {
     handleError(err, "pobieranie wszystkich Budynków");
   }
   return buildings;
+}
+export async function deleteBuilding(id) {
+  let response;
+  try {
+    response = await genericDelete("/Building", id);
+    return response;
+  } catch (err) {
+    handleError(err, "usuwanie Budynku");
+    return err;
+  }
 }
