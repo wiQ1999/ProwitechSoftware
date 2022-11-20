@@ -48,7 +48,7 @@
   //     }
   //   }
   // }
-  
+
   import AddBuildingAddressPopUp from "$lib/components/AddBuildingAddressPopUp.svelte";
   import BuildingForm from "$lib/components/BuildingForm.svelte";
   import {
@@ -114,11 +114,13 @@
     }
   }
   async function createBuilding(baId, propId, bType) {
-    let buildingPostResult = await postBuilding(baId, propId, bType);
-    if (buildingPostResult instanceof Response) {
-      let buildingId = await buildingPostResult.json();
-      // console.log(buildingId);
-      await showNewBuilding(buildingId);
+    if (baId != "00000000-0000-0000-0000-000000000000") {
+      let buildingPostResult = await postBuilding(baId, propId, bType);
+      if (buildingPostResult instanceof Response) {
+        let buildingId = await buildingPostResult.json();
+        // console.log(buildingId);
+        await showNewBuilding(buildingId);
+      }
     }
   }
   async function showNewBuilding(bId) {
