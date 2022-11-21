@@ -1,4 +1,4 @@
-﻿using Infrastructure.Database;
+﻿                using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Microsoft.Data.SqlClient;
@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
             return await _dbContext.Buildings.
                 Include(b => b.BuildingAddress).
                 Include(b => b.PropertyManager).
-                    ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(pm => pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).
                         ToArrayAsync(cancellationToken);
         }
 
@@ -54,6 +54,16 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             Building? buildingToDelete = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            if (buildingToDelete == null)
+                throw new Exception($"Brak Budynku o identyfikatorze {id}.");
+            Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
+            if (buildingAddressIdToDelete != null)
+            {
+                BuildingAddress buildingAddressToDelete=await _dbContext.BuildingAddresses.
+                    FirstOrDefaultAsync(b => b.Id == buildingAddressIdToDelete, cancellationToken);
+
+                _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
+            }
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");
             _dbContext.Buildings.Remove(buildingToDelete);

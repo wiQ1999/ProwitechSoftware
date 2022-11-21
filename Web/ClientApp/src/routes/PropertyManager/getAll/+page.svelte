@@ -15,12 +15,13 @@
   //       staircaseNumber: "",
   //     },
   //   };
+
   import { onMount } from "svelte";
   import {
     getAllPropertyManagers,
     deletePropertyManager,
-  } from "../../../stores/PropertyManager";
-  import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
+  } from "$lib/stores/PropertyManager";
+  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
   let displayAll;
   let displayPopUp;
   let displayGetAllProblem;

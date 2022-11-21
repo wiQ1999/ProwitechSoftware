@@ -1,5 +1,5 @@
 <script>
-  import { updateBuildingAddressAgain } from "../stores/BuildingAddress";
+  import { updateBuildingAddressAgain } from "$lib/stores/BuildingAddress";
   import { onMount } from "svelte";
 
   export let corrdinates_not_found_message;

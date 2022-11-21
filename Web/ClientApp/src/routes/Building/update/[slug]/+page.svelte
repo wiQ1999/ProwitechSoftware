@@ -22,106 +22,123 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
-  import { tryToUpdateBuildingAddress } from "$lib/stores/BuildingAddress";
-  import { checkIfUpdatedBuildingAddressAndOriginalBuildingAddressDiffer } from "$lib/stores/BuildingAddress";
-  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
-  import { onMount } from "svelte";
   import {
-    getPropertyManagerById,
-    checkIfPropManagersDiffer,
-    updatePropertyManager,
-  } from "$lib/stores/PropertyManager";
-  import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
+    tryToUpdateBuildingAddress,
+    checkIfUpdatedBuildingAddressAndOriginalBuildingAddressDiffer,
+  } from "$lib/stores/BuildingAddress";
+  import { chooseNewStringIfNewDiffersFromOld } from "$lib/js-lib/helpers";
+  import { getBuildingById, updateBuilding } from "$lib/stores/Building.js";
+  import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
+  import { onMount } from "svelte";
+  import BuildingForm from "$lib/components/BuildingForm.svelte";
   import EditBuildingAddressPopUp from "$lib/components/EditBuildingAddressPopUp.svelte";
   import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
 
-  //dane pobrane z getPropertyManagerById - pierwotne i podlegające zmianie
-  let updateBuildingAddressDTO;
+  //dane pobrane z getBuildingById - pierwotne i podlegające zmianie
+  let originalBuildingDTO;
+  let updateBuildingDTO;
+  //--
   let originalBuildingAddressDTO;
-  let updatePropertyManagerDTO;
-  let originalPropertyManagerDTO;
+  let updateBuildingAddressDTO;
+  //--
+  let originalPropertyManagerId;
+  let updatePropertyManagerId;
+  //--
+  let originalBuildingType;
+  let updateBuildingType;
   //---------------------------------------
   //części wpływające na wygląd
   let editBuildingAddressPopUpVisibility;
   let corrdinates_not_found_message;
   let formVisibility;
   let errorDivVisibility;
-  let updatedPropertyManagerPopUpVisibility;
-  let showPropertyManagerPopUpMessage;
+  let updatedBuildingPopUpVisibility;
+  let showBuildingPopUpMessage;
   //---------------------------------------
   let buildingAddressId;
 
   let buildingAddressChanged;
-  let otherPropManagerDataChanged;
+  let otherBuildingDataChanged;
 
   let buildingAddressesDontDiffer;
   let buildingAddressUpdateError;
 
-  let PropertyManagerDTO;
+  let BuildingDTO;
   let AddUpdateBuildingAddressResponse;
 
   onMount(async () => {
-    updatedPropertyManagerPopUpVisibility = false;
+    updatedBuildingPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
     await prepareForm(data.id);
   });
   //data --> pobierane dane z URLa przez funkcję load (w pliku +page.js w bieżącym folderze)
   //-----------------------------------------------------------------------------------------
-  // struktura originalPropertyManagerDTO:
-  // {
-  //   "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
-  //   "name": "Klub Sportowy Zawisza",
-  //   "phoneNumber": "+48 999 999 999",
-  //   "fullAddress": {
-  //     "id": "d3bc1437-a363-4d7c-5487-08dabf373e80",
-  //     "buildingAddressId": "47054ff8-e3c3-4034-8629-bdc4da733944",
-  //     "buildingAddress": {
-  //       "id": "47054ff8-e3c3-4034-8629-bdc4da733944",
-  //       "cityName": "Bydgoszcz",
-  //       "streetName": "Gdańska",
-  //       "buildingNumber": "44",
-  //       "longitude": 18.0075972,
-  //       "latitude": 53.12941739999999,
-  //       "coordinateType": "ROOFTOP",
-  //       "postalCode": "85-008"
-  //     },
-  //     "localNumber": "1",
-  //     "staircaseNumber": "F"
+  // STRUKTURA GET_BUILDING_BY_ID:
+  //   {
+  //   "id": "fbd74583-a8b5-4954-67c9-08dacb03ff5f",
+  //   "buildingAddress": {
+  //     "id": "41896088-6304-4dce-bafa-96e671b7c75a",
+  //     "cityName": "Poznań",
+  //     "streetName": "św. Marcin",
+  //     "buildingNumber": "99",
+  //     "longitude": null,
+  //     "latitude": null,
+  //     "coordinateType": null,
+  //     "postalCode": "61-804"
+  //   },
+  //   "type": "wielolokalowy",
+  //   "locals": [],
+  //   "propertyManager": {
+  //     "id": "38974075-73ac-46dd-34e4-08dacaf3e376",
+  //     "name": "Poznanskie Betlejem",
+  //     "phoneNumber": "+48 756 4563 212",
+  //     "fullAddress": {
+  //       "id": "a7de7d5b-6f3b-4f0c-c160-08dacaf3e366",
+  //       "buildingAddressId": "b0046c21-eb1c-4980-8f78-fd1431ff6bcc",
+  //       "buildingAddress": null,
+  //       "localNumber": "6",
+  //       "staircaseNumber": "c"
+  //     }
   //   }
   // }
-  async function prepareForm(propertyManagerId) {
-    let propertyManagerResponse = await getPropertyManagerById(
-      propertyManagerId
-    );
-    if (propertyManagerResponse instanceof Response) {
-      originalPropertyManagerDTO = await propertyManagerResponse.json();
-      updatePropertyManagerDTO = structuredClone(originalPropertyManagerDTO);
-      originalBuildingAddressDTO =
-        originalPropertyManagerDTO.fullAddress.buildingAddress;
+
+  async function prepareForm(buildingId) {
+    let buildingResponse = await getBuildingById(buildingId);
+    if (buildingResponse instanceof Response) {
+      originalBuildingDTO = await buildingResponse.json();
+      // updateBuildingDTO = structuredClone(originalBuildingDTO);
+      // //--
+      originalBuildingAddressDTO = originalBuildingDTO.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
+      //--
+      originalPropertyManagerId = originalBuildingDTO.propertyManager.id;
+      updatePropertyManagerId = structuredClone(originalPropertyManagerId);
+      //--
+      originalBuildingType = originalBuildingDTO.type;
+      updateBuildingType = structuredClone(originalBuildingType);
 
       formVisibility = true;
     } else {
       errorDivVisibility = true;
     }
   }
-
-  async function updatePropertyManagerAllData(
+  async function updateBuildingAllData(
     newBuildingAddressDTO,
-    oldBuildingAddressDTO
+    newPropertyManagerId,
+    newBuildingType
   ) {
     await updateBuildingAddressOnly(
       newBuildingAddressDTO,
-      oldBuildingAddressDTO
+      originalBuildingAddressDTO
     );
     if (
       buildingAddressChanged ||
       buildingAddressesDontDiffer ||
       buildingAddressUpdateError
     ) {
-      await updatePropertyManagerDataWithoutBuildingAddress(
-        updatePropertyManagerDTO,
-        originalPropertyManagerDTO,
+      await updateBuildingDataWithoutBuildingAddress(
+        newPropertyManagerId,
+        newBuildingType,
         buildingAddressChanged
       );
     }
@@ -174,59 +191,75 @@
     }
   }
 
-  async function updatePropertyManagerDataWithoutBuildingAddress(
-    newPropertyManagerDTO,
-    oldPropertyManagerDTO,
+  async function updateBuildingDataWithoutBuildingAddress(
+    newPropertyManagerId,
+    newType,
     buildingAddressChanged
   ) {
-    let newAndOldPropManDiffer = checkIfPropManagersDiffer(
-      newPropertyManagerDTO,
-      oldPropertyManagerDTO
+    let propertyManagerIdForBuildingUpdate = chooseNewStringIfNewDiffersFromOld(
+      originalPropertyManagerId,
+      newPropertyManagerId
     );
-    if (!newAndOldPropManDiffer) {
-      otherPropManagerDataChanged = false;
+    let buildingTypeForUpdate = chooseNewStringIfNewDiffersFromOld(
+      originalBuildingType,
+      newType
+    );
+
+    if (
+      propertyManagerIdForBuildingUpdate != originalPropertyManagerId ||
+      buildingTypeForUpdate != originalBuildingType
+    ) {
+      updateBuildingDTO = {
+        id: originalBuildingDTO.id,
+        type: buildingTypeForUpdate,
+        propertyManagerId: propertyManagerIdForBuildingUpdate,
+      };
+      console.log(updateBuildingDTO);
+      let updateSuccess = await updateBuilding(updateBuildingDTO);
+      if (updateSuccess) {
+        otherBuildingDataChanged = true;
+      } else {
+        otherBuildingDataChanged = false;
+      }
     } else {
-      let updateSuccess = await updatePropertyManager(newPropertyManagerDTO);
-      if (updateSuccess) otherPropManagerDataChanged = true;
-      else otherPropManagerDataChanged = false;
+      otherBuildingDataChanged = false;
     }
-    displayPropertyManagerAfterUpdate(
-      oldPropertyManagerDTO.id,
+
+    displayBuildingAfterUpdate(
+      originalBuildingDTO.id,
       buildingAddressChanged,
-      otherPropManagerDataChanged
+      otherBuildingDataChanged
     );
   }
 
-  async function displayPropertyManagerAfterUpdate(
+  async function displayBuildingAfterUpdate(
     id,
     buildingAddressChanged,
-    otherPropManagerDataChanged
+    otherDataChanged
   ) {
     let message;
 
-    if (buildingAddressChanged && otherPropManagerDataChanged) {
-      message =
-        "Dane Zarządcy Nieruchomości po edycji adresu budynku oraz innych danych:";
+    if (buildingAddressChanged && otherDataChanged) {
+      message = "Dane Budynku po edycji adresu budynku oraz innych danych:";
     } else if (buildingAddressChanged) {
       message =
-        "Zmieniono adres budynku Zarządcy Nieruchomości BEZ innych danych. Dane Zarządcy Nieruchomości po aktualizacji:";
-    } else if (otherPropManagerDataChanged) {
-      message =
-        "Zmieniono dane Zarządcy Nieruchomości BEZ zmiany adresu budynku. Nowe dane:";
+        "Zmieniono adres Budynku BEZ innych danych. Dane Budynku po aktualizacji:";
+    } else if (otherDataChanged) {
+      message = "Zmieniono dane Budynku BEZ zmiany adresu budynku. Nowe dane:";
     } else {
       message = "Żadne dane nie zostały zmienione. Poniżej aktualne dane:";
     }
 
-    let propertyManagerAfterUpdate = await getPropertyManagerById(id);
+    let buildingAfterUpdate = await getBuildingById(id);
 
-    if (propertyManagerAfterUpdate instanceof Response) {
-      PropertyManagerDTO = await propertyManagerAfterUpdate.json();
+    if (buildingAfterUpdate instanceof Response) {
+      BuildingDTO = await buildingAfterUpdate.json();
     } else {
-      PropertyManagerDTO = null;
+      BuildingDTO = null;
     }
     formVisibility = false;
-    showPropertyManagerPopUpMessage = message;
-    updatedPropertyManagerPopUpVisibility = true;
+    showBuildingPopUpMessage = message;
+    updatedBuildingPopUpVisibility = true;
   }
 
   function prepareMessage(
@@ -249,9 +282,9 @@
       updateBuildingAddressDTO={AddUpdateBuildingAddressResponse.addedBuildingAddress}
       {corrdinates_not_found_message}
       continueEdition={async () =>
-        await updatePropertyManagerDataWithoutBuildingAddress(
-          updatePropertyManagerDTO,
-          originalPropertyManagerDTO,
+        await updateBuildingDataWithoutBuildingAddress(
+          updatePropertyManagerId,
+          updateBuildingType,
           buildingAddressChanged
         )}
       bind:buildingAddressId
@@ -259,23 +292,25 @@
     />
   {/if}
   {#if errorDivVisibility}
-    <div>Błąd ładowania danych Zarządcy Nieruchomości do edycji</div>
+    <div>Błąd ładowania danych Budynku do edycji</div>
   {/if}
   {#if formVisibility}
-    <PropertyManagerForm
+    <BuildingForm
       bind:buildingAddressDTO={updateBuildingAddressDTO}
-      bind:propertyManagerDTO={updatePropertyManagerDTO}
+      bind:propertyManagerId={updatePropertyManagerId}
+      bind:buildingType={updateBuildingType}
       onSubmit={async () =>
-        await updatePropertyManagerAllData(
+        await updateBuildingAllData(
           updateBuildingAddressDTO,
-          originalBuildingAddressDTO
+          updatePropertyManagerId,
+          updateBuildingType
         )}
-    />
-  {/if}
-  {#if updatedPropertyManagerPopUpVisibility}
-    <ShowPropertyManagerPopUp
-      {PropertyManagerDTO}
-      message={showPropertyManagerPopUpMessage}
+    />{/if}
+  {#if updatedBuildingPopUpVisibility}
+    <ShowBuildingPopUp
+      {BuildingDTO}
+      message1={showBuildingPopUpMessage}
+      message2="podlegający pod Zarządcę Nieruchomości:"
     />
   {/if}
 </div>
