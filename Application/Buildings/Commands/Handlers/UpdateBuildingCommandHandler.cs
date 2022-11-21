@@ -34,6 +34,10 @@ namespace Application.Buildings.Commands.Handlers
                     throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
                 bFromDB.PropertyManagerId = request.PropertyManagerId;
             }
+            else
+            {
+                bFromDB.PropertyManagerId = null;
+            }
             bFromDB.Type = request.Type;
             await _buildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);
             return Unit.Value;
