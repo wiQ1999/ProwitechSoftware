@@ -59,21 +59,21 @@
   </div>
   <div>
     <label for="property-manager-name">Nazwa Zarządcy Nieruchomości</label>
-    <input type="text" bind:value={propertyManagerDTO.name} />
+    <input type="text" bind:value={propertyManagerDTO.name} required />
     <label for="property-manager-phone-number">Numer telefonu</label>
-    <input type="text" bind:value={propertyManagerDTO.phoneNumber} />
+    <input type="text" bind:value={propertyManagerDTO.phoneNumber} required/>
     <label for="property-manager-name">Nazwa ulicy</label>
-    <input type="text" bind:value={buildingAddressDTO.streetName} />
+    <input type="text" bind:value={buildingAddressDTO.streetName} required />
     <label for="building-address-building-number">Numer budynku</label>
-    <input type="text" bind:value={buildingAddressDTO.buildingNumber} />
-    <label for="property-manager-local-number">Numer lokalu (opcjonalnie)</label
+    <input type="text" bind:value={buildingAddressDTO.buildingNumber} required />
+    <label for="property-manager-local-number">Numer lokalu*</label
     >
     <input
       type="text"
       bind:value={propertyManagerDTO.fullAddress.localNumber}
     />
     <label for="property-manager-staircase-number"
-      >Numer klatki schodowej (opcjonalnie)</label
+      >Numer klatki schodowej*</label
     >
     <input
       type="text"
