@@ -4,74 +4,87 @@
     //Z API
     const collection = [
         {
-            person: {
-                name: "Wiktor",
-                surname: "Szczeszek",
-                age: 23,
-                address: {
-                    city: "Opalenica",
-                    street: "Poprzeczna",
-                    number: 2,
-                },
+            id: "1",
+            name: "Wiktor",
+            surname: "Szczeszek",
+            age: 23,
+            address: {
+                city: "Opalenica",
+                street: "Poprzeczna",
+                number: 2,
             },
         },
         {
-            person: {
-                name: "Zdzisiu",
-                surname: "Trąbka",
-                age: 43,
-                address: {
-                    city: "Poznań",
-                    street: "Polna",
-                    number: 55,
-                },
+            id: "2",
+            name: "Zdzisiu",
+            surname: "Trąbka",
+            age: 43,
+            address: {
+                city: "Poznań",
+                street: "Polna",
+                number: 55,
             },
         },
         {
-            person: {
-                name: "Jarek",
-                surname: "Koparek",
-                age: 54,
-                address: {
-                    city: "Wrocław",
-                    street: "Mieszkaniowa",
-                    number: 8,
-                },
+            id: "3",
+            name: "Jarek",
+            surname: "Koparek",
+            age: 54,
+            address: {
+                city: "Wrocław",
+                street: "Mieszkaniowa",
+                number: 8,
             },
         },
         {
-            person: {
-                name: "Marek",
-                surname: "Wozidło",
-                age: 33,
-                address: {
-                    city: "Bydgoszcz",
-                    street: "Drzewiasta",
-                    number: 112,
-                },
+            id: "4",
+            name: "Marek",
+            surname: "Wozidło",
+            age: 33,
+            address: {
+                city: "Bydgoszcz",
+                street: "Drzewiasta",
+                number: 112,
             },
         },
         {
-            person: {
-                name: "Jan",
-                surname: "Nowak",
-                age: 19,
-                address: {
-                    city: "Poznań",
-                    street: "Rolna",
-                    number: 1,
-                },
+            id: "5",
+            name: "Jan",
+            surname: "Nowak",
+            age: 19,
+            address: {
+                city: "Poznań",
+                street: "Rolna",
+                number: 1,
             },
         },
     ];
 
-    const headers = ["Imię", "Nazwisko", "Wiek", "Miasto"];
-    const properties = [
-        "person.name",
-        "person.surname",
-        "person.age",
-        "person.address.city",
-    ];
+    const headerDictionary = {
+        ID: "id",
+        Imię: "name",
+        Nazwisko: "surname",
+        Wiek: "age",
+        Miasto: "address.city",
+    };
+
+    function addHandler(event) {
+        alert("addHandler");
+    }
+
+    function detailHandler(event) {
+        alert("detailHandler");
+    }
+
+    function deleteHandler(event) {
+        alert("deleteHandler");
+    }
 </script>
 
-<BaseList {collection} {headers} {properties} />
+<BaseList
+    {collection}
+    {headerDictionary}
+    on:listAdd={addHandler}
+    on:listDetail={detailHandler}
+    on:listDelete={deleteHandler}
+/>
