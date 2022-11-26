@@ -48,15 +48,14 @@
   export let message2;
 </script>
 
-<div>
+<div class="add-building-success-popUp">
   {#if BuildingDTO == null}
     Nie udało się odczytać danych budynku.
   {:else}
-    {message1}
+    <p>{message1}</p>
     <br />
 
     {BuildingDTO.buildingAddress.streetName}
-    <br />
     {BuildingDTO.buildingAddress.buildingNumber}
     <br />
     {BuildingDTO.buildingAddress.cityName}
@@ -72,6 +71,26 @@
     {/if}
     <br />
 
-    <a href="/index" class="button">Powrót do strony głównej</a>
+    <a href="/" class="button">Powrót do strony głównej</a>
   {/if}
 </div>
+
+<style>
+  .button {
+    text-decoration:none;
+    color: black;
+    padding: 1%;
+    margin-top: 5%;
+    background-color: pink;
+    border-radius: 7px;
+  }
+  .add-building-success-popUp{
+  width: 50%;
+    height: 50%;
+    position: relative;
+    margin: 10% auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
+  }
+</style>

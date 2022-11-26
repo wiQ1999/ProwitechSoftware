@@ -243,6 +243,7 @@
   }
 </script>
 
+<div class="outside">
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
@@ -279,3 +280,5 @@
     />
   {/if}
 </div>
+</div>
+

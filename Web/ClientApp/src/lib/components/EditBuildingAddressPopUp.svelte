@@ -108,10 +108,11 @@
   }
 </script>
 
+<div class="outside">
 <div class="edit-building-address-POP-UP">
   {#if question_window_show}
     <div class="question-window">
-      {corrdinates_not_found_message}
+      <p> {corrdinates_not_found_message} </p>
       <button
         on:click|preventDefault={() =>
           displayUpdateOutcome(
@@ -146,3 +147,41 @@
     </div>
   {/if}
 </div>
+</div>
+
+<style>
+  .outside {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top:0;
+    left:0;
+    background-color: rgba(0,0,0,0.7)
+  }
+  .edit-building-address-POP-UP {
+    width: 50%;
+    height: 50%;
+    position: relative;
+    margin: 10% auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
+  }
+
+  button, .button{
+    text-decoration:none;
+    color: black;
+    padding: 1%;
+    margin: 5% auto;
+    background-color: pink;
+    border-radius: 7px;
+    border: 0px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 12px;
+    display: flex;
+    width: 50%;
+  }
+
+</style>

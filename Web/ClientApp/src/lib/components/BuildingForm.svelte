@@ -50,12 +50,12 @@
       id: null,
       name: "Brak zarządcy",
       fullAddressInShort: {
-        cityName: null,
-        streetName: null,
-        buildingNumber: null,
-        postalCode: null,
-        localNumber: null,
-        staircaseNumber: null,
+        cityName: "",
+        streetName: "",
+        buildingNumber: "",
+        postalCode: "",
+        localNumber: "",
+        staircaseNumber: "",
       },
     });
     console.log(propertyManagers);
@@ -67,27 +67,27 @@
 
 {#if formVisibility}
   <form on:submit|preventDefault={async () => await onSubmit()}>
-    <div>
+    <fieldset>
+      <legend> <h1> Dodaj Zarządce budynku </h1> </legend>
       <label for="building-address-city-name">Miejscowość</label>
       <select bind:value={buildingAddressDTO.cityName}>
         {#each cities as city}
           <option value={city.id}>{city.name}</option>
         {/each}
       </select>
-    </div>
-    <div>
+
       <label for="property-manager-name">Nazwa ulicy</label>
       <input type="text" bind:value={buildingAddressDTO.streetName} />
       <label for="building-address-building-number">Numer budynku</label>
       <input type="text" bind:value={buildingAddressDTO.buildingNumber} />
-    </div>
-    <div>
+
+      <label for="building-type">Typ domu</label>
       <select bind:value={buildingType}>
         {#each buildingTypes as btype}
           <option value={btype}>{btype}</option>
         {/each}
       </select>
-    </div>
+      <label for="property-manager-info">Zarządca nieruchomości</label>
     <select bind:value={propertyManagerId}>
       {#each propertyManagers as propman}
         <option value={propman.id}
@@ -101,6 +101,7 @@
         >
       {/each}
     </select>
+  </fieldset>
     <button type="submit">Submit</button>
   </form>
 {/if}
@@ -110,7 +111,47 @@
     box-sizing: border-box;
   }
   form {
-    display: flex;
-    width: 300px;
+  max-width: 50%;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #f4f7f8;
+  border-radius: 8px;
+  text-align: center;
+  }
+
+  input,select {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a9;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+  margin-bottom: 30px;
+  }
+
+  label {
+    display: block;
+  }
+
+  fieldset {
+    border: none;
+    text-align: center;
+  }
+
+  button {
+    padding: 19px 39px 18px 39px;
+    background-color: #b4e8a5;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    border-radius: 5px;
+    width: 100%;
+    box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+    margin-bottom: 10px;
   }
 </style>

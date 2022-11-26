@@ -79,6 +79,7 @@
   }
 </script>
 
+<div class="outside">
 <div class="add-building-address-POP-UP">
   {#if question_window_show}
     <div class="question-window">
@@ -93,7 +94,7 @@
           addBuildingAddress(only_address_option.optionalArguments, true)}
         >{only_address_option.info}</button
       >
-      <a href="/index" class="button">{abandon_option.info}</a>
+      <a href="/" class="button">{abandon_option.info}</a>
     </div>
   {/if}
   {#if result_window_show}
@@ -112,3 +113,40 @@
     </div>
   {/if}
 </div>
+</div>
+
+<style>
+  .outside {
+    position: fixed;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+
+  .add-building-address-POP-UP {
+    width: 50%;
+    height: 50%;
+    position: relative;
+    margin: 10% auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
+    text-align: center;
+  }
+
+  button, .button{
+    text-decoration:none;
+    color: black;
+    padding: 1%;
+    margin: 5% auto;
+    background-color: pink;
+    border-radius: 7px;
+    border: 0px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 12px;
+    display: flex;
+    width: 50%;
+  }
+</style>
+

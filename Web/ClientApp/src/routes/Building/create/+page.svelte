@@ -164,3 +164,4 @@
     <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
   {/if}
 </div>
+

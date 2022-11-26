@@ -38,6 +38,7 @@
   import { onMount } from "svelte";
   import { getAllBuildings, deleteBuilding } from "$lib/stores/Building";
   import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
+    import PropertyManagerForm from "../../../lib/components/PropertyManagerForm.svelte";
   let displayAll;
   let displayPopUp;
   let displayGetAllProblem;
@@ -82,32 +83,41 @@
     window.location.reload();
   }
 </script>
+<div>
+  <a href="/Building/create" class="button">Dodaj budynek</a>
+</div>
 
 <div class="display-all-buildings">
   {#if displayAll}
     <table>
       <tbody>
-        Budynki:
+        <h2>Budynki</h2>
+        <tr class="headline">
+          <td colspan="4">Adres budynku</td>
+          <td>Typ budynku</td>
+          <td>Zarządca</td>
+          <td>Nr telefonu</td>
+          <td>Adres zarządcy</td>
+          <td>Numer lokalu</td>
+          <td>Numer klatki</td>
+          <td>Kod pocztowy</td>
+          <td colspan="2" hidden>USUŃ ZAZNACZONE</td>
+        </tr>
         {#each buildingsJSON as building}
           <tr>
+            <td>{building.buildingAddress.postalCode}</td>
             <td>{building.buildingAddress.cityName}</td>
             <td>{building.buildingAddress.streetName}</td>
             <td>{building.buildingAddress.buildingNumber}</td>
-            <td>{building.buildingAddress.postalCode}</td>
             <td>{building.type}</td>
 
             {#if building.propertyManager}
               <td>{building.propertyManager.name}</td>
               <td>{building.propertyManager.phoneNumber}</td>
-              <td
-                >{building.propertyManager.fullAddress.buildingAddress
-                  .streetName}</td
-              >
-              <td
-                >{building.propertyManager.fullAddress.buildingAddress
-                  .buildingNumber}</td
-              >
+              <td>{building.propertyManager.fullAddress.buildingAddress.streetName}
+                  {building.propertyManager.fullAddress.buildingAddress.buildingNumber} </td>
               <td>{building.propertyManager.fullAddress.localNumber}</td>
+
               <td>{building.propertyManager.fullAddress.staircaseNumber}</td>
               <td
                 >{building.propertyManager.fullAddress.buildingAddress
@@ -136,6 +146,7 @@
   {:else if displayGetAllProblem}
     {errorMessage}
   {:else if displayPopUp}
+  <div class="outside">
     <div class="delete-building-confirm-pop-up">
       <ShowBuildingPopUp
         {BuildingDTO}
@@ -149,5 +160,64 @@
       <button on:click|preventDefault={() => window.location.reload()}
         >ANULUJ</button
       >
-    </div>{/if}
+    </div>
+  </div>{/if}
 </div>
+
+
+<style>
+  div {
+    margin:5% auto;
+    text-align: center;
+  }
+
+  table{
+    margin: 5% auto;
+    border: 2px solid black;
+    width: 90%;
+  }
+
+  .headline{
+    font-weight:bold;
+    background-color: lightblue;
+  }
+
+  td{
+    border: 2px solid black;
+    padding: 5px;
+  }
+
+  .outside {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top:0;
+    left:0;
+    background-color: rgba(0,0,0,0.7)
+  }
+  .delete-building-confirm-pop-up {
+    width: 50%;
+    height: 50%;
+    position: relative;
+    margin: 10% auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
+  }
+
+    button, .button{
+    text-decoration:none;
+    color: black;
+    padding: 1%;
+    margin: 5% auto;
+    background-color: pink;
+    border-radius: 7px;
+    border: 0px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 12px;
+    display: flex;
+    width: 50%;
+  }
+</style>

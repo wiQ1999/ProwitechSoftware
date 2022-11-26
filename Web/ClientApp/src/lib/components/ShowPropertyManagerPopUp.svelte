@@ -19,13 +19,11 @@
   export let message;
   console.log(PropertyManagerDTO);
 </script>
-
-<div class ="outside">
-  <div class="inside">
+<div class="outside">
+<div class="add-property-manager-popUp">
   {#if PropertyManagerDTO == null}
     Nie udało się odczytać danych Zarządcy Nieruchomości.
   {:else}
-  <h2> Sukces! </h2>
     <p>{message} </p>
     <p>Imię i nazwisko: <b>{PropertyManagerDTO.name}</b></p>
     Adres: 
@@ -54,26 +52,6 @@
 </div>
 
 <style>
-  .outside {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top:0;
-    left:0;
-    background-color: rgba(0,0,0,0.7)
-  }
-  .inside {
-    width: 50%;
-    height: 50%;
-    position: relative;
-    margin: 10% auto;
-    background-color: white;
-    border-radius: 20px;
-    padding: 2%;
-  }
-
   .button {
     text-decoration:none;
     color: black;
@@ -81,5 +59,15 @@
     margin-top: 5%;
     background-color: pink;
     border-radius: 7px;
+  }
+
+  .add-property-manager-popUp{
+    width: 50%;
+    height: 50%;
+    position: relative;
+    margin: 10% auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2%;
   }
 </style>
