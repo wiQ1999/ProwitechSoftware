@@ -1,9 +1,9 @@
 import {
-  genericGetAll,
-  genericDelete,
-  genericGetById,
   genericPost,
+  genericGetAll,
+  genericGetById,
   genericPut,
+  genericDelete
 } from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
@@ -20,6 +20,7 @@ export async function getAllUsers() {
 export async function deleteUser(id) {
   try {
     const response = await genericDelete("/Users", id);
+    console.log("po featchu")
     return await response.json();
   } catch (err) {
     handleError(err, "usuwanie Użytkownika na podstawie ID");

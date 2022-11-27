@@ -1,58 +1,46 @@
 <script>
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
-    import {
-        getAllUsers,
-        getUserById,
-        deleteUser as deleteUserById,
-    } from "../../stores/Users";
+    import { getAllUsers, deleteUser } from "$lib/stores/Users";
+    import BaseList from "$lib/components/base/BaseList.svelte";
 
-    let users = [];
+    let collection = [];
     onMount(async () => {
-        users = await getAllUsers();
+        collection = await getAllUsers();
     });
 
-    function goToAddRow(id) {
-        goto(`/users/${id}`);
+    const headerDictionary = {
+        Imię: "firstName",
+        Nazwisko: "lastName",
+        Emial: "email",
+        "Numer tel.": "phoneNumber",
+        Rola: "role.name",
+    };
+
+    function addHandler(event) {
+        goto(`/users/create`);
     }
 
-    function goToEditRow(id) {
-        goto(`/users/${id}`);
+    function detailHandler(event) {
+        goto(`/users/details/${event.detail.row.id}`);
     }
 
-    async function deleteRow(user) {
-        //await deleteUser(user.id);
-        alert("Nie zaimplementowano");
+    function deleteHandler(event) {
+        deleteUser(event.detail.row.id);
+        window.location.reload();
+    }
+
+    function deleteSelectedHandler(event) {
+        alert("deleteSelectedHandler");
+        console.log(event.detail.rows);
     }
 </script>
 
-<!-- <button on:click={() => goToAddRow("1")}>Dodaj nowego użytkownika</button> -->
-
-<table>
-    <tr>
-        <th>Imię</th>
-        <th>Nazwisko</th>
-        <th>Email</th>
-        <th>Rola</th>
-    </tr>
-    {#each users as user}
-        <tr on:dblclick={goToEditRow(user.id)}>
-            <td>{user.firstName ?? ""}</td>
-            <td>{user.lastName ?? ""}</td>
-            <td>{user.email ?? ""}</td>
-            <td>{user.role.name ?? ""}</td>
-            <td>
-                <button on:click={getUserById(user.id)}> Szczegóły </button>
-            </td>
-            <td>
-                <button on:click{deleteRow(user)}> Usuń </button>
-            </td>
-        </tr>
-    {/each}
-</table>
-
-<style>
-    td {
-        border-bottom: 2px solid;
-    }
-</style>
+<BaseList
+    {collection}
+    {headerDictionary}
+    on:listAdd={addHandler}
+    on:listDetail={detailHandler}
+    on:listDelete={deleteHandler}
+    on:listDeleteSelected={deleteSelectedHandler}
+/>
