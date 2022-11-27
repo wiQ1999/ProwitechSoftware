@@ -74,10 +74,17 @@
 
     function detailHandler(event) {
         alert("detailHandler");
+        console.log(event.detail.row);
     }
 
     function deleteHandler(event) {
         alert("deleteHandler");
+        console.log(event.detail.row);
+    }
+
+    function deleteSelectedHandler(event) {
+        alert("deleteSelectedHandler");
+        console.log(event.detail.rows);
     }
 </script>
 
@@ -87,4 +94,5 @@
     on:listAdd={addHandler}
     on:listDetail={detailHandler}
     on:listDelete={deleteHandler}
+    on:listDeleteSelected={deleteSelectedHandler}
 />
