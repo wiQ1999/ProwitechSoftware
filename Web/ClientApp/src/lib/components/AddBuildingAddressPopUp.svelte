@@ -138,15 +138,17 @@
   button, .button{
     text-decoration:none;
     color: black;
-    padding: 1%;
+    padding: 1% 0;
     margin: 5% auto;
+    width: 100%;
     background-color: pink;
     border-radius: 7px;
     border: 0px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 12px;
     display: flex;
-    width: 50%;
+    justify-content: center;
+    cursor: pointer;
   }
 </style>
 

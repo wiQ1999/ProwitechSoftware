@@ -75,8 +75,12 @@
   }
 </script>
 
-<div class="display-all-property-managers">
+<div class="abovetable">
+  <div class="plus icon" />
   <a href="/PropertyManager/create" class="button">Dodaj Zarządcę</a>
+</div>
+
+<div class="display-all-property-managers">
   {#if displayAll}
     <table>
       <tbody>
@@ -99,12 +103,17 @@
             <td>{manager.fullAddress.buildingAddress.buildingNumber}</td>
             <td>{manager.fullAddress.localNumber}</td>
             <td>{manager.fullAddress.staircaseNumber}</td>
-            <button on:click|preventDefault={() => edit(manager.id)}>
-              <td>Edytuj</td>
-            </button>
-            <button on:click|preventDefault={() => displayConfirmPopUp(manager)}>
-              <td>Usuń</td>
-            </button>
+            <td
+              ><button on:click|preventDefault={() => edit(manager.id)}
+                ><div class="edit icon" /></button
+              ></td
+            >
+            <td
+              ><button
+                on:click|preventDefault={() => displayConfirmPopUp(manager)}
+                ><div class="trash icon" /></button
+              ></td
+            >
             <!-- <button on:click|preventDefault={async () => await continueAdding()}
           >Kontynuuj</button
         > -->
@@ -138,22 +147,27 @@
 <style>
   div {
     margin: 5% auto;
-    text-align: center;
   }
 
   table {
     margin: 5% auto;
-    border: 2px solid black;
+    border: 2px solid lightslategray;
+    border-radius: 8px;
     width: 90%;
+    text-align: left;
+  }
+
+  .abovetable {
+    margin: 5%;
   }
 
   .headline {
-    font-weight: bold;
-    background-color: lightblue;
+    background-color: #007acc;
+    color: white;
   }
-  td {
-    border: 2px solid black;
-    padding: 5px 0;
+
+  tr:nth-child(odd) {
+    background-color: #dee8f5;
   }
 
   .outside {
@@ -189,7 +203,14 @@
       sans-serif;
     font-size: 12px;
     display: flex;
-    width: 50%;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  td button {
+    width: 50px;
+    height: 25px;
+    position: relative;
   }
 
   .confirm {
@@ -198,5 +219,92 @@
 
   .reject {
     background-color: lightcoral;
+  }
+
+  .edit.icon {
+    color: #000;
+    position: absolute;
+    margin-left: 4px;
+    margin-top: 7px;
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    border: solid 1px currentColor;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+
+  .edit.icon:before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: -1px;
+    width: 0px;
+    height: 0px;
+    border-left: solid 5px transparent;
+    border-right: solid 5px currentColor;
+    border-top: solid 2px transparent;
+    border-bottom: solid 2px transparent;
+  }
+
+  .trash.icon {
+    color: #000;
+    position: absolute;
+    margin-left: 5px;
+    margin-top: 7px;
+    width: 9px;
+    height: 10px;
+    border-left: solid 1px currentColor;
+    border-right: solid 1px currentColor;
+    border-bottom: solid 1px currentColor;
+    border-radius: 0 0 2px 2px;
+  }
+
+  .trash.icon:before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: -2px;
+    width: 17px;
+    height: 1px;
+    background-color: currentColor;
+  }
+
+  .trash.icon:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    width: 7px;
+    height: 2px;
+    border-left: solid 1px currentColor;
+    border-right: solid 1px currentColor;
+    border-top: solid 1px currentColor;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .plus.icon {
+    color: #000;
+    position: absolute;
+    margin-left: 3px;
+    margin-top: 10px;
+  }
+
+  .plus.icon:before {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 1px;
+    background-color: currentColor;
+  }
+
+  .plus.icon:after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 1px;
+    background-color: currentColor;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
   }
 </style>

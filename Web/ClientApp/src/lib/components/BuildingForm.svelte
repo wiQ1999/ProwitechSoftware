@@ -68,7 +68,7 @@
 {#if formVisibility}
   <form on:submit|preventDefault={async () => await onSubmit()}>
     <fieldset>
-      <legend> <h1> Dodaj Zarządce budynku </h1> </legend>
+      <legend> <h1> Dodaj budynek </h1> </legend>
       <label for="building-address-city-name">Miejscowość</label>
       <select bind:value={buildingAddressDTO.cityName}>
         {#each cities as city}
@@ -145,7 +145,7 @@
 
   button {
     padding: 19px 39px 18px 39px;
-    background-color: #b4e8a5;
+    background-color: #0078c8;
     font-size: 18px;
     text-align: center;
     font-style: normal;
@@ -153,5 +153,7 @@
     width: 100%;
     box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
     margin-bottom: 10px;
+    justify-content: center;
+    cursor: pointer;
   }
 </style>

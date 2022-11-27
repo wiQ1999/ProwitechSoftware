@@ -42,6 +42,9 @@
   //       "staircaseNumber": "C"
   //     }
   //   }
+
+    import Page from "../../routes/PropertyManager/getAll/+page.svelte";
+
   // }
   export let BuildingDTO;
   export let message1;
@@ -66,8 +69,8 @@
     <br />
     {BuildingDTO.type}
     {#if BuildingDTO.propertyManager}
-      {message2}
-      {BuildingDTO.propertyManager.name}
+      <p>{message2}
+      {BuildingDTO.propertyManager.name} </p>
     {/if}
     <br />
 
@@ -83,6 +86,8 @@
     margin-top: 5%;
     background-color: pink;
     border-radius: 7px;
+    justify-content: center;
+    cursor: pointer;
   }
   .add-building-success-popUp{
   width: 50%;

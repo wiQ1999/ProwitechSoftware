@@ -181,7 +181,8 @@
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 12px;
     display: flex;
-    width: 50%;
+    justify-content: center;
+    cursor: pointer;
   }
 
 </style>

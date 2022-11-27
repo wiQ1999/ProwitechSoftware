@@ -59,6 +59,8 @@
     margin-top: 5%;
     background-color: pink;
     border-radius: 7px;
+    justify-content: center;
+    cursor: pointer;
   }
 
   .add-property-manager-popUp{
