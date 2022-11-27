@@ -28,8 +28,6 @@ public class CreateOrUpdateUserPermissionsCommandHandler
         CreateOrUpdateUserPermissionsCommand request, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByIdAsync(request.UserId, cancellationToken);
-        if (user == null)
-            throw new NotFoundInDbExcption(AppSource.Users, request.UserId);
 
         var originalpermissions = await _permissionsRepository
             .GetUserPermissionsAsync(request.UserId, cancellationToken);

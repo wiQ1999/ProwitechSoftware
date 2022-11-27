@@ -29,8 +29,6 @@ public class CreateOrUpdateRolePermissionsCommandHandler
         CreateOrUpdateRolePermissionsCommand request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetRoleByIdAsync(request.RoleId, cancellationToken);
-        if (role == null)
-            throw new NotFoundInDbExcption(AppSource.Roles, request.RoleId);
 
         var originalpermissions = await _permissionsRepository
             .GetRolePermissionsAsync(request.RoleId, cancellationToken);
