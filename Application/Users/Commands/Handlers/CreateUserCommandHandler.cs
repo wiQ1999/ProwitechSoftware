@@ -1,6 +1,8 @@
 ﻿using Application.Users.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
+using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
@@ -17,19 +19,20 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
 
     public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.GetRoleByIdAsync(request.RoleId, cancellationToken);
-        if (role == null)
-            throw new Exception($"Nie znaleziono roli o identyfikatorze {request.RoleId}.");
+        if (request.RoleId != null)
+            await _roleRepository.GetRoleByIdAsync((Guid)request.RoleId, cancellationToken);
+            
         User user = new()
         {
             Login = request.Login,
             Password = request.Password,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            Email = string.IsNullOrEmpty(request.Email) ? null! : request.Email,
+            Email = request.Email,
             PhoneNumber = request.PhoneNumber,
-            RoleId = role.Id
+            RoleId = request.RoleId
         };
+
         return await _usersRepository.CreateUserAsync(user, cancellationToken);
     }
 }

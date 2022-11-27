@@ -34,13 +34,8 @@ public class UsersRepository : IUsersRepository
 
     public async Task<Guid> CreateUserAsync(User user, CancellationToken cancellationToken)
     {
-        await TryGetUserById(user.Id, cancellationToken);
         if (await _dbContext.Users.AnyAsync(u => u.Login == user.Login, cancellationToken))
             throw new NotUniqueInDbException(AppSource.Users, user.Id, nameof(user.Login), user.Login);
-
-        if (!string.IsNullOrEmpty(user.Email) && 
-            await _dbContext.Users.AnyAsync(u => u.Email == user.Email, cancellationToken))
-            throw new NotUniqueInDbException(AppSource.Users, user.Id, nameof(user.Email), user.Email);
 
         await _dbContext.Users.AddAsync(user, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -52,6 +47,7 @@ public class UsersRepository : IUsersRepository
     {
         await TryGetUserById(user.Id, cancellationToken);
         _dbContext.Entry(user).State = EntityState.Modified;
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
