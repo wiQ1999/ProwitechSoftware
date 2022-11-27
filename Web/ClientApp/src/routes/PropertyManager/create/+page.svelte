@@ -2,16 +2,16 @@
   import {
     postBuildingAddress,
     deleteBuildingAddress,
-  } from "../../../stores/BuildingAddress.js";
+  } from "$lib/stores/BuildingAddress.js";
   import {
     postPropertyManager,
     getPropertyManagerById,
-  } from "../../../stores/PropertyManager";
-  import BuildingAddressPopUp from "../../../components/AddBuildingAddressPopUp.svelte";
-  import ShowPropertyManagerPopUp from "../../../components/ShowPropertyManagerPopUp.svelte";
+  } from "$lib/stores/PropertyManager";
+  import { prepareCoordinatesNotFoundMessage } from "$lib/js-lib/helpers";
+  import BuildingAddressPopUp from "$lib/components/AddBuildingAddressPopUp.svelte";
+  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
   import { onMount } from "svelte";
-  import PropertyManagerForm from "../../../components/PropertyManagerForm.svelte";
-
+  import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
   let buildingAddressDTO;
   let propertyManagerDTO;
   let buildingAddressPostResult = "";
@@ -50,27 +50,14 @@
         await createPropertyManager();
       } else {
         addedBuildingAddress = buildingAddressJSON.addedBuildingAddress;
-        displayBuildingAddressConfirmPopUp(
+        corrdinates_not_found_message = prepareCoordinatesNotFoundMessage(
           addedBuildingAddress,
           buildingAddressJSON
         );
+        buildingAddressConfirmPopUpVisibility = true;
+        formVisibility = false;
       }
     }
-  }
-
-  function displayBuildingAddressConfirmPopUp(
-    addedBuildingAddress,
-    buildingAddressJSON
-  ) {
-    let cityName = addedBuildingAddress.cityName;
-    let streetName = addedBuildingAddress.streetName;
-    let buildingNumber = addedBuildingAddress.buildingNumber;
-
-    corrdinates_not_found_message = `Nie znaleziono dokładnych współrzędnych dla adresu ${streetName} ${buildingNumber}, ${cityName}
-  \nOdnaleziono współrzędne dla adresu: ${buildingAddressJSON.googleAPIFormattedAddress}.
-  \nCzy chce je zachować?`;
-    buildingAddressConfirmPopUpVisibility = true;
-    formVisibility = false;
   }
 
   async function createPropertyManager() {
@@ -117,7 +104,7 @@
     <BuildingAddressPopUp
       {addedBuildingAddress}
       {corrdinates_not_found_message}
-      createPropertyManager={async () => await createPropertyManager()}
+      functionToInvokeAfterAdding={async () => await createPropertyManager()}
       bind:buildingAddressId
     />
   {/if}

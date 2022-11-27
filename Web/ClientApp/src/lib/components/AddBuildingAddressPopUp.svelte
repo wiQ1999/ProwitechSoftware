@@ -1,10 +1,10 @@
 <script>
-  import { HttpMethodError } from "../js-lib/errors.js";
-  import { postBuildingAddressAgain } from "../stores/BuildingAddress.js";
+  import { HttpMethodError } from "$lib/js-lib/errors";
+  import { postBuildingAddressAgain } from "$lib/stores/BuildingAddress.js";
 
   export let corrdinates_not_found_message;
   export let addedBuildingAddress;
-  export let createPropertyManager = () => {};
+  export let functionToInvokeAfterAdding = () => {};
   export let buildingAddressId;
 
   let result_window_show = false;
@@ -66,6 +66,7 @@
           buildingAddressPostResultAgainJSON.addedBuildingAddress.id;
       } else {
         result_message = `Problem z dodaniem adresu: ${buildingAddressPostResultAgainJSON}`;
+        console.log(buildingAddressPostResultAgainJSON);
         buttonErrorVisibility = true;
         buttonContinueVisibility = false;
       }
@@ -74,7 +75,7 @@
   }
   async function continueAdding() {
     result_window_show = false;
-    await createPropertyManager();
+    await functionToInvokeAfterAdding();
   }
 </script>
 

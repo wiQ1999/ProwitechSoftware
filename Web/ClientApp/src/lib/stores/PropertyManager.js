@@ -4,8 +4,8 @@ import {
   genericGetById,
   genericPost,
   genericPut,
-} from "../js-lib/httpMethods";
-import { handleError } from "../js-lib/errors";
+} from "$lib/js-lib/httpMethods";
+import { handleError } from "$lib/js-lib/errors";
 
 export async function postPropertyManager(propertyManager) {
   let response;

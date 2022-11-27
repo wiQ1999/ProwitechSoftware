@@ -1,11 +1,11 @@
-import { handleError } from "../js-lib/errors.js";
+import { handleError } from "$lib/js-lib/errors.js";
 import {
   genericPost,
   genericDelete,
   genericGetById,
   genericPut,
-} from "../js-lib/httpMethods.js";
-import { AddUpdateBuildingAddressRequestResult } from "../js-lib/helpers";
+} from "$lib/js-lib/httpMethods.js";
+import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
 export async function getBuildingAddressById(id) {
   let response;
   try {

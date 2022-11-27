@@ -1,5 +1,6 @@
 import { addOptionalParameters } from "./helpers";
 import { HttpMethodError } from "./errors";
+import { json } from "@sveltejs/kit";
 
 const apiAddress = "https://localhost:7186";
 
@@ -121,6 +122,7 @@ export async function genericPut(
   };
 
   response = await fetch(url, fetchData);
+
   if (!response.ok) {
     let json = await response.clone().json();
     let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;

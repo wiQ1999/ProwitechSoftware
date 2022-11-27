@@ -14,7 +14,7 @@ namespace Application.Buildings.Commands.Requests
         public Guid BuildingAddressId { get; set; }
         [Required]
         public string Type { get; set; }
-        [Required]
+        //[Required]
         public Guid PropertyManagerId { get; set; }
     }
 }

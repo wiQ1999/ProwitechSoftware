@@ -22,14 +22,24 @@ namespace Application.Buildings.Commands.Handlers
 
         public async Task<Unit> Handle(UpdateBuildingCommand request, CancellationToken cancellationToken)
         {
-            var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
-            if (pmFromDB == null)
-                throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
+            
+                
             var bFromDB = await _buildingRepository.GetAsync(request.Id, cancellationToken);
             if (bFromDB == null)
                 throw new Exception($"Brak w bazie danych budynku o Id: {request.Id}");
-            bFromDB.PropertyManagerId = request.PropertyManagerId;
-            await _buildingRepository.UpdateBuildingAsync(bFromDB,cancellationToken);
+            if (request.PropertyManagerId != Guid.Empty)
+            {
+                var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
+                if (pmFromDB == null)
+                    throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
+                bFromDB.PropertyManagerId = request.PropertyManagerId;
+            }
+            else
+            {
+                bFromDB.PropertyManagerId = null;
+            }
+            bFromDB.Type = request.Type;
+            await _buildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);
             return Unit.Value;
 
         }
