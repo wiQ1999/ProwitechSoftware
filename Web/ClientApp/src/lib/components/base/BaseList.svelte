@@ -83,7 +83,6 @@
         {/each}
     </tr>
     {#each collection as row, i}
-        <!-- on:dblclick={goToEditRow(row.id)}-->
         <tr>
             <td>
                 <input type="checkbox" bind:checked={checkCollection[i]} />
@@ -100,3 +99,7 @@
         </tr>
     {/each}
 </table>
+
+{#if collection.length == 0}
+    Brak rekordów
+{/if}
