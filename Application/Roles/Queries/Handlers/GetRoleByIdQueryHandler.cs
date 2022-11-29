@@ -2,6 +2,8 @@
 using Application.Roles.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Models.Enums;
+using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Roles.Queries.Handlers;
@@ -19,8 +21,7 @@ public class GetRoleByIdQueryHandler : IRequestHandler<GetRoleByIdQuery, RoleDto
     public async Task<RoleDto> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetRoleByIdAsync(request.Id, cancellationToken);
-        if (role == null)
-            throw new Exception($"Nie znaleziono roli o identyfikatorze {request.Id}.");
+
         return _mapper.Map<RoleDto>(role);
     }
 }

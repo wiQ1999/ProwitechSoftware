@@ -1,5 +1,7 @@
 ﻿using Application.Users.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Models.Enums;
+using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
@@ -17,17 +19,19 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetUserByIdAsync(request.Id, cancellationToken);
-        if (user == null)
-            throw new Exception($"Nie znaleziono użytkownika o identyfikatorze {request.Id}.");
-        if (await _roleRepository.GetRoleByIdAsync(request.RoleId, cancellationToken) == null)
-            throw new Exception($"Nie znaleziono roli o identyfikatorze {request.RoleId}.");
+
+        if (request.RoleId != null)
+            await _roleRepository.GetRoleByIdAsync((Guid)request.RoleId, cancellationToken);
+
         user.Login = request.Login;
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
         user.Email = request.Email;
         user.PhoneNumber = request.PhoneNumber;
         user.RoleId = request.RoleId;
+
         await _usersRepository.UpdateUserAsync(user, cancellationToken);
+        
         return Unit.Value;
     }
 }

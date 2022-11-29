@@ -15,7 +15,11 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
 
     public async Task<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        Role role = new() { Name = request.Name };
+        Role role = new() 
+        { 
+            Name = request.Name 
+        };
+
         return await _roleRepository.CreateRoleAsync(role, cancellationToken);
     }
 }

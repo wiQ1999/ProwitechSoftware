@@ -1,5 +1,7 @@
 ﻿using Application.Users.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Models.Enums;
+using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
@@ -15,10 +17,11 @@ public class ChangeUserPasswordCommandHandler : IRequestHandler<ChangeUserPasswo
     public async Task<Unit> Handle(ChangeUserPasswordCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUserByIdAsync(request.Id, cancellationToken);
-        if (user == null)
-            throw new Exception($"Brak użytkownika o identyfikatorze {request.Id}.");
+
         user.Password = request.Password;
+
         await _userRepository.UpdateUserAsync(user, cancellationToken);
+
         return Unit.Value;
     }
 }
