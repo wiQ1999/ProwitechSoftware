@@ -53,10 +53,11 @@
             property = property.slice(1);
         }
 
-        let result = row;
         const props = property.split(".");
+        let result = row;
 
         for (let i = 0; i < props.length; i++) {
+            if (result == null) return "";
             result = Reflect.get(result, props[i]);
         }
 
