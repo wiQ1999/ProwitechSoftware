@@ -25,14 +25,20 @@
         goto(`/users/details/${event.detail.row.id}`);
     }
 
-    function deleteHandler(event) {
-        deleteUser(event.detail.row.id);
+    async function deleteHandler(event) {
+        await deleteUser(event.detail.row.id);
         window.location.reload();
     }
 
-    function deleteSelectedHandler(event) {
-        alert("deleteSelectedHandler");
-        console.log(event.detail.rows);
+    async function deleteSelectedHandler(event) {
+        const rows = event.detail.rows;
+        if (rows == null) return;
+
+        for (let i = 0; i < rows.length; i++) {
+            await deleteUser(rows[i].id);
+        }
+
+        window.location.reload();
     }
 </script>
 
