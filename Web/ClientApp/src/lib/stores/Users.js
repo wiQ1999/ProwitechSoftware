@@ -14,18 +14,37 @@ export async function getAllUsers() {
   }
   catch (err) {
     handleError(err, "pobieranie wszystkich Użytkowników");
+    return err;
+  }
+}
+
+export async function getUserById(userId) {
+  try {
+    const response = await genericGetById("/Users", userId);
+    return response.json();
+  } catch (err) {
+    handleError(err, "pobieranie Użytkownika na podstawie ID");
+  }
+}
+
+export async function putUser(id, user) {
+  try {
+    const response = await genericPut("/Users", id, user);
+    return response.json();
+  } catch (err) {
+    handleError(err, "Aktualizacja Użytkownika");
+    return err;
   }
 }
 
 export async function deleteUser(id) {
   try {
     const response = await genericDelete("/Users", id);
-    console.log("po featchu")
     return await response.json();
   } catch (err) {
     handleError(err, "usuwanie Użytkownika na podstawie ID");
+    return err;
   }
-  return response;
 }
 
 
@@ -41,39 +60,6 @@ export async function deleteUser(id) {
 //   }
 // }
 
-// export async function putPropertyManager(id, propertyManager) {
-//   let response;
-//   try {
-//     response = await genericPut("/PropertyManager", id, propertyManager);
-//     return response;
-//   } catch (err) {
-//     handleError(err, "Aktualizacja Zarządcy Nieruchomości");
-//     return err;
-//   }
-// }
-
-// export async function getPropertyManagerById(propertyManagerId) {
-//   let getPropertyManagerByIdResult;
-//   try {
-//     getPropertyManagerByIdResult = await genericGetById(
-//       "/PropertyManager",
-//       propertyManagerId
-//     );
-//   } catch (err) {
-//     handleError(err, "pobieranie Zarządcy Nieruchomości na podstawie ID");
-//   }
-//   return getPropertyManagerByIdResult;
-// }
-
-// export async function deletePropertyManager(id) {
-//   let response;
-//   try {
-//     response = await genericDelete("/PropertyManager", id);
-//   } catch (err) {
-//     handleError(err, "usuwanie Zarządcy Nieruchomości na podstawie ID");
-//   }
-//   return response;
-// }
 
 // export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
 //   if (

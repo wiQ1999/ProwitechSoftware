@@ -12,7 +12,10 @@
     lastName: null,
     email: null,
     phoneNumber: null,
-    roleId: null,
+    role: {
+      id: null,
+      name: null,
+    },
   };
 
   let roles = [];
@@ -41,7 +44,9 @@
   <button on:click={goBack($page)}>Zamknij</button>
   <br />
 
-  <h3>Dane podstawowe</h3>
+  <label for="user.login">Login</label>
+  <input type="text" bind:value={user.login} disabled={readonlyValue} />
+  <br />
   <label for="user.firstName">Imię</label>
   <input type="text" bind:value={user.firstName} disabled={readonlyValue} />
   <br />
@@ -54,10 +59,10 @@
   <label for="user.phoneNumber">Numer telefonu</label>
   <input type="text" bind:value={user.phoneNumber} disabled={readonlyValue} />
   <br />
-  <label for="user.roleId">Rola</label>
-  <select bind:value={user.roleId} disabled={readonlyValue}>
+  <label for="user.role.id">Rola</label>
+  <select bind:value={user.role.id} disabled={readonlyValue}>
     {#each roles as role}
-      {#if role.id == user.roleId}
+      {#if role.id == user.role.id}
         <option selected value={role.id}>{role.name}</option>
       {/if}
       <option value={role.id}>{role.name}</option>
@@ -65,15 +70,11 @@
   </select>
   <br />
 
-  <h3>Dane logowania</h3>
-  <label for="user.login">Login</label>
-  <input type="text" bind:value={user.login} disabled={readonlyValue} />
-  <br />
-  <label for="user.password">Hasło</label>
+  <!-- <label for="user.password">Hasło</label>
   <input
     type="password"
     bind:value={user.password}
     disabled={readonlyValue}
     required
-  />
+  /> -->
 </form>

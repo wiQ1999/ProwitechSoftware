@@ -1,86 +1,48 @@
 <script>
     import { onMount } from "svelte";
-    import {
-        postRole,
-        getAllRoles,
-        putRole,
-        deleteRole,
-    } from "../../stores/Roles";
+    import { getAllRoles, deleteRole } from "$lib/stores/Roles";
+    import { goto } from "$app/navigation";
+    import BaseList from "$lib/components/base/BaseList.svelte";
 
-    let newRoleName;
-    let roles = [];
-    let roleToUpdate;
-
+    let collection = [];
     onMount(async () => {
-        roles = await getAllRoles();
+        collection = await getAllRoles();
     });
 
-    async function postRoleAndReload() {
-        await postRole(newRoleName);
+    const headerDictionary = {
+        Nazwa: "name",
+    };
+
+    function addHandler(event) {
+        goto(`/roles/create`);
+    }
+
+    function detailHandler(event) {
+        goto(`/roles/details/${event.detail.row.id}`);
+    }
+
+    async function deleteHandler(event) {
+        await deleteRole(event.detail.row.id);
         window.location.reload();
     }
 
-    async function putRoleAndReload() {
-        await putRole(roleToUpdate.id, roleToUpdate);
-        window.location.reload();
-    }
+    async function deleteSelectedHandler(event) {
+        const rows = event.detail.rows;
+        if (rows == null) return;
 
-    async function delteRoleAndReload() {
-        await deleteRole(roleToUpdate.id, roleToUpdate);
+        for (let i = 0; i < rows.length; i++) {
+            await deleteRole(rows[i].id);
+        }
+
         window.location.reload();
     }
 </script>
 
-<br />
-
-<h3>Dodaj nową rolę</h3>
-<form on:submit={() => postRoleAndReload()}>
-    <label for={newRoleName}>Nazwa</label>
-    <input type="text" bind:value={newRoleName} />
-    <button type="submit">Submit</button>
-</form>
-
-<br />
-
-<h3>Lista ról</h3>
-<form on:submit={() => delteRoleAndReload()}>
-    <table>
-        <tr>
-            <th>Nazwa</th>
-        </tr>
-        {#each roles as role}
-            <tr>
-                <td>
-                    <input type="text" required bind:value={role.name} />
-                </td>
-                <td>
-                    <!-- <button
-                        on:click={() => {
-                            roleToUpdate = role;
-                        }}
-                        type="submit"
-                    >
-                        Aktualizuj
-                    </button> -->
-                </td>
-
-                <td>
-                    <button
-                        on:click={() => {
-                            roleToUpdate = role;
-                        }}
-                        type="submit"
-                    >
-                        Usuń
-                    </button>
-                </td>
-            </tr>
-        {/each}
-    </table>
-</form>
-
-<style>
-    td {
-        border-bottom: 2px solid;
-    }
-</style>
+<BaseList
+    {collection}
+    {headerDictionary}
+    on:listAdd={addHandler}
+    on:listDetail={detailHandler}
+    on:listDelete={deleteHandler}
+    on:listDeleteSelected={deleteSelectedHandler}
+/>
