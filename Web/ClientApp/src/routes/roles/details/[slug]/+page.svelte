@@ -1,74 +1,76 @@
 <script>
     import { onMount } from "svelte";
     import { page } from "$app/stores";
-    import { getUserById, putUser } from "$lib/stores/Users";
-    import { getAllRoles } from "$lib/stores/Roles";
+    import { getRoleById, putRole } from "$lib/stores/Roles";
     import { goto } from "$app/navigation";
 
-    let user = {
+    let role = {
         id: null,
-        login: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        phoneNumber: null,
-        role: {
-            id: null,
-            name: null,
-        },
+        name: null,
     };
-    let roles = [];
-    let isPasswordChanging = false;
-    let isEditing = false;
-    let readonlyValue = "disabled";
+    let isEditing = true;
 
     onMount(async () => {
-        user = await getUserById($page.params.slug);
-        roles = await getAllRoles();
+        role = await getRoleById($page.params.slug);
     });
 
     async function submitHandler() {
         alert("submitHandler");
-        let dto = {
-            login: user.login,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            roleId: user.role.id,
-            id: user.id,
-        };
-
-        await putUser(user.id, dto);
-        isEditing = false;
-        readonlyValue = "disabled";
+        await putRole($page.params.slug, role);
+        changeEditingStatus();
     }
 
     function editHandler() {
-        isEditing = true;
-        readonlyValue = "";
+        alert("editHandler");
+        changeEditingStatus();
     }
 
     function closeHandler() {
         alert("closeHandler");
-        //goto("/users");
+        goto("/roles");
+    }
+
+    function changeEditingStatus() {
+        isEditing = !isEditing;
     }
 </script>
 
-<h2>Rola</h2>
+<div class="container">
+    <div class="references">
+        <a href="/roles/details/{$page.params.slug}/users">Użytkownicy</a>
+    </div>
+    <div class="space" />
+    <div class="main-form">
+        <h2>Rola</h2>
+        <form on:submit|preventDefault={submitHandler}>
+            {#if isEditing}
+                <button type="submit">Zapisz</button>
+            {:else}
+                <button on:click|preventDefault={editHandler}>Edytuj</button>
+            {/if}
+            <button on:click|preventDefault={closeHandler}>Zamknij</button>
 
-<form on:submit|preventDefault={submitHandler}>
-    {#if isEditing}
-        <button type="submit">Zapisz</button>
-    {:else}
-        <button on:click={editHandler}>Edytuj</button>
-    {/if}
-    <button on:click|preventDefault={closeHandler}>Zamknij</button>
+            <br />
+            <br />
 
-    <br />
-    <br />
+            <label for="role.name">Nazwa</label>
+            <input type="text" bind:value={role.name} disabled={!isEditing} />
+            <br />
+        </form>
+    </div>
+</div>
 
-    <label for="user.login">Login</label>
-    <input type="text" bind:value={user.login} disabled={readonlyValue} />
-    <br />
-</form>
+<style>
+    .container {
+        display: flex;
+    }
+
+    .references {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .space {
+        width: 5ch;
+    }
+</style>

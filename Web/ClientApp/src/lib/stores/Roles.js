@@ -24,22 +24,23 @@ export async function getAllRoles() {
   }
   catch (err) {
     handleError(err, "Pobieranie wszystkich Ról");
+    return err;
   }
 }
 
-export async function getRole(id) {
+export async function getRoleById(id) {
   try {
     const response = await genericGetById("/Roles", id);
     return await response.json();
   } catch (err) {
-    handleError(err, "Pobieranie Roli");
+    handleError(err, "Pobieranie Roli na podstawie ID");
+    return err;
   }
-  return getPropertyManagerByIdResult;
 }
 
 export async function putRole(id, roleDto) {
   try {
-    let response = await genericPut("/Role", id, roleDto);
+    const response = await genericPut("/Roles", id, roleDto);
     return await response.json();
   } catch (err) {
     handleError(err, "Aktualizacja Roli");
