@@ -7,9 +7,9 @@ import {
 } from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
-export async function postRole(roleName) {
+export async function postRole(roleDto) {
   try {
-    const response = await genericPost("/Roles", null, { name: roleName });
+    const response = await genericPost("/Roles", null, roleDto);
     return await response.json();
   } catch (err) {
     handleError(err, "Dodawanie Roli");
