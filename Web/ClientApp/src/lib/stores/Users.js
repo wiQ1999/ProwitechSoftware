@@ -7,6 +7,16 @@ import {
 } from "../js-lib/httpMethods";
 import { handleError } from "../js-lib/errors";
 
+export async function postUser(userDto) {
+  try {
+    const response = await genericPost("/Users", userDto);
+    return response.json();
+  } catch (err) {
+    handleError(err, "dodawanie Użytkownika");
+    return err;
+  }
+}
+
 export async function getAllUsers() {
   try {
     const response = await genericGetAll("/Users");
@@ -49,16 +59,7 @@ export async function deleteUser(id) {
 
 
 
-// export async function postPropertyManager(propertyManager) {
-//   let response;
-//   try {
-//     response = await genericPost("/PropertyManager", propertyManager);
-//     return response;
-//   } catch (err) {
-//     handleError(err, "dodawanie Zarządcy Nieruchomości");
-//     return err;
-//   }
-// }
+
 
 
 // export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
