@@ -21,7 +21,7 @@
 
     async function submitHandler() {
         let id = await postUser(user);
-        goto(`/users/details/${id}`);
+        goto(`/users/${id}/details`);
     }
 
     function closeHandler() {
