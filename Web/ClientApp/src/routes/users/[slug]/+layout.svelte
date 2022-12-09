@@ -1,5 +1,12 @@
 <script>
     import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+
+    export let userName = "";
+
+    function closeHandler() {
+        goto("/users");
+    }
 </script>
 
 <br />
@@ -11,5 +18,11 @@
     <a href="/users/{$page.params.slug}/password-change">Zmiana hasła</a>
 </div>
 <div>
+    <b>Użytkownik {userName}</b>
+    <button on:click|preventDefault={closeHandler}>Zamknij</button>
+
+    <br />
+    <br />
+
     <slot />
 </div>
