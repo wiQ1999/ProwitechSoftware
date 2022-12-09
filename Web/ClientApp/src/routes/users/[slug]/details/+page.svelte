@@ -5,6 +5,7 @@
     import { getAllRoles } from "$lib/stores/Roles";
     import { goto } from "$app/navigation";
 
+    let baseUser;
     let user = {
         id: null,
         login: null,
@@ -21,27 +22,46 @@
     let isEditing = false;
 
     onMount(async () => {
-        user = await getUserById($page.params.slug);
+        baseUser = await getUserById($page.params.slug);
+        user = Object.assign({}, baseUser);
         roles = await getAllRoles();
     });
 
-    async function submitHandler() {
-        let dto = {
-            login: user.login,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            roleId: user.role.id,
-            id: user.id,
-        };
-
-        await putUser(user.id, dto);
+    function submitHandler() {
+        if (checkIfUserChenged()) {
+            let dto = {
+                login: user.login,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                roleId: user.role.id,
+                id: user.id,
+            };
+            putUser(user.id, dto);
+            baseUser = user;
+        }
         changeEditingStatus();
+    }
+
+    function checkIfUserChenged() {
+        return (
+            user?.id !== baseUser?.id ||
+            user?.login !== baseUser?.login ||
+            user?.firstName !== baseUser?.firstName ||
+            user?.lastName !== baseUser?.lastName ||
+            user?.email !== baseUser?.email ||
+            user?.phoneNumber !== baseUser?.phoneNumber ||
+            user?.role?.id !== baseUser?.role?.id
+        );
     }
 
     function editHandler() {
         changeEditingStatus();
+    }
+
+    function changeEditingStatus() {
+        isEditing = !isEditing;
     }
 
     function closeHandler() {
@@ -51,10 +71,6 @@
     function roleInputHangler(event) {
         let role = roles.find((r) => r.id == event.target.value);
         user.role = role;
-    }
-
-    function changeEditingStatus() {
-        isEditing = !isEditing;
     }
 </script>
 
