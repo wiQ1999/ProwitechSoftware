@@ -1,8 +1,17 @@
 <script>
+    import formNameStore from "$lib/stores/GlobalStore.js";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    export let userName = "";
+    let userName = "";
+
+    formNameStore.subscribe((value) => {
+        userName = value;
+    });
+    //$: userName = $FormNameStore;
+    // FormNameStore.subscribe((name) => {
+    //     console.log(name);
+    // });
 
     function closeHandler() {
         goto("/users");

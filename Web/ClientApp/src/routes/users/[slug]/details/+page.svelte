@@ -1,9 +1,9 @@
 <script>
+    import formNameStore from "$lib/stores/GlobalStore.js";
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { getUserById, putUser } from "$lib/stores/Users";
     import { getAllRoles } from "$lib/stores/Roles";
-    import { goto } from "$app/navigation";
 
     let baseUser;
     let user = {
@@ -25,6 +25,10 @@
         baseUser = await getUserById($page.params.slug);
         user = Object.assign({}, baseUser);
         roles = await getAllRoles();
+
+        // FormNameStore.update(() => {
+        //     return baseUser?.name ?? "";
+        // });
     });
 
     function submitHandler() {
@@ -64,17 +68,11 @@
         isEditing = !isEditing;
     }
 
-    function closeHandler() {
-        goto("/users");
-    }
-
     function roleInputHangler(event) {
         let role = roles.find((r) => r.id == event.target.value);
         user.role = role;
     }
 </script>
-
-<h2>Użytkownik {user.login}</h2>
 
 <form on:submit|preventDefault={submitHandler}>
     {#if isEditing}
@@ -82,7 +80,6 @@
     {:else}
         <button on:click|preventDefault={editHandler}>Edytuj</button>
     {/if}
-    <button on:click|preventDefault={closeHandler}>Zamknij</button>
 
     <br />
     <br />
