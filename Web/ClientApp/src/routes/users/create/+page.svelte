@@ -19,8 +19,8 @@
         roles = await getAllRoles();
     });
 
-    function submitHandler() {
-        let id = postUser(user);
+    async function submitHandler() {
+        let id = await postUser(user);
         goto(`/users/${id}/details`);
     }
 

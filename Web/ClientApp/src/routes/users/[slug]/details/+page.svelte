@@ -29,7 +29,7 @@
         formNameStore.update(() => user?.login ?? "");
     });
 
-    function submitHandler() {
+    async function submitHandler() {
         if (checkIfUserChenged()) {
             let dto = {
                 login: user.login,
@@ -40,20 +40,20 @@
                 roleId: user.role.id,
                 id: user.id,
             };
-            putUser(user.id, dto);
-            baseUser = user;
+            await putUser(user.id, dto);
+            baseUser = Object.assign({}, user);
         }
         changeEditingStatus();
     }
 
     function checkIfUserChenged() {
         return !(
-            user?.id === baseUser?.id ||
-            user?.login === baseUser?.login ||
-            user?.firstName === baseUser?.firstName ||
-            user?.lastName === baseUser?.lastName ||
-            user?.email === baseUser?.email ||
-            user?.phoneNumber === baseUser?.phoneNumber ||
+            user?.id === baseUser?.id &&
+            user?.login === baseUser?.login &&
+            user?.firstName === baseUser?.firstName &&
+            user?.lastName === baseUser?.lastName &&
+            user?.email === baseUser?.email &&
+            user?.phoneNumber === baseUser?.phoneNumber &&
             user?.role?.id === baseUser?.role?.id
         );
     }

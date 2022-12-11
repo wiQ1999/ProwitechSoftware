@@ -23,10 +23,10 @@
         resetForm();
     }
 
-    function validateForm() {
+    async function validateForm() {
         if (password.new !== password.repeat) {
             //popup o błędzie
-            alert("Hasła muszą być takie same.");
+            await alert("Hasła muszą być takie same.");
             return false;
         }
 
