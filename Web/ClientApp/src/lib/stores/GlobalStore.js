@@ -1,3 +1,5 @@
 import { writable } from "svelte/store";
 
-export const formNameStore = writable("aaa");
+const formNameStore = writable("");
+
+export default formNameStore;

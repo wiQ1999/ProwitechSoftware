@@ -47,6 +47,16 @@ export async function putUser(id, user) {
   }
 }
 
+export async function putUserPassword(id, pwdDto) {
+  try {
+    const response = await genericPut("/Users/Security", id, pwdDto);
+    return response.json();
+  } catch (err) {
+    handleError(err, "Aktualizacja hasła Użytkownika");
+    return err;
+  }
+}
+
 export async function deleteUser(id) {
   try {
     const response = await genericDelete("/Users", id);

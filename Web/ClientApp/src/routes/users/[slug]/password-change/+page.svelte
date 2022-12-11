@@ -1,24 +1,55 @@
 <script>
-    import { onMount } from "svelte";
     import { page } from "$app/stores";
-    import { getUserById, putUser } from "$lib/stores/Users";
-    import { getAllRoles } from "$lib/stores/Roles";
-    import { goto } from "$app/navigation";
+    import { putUserPassword } from "$lib/stores/Users";
+
+    let password = {
+        new: null,
+        repeat: null,
+    };
 
     function submitHandler() {
-        alert("SUBMIT");
+        if (validateForm()) {
+            let id = $page.params.slug;
+            let dto = {
+                id: id,
+                password: password.new,
+            };
+
+            putUserPassword(id, dto);
+            //popup o powodzeniu
+            alert("Pomyślnie zmieniono hasło.");
+        }
+
+        resetForm();
+    }
+
+    function validateForm() {
+        if (password.new !== password.repeat) {
+            //popup o błędzie
+            alert("Hasła muszą być takie same.");
+            return false;
+        }
+
+        return true;
+    }
+
+    function resetForm() {
+        password.new = null;
+        password.repeat = null;
     }
 </script>
 
-<br />
-<br />
+<h3>Zmiana hasła</h3>
 
-<form on:submit={submitHandler}>
+<form on:submit|preventDefault={submitHandler}>
     <button type="submit">Zapisz</button>
+
     <br />
-    <label for="password">Hasło</label>
-    <input type="password" />
+    <br />
+
+    <label for="password">Nowe hasło</label>
+    <input type="password" bind:value={password.new} />
     <br />
     <label for="repeat">Powtórz hasło</label>
-    <input type="password" />
+    <input type="password" bind:value={password.repeat} />
 </form>

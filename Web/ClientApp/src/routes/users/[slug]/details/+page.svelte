@@ -26,9 +26,7 @@
         user = Object.assign({}, baseUser);
         roles = await getAllRoles();
 
-        // FormNameStore.update(() => {
-        //     return baseUser?.name ?? "";
-        // });
+        formNameStore.update(() => user?.login ?? "");
     });
 
     function submitHandler() {
@@ -49,14 +47,14 @@
     }
 
     function checkIfUserChenged() {
-        return (
-            user?.id !== baseUser?.id ||
-            user?.login !== baseUser?.login ||
-            user?.firstName !== baseUser?.firstName ||
-            user?.lastName !== baseUser?.lastName ||
-            user?.email !== baseUser?.email ||
-            user?.phoneNumber !== baseUser?.phoneNumber ||
-            user?.role?.id !== baseUser?.role?.id
+        return !(
+            user?.id === baseUser?.id ||
+            user?.login === baseUser?.login ||
+            user?.firstName === baseUser?.firstName ||
+            user?.lastName === baseUser?.lastName ||
+            user?.email === baseUser?.email ||
+            user?.phoneNumber === baseUser?.phoneNumber ||
+            user?.role?.id === baseUser?.role?.id
         );
     }
 
@@ -73,6 +71,8 @@
         user.role = role;
     }
 </script>
+
+<h3>Szczegóły</h3>
 
 <form on:submit|preventDefault={submitHandler}>
     {#if isEditing}

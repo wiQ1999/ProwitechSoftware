@@ -3,16 +3,6 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    let userName = "";
-
-    formNameStore.subscribe((value) => {
-        userName = value;
-    });
-    //$: userName = $FormNameStore;
-    // FormNameStore.subscribe((name) => {
-    //     console.log(name);
-    // });
-
     function closeHandler() {
         goto("/users");
     }
@@ -27,7 +17,7 @@
     <a href="/users/{$page.params.slug}/password-change">Zmiana hasła</a>
 </div>
 <div>
-    <b>Użytkownik {userName}</b>
+    <b>Użytkownik {$formNameStore}</b>
     <button on:click|preventDefault={closeHandler}>Zamknij</button>
 
     <br />

@@ -19,8 +19,8 @@
         roles = await getAllRoles();
     });
 
-    async function submitHandler() {
-        let id = await postUser(user);
+    function submitHandler() {
+        let id = postUser(user);
         goto(`/users/${id}/details`);
     }
 
@@ -29,7 +29,7 @@
     }
 </script>
 
-<h1>Dodaj użytkownika</h1>
+<h3>Dodaj użytkownika</h3>
 
 <form on:submit|preventDefault={submitHandler}>
     <button type="submit">Utwórz</button>
