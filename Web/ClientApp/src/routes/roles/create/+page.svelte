@@ -2,13 +2,11 @@
     import { postRole } from "$lib/stores/Roles";
     import { goto } from "$app/navigation";
 
-    let role = {
-        name: null,
-    };
+    let roleName = null;
 
     async function submitHandler() {
-        let id = await postRole(role);
-        goto(`/roles/details/${id}`);
+        let id = await postRole(roleName);
+        goto(`/roles/${id}/details`);
     }
 
     function closeHandler() {
@@ -16,7 +14,8 @@
     }
 </script>
 
-<h2>Dodaj rolę</h2>
+<h3>Dodaj rolę</h3>
+
 <form on:submit|preventDefault={submitHandler}>
     <button type="submit">Utwórz</button>
     <button on:click|preventDefault={closeHandler}>Zamknij</button>
@@ -24,7 +23,7 @@
     <br />
     <br />
 
-    <label for="role.name">Nazwa</label>
-    <input type="text" bind:value={role.name} />
+    <label for="roleName">Nazwa</label>
+    <input type="text" bind:value={roleName} />
     <br />
 </form>

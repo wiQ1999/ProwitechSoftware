@@ -18,7 +18,7 @@
     }
 
     function detailHandler(event) {
-        goto(`/roles/details/${event.detail.row.id}`);
+        goto(`/roles/${event.detail.row.id}/details`);
     }
 
     async function deleteHandler(event) {

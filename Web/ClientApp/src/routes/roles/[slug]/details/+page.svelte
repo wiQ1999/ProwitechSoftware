@@ -1,9 +1,10 @@
 <script>
+    import formNameStore from "$lib/stores/GlobalStore.js";
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { getRoleById, putRole } from "$lib/stores/Roles";
-    import { goto } from "$app/navigation";
 
+    let baseRole;
     let role = {
         id: null,
         name: null,
@@ -11,20 +12,26 @@
     let isEditing = false;
 
     onMount(async () => {
-        role = await getRoleById($page.params.slug);
+        baseRole = await getRoleById($page.params.slug);
+        role = Object.assign({}, baseRole);
+
+        formNameStore.update(() => role.name ?? "");
     });
 
     async function submitHandler() {
-        await putRole($page.params.slug, role);
+        if (checkIfRoleChanged()) {
+            await putRole($page.params.slug, role);
+            baseRole = Object.assign({}, role);
+        }
         changeEditingStatus();
+    }
+
+    function checkIfRoleChanged() {
+        return !(role.id === baseRole.id && role.name === baseRole.name);
     }
 
     function editHandler() {
         changeEditingStatus();
-    }
-
-    function closeHandler() {
-        goto("/roles");
     }
 
     function changeEditingStatus() {
@@ -32,14 +39,14 @@
     }
 </script>
 
-<h2>Rola {role.name}</h2>
+<h3>Szczegóły</h3>
+
 <form on:submit|preventDefault={submitHandler}>
     {#if isEditing}
         <button type="submit">Zapisz</button>
     {:else}
         <button on:click|preventDefault={editHandler}>Edytuj</button>
     {/if}
-    <button on:click|preventDefault={closeHandler}>Zamknij</button>
 
     <br />
     <br />
