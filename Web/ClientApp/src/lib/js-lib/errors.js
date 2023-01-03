@@ -1,3 +1,6 @@
+import { openModal } from "svelte-modals";
+import BasePopUp from "$lib/components/base/BasePopUp.svelte";
+
 export class HttpMethodError extends Error {
   constructor(message, errors = null) {
     super(message);
@@ -20,5 +23,6 @@ export function handleError(error, actionName) {
   } else if (error instanceof Error) {
     alert_message = `Wystąpił inny błąd: ${error.message}\n${error.stack}\nWykonywana akcja: [${actionName}]`;
   }
-  alert(alert_message);
+  // alert(alert_message);
+  openModal(BasePopUp, { title: "Błąd", message: alert_message });
 }
