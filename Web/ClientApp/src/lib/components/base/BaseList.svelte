@@ -48,7 +48,12 @@
       document.getElementsByClassName(tableRowsClassName)
     );
     rowsElems.forEach((rowElem) => {
-      rowElem.style.backgroundColor = "red";
+      let rowId = rowElem.id;
+      let checkboxId = `${rowId}-checkbox`;
+      let checkboxElement = document.getElementById(checkboxId);
+      if (checkboxElement.checked) {
+        rowElem.style.backgroundColor = "red";
+      }
     });
   }
 
@@ -102,7 +107,11 @@
   {#each collection as row, i}
     <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
       <td>
-        <input type="checkbox" bind:checked={checkCollection[i]} />
+        <input
+          type="checkbox"
+          bind:checked={checkCollection[i]}
+          id="{tableRowsClassName}-{row.id}-checkbox"
+        />
       </td>
       {#each getHeaderProperties() as property}
         <td>{getDataFrmRow(row, property)}</td>
