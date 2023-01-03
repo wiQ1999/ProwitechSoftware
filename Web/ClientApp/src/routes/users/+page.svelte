@@ -7,6 +7,7 @@
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
 
   let collection = [];
+  let tableRowsClassName = "users-base-list";
   onMount(async () => {
     collection = await getAllUsers();
   });
@@ -32,6 +33,8 @@
       title: "Potwierdź akcję",
       message: "Czy na pewno chcesz usunąć wybranego użytkownika?",
       onOkay: async () => await deleteAndReload(event.detail.row.id),
+      undoSingleColorSelection: true,
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
     });
   }
   async function deleteAndReload(id) {
@@ -45,6 +48,8 @@
       title: "Potwierdź akcję",
       message: "Czy na pewno chcesz usunąć zaznaczonych użytkowników?",
       onOkay: async () => await deleteSelectedAndReload(rows),
+      undoMultipleColorSelection: true,
+      selectedClassName: tableRowsClassName,
     });
   }
   async function deleteSelectedAndReload(rows) {
@@ -61,6 +66,7 @@
 <BaseList
   {collection}
   {headerDictionary}
+  {tableRowsClassName}
   on:listAdd={addHandler}
   on:listDetail={detailHandler}
   on:listDelete={deleteHandler}

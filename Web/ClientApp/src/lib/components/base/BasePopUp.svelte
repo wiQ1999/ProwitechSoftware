@@ -5,6 +5,14 @@
 
   export let title;
   export let message;
+  export let reloadRequired = false;
+
+  const handleClick = () => {
+    closeModal();
+    if (reloadRequired) {
+      window.location.reload();
+    }
+  };
 </script>
 
 {#if isOpen}
@@ -13,7 +21,7 @@
       <h2>{title}</h2>
       <p>{message}</p>
       <div class="actions">
-        <button on:click={closeModal}>OK</button>
+        <button on:click={handleClick}>OK</button>
       </div>
     </div>
   </div>

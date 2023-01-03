@@ -40,13 +40,13 @@ export async function getPropertyManagerById(propertyManagerId) {
   return getPropertyManagerByIdResult;
 }
 export async function getAllPropertyManagers() {
-  let managers;
+  let response;
   try {
-    managers = await genericGetAll("/PropertyManager");
+    response = await genericGetAll("/PropertyManager");
   } catch (err) {
     handleError(err, "pobieranie wszystkich Zarządców Nieruchomości");
   }
-  return managers;
+  return await response.json();
 }
 export async function deletePropertyManager(id) {
   let response;

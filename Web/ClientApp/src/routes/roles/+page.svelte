@@ -6,10 +6,11 @@
   import { openModal } from "svelte-modals";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
 
-    let collection = [];
-    onMount(async () => {
-        collection = await getAllRoles();
-    });
+  let collection = [];
+  let tableRowsClassName = "roles-base-list";
+  onMount(async () => {
+    collection = await getAllRoles();
+  });
 
   const headerDictionary = {
     Nazwa: "name",
@@ -28,6 +29,8 @@
       title: "Potwierdź akcję",
       message: "Czy na pewno chcesz usunąć wybraną rolę?",
       onOkay: async () => await deleteRoleAndReload(event.detail.row.id),
+      undoSingleColorSelection: true,
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
     });
   }
 
@@ -42,6 +45,8 @@
       title: "Potwierdź akcję",
       message: "Czy na pewno chcesz usunąć zaznaczone role?",
       onOkay: async () => await deleteSelectedAndReload(rows),
+      undoMultipleColorSelection: true,
+      selectedClassName: tableRowsClassName,
     });
   }
   async function deleteSelectedAndReload(rows) {
@@ -58,6 +63,7 @@
 <BaseList
   {collection}
   {headerDictionary}
+  {tableRowsClassName}
   on:listAdd={addHandler}
   on:listDetail={detailHandler}
   on:listDelete={deleteHandler}

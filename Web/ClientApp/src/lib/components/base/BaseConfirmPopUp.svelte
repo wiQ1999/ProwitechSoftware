@@ -5,9 +5,30 @@
   export let title;
   export let message;
   export let onOkay = async () => {};
+  export let undoSingleColorSelection = false;
+  export let selectedElementHtmlDomId = 0;
+  export let undoMultipleColorSelection = false;
+  export let selectedClassName = "";
 
   const _onOkay = async () => {
+    closeModal();
     await onOkay();
+  };
+  const _onCancel = () => {
+    closeModal();
+    if (undoSingleColorSelection) {
+      document
+        .getElementById(selectedElementHtmlDomId)
+        .removeAttribute("style");
+    }
+    if (undoMultipleColorSelection) {
+      const rowsElems = Array.from(
+        document.getElementsByClassName(selectedClassName)
+      );
+      rowsElems.forEach((rowElem) => {
+        rowElem.removeAttribute("style");
+      });
+    }
   };
 </script>
 
@@ -18,7 +39,7 @@
       <p>{message}</p>
       <div class="actions">
         <button on:click={_onOkay}>OK</button>
-        <button on:click={closeModal}>Anuluj</button>
+        <button on:click={_onCancel}>Anuluj</button>
       </div>
     </div>
   </div>
