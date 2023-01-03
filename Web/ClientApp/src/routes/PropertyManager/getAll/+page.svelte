@@ -17,110 +17,95 @@
   //   };
 
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import BaseList from "$lib/components/base/BaseList.svelte";
   import {
     getAllPropertyManagers,
     deletePropertyManager,
   } from "$lib/stores/PropertyManager";
-  import ShowPropertyManagerPopUp from "$lib/components/ShowPropertyManagerPopUp.svelte";
-  let displayAll;
-  let displayPopUp;
-  let displayGetAllProblem;
-  let errorMessage =
-    "Nie udało się pobrać danych o Zarządcach Nieruchomości z bazy danych";
-  let managersJSON;
-  let PropertyManagerDTO;
-  let idToDelete;
-  let showPropertyManagerPopUpMessage =
-    "Jesteś pewny, że chcesz usunąć poniższego Zarządcę Nieruchomości?";
+  import { openModal } from "svelte-modals";
+  import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
+  let collection = [];
+  let tableRowsClassName = "propertyManagers-base-list";
 
   onMount(async () => {
-    let managers = await getAllPropertyManagers();
-    if (managers instanceof Error) {
-      displayAll = false;
-      displayGetAllProblem = true;
-    } else if (managers instanceof Response) {
-      managersJSON = await managers.json();
-      displayAll = true;
-    }
+    collection = await getAllPropertyManagers();
   });
-  function edit(id) {
-    // localStorage.setItem("manager_to_update_id", id);
-    window.location.href = `/PropertyManager/update/${id}`;
+  const headerDictionary = {
+    Nazwa: "name",
+    Telefon: "phoneNumber",
+    Miasto: "fullAddress.buildingAddress.cityName",
+    Ulica: "fullAddress.buildingAddress.streetName",
+    "Numer budynku": "fullAddress.buildingAddress.buildingNumber",
+    "Numer lokalu": "fullAddress.localNumber",
+    "Numer klatki": "fullAddress.staircaseNumber",
+    "Kod pocztowy": "fullAddress.buildingAddress.postalCode",
+  };
+  function addHandler(event) {
+    goto(`/propertyManager/create`);
   }
-  function displayConfirmPopUp(manager) {
-    PropertyManagerDTO = {
-      name: manager.name,
-      phoneNumber: manager.phoneNumber,
-      fullAddress: {
-        buildingAddress: {
-          cityName: manager.fullAddress.buildingAddress.cityName,
-          streetName: manager.fullAddress.buildingAddress.streetName,
-          buildingNumber: manager.fullAddress.buildingAddress.buildingNumber,
-          postalCode: manager.fullAddress.buildingAddress.postalCode,
-        },
-        localNumber: manager.fullAddress.localNumber,
-        staircaseNumber: manager.fullAddress.staircaseNumber,
-      },
-    };
-    idToDelete = manager.id;
-    displayAll = false;
-    displayPopUp = true;
+
+  function detailHandler(event) {
+    goto(`/propertyManager/update/${event.detail.row.id}`);
   }
-  async function deletePropManager(id) {
+
+  async function deleteHandler(event) {
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć wybranego Zarządcę Nieruchomości?",
+      onOkay: async () => await deleteAndReload(event.detail.row.id),
+      undoSingleColorSelection: true,
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
+    });
+  }
+
+  async function deleteAndReload(id) {
     let response = await deletePropertyManager(id);
     if (response instanceof Response) {
-      alert("Pomyślnie usunięto Zarządcę Nieruchomości");
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto wybranego Zarządcę Nieruchomości",
+        reloadRequired: true,
+      });
     }
-    window.location.reload();
+  }
+
+  async function deleteSelectedHandler(event) {
+    const rows = event.detail.rows;
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć zaznaczonych Zarządców?",
+      onOkay: async () => await deleteSelectedAndReload(rows),
+      undoMultipleColorSelection: true,
+      selectedClassName: tableRowsClassName,
+    });
+  }
+  async function deleteSelectedAndReload(rows) {
+    if (rows == null) return;
+    let errorOccured = false;
+    let deleteResult;
+
+    for (let i = 0; i < rows.length; i++) {
+      deleteResult = await deletePropertyManager(rows[i].id);
+      if (!(deleteResult instanceof Response)) errorOccured = true;
+    }
+    if (!errorOccured) {
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto zaznaczonych Zarządców",
+        reloadRequired: true,
+      });
+    }
   }
 </script>
 
-<div class="display-all-property-managers">
-  {#if displayAll}
-    <table>
-      <tbody>
-        {#each managersJSON as manager}
-          <tr>
-            <td>{manager.name}</td>
-            <td>{manager.phoneNumber}</td>
-            <td>{manager.fullAddress.buildingAddress.cityName}</td>
-            <td>{manager.fullAddress.buildingAddress.streetName}</td>
-            <td>{manager.fullAddress.buildingAddress.buildingNumber}</td>
-            <td>{manager.fullAddress.buildingAddress.postalCode}</td>
-            <td>{manager.fullAddress.localNumber}</td>
-            <td>{manager.fullAddress.staircaseNumber}</td>
-            <td
-              ><button on:click|preventDefault={() => edit(manager.id)}
-                >Edytuj</button
-              ></td
-            >
-            <td
-              ><button
-                on:click|preventDefault={() => displayConfirmPopUp(manager)}
-                >Usuń</button
-              ></td
-            >
-            <!-- <button on:click|preventDefault={async () => await continueAdding()}
-          >Kontynuuj</button
-        > -->
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else if displayGetAllProblem}
-    {errorMessage}
-  {:else if displayPopUp}
-    <div class="delete-property-manager-confirm-pop-up">
-      <ShowPropertyManagerPopUp
-        {PropertyManagerDTO}
-        message={showPropertyManagerPopUpMessage}
-      />
-      <button
-        on:click|preventDefault={async () =>
-          await deletePropManager(idToDelete)}>TAK, USUŃ</button
-      >
-      <button on:click|preventDefault={() => window.location.reload()}
-        >ANULUJ</button
-      >
-    </div>{/if}
-</div>
+<BaseList
+  {collection}
+  {headerDictionary}
+  {tableRowsClassName}
+  on:listAdd={addHandler}
+  on:listDetail={detailHandler}
+  on:listDelete={deleteHandler}
+  on:listDeleteSelected={deleteSelectedHandler}
+/>

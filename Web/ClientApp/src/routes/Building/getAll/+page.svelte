@@ -44,7 +44,7 @@
   import { getAllBuildings, deleteBuilding } from "$lib/stores/Building";
 
   let collection = [];
-  let tableRowsClassName="building-base-list"
+  let tableRowsClassName = "buildings-base-list";
   onMount(async () => {
     collection = await getAllBuildings();
   });
@@ -72,7 +72,7 @@
       message: "Czy na pewno chcesz usunąć wybrany budynek?",
       onOkay: async () => await deleteAndReload(event.detail.row.id),
       undoSingleColorSelection: true,
-      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
     });
   }
 
@@ -82,7 +82,7 @@
       openModal(BasePopUp, {
         title: "Udana akcja",
         message: "Pomyślnie usunięto wybrany budynek",
-        reloadRequired: true
+        reloadRequired: true,
       });
     }
   }
@@ -94,7 +94,7 @@
       message: "Czy na pewno chcesz usunąć zaznaczone budynki?",
       onOkay: async () => await deleteSelectedAndReload(rows),
       undoMultipleColorSelection: true,
-      selectedClassName: tableRowsClassName
+      selectedClassName: tableRowsClassName,
     });
   }
   async function deleteSelectedAndReload(rows) {
@@ -110,7 +110,7 @@
       openModal(BasePopUp, {
         title: "Udana akcja",
         message: "Pomyślnie usunięto zaznaczone budynki",
-        reloadRequired: true
+        reloadRequired: true,
       });
     }
   }
