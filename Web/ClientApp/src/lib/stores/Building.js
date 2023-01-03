@@ -45,13 +45,13 @@ export async function getBuildingById(id) {
   return getBuildingByIdResult;
 }
 export async function getAllBuildings() {
-  let buildings;
+  let response;
   try {
-    buildings = await genericGetAll("/Building");
+    response = await genericGetAll("/Building");
   } catch (err) {
     handleError(err, "pobieranie wszystkich Budynków");
   }
-  return buildings;
+  return await response.json();
 }
 export async function deleteBuilding(id) {
   let response;

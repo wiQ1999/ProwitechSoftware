@@ -36,118 +36,92 @@
   //     }
   //   }
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import BaseList from "$lib/components/base/BaseList.svelte";
+  import { openModal } from "svelte-modals";
+  import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import { getAllBuildings, deleteBuilding } from "$lib/stores/Building";
-  import ShowBuildingPopUp from "$lib/components/ShowBuildingPopUp.svelte";
-  let displayAll;
-  let displayPopUp;
-  let displayGetAllProblem;
-  let errorMessage = "Nie udało się pobrać danych o Budynkach z bazy danych";
-  let buildingsJSON;
-  let BuildingDTO;
-  let idToDelete;
-  let showBuildingPopUpMessage =
-    "Jesteś pewny, że chcesz usunąć poniższy Budynek?";
 
+  let collection = [];
+  let tableRowsClassName="building-base-list"
   onMount(async () => {
-    let buildings = await getAllBuildings();
-    if (buildings instanceof Error) {
-      displayAll = false;
-      displayGetAllProblem = true;
-    } else if (buildings instanceof Response) {
-      buildingsJSON = await buildings.json();
-      console.log(buildingsJSON);
-      if (buildingsJSON.length == 0) {
-        errorMessage = "Brak budynków w bazie danych";
-        displayGetAllProblem = true;
-      } else {
-        displayAll = true;
-      }
-    }
+    collection = await getAllBuildings();
   });
-  function edit(id) {
-    // localStorage.setItem("manager_to_update_id", id);
-    window.location.href = `/Building/update/${id}`;
+
+  const headerDictionary = {
+    Miasto: "buildingAddress.cityName",
+    Ulica: "buildingAddress.streetName",
+    "Numer budynku": "buildingAddress.buildingNumber",
+    "Kod pocztowy": "buildingAddress.postalCode",
+    Typ: "type",
+    "Zarządca Nieruchomości": "propertyManager.name",
+  };
+
+  function addHandler(event) {
+    goto(`/building/create`);
   }
-  function displayConfirmPopUp(building) {
-    idToDelete = building.id;
-    displayAll = false;
-    displayPopUp = true;
-    BuildingDTO = building;
+
+  function detailHandler(event) {
+    goto(`/building/update/${event.detail.row.id}`);
   }
-  async function deleteChosenBuilding(id) {
+
+  async function deleteHandler(event) {
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć wybrany budynek?",
+      onOkay: async () => await deleteAndReload(event.detail.row.id),
+      undoSingleColorSelection: true,
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`
+    });
+  }
+
+  async function deleteAndReload(id) {
     let response = await deleteBuilding(id);
     if (response instanceof Response) {
-      alert("Pomyślnie usunięto wybrany Budynek");
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto wybrany budynek",
+        reloadRequired: true
+      });
     }
-    window.location.reload();
+  }
+
+  async function deleteSelectedHandler(event) {
+    const rows = event.detail.rows;
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć zaznaczone budynki?",
+      onOkay: async () => await deleteSelectedAndReload(rows),
+      undoMultipleColorSelection: true,
+      selectedClassName: tableRowsClassName
+    });
+  }
+  async function deleteSelectedAndReload(rows) {
+    if (rows == null) return;
+    let errorOccured = false;
+    let deleteResult;
+
+    for (let i = 0; i < rows.length; i++) {
+      deleteResult = await deleteBuilding(rows[i].id);
+      if (!(deleteResult instanceof Response)) errorOccured = true;
+    }
+    if (!errorOccured) {
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto zaznaczone budynki",
+        reloadRequired: true
+      });
+    }
   }
 </script>
 
-<div class="display-all-buildings">
-  {#if displayAll}
-    <table>
-      <tbody>
-        Budynki:
-        {#each buildingsJSON as building}
-          <tr>
-            <td>{building.buildingAddress.cityName}</td>
-            <td>{building.buildingAddress.streetName}</td>
-            <td>{building.buildingAddress.buildingNumber}</td>
-            <td>{building.buildingAddress.postalCode}</td>
-            <td>{building.type}</td>
-
-            {#if building.propertyManager}
-              <td>{building.propertyManager.name}</td>
-              <td>{building.propertyManager.phoneNumber}</td>
-              <td
-                >{building.propertyManager.fullAddress.buildingAddress
-                  .streetName}</td
-              >
-              <td
-                >{building.propertyManager.fullAddress.buildingAddress
-                  .buildingNumber}</td
-              >
-              <td>{building.propertyManager.fullAddress.localNumber}</td>
-              <td>{building.propertyManager.fullAddress.staircaseNumber}</td>
-              <td
-                >{building.propertyManager.fullAddress.buildingAddress
-                  .postalCode}</td
-              >
-            {/if}
-
-            <td
-              ><button on:click|preventDefault={() => edit(building.id)}
-                >Edytuj</button
-              ></td
-            >
-            <td
-              ><button
-                on:click|preventDefault={() => displayConfirmPopUp(building)}
-                >Usuń</button
-              ></td
-            >
-            <!-- <button on:click|preventDefault={async () => await continueAdding()}
-          >Kontynuuj</button
-        > -->
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else if displayGetAllProblem}
-    {errorMessage}
-  {:else if displayPopUp}
-    <div class="delete-building-confirm-pop-up">
-      <ShowBuildingPopUp
-        {BuildingDTO}
-        message1="Czy na pewno chcesz usunąć poniższy budynek:"
-        message2="podlegający pod Zarządcę Nieruchomości:"
-      />
-      <button
-        on:click|preventDefault={async () =>
-          await deleteChosenBuilding(idToDelete)}>TAK, USUŃ</button
-      >
-      <button on:click|preventDefault={() => window.location.reload()}
-        >ANULUJ</button
-      >
-    </div>{/if}
-</div>
+<BaseList
+  {collection}
+  {headerDictionary}
+  {tableRowsClassName}
+  on:listAdd={addHandler}
+  on:listDetail={detailHandler}
+  on:listDelete={deleteHandler}
+  on:listDeleteSelected={deleteSelectedHandler}
+/>
