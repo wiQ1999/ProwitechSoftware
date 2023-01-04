@@ -243,6 +243,7 @@
   }
 </script>
 
+<a href="/propertyManagers/getAll">Powrót</a>
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
@@ -270,6 +271,7 @@
           updateBuildingAddressDTO,
           originalBuildingAddressDTO
         )}
+      editMode={true}
     />
   {/if}
   {#if updatedPropertyManagerPopUpVisibility}

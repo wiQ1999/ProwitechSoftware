@@ -99,6 +99,7 @@
   }
 </script>
 
+<a href="/propertyManagers/getAll">Powrót</a>
 <div class="add-property-manager-form">
   {#if buildingAddressConfirmPopUpVisibility}
     <BuildingAddressPopUp

@@ -16,6 +16,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@googlemaps/js-api-loader": "^1.15.1",
+		"dotenv": "^16.0.3",
 		"svelte-modals": "^1.2.1"
 	}
 }

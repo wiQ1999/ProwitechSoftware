@@ -46,7 +46,10 @@
   let collection = [];
   let tableRowsClassName = "buildings-base-list";
   onMount(async () => {
-    collection = await getAllBuildings();
+    let response = await getAllBuildings();
+    if (response instanceof Response) {
+      collection = await response.json();
+    }
   });
 
   const headerDictionary = {
@@ -59,11 +62,11 @@
   };
 
   function addHandler(event) {
-    goto(`/building/create`);
+    goto(`/buildings/create`);
   }
 
   function detailHandler(event) {
-    goto(`/building/update/${event.detail.row.id}`);
+    goto(`/buildings/details/${event.detail.row.id}`);
   }
 
   async function deleteHandler(event) {
@@ -116,6 +119,7 @@
   }
 </script>
 
+<a href="/">Powrót</a>
 <BaseList
   {collection}
   {headerDictionary}

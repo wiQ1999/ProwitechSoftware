@@ -30,7 +30,10 @@
   let tableRowsClassName = "propertyManagers-base-list";
 
   onMount(async () => {
-    collection = await getAllPropertyManagers();
+    let response = await getAllPropertyManagers();
+    if (response instanceof Response) {
+      collection = await response.json();
+    }
   });
   const headerDictionary = {
     Nazwa: "name",
@@ -43,11 +46,11 @@
     "Kod pocztowy": "fullAddress.buildingAddress.postalCode",
   };
   function addHandler(event) {
-    goto(`/propertyManager/create`);
+    goto(`/propertyManagers/create`);
   }
 
   function detailHandler(event) {
-    goto(`/propertyManager/update/${event.detail.row.id}`);
+    goto(`/propertyManagers/details/${event.detail.row.id}`);
   }
 
   async function deleteHandler(event) {
@@ -100,6 +103,7 @@
   }
 </script>
 
+<a href="/">Powrót</a>
 <BaseList
   {collection}
   {headerDictionary}

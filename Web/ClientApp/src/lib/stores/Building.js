@@ -39,19 +39,21 @@ export async function getBuildingById(id) {
   let getBuildingByIdResult;
   try {
     getBuildingByIdResult = await genericGetById("/Building", id);
+    return getBuildingByIdResult;
   } catch (err) {
     handleError(err, "pobieranie Budynku na podstawie ID");
+    return err;
   }
-  return getBuildingByIdResult;
 }
 export async function getAllBuildings() {
   let response;
   try {
     response = await genericGetAll("/Building");
+    return response;
   } catch (err) {
     handleError(err, "pobieranie wszystkich Budynków");
+    return err;
   }
-  return await response.json();
 }
 export async function deleteBuilding(id) {
   let response;

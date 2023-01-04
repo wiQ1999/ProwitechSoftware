@@ -46,6 +46,5 @@
     {/if}
     <br />
     {PropertyManagerDTO.phoneNumber}
-    <a href="/index" class="button">Powrót do strony głównej</a>
   {/if}
 </div>
