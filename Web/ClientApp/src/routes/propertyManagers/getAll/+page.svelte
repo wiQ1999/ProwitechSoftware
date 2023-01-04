@@ -50,7 +50,7 @@
   }
 
   function detailHandler(event) {
-    goto(`/propertyManagers/update/${event.detail.row.id}`);
+    goto(`/propertyManagers/details/${event.detail.row.id}`);
   }
 
   async function deleteHandler(event) {

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { getAllPropertyManagers } from "$lib/stores/PropertyManager";
+  import Map from "$lib/components/Map.svelte";
 
   export let buildingAddressDTO = {
     cityName: "",
@@ -12,9 +13,11 @@
   export let onSubmit = async () => {};
   export let editMode = false;
   let readMode = false;
+  export let building = null;
 
   let formVisibility;
   let propertyManagers = [];
+  let button_message = "Włącz edytowanie";
 
   let cities = [
     { id: "Bydgoszcz", name: "Bydgoszcz" },
@@ -68,13 +71,18 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    editMode = false;
+    if (button_message == "Włącz edytowanie") {
+      button_message = "Wyłącz edytowanie";
+    } else {
+      button_message = "Włącz edytowanie";
+    }
+    // editMode = false;
   }
 </script>
 
 {#if formVisibility}
   {#if editMode}
-    <button on:click={() => changeEditingStatus()}>Włącz edytowanie</button>
+    <button on:click={() => changeEditingStatus()}>{button_message}</button>
   {/if}
   <form on:submit|preventDefault={async () => await onSubmit()}>
     <div>
@@ -100,12 +108,14 @@
       />
     </div>
     <div>
+      <label for="building-type">Typ budynku</label>
       <select bind:value={buildingType} disabled={readMode}>
         {#each buildingTypes as btype}
           <option value={btype}>{btype}</option>
         {/each}
       </select>
     </div>
+    <label for="building-property-manager">Zarządca Nieruchomości</label>
     <select bind:value={propertyManagerId} disabled={readMode}>
       {#each propertyManagers as propman}
         <option value={propman.id}
@@ -121,6 +131,9 @@
     </select>
     <button type="submit" disabled={readMode}>Submit</button>
   </form>
+  {#if readMode}
+    <Map {building} displayLink={false} />
+  {/if}
 {/if}
 
 <style>

@@ -66,7 +66,7 @@
   }
 
   function detailHandler(event) {
-    goto(`/buildings/update/${event.detail.row.id}`);
+    goto(`/buildings/details/${event.detail.row.id}`);
   }
 
   async function deleteHandler(event) {

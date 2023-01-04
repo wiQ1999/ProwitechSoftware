@@ -307,6 +307,7 @@
           updateBuildingType
         )}
       editMode={true}
+      building={originalBuildingDTO}
     />{/if}
   {#if updatedBuildingPopUpVisibility}
     <ShowBuildingPopUp

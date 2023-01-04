@@ -2,105 +2,148 @@
   import { Loader } from "@googlemaps/js-api-loader";
   import { onMount } from "svelte";
   import { env } from "$env/dynamic/public";
-  // import {getBui}
-  // import mapStyles from "./map-styles"; // optional
 
-  const POZNAN_LATITUDE = 52.409538;
-  const POZNAN_LONGITUDE = 16.931992;
-  export let buildingsArray;
+  export let building;
+  export let displayLink = false;
+  export let displayBuildingInfo = false;
 
   let loadError;
   let container;
   let map;
+  let mapVisibility;
   let errorMessage = "Nie udało się pobrać mapy";
   let api_key = env.PUBLIC_GOOGLE_DISPLAY_MAP_API_KEY;
+  let inaccurateCoordinates = false;
+  let lackOfCoordinates = false;
 
   const loader = new Loader({
     apiKey: api_key,
     version: "weekly",
     libraries: ["marker"],
   });
-  // let zoom = 8;
-  // let center = { lat: -34.397, lng: 150.644 };
-
-  function addMarker(location, address) {
-    const contentString = `<h4>${address.streetName} ${address.buildingNumber} ${address.cityName}</h4>`;
-    const pinViewScaled = new google.maps.marker.PinView({
-      scale: 1.5,
-    });
-    // const marker = new google.maps.AdvancedMarkerView({
-    //   position: location,
-    //   map,
-    //   // title: `${address.streetName} ${address.buildingNumber}`,
-    //   content: pinViewScaled.element,
-    // });
-    const markerViewScaled = new google.maps.marker.AdvancedMarkerView({
-      map,
-      position: { lat: 37.419, lng: -122.02 },
-      content: pinViewScaled.element,
-    });
-    // const infoWindow = new google.maps.InfoWindow({
-    //   content: contentString,
-    //   ariaLabel: "Uluru",
-    // });
-    // marker.addListener("mouseover", () => {
-    //   infoWindow.open({
-    //     anchor: marker,
-    //     map,
-    //   });
-    // });
-  }
-  function setMap() {
-    map = new google.maps.Map(container, {
-      center: { lat: 37.419, lng: -122.02 },
-      zoom: 12,
-    });
-    if (buildingsArray.length >= 0) {
-      for (let building of buildingsArray) {
-        addMarker(
-          {
-            lat: building.buildingAddress.latitude,
-            lng: building.buildingAddress.longitude,
-          },
-          building.buildingAddress
-        );
-      }
-    }
-  }
 
   onMount(async () => {
-    console.log(buildingsArray);
+    if (
+      building.buildingAddress.longitude == null ||
+      building.buildingAddress.latitude == null
+    ) {
+      lackOfCoordinates = true;
+      container = "BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY";
+      return;
+    }
+    if (building.buildingAddress.coordinateType != "ROOFTOP") {
+      inaccurateCoordinates = true;
+    }
     loader
       .load()
       .then(() => {
         setMap();
       })
       .catch((err) => {
+        console.log(err);
         errorMessage = err;
         loadError = true;
       });
-
-    // markerView.addListener("click", ({ domEvent, latLng }) => {
-    //   const { target } = domEvent;
-    //   // Handle the click event.
-    //   // ...
-    // });
+    mapVisibility = true;
   });
+
+  function setMap() {
+    map = new google.maps.Map(container, {
+      center: {
+        lat: building.buildingAddress.latitude,
+        lng: building.buildingAddress.longitude,
+      },
+      zoom: 14,
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: true,
+      streetViewControl: true,
+      rotateControl: true,
+      fullscreenControl: true,
+    });
+
+    addMarker(
+      map,
+      {
+        lat: building.buildingAddress.latitude,
+        lng: building.buildingAddress.longitude,
+      },
+      building.buildingAddress
+    );
+  }
+  function addMarker(map, location, address) {
+    let contentString = `<h4>${address.streetName} ${address.buildingNumber} ${address.cityName}</h4>`;
+    if (displayLink) {
+      contentString =
+        contentString +
+        `<a href="https://maps.google.com?q=${location.lat},${location.lng}">Wyznacz trasę</a>`;
+    }
+    const marker = new google.maps.Marker({
+      position: location,
+      map,
+    });
+
+    const infoWindow = new google.maps.InfoWindow({
+      content: contentString,
+      ariaLabel: "Uluru",
+    });
+    infoWindow.open({
+      anchor: marker,
+      map,
+    });
+    // marker.addListener("mouseover", () => {
+    //   infoWindow.open({
+    //     anchor: marker,
+    //     map,
+    //   });
+    // });
+    // marker.addListener("mouseout", () => {
+    //   infoWindow.close();
+    // });
+  }
 </script>
 
 <div>
-  <div class="full-screen" bind:this={container} />
+  {#if displayBuildingInfo}
+    <div class="building-info">
+      <table>
+        <tr>
+          <td>Ulica</td>
+          <td>{building.buildingAddress.streetName}</td>
+        </tr>
+        <tr>
+          <td>Numer budynku</td>
+          <td>{building.buildingAddress.buildingNumber}</td>
+        </tr>
+        {#if inaccurateCoordinates}
+          <tr>
+            <td colspan="2"
+              >UWAGA: WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ DOKŁADNE. SPRAWDŹ
+              DOKŁADNIE, DOKĄD JEDZIESZ.</td
+            >
+          </tr>
+        {/if}
+      </table>
+    </div>
+  {/if}
+  {#if lackOfCoordinates}
+    <div class="lack-of-coordinates">
+      BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
+    </div>
+  {/if}
+  {#if mapVisibility}
+    <div class="full-screen" bind:this={container} />
+  {/if}
   {#if loadError == true}
     <div>
       {errorMessage}
     </div>
   {/if}
-  <h1>{import.meta.env.VITE_TEST_VAR}</h1>
 </div>
 
 <style>
   .full-screen {
-    width: 100vw;
-    height: 100vh;
+    width: 75vw;
+    height: 75vh;
   }
 </style>
