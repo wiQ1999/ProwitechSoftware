@@ -139,6 +139,7 @@
   }
 </script>
 
+<a href="/buildings/getAll">Powrót</a>
 <div>
   {#if buildingAddressConfirmPopUpVisibility}
     <AddBuildingAddressPopUp

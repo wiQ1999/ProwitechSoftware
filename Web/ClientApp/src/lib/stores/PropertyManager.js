@@ -34,28 +34,31 @@ export async function getPropertyManagerById(propertyManagerId) {
       "/PropertyManager",
       propertyManagerId
     );
+    return getPropertyManagerByIdResult;
   } catch (err) {
     handleError(err, "pobieranie Zarządcy Nieruchomości na podstawie ID");
+    return err;
   }
-  return getPropertyManagerByIdResult;
 }
 export async function getAllPropertyManagers() {
   let response;
   try {
     response = await genericGetAll("/PropertyManager");
+    return response;
   } catch (err) {
     handleError(err, "pobieranie wszystkich Zarządców Nieruchomości");
+    return err;
   }
-  return await response.json();
 }
 export async function deletePropertyManager(id) {
   let response;
   try {
     response = await genericDelete("/PropertyManager", id);
+    return response;
   } catch (err) {
     handleError(err, "usuwanie Zarządcy Nieruchomości na podstawie ID");
+    return err;
   }
-  return response;
 }
 export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
   if (
