@@ -2,6 +2,7 @@
   import {
     postBuildingAddress,
     deleteBuildingAddress,
+    getBuildingAddressIdIfAlredyExists,
   } from "$lib/stores/BuildingAddress.js";
   import {
     postPropertyManager,
@@ -35,12 +36,18 @@
       force: false,
       onlyAddress: false,
     };
-
+    let foundBuildingAddressId = await getBuildingAddressIdIfAlredyExists(
+      buildingAddressDTO
+    );
+    if (foundBuildingAddressId != null) {
+      buildingAddressId = foundBuildingAddressId;
+      await createPropertyManager();
+      return;
+    }
     buildingAddressPostResult = await postBuildingAddress(
       buildingAddressDTO,
       optionalArguments
     );
-
     if (buildingAddressPostResult instanceof Error) {
       // window.location.reload();
     } else if (buildingAddressPostResult instanceof Response) {
@@ -79,7 +86,8 @@
 
     if (postPropertyManagerId instanceof Error) {
       //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
-      await deleteBuildingAddress(buildingAddressId);
+      //adnotacja 05-01-2023 - nie usuwamy BuildingAddress, bo może być potrzebny dla innych FullAddresses
+      // await deleteBuildingAddress(buildingAddressId);
       formVisibility = true;
       // window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {

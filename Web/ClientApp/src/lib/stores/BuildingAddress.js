@@ -6,6 +6,40 @@ import {
   genericPut,
 } from "$lib/js-lib/httpMethods.js";
 import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
+
+export async function getBuildingAddressIdIfAlredyExists(bDTO) {
+  let findBuildingAddressQuery = {
+    cityName: bDTO.cityName,
+    streetName: bDTO.streetName,
+    buildingNumber: bDTO.buildingNumber,
+  };
+
+  //sprawdź, czy wysyłany BuildingAddress już istnieje w bazie danych
+  let response = await checkIfBuildingAddressAlreadyExists(
+    findBuildingAddressQuery
+  );
+  if (response instanceof Response) {
+    if (response.status == 200) {
+      let foundBuildingAddressDTO = await response.json();
+      let id = foundBuildingAddressDTO.id;
+      return id;
+    }
+  }
+  return null;
+}
+async function checkIfBuildingAddressAlreadyExists(FindBuildingAddressQuery) {
+  let response;
+  try {
+    response = await genericPost(
+      "/BuildingAddress/find",
+      FindBuildingAddressQuery
+    );
+    return response;
+  } catch (err) {
+    handleError(err, "dodawanie nowego Adresu Budynku");
+    return err;
+  }
+}
 export async function getBuildingAddressById(id) {
   let response;
   try {

@@ -54,6 +54,7 @@
   import {
     getBuildingAddressById,
     postBuildingAddress,
+    getBuildingAddressIdIfAlredyExists,
   } from "$lib/stores/BuildingAddress";
   import { prepareCoordinatesNotFoundMessage } from "$lib/js-lib/helpers";
   import { onMount } from "svelte";
@@ -81,6 +82,14 @@
     buildingAddressConfirmPopUpVisibility = false;
   });
   async function tryToAddBuildingAddress(bDTO) {
+    let foundBuildingAddressId = await getBuildingAddressIdIfAlredyExists(
+      buildingAddressDTO
+    );
+    if (foundBuildingAddressId != null) {
+      buildingAddressId = foundBuildingAddressId;
+      await createBuilding(buildingAddressId, propertyManagerId, buildingType);
+      return;
+    }
     let optionalArguments = {
       force: false,
       onlyAddress: false,
