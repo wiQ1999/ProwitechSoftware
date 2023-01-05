@@ -39,15 +39,23 @@ namespace Application.PropertyManagers.Commands.Handlers
                 LocalNumber = faDTO.LocalNumber,
                 StaircaseNumber = faDTO.StaircaseNumber
             };
+            Guid fullAddressId;
+            var faFromDB = await _fullAddressRepository.FindFullAddress(fullAddres, cancellationToken);
+            if(faFromDB == null)
+            {
+                fullAddressId = await _fullAddressRepository.AddAsync(fullAddres, cancellationToken);
+            }
+            else
+            {
+                fullAddressId = faFromDB.Id;
+            }
 
-            var fullAddressId = await _fullAddressRepository.AddAsync(fullAddres, cancellationToken);
-            var faFromDB = await _fullAddressRepository.GetAsync(fullAddressId, cancellationToken);//SPRAWDZIĆ BEZ TEGO
 
             PropertyManager propertyManager = new()
             {
                 Name = request.Name,
                 PhoneNumber = request.PhoneNumber,
-                FullAddressId = faFromDB.Id,
+                FullAddressId = fullAddressId,
                 
             };
             return await _propertyManagerRepository.AddAsync(propertyManager, cancellationToken);

@@ -59,10 +59,10 @@ namespace Infrastructure.Repositories
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
             if (buildingAddressIdToDelete != null)
             {
-                BuildingAddress buildingAddressToDelete=await _dbContext.BuildingAddresses.
+                BuildingAddress? buildingAddressToDelete=await _dbContext.BuildingAddresses.
                     FirstOrDefaultAsync(b => b.Id == buildingAddressIdToDelete, cancellationToken);
-
-                _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
+                if(buildingAddressToDelete != null)
+                    _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
             }
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");

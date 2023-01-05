@@ -44,5 +44,25 @@ namespace Infrastructure.Repositories
             _dbContext.Entry(address).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            
+            FullAddress? fullAddress = await _dbContext.FullAddresses.
+                FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
+            if (fullAddress == null)
+                throw new Exception($"Brak Adresu o identyfikatorze {id}");
+            _dbContext.FullAddresses.Remove(fullAddress);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<FullAddress?> FindFullAddress(FullAddress address, CancellationToken cancellationToken)
+        {
+            FullAddress? faFromDB = await _dbContext.FullAddresses
+                .FirstOrDefaultAsync(
+                fa => fa.BuildingAddressId==address.BuildingAddressId
+                && fa.LocalNumber==address.LocalNumber
+                && fa.StaircaseNumber==address.StaircaseNumber);
+            return faFromDB;
+        }
     }
 }

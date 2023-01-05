@@ -52,6 +52,15 @@ namespace Infrastructure.Repositories
             PropertyManager? propMan = await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
             if(propMan == null)
                 throw new Exception($"Brak Zarządcy Nieruchomości o identyfikatorze {id}.");
+            //Guid? fullAddressId = propMan.FullAddressId;
+            //if(fullAddressId != null)
+            //{
+            //    FullAddress? faFromDB = await _dbContext.FullAddresses
+            //        .FirstOrDefaultAsync(fa => fa.Id == fullAddressId, cancellationToken);
+            //    if (faFromDB != null)
+            //        _dbContext.FullAddresses.Remove(faFromDB);
+            //}
+            
             _dbContext.PropertyManagers.Remove(propMan);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

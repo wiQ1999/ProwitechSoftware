@@ -20,7 +20,8 @@ namespace Application.PropertyManagers.Commands.Handlers
 
         public async Task<Unit> Handle(DeletePropertyManagerCommand request, CancellationToken cancellationToken)
         {
-            await _propertyManagerRepository.DeleteAsync(request.Id,cancellationToken);
+            
+            await _propertyManagerRepository.DeleteAsync(request.Id, cancellationToken);
             return Unit.Value;
         }
     }
