@@ -57,7 +57,7 @@
     <select bind:value={buildingAddressDTO.cityName} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
       {#each cities as city}
       {#if city.id == "Poznań"}
-        <option value={city.id} selected>{city.name} xd</option>
+        <option value={city.id}>{city.name} xd</option>
       {:else}
         <option value={city.id}>{city.name}</option>
       {/if}

@@ -128,13 +128,13 @@
     {errorMessage}
   {:else if displayPopUp}
     <div class="w-[100%] h-[100%] m-0 p-0 top-0 left-0 fixed bg-black/80">
-      <div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl">
+      <div class="w-[50%] h-[50%] relative my-5 mx-auto bg-white rounded-2xl">
         <ShowPropertyManagerPopUp
           {PropertyManagerDTO}
           message={showPropertyManagerPopUpMessage}
         />
         <button
-          class="bg-green-500 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+          class="bg-green-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
           on:click|preventDefault={async () =>
             await deletePropManager(idToDelete)}>TAK, USUŃ</button
         >
