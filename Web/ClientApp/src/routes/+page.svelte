@@ -24,8 +24,8 @@
               placeholder="Podaj hasło"
               id="password"
               required
-			  pattern=".&#123;8,}"
-  			  title="Musi zawierać co najmniej osiem znaków"
+			        pattern=".&#123;8,}"
+  			      title="Musi zawierać co najmniej osiem znaków"
               bind:value={pwd}
             />
             <div class="bg-[#ecf2f5] w-[100%] py-[1%] px-[2%] mt-4">
