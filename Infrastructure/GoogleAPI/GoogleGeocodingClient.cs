@@ -7,9 +7,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Application.Responses;
 using Microsoft.AspNetCore.WebUtilities;
 using Infrastructure.Responses.BuildingAddressController;
+using Infrastructure.Responses;
 
 namespace Infrastructure.GoogleAPI
 {

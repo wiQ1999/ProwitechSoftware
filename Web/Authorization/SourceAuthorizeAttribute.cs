@@ -2,16 +2,15 @@
 using Application.Interfaces.Services;
 using Infrastructure.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Web.Authorization;
 
-namespace Web.AuthorizeAttributes;
+namespace Web.Authorization;
 
 public class SourcePermissionsAttribute : TypeFilterAttribute
 {
     private readonly IClaimProvider _claimProvider = new ClaimProvider();
 
     public SourcePermissionsAttribute(
-        AppSource source, PermissionProperty permissionProeprty) 
+        AppSource source, PermissionProperty permissionProeprty)
         : base(typeof(SourcePermissionsFilter))
     {
         Arguments = new object[]
@@ -24,7 +23,7 @@ public class SourcePermissionsAttribute : TypeFilterAttribute
         AppSource source, params PermissionProperty[] permissionProeprties)
         : base(typeof(SourcePermissionsFilter))
     {
-        var claims = permissionProeprties.Select(pp 
+        var claims = permissionProeprties.Select(pp
             => _claimProvider.CreateClaim(source, pp));
 
         Arguments = claims.ToArray<object>();

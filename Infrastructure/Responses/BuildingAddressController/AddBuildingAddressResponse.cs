@@ -1,5 +1,4 @@
-﻿using Application.Responses;
-using Infrastructure.GoogleAPI.Responses;
+﻿using Infrastructure.GoogleAPI.Responses;
 using Infrastructure.Models.Domain;
 using System;
 using System.Collections.Generic;

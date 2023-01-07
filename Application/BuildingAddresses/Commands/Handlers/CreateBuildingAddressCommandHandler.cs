@@ -1,5 +1,4 @@
 ﻿using Application.BuildingAddresses.Commands.Requests;
-using Application.Responses;
 using Infrastructure.Responses.BuildingAddressController;
 using AutoMapper;
 using Infrastructure.GoogleAPI;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Responses;
 
 namespace Application.BuildingAddresses.Commands.Handlers
 {
