@@ -35,11 +35,7 @@ public class LoginQueryHandler
             request.Login, request.Password, cancellationToken);
 
         if (user == null)
-            return new AuthenticationResponse
-            {
-                Token = null,
-                IsGenerated = false
-            };
+            return new AuthenticationResponse(null, false);
 
         var mappedUser = _mapper.Map<UserDto>(user);
 
@@ -48,10 +44,6 @@ public class LoginQueryHandler
 
         var token = _jwtTokenGenerator.GenerateToken(mappedUser, permissions);
 
-        return new AuthenticationResponse
-        {
-            Token = token,
-            IsGenerated = !string.IsNullOrEmpty(token)
-        };
+        return new AuthenticationResponse(token, !string.IsNullOrEmpty(token));
     }
 }
