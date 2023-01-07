@@ -2,23 +2,25 @@
 using Application.Roles.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
-using Infrastructure.Models.Enums;
-using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Roles.Queries.Handlers;
-public class GetRoleByIdQueryHandler : IRequestHandler<GetRoleByIdQuery, RoleDto>
+
+public class GetRoleByIdQueryHandler 
+    : IRequestHandler<GetRoleByIdQuery, RoleDto>
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IMapper _mapper;
 
-    public GetRoleByIdQueryHandler(IRoleRepository roleRepository, IMapper mapper)
+    public GetRoleByIdQueryHandler(
+        IRoleRepository roleRepository, IMapper mapper)
     {
         _roleRepository = roleRepository;
         _mapper = mapper;
     }
 
-    public async Task<RoleDto> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
+    public async Task<RoleDto> Handle(
+        GetRoleByIdQuery request, CancellationToken cancellationToken)
     {
         var role = await _roleRepository.GetRoleByIdAsync(request.Id, cancellationToken);
 

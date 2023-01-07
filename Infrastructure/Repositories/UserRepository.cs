@@ -35,7 +35,7 @@ public class UsersRepository : IUsersRepository
     public async Task<Guid> CreateUserAsync(User user, CancellationToken cancellationToken)
     {
         if (await _dbContext.Users.AnyAsync(u => u.Login == user.Login, cancellationToken))
-            throw new NotUniqueInDbException(AppSource.Users, user.Id, nameof(user.Login), user.Login);
+            throw new NotUniqueInDbException(AppSource.Users, nameof(user.Login), user.Login);
 
         await _dbContext.Users.AddAsync(user, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);

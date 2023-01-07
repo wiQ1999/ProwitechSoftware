@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Models.Domain;
 
 namespace Infrastructure.Models.Common;
+
 public abstract class BaseAuditableEntity : BaseEntity
 {
     public DateTime Created { get; set; }

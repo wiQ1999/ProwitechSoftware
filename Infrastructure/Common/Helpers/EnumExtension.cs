@@ -2,6 +2,7 @@
 using System.Reflection;
 
 namespace Infrastructure.Common.Helpers;
+
 public static class EnumExtension
 {
     public static string GetDescription(this Enum value)

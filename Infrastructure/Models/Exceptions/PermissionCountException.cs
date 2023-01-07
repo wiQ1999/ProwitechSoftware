@@ -1,4 +1,5 @@
 ﻿namespace Infrastructure.Models.Exceptions;
+
 public class PermissionCountException : Exception
 {
 	public PermissionCountException()
