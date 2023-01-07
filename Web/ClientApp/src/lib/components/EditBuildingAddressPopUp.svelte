@@ -108,8 +108,8 @@
   }
 </script>
 
-<div class="outside">
-<div class="edit-building-address-POP-UP">
+<div class="w-[100%] h-[100%] fixed m-0 p-0 top-0 left-0 bg-black/70">
+<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl p-[2%]">
   {#if question_window_show}
     <div class="question-window">
       <p> {corrdinates_not_found_message} </p>
@@ -128,19 +128,19 @@
             true
           )}>{only_address_option.info}</button
       >
-      <a href="/index" class="button">{abandon_option.info}</a>
+      <a href="/" class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer">{abandon_option.info}</a>
     </div>
   {/if}
   {#if result_window_show}
     <div class="result-window">
       {result_message}
       {#if buttonContinueVisibility}
-        <button on:click|preventDefault={async () => await returnToParent()}
+        <button on:click|preventDefault={async () => await returnToParent()} class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
           >Kontynuuj</button
         >
       {/if}
       {#if buttonErrorVisibility}
-        <button on:click|preventDefault={() => window.location.reload()}
+        <button on:click|preventDefault={() => window.location.reload()} class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
           >Spróbuj ponownie</button
         >
       {/if}
@@ -148,41 +148,3 @@
   {/if}
 </div>
 </div>
-
-<style>
-  .outside {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top:0;
-    left:0;
-    background-color: rgba(0,0,0,0.7)
-  }
-  .edit-building-address-POP-UP {
-    width: 50%;
-    height: 50%;
-    position: relative;
-    margin: 10% auto;
-    background-color: white;
-    border-radius: 20px;
-    padding: 2%;
-  }
-
-  button, .button{
-    text-decoration:none;
-    color: black;
-    padding: 1%;
-    margin: 5% auto;
-    background-color: pink;
-    border-radius: 7px;
-    border: 0px;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-</style>

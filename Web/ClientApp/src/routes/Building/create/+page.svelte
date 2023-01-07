@@ -161,22 +161,9 @@
       onSubmit={async () => await tryToAddBuildingAddress(buildingAddressDTO)}
     />{/if}
   {#if showBuildingPopUpVisibility}
-  <div class="outside">
+  <div class="w-[100%] h-[100%] fixed m-0 p-0 top-0 left-0 bg-black/70">
     <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
   </div>
     {/if}
 </div>
-
-<style>
-  .outside{
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top:0;
-    left:0;
-    background-color: rgba(0,0,0,0.7)
-  }
-</style>
 

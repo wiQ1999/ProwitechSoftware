@@ -19,8 +19,8 @@
   export let message;
   console.log(PropertyManagerDTO);
 </script>
-<div class="outside">
-<div class="add-property-manager-popUp">
+<div class="w-[100%] h-[100%] fixed m-0 p-0 top-0 left-0 bg-black/70">
+<div class="w-[50%] h-[50%] text-center relative my-5 mx-auto bg-white rounded-2xl pt-10 px-2">
   {#if PropertyManagerDTO == null}
     Nie udało się odczytać danych Zarządcy Nieruchomości.
   {:else}
@@ -46,30 +46,6 @@
     <b>{PropertyManagerDTO.phoneNumber} </b>
   </p>
     <br>
-    <a href="/" class="button">Powrót do strony głównej</a>
   {/if}
   </div>
 </div>
-
-<style>
-  .button {
-    text-decoration:none;
-    color: black;
-    padding: 1%;
-    margin-top: 5%;
-    background-color: pink;
-    border-radius: 7px;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  .add-property-manager-popUp{
-    width: 50%;
-    height: 50%;
-    position: relative;
-    margin: 10% auto;
-    background-color: white;
-    border-radius: 20px;
-    padding: 2%;
-  }
-</style>

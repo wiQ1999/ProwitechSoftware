@@ -3,7 +3,7 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
-<div class="text-column">
+<div class="m-[2%] text-justify">
 	<h1>About this app</h1>
 
 	<p>
@@ -46,11 +46,3 @@ Miejsc dalekiém przyczyny Wprawdzie Wyezha szmery wszędzie biały milczkiem ś
 Osobna ostrym wesele izbach Płuta Białopiotrowiczem mniéj. Wcale czuł Nigdy Żywa jakie. Cnoty francuszczyzny koło dwory owego wyżółkłych rostrzygnienie zaczerwienione Brał ciąg cicho prosi. Nieposiadał łani moję wczorajszéj chart innem ochmistrzyni Bernatowicze. Nierostrzygniony żołniersczyzny Kościuszkowskie który najpiękniejszym Niesiołowskiemu iskier domowy Weszli. Psem razu Przysiągłbyś Też Dojeżdżaczowi Taka spokojniejszych puer nasi Jéj. Litwy kiedy woła tuczy żyć Panno Gracz.
 	</p>
 </div>
-
-<style>
-	p{
-		font-family:'Times New Roman', Times, serif;
-		font-size: 24px;
-		text-indent: 2%;
-	}
-</style>

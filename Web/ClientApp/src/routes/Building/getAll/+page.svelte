@@ -84,17 +84,17 @@
   }
 </script>
 
-<div class="abovetable">
-  <div class="plus icon" />
-  <a href="/Building/create" class="button">Dodaj budynek</a>
+<div class="mx-[5%] w-[90%] text-center">
+  <a href="/Building/create"> 
+    <button class="mx-auto p-4 rounded-md w-1/2 bg-[#007acc]">Dodaj budynek</button>
+  </a>
 </div>
 
 <div class="display-all-buildings">
   {#if displayAll}
-    <table>
-      <tbody>
-        <h2>Budynki</h2>
-        <tr class="headline">
+    <table class="my-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[90%] text-left">
+      <tbody class="[&>*:nth-child(odd)]:bg-[#dee8f5]">
+        <tr class="text-xs font-bold border-b-2 border-slate-600 p-2">
           <td colspan="4">Adres budynku</td>
           <td>Typ budynku</td>
           <td>Zarządca</td>
@@ -103,7 +103,7 @@
           <td>Numer lokalu</td>
           <td>Numer klatki</td>
           <td>Kod pocztowy</td>
-          <td colspan="2" hidden>USUŃ ZAZNACZONE</td>
+          <td colspan="2"></td>
         </tr>
         {#each buildingsJSON as building}
           <tr>
@@ -132,14 +132,15 @@
             {/if}
 
             <td
-              ><button on:click|preventDefault={() => edit(building.id)}
+              ><button class="bg-yellow-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-md justify-center cursor-pointer flex w-[50px] h-[25px]"
+                on:click|preventDefault={() => edit(building.id)}
                 ><div class="edit icon" /></button
               ></td
             >
             <td
-              ><button
+              ><button class="bg-red-500 decoration-none text-black text-base p-[1%] m-[5%] rounded-md justify-center cursor-pointer flex w-[50px] h-[25px]"
                 on:click|preventDefault={() => displayConfirmPopUp(building)}
-                ><div class="trash icon" /></button
+                ><div class="trash icon"/></button
               ></td
             >
             <!-- <button on:click|preventDefault={async () => await continueAdding()}
@@ -152,20 +153,20 @@
   {:else if displayGetAllProblem}
     {errorMessage}
   {:else if displayPopUp}
-    <div class="outside">
-      <div class="delete-building-confirm-pop-up">
+    <div class="w-[100%] h-[100%] m-0 p-0 top-0 left-0 fixed bg-black/80">
+      <div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl">
         <ShowBuildingPopUp
           {BuildingDTO}
           message1="Czy na pewno chcesz usunąć poniższy budynek:"
           message2="podlegający pod Zarządcę Nieruchomości:"
         />
         <button
-          class="confirm"
+        class="bg-green-500 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
           on:click|preventDefault={async () =>
             await deleteChosenBuilding(idToDelete)}>TAK, USUŃ</button
         >
         <button
-          class="reject"
+        class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
           on:click|preventDefault={() => window.location.reload()}
           >ANULUJ</button
         >
@@ -174,86 +175,6 @@
 </div>
 
 <style>
-  div {
-    margin: 5% auto;
-  }
-
-  table {
-    margin: 5% auto;
-    border: 2px solid lightslategray;
-    border-radius: 8px;
-    width: 90%;
-    text-align: left;
-  }
-
-  .abovetable {
-    margin: 5%;
-  }
-
-  .headline {
-    background-color: #007acc;
-    color: white;
-  }
-
-  td {
-    padding: 5px;
-  }
-
-  tr:nth-child(odd) {
-    background-color: #dee8f5;
-  }
-
-  .outside {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  .delete-building-confirm-pop-up {
-    width: 50%;
-    height: 50%;
-    position: relative;
-    margin: 10% auto;
-    background-color: white;
-    border-radius: 20px;
-    padding: 2%;
-  }
-
-  button,
-  .button {
-    text-decoration: none;
-    color: black;
-    padding: 1%;
-    margin: 2% auto;
-    background-color: pink;
-    border-radius: 7px;
-    border: 0px;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  td button {
-    width: 50px;
-    height: 25px;
-    position: relative;
-  }
-
-  .confirm {
-    background-color: lightgreen;
-  }
-
-  .reject {
-    background-color: lightcoral;
-  }
-
   .edit.icon {
     color: #000;
     position: absolute;
@@ -314,30 +235,5 @@
     border-right: solid 1px currentColor;
     border-top: solid 1px currentColor;
     border-radius: 4px 4px 0 0;
-  }
-
-  .plus.icon {
-    color: #000;
-    position: absolute;
-    margin-left: 3px;
-    margin-top: 10px;
-  }
-
-  .plus.icon:before {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 1px;
-    background-color: currentColor;
-  }
-
-  .plus.icon:after {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 1px;
-    background-color: currentColor;
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
   }
 </style>

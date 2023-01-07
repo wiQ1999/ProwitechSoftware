@@ -51,51 +51,27 @@
   export let message2;
 </script>
 
-<div class="add-building-success-popUp">
+<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl pt-10 p-1">
   {#if BuildingDTO == null}
     Nie udało się odczytać danych budynku.
   {:else}
     <p>{message1}</p>
     <br />
 
-    {BuildingDTO.buildingAddress.streetName}
-    {BuildingDTO.buildingAddress.buildingNumber}
+    Ulica: <span class="font-semibold">{BuildingDTO.buildingAddress.streetName}
+    {BuildingDTO.buildingAddress.buildingNumber} </span>
     <br />
-    {BuildingDTO.buildingAddress.cityName}
+    Miasto: <span class="font-semibold">{BuildingDTO.buildingAddress.cityName} </span>
     <br />
     {#if BuildingDTO.buildingAddress.postalCode != null}
-      {BuildingDTO.buildingAddress.postalCode}
+      Kod pocztowy: <span class="font-semibold">{BuildingDTO.buildingAddress.postalCode} </span>
     {/if}
     <br />
-    {BuildingDTO.type}
+    Rodzaj: <span class="font-semibold">{BuildingDTO.type} </span>
     {#if BuildingDTO.propertyManager}
       <p>{message2}
-      {BuildingDTO.propertyManager.name} </p>
+        <span class="font-semibold">{BuildingDTO.propertyManager.name} </span> </p>
     {/if}
     <br />
-
-    <a href="/" class="button">Powrót do strony głównej</a>
   {/if}
 </div>
-
-<style>
-  .button {
-    text-decoration:none;
-    color: black;
-    padding: 1%;
-    margin-top: 5%;
-    background-color: pink;
-    border-radius: 7px;
-    justify-content: center;
-    cursor: pointer;
-  }
-  .add-building-success-popUp{
-  width: 50%;
-    height: 50%;
-    position: relative;
-    margin: 10% auto;
-    background-color: white;
-    border-radius: 20px;
-    padding: 2%;
-  }
-</style>

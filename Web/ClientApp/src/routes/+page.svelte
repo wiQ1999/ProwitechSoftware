@@ -6,98 +6,33 @@
 <main>
   <slot>
     <!-- elementy strony -->
-    <section>
-        <div class="panel">
-          <form>
-            <label for="username">Nazwa użytkownika:</label>
-            <input
+    <section class="flex flex-col justify-center items-center flex-2/3">
+		
+        <div class="w-3/4 mx-auto my-0 pt-8 bg-white border-2 border-silver border-solid">
+          <form class="m-0">
+            <label class="block w-1/2 px-2 py-2 mx-[20%] my-0 text-left text-[#696969] text-base" for="username">Nazwa użytkownika:</label>
+            <input class="block w-1/2 px-2 py-2 mx-[20%] my-0 border-2 border-silver outline-8 outline-[#ebebeb] focus:outline-8 focus:outline-[#e5f2f8] text-lg "
               type="text"
               placeholder="Podaj nazwę użytkownika"
               id="username"
               required
               bind:value={login}
             />
-            <label for="password">Hasło:</label>
-            <input
+            <label class="block w-1/2 px-2 py-2 mx-[20%] my-0 text-left text-[#696969] text-base" for="password">Hasło:</label>
+            <input class="block w-1/2 px-2 py-2 mx-[20%] my-0 border-2 border-silver outline-8 outline-[#ebebeb] focus:outline-8 focus:outline-[#e5f2f8] text-lg"
               type="password"
               placeholder="Podaj hasło"
               id="password"
               required
+			  pattern=".&#123;8,}"
+  			  title="Musi zawierać co najmniej osiem znaków"
               bind:value={pwd}
             />
-            <div class="lower">
-              <input type="submit" value="Loguj!" />
+            <div class="bg-[#ecf2f5] w-[100%] py-[1%] px-[2%] mt-4">
+              <input class="w-1/5 px-3 py-4 border-2 border-solid border-[#005f85] text-white bg-[#007acc] relative left-[35%] cursor-pointer" type="submit" value="Loguj!" />
             </div>
           </form>
         </div>
     </section>
   </slot>
 </main>
-
-<style>
-section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	.panel {
-		width: 75%;
-		margin: 0 auto;
-		padding: 15px 0 0;
-		background: #fff;
-		border: 1px solid silver;
-	}
-	form {
-		margin: 0;
-	}
-
-	label {
-		display: block;
-		width: 50%;
-		padding: 10px 10px;
-		margin: 0 20%;
-		text-align: left;
-		color: #696969;
-		font-size: 16px;
-		text-shadow: 0 0 1px silver;
-	}
-
-	#username,
-	#password {
-		display: block;
-		width: 50%;
-		margin: 0 20%;
-		padding: 10px 5px;
-		border: 1px solid silver;
-		outline: 5px solid #ebebeb;
-		font-size: 22px;
-	}
-
-	#username:focus,
-	#password:focus {
-		outline: 5px solid #e5f2f8;
-	}
-
-	.lower {
-		background: #ecf2f5;
-		width: 96%;
-		padding: 1% 2%;
-		margin-top: 20px;
-	}
-
-	input[type="submit"] {
-		width: 20%;
-		padding: 15px 13px;
-		border: 1px solid #005f85;
-		color: white;
-		text-shadow: 0 0 1px black;
-		background: #007acc;
-		position: relative;
-		left: 40%;
-    cursor: pointer;
-	}
-</style>
-
