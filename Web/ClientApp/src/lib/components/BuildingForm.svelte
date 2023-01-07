@@ -70,34 +70,45 @@
     <fieldset class="border-none">
       <legend class="font-bold text-lg py-5"> Dodaj budynek </legend>
       <label for="building-address-city-name" class="block">Miejscowość</label>
-      <select bind:value={buildingAddressDTO.cityName} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+      <select bind:value={buildingAddressDTO.cityName} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
         {#each cities as city}
           <option value={city.id}>{city.name}</option>
         {/each}
       </select>
 
       <label for="property-manager-name" class="block">Nazwa ulicy</label>
-      <input type="text" bind:value={buildingAddressDTO.streetName} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"/>
+      <input type="text" bind:value={buildingAddressDTO.streetName} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"/>
       <label for="building-address-building-number" class="block">Numer budynku</label>
-      <input type="text" bind:value={buildingAddressDTO.buildingNumber} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"/>
+      <input type="text" bind:value={buildingAddressDTO.buildingNumber} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"/>
 
       <label for="building-type" class="block">Typ domu</label>
-      <select bind:value={buildingType} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+      <select bind:value={buildingType} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
         {#each buildingTypes as btype}
           <option value={btype}>{btype}</option>
         {/each}
       </select>
       <label for="property-manager-info" class="block">Zarządca nieruchomości</label>
-    <select bind:value={propertyManagerId} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+    <select bind:value={propertyManagerId} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
       {#each propertyManagers as propman}
         <option value={propman.id}
-          >{propman.name} |
-          {propman.fullAddressInShort.streetName} |
-          {propman.fullAddressInShort.buildingNumber} |
-          {propman.fullAddressInShort.staircaseNumber} |
-          {propman.fullAddressInShort.localNumber} |
-          {propman.fullAddressInShort.postalCode}
-          {propman.fullAddressInShort.cityName}</option
+          >{propman.name}
+          {#if propman.fullAddressInShort.streetName != ""}
+          | {propman.fullAddressInShort.streetName}
+          {/if}
+          {#if propman.fullAddressInShort.buildingNumber != ""}
+          | {propman.fullAddressInShort.buildingNumber}
+          {/if}
+          {#if propman.fullAddressInShort.staircaseNumber != ""}
+          kl. {propman.fullAddressInShort.staircaseNumber}
+          {/if}
+          {#if propman.fullAddressInShort.localNumber != ""}
+          m. {propman.fullAddressInShort.localNumber}
+          {/if}
+          {#if propman.fullAddressInShort.postalCode != ""}
+          | {propman.fullAddressInShort.postalCode}
+          {propman.fullAddressInShort.cityName}
+          {/if}
+          </option
         >
       {/each}
     </select>

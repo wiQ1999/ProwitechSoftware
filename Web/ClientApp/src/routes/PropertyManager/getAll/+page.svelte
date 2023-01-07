@@ -101,8 +101,10 @@
             <td>{manager.fullAddress.buildingAddress.cityName}</td>
             <td>{manager.fullAddress.buildingAddress.streetName}</td>
             <td>{manager.fullAddress.buildingAddress.buildingNumber}</td>
-            <td>{manager.fullAddress.localNumber}</td>
-            <td>{manager.fullAddress.staircaseNumber}</td>
+            
+            <td>{#if !manager.fullAddress.localNumber} - {/if} {manager.fullAddress.localNumber}</td>
+            
+            <td>{#if !manager.fullAddress.staircaseNumber} - {/if} {manager.fullAddress.staircaseNumber}</td>
             <td
               ><button class="bg-yellow-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-md justify-center cursor-pointer flex w-[50px] h-[25px]"
                 on:click|preventDefault={() => edit(manager.id)}

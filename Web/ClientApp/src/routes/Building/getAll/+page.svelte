@@ -98,11 +98,7 @@
           <td colspan="4">Adres budynku</td>
           <td>Typ budynku</td>
           <td>Zarządca</td>
-          <td>Nr telefonu</td>
-          <td>Adres zarządcy</td>
-          <td>Numer lokalu</td>
-          <td>Numer klatki</td>
-          <td>Kod pocztowy</td>
+          <td colspan="3">Dane zarządcy</td>
           <td colspan="2"></td>
         </tr>
         {#each buildingsJSON as building}
@@ -120,11 +116,8 @@
                 >{building.propertyManager.fullAddress.buildingAddress
                   .streetName}
                 {building.propertyManager.fullAddress.buildingAddress
-                  .buildingNumber}
+                  .buildingNumber}{#if building.propertyManager.fullAddress.localNumber}/{building.propertyManager.fullAddress.localNumber}{/if} {#if building.propertyManager.fullAddress.staircaseNumber}klatka {building.propertyManager.fullAddress.staircaseNumber}{/if} 
               </td>
-              <td>{building.propertyManager.fullAddress.localNumber}</td>
-
-              <td>{building.propertyManager.fullAddress.staircaseNumber}</td>
               <td
                 >{building.propertyManager.fullAddress.buildingAddress
                   .postalCode}</td
