@@ -16,7 +16,7 @@ namespace Application.Buildings.DTOs
         public string Type { get; set; }
 
         //Navigate Property
-        public ICollection<Local>? Locals { get; set; }
+        //public ICollection<Local>? Locals { get; set; }
 
         public PropertyManagerDTO PropertyManager { get; set; }
 

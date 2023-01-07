@@ -22,6 +22,13 @@ namespace Infrastructure.Models.Domain
         public string? CoordinateType { get; set; }
         [MaxLength(10)]
         public string? PostalCode { get; set; }
+
+        //public Guid? BuildingId { get; set; }
+        //public Building? Building { get; set; }
+
+        //public Guid? FullAddressId { get; set; }
+        //public FullAddress? FullAddress { get; set; }
+
         public BuildingAddress DeepCopy()
         {
             BuildingAddress copy = new BuildingAddress(this.CityName, this.StreetName, this.BuildingNumber, this.PostalCode);

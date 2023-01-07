@@ -19,6 +19,10 @@ namespace Infrastructure.Database.Configurations
                 .WithMany(pm => pm.Buildings)
                 .HasForeignKey(b => b.PropertyManagerId)
                 .OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(b => b.BuildingAddress)
+                .WithMany()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

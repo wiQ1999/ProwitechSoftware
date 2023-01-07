@@ -11,6 +11,6 @@ public record FullAddressDTO
 {
     [Required]
     public Guid BuildingAddressId { get; set; }
-    public string? LocalNumber { get; set; }
+    public string? VenueNumber { get; set; }
     public string? StaircaseNumber { get; set; }
 }

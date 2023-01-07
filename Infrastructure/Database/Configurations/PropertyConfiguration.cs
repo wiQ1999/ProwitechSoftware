@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Models.Domain;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +9,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class FullAddressConfiguration: IEntityTypeConfiguration<FullAddress>
+    public class PropertyConfiguration : IEntityTypeConfiguration<Property>
     {
-        public void Configure(EntityTypeBuilder<FullAddress> builder)
+        public void Configure(EntityTypeBuilder<Property> builder)
         {
             builder
-                .HasOne(fa => fa.BuildingAddress)
-                .WithOne()
+                .HasOne(p => p.Building)
+                .WithMany(b => b.Properties)
                 .OnDelete(DeleteBehavior.Cascade);
             builder
-                .HasOne(fa => fa.PropertyAddress)
-                .WithOne()
+                .HasOne(p => p.PropertyAddress)
+                .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-    
 }

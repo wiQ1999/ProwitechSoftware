@@ -35,8 +35,8 @@ namespace Application.PropertyManagers.Commands.Handlers
                 FullAddress faFromDB = await _fullAddressRepository.GetAsync(pmFromDb.FullAddressId.Value, cancellationToken);
                 if (command.UpdateFullAddressDTO.BuildingAddressId != Guid.Empty)
                     faFromDB.BuildingAddressId = command.UpdateFullAddressDTO.BuildingAddressId;
-                faFromDB.LocalNumber = command.UpdateFullAddressDTO.LocalNumber;
-                faFromDB.StaircaseNumber = command.UpdateFullAddressDTO.StaircaseNumber;
+                faFromDB.PropertyAddress.VenueNumber = command.UpdateFullAddressDTO.VenueNumber;
+                faFromDB.PropertyAddress.StaircaseNumber = command.UpdateFullAddressDTO.StaircaseNumber;
                 await _fullAddressRepository.UpdateAsync(faFromDB, cancellationToken);
 
             }

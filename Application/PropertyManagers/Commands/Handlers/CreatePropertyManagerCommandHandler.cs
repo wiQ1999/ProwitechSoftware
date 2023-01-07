@@ -18,12 +18,17 @@ namespace Application.PropertyManagers.Commands.Handlers
         private readonly IPropertyManagerRepository _propertyManagerRepository;
         private readonly IFullAddressRepository _fullAddressRepository;
         private readonly IBuildingAddressRepository _buildingAddressRepository;
+        private readonly IPropertyAddressRepository _propertyAddressRepository;
 
-        public CreatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository, IFullAddressRepository fullAddressRepository, IBuildingAddressRepository buildingAddressRepository)
+        public CreatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository,
+            IFullAddressRepository fullAddressRepository, 
+            IBuildingAddressRepository buildingAddressRepository, 
+            IPropertyAddressRepository propertyAddressRepository)
         {
             _propertyManagerRepository = propertyManagerRepository;
             _fullAddressRepository = fullAddressRepository;
             _buildingAddressRepository = buildingAddressRepository;
+            _propertyAddressRepository = propertyAddressRepository;
         }
 
         public async Task<Guid> Handle(CreatePropertyManagerCommand request, CancellationToken cancellationToken)
@@ -33,16 +38,26 @@ namespace Application.PropertyManagers.Commands.Handlers
             var baFromDB = await _buildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
             if (baFromDB == null)
                 throw new Exception($"W bazie danych nie ma adresu budynku o id: {faDTO.BuildingAddressId}");
+            var propertyAddress = new PropertyAddress()
+            {
+                VenueNumber = faDTO.VenueNumber,
+                StaircaseNumber = faDTO.StaircaseNumber
+            };
             var fullAddres = new FullAddress()
             {
                 BuildingAddressId = faDTO.BuildingAddressId,
-                LocalNumber = faDTO.LocalNumber,
-                StaircaseNumber = faDTO.StaircaseNumber
+                PropertyAddress = propertyAddress,
             };
             Guid fullAddressId;
             var faFromDB = await _fullAddressRepository.FindFullAddress(fullAddres, cancellationToken);
             if(faFromDB == null)
             {
+                var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                fullAddres = new FullAddress()
+                {
+                    BuildingAddressId = faDTO.BuildingAddressId,
+                    PropertyAddressId=propertyAddressId
+                };
                 fullAddressId = await _fullAddressRepository.AddAsync(fullAddres, cancellationToken);
             }
             else

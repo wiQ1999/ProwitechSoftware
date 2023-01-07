@@ -21,7 +21,10 @@ namespace Infrastructure.Repositories
         {
             //if (await _dbContext.FullAddresses.AnyAsync(fa => fa.Equals(fullAddress)))
             //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-            if (await _dbContext.FullAddresses.AnyAsync(fa => fa.BuildingAddressId == fullAddress.BuildingAddressId && fa.LocalNumber==fullAddress.LocalNumber))
+            if (await _dbContext.FullAddresses.AnyAsync(fa => 
+            fa.BuildingAddressId == fullAddress.BuildingAddressId 
+            && fa.PropertyAddress.VenueNumber.ToUpper() == fullAddress.PropertyAddress.VenueNumber.ToUpper()
+            && fa.PropertyAddress.StaircaseNumber.ToUpper() == fullAddress.PropertyAddress.StaircaseNumber.ToUpper()))
                 throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
 
             await _dbContext.AddAsync(fullAddress);
@@ -60,8 +63,8 @@ namespace Infrastructure.Repositories
             FullAddress? faFromDB = await _dbContext.FullAddresses
                 .FirstOrDefaultAsync(
                 fa => fa.BuildingAddressId==address.BuildingAddressId
-                && fa.LocalNumber==address.LocalNumber
-                && fa.StaircaseNumber==address.StaircaseNumber);
+                && fa.PropertyAddress.VenueNumber==address.PropertyAddress.VenueNumber
+                && fa.PropertyAddress.StaircaseNumber==address.PropertyAddress.StaircaseNumber);
             return faFromDB;
         }
     }

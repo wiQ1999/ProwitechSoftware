@@ -18,9 +18,11 @@ public static class ConfigureServices
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionsRepository, PermissionRepository>();
         services.AddScoped<IBuildingAddressRepository, BuildingAddressRepository>();
+        services.AddScoped<IPropertyAddressRepository, PropertyAddressRepository>();
         services.AddScoped<IFullAddressRepository, FullAddressRepository>();
         services.AddScoped<IPropertyManagerRepository, PropertyManagerRepository>();
         services.AddScoped<IBuildingRepository, BuildingRepository>();
+        
 
         return services;
     }

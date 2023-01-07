@@ -11,8 +11,10 @@ public class ProwitechDbContext : DbContext
     public DbSet<Building> Buildings => Set<Building>();
     public DbSet<BuildingAddress> BuildingAddresses => Set<BuildingAddress>();
     public DbSet<FullAddress> FullAddresses =>Set<FullAddress>();
-    public DbSet<Local> Locals =>Set<Local>();
+    public DbSet<InspectionProtocol> InspectionProtocols=>Set<InspectionProtocol>();
+    public DbSet<InspectionTask> InspectionTasks => Set<InspectionTask>();
     public DbSet<Property> Properties =>Set<Property>();
+    public DbSet<PropertyAddress> PropertyAddresses => Set<PropertyAddress>();
     public DbSet<PropertyManager> PropertyManagers =>Set<PropertyManager>();
     public DbSet<Resident> Residents =>Set<Resident>();
 

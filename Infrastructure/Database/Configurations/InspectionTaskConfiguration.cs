@@ -9,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class PropertyManagerConfiguration : IEntityTypeConfiguration<PropertyManager>
+    public class InspectionTaskConfiguration : IEntityTypeConfiguration<InspectionTask>
     {
-        public void Configure(EntityTypeBuilder<PropertyManager> builder)
+        public void Configure(EntityTypeBuilder<InspectionTask> builder)
         {
             builder
-                .HasOne(p => p.FullAddress)
+                .HasOne(it => it.Building)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+            builder
+                .HasOne(it => it.TaskDelegator)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
         }

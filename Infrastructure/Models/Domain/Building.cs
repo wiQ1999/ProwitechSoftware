@@ -14,12 +14,9 @@ namespace Infrastructure.Models.Domain
 
         public string Type { get; set; }
 
-
-        //Navigate Property
-        public ICollection<Local>? Locals { get; set; }
-
         public Guid? PropertyManagerId { get; set; }
-        public PropertyManager? PropertyManager { get; set; }
+        public PropertyManager PropertyManager { get; set; }
+        public ICollection<Property>? Properties { get; set; }
 
 
     }
