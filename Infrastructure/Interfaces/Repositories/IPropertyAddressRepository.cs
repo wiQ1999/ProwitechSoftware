@@ -13,5 +13,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task<PropertyAddress> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<Guid> AddAsync(PropertyAddress address, CancellationToken cancellationToken);
         Task UpdateAsync(PropertyAddress address, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

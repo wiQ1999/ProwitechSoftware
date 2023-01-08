@@ -1,4 +1,5 @@
 ﻿
+using Application.FullAddresses.HelperMethods;
 using Application.PropertyManagers.Commands.Requests;
 using Application.Roles.Commands.Requests;
 using AutoMapper;
@@ -38,34 +39,10 @@ namespace Application.PropertyManagers.Commands.Handlers
             var baFromDB = await _buildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
             if (baFromDB == null)
                 throw new Exception($"W bazie danych nie ma adresu budynku o id: {faDTO.BuildingAddressId}");
-            var propertyAddress = new PropertyAddress()
-            {
-                VenueNumber = faDTO.VenueNumber,
-                StaircaseNumber = faDTO.StaircaseNumber
-            };
-            var fullAddres = new FullAddress()
-            {
-                BuildingAddressId = faDTO.BuildingAddressId,
-                PropertyAddress = propertyAddress,
-            };
-            Guid fullAddressId;
-            var faFromDB = await _fullAddressRepository.FindFullAddress(fullAddres, cancellationToken);
-            if(faFromDB == null)
-            {
-                var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
-                fullAddres = new FullAddress()
-                {
-                    BuildingAddressId = faDTO.BuildingAddressId,
-                    PropertyAddressId=propertyAddressId
-                };
-                fullAddressId = await _fullAddressRepository.AddAsync(fullAddres, cancellationToken);
-            }
-            else
-            {
-                fullAddressId = faFromDB.Id;
-            }
 
-
+            FullAddressCRUDHelper helper = new FullAddressCRUDHelper(_fullAddressRepository, _propertyAddressRepository);
+            Guid fullAddressId = await helper.GetCreatedOrAlreadyExistingFullAddressId(request.FullAddressDTO, cancellationToken);
+            
             PropertyManager propertyManager = new()
             {
                 Name = request.Name,

@@ -19,13 +19,24 @@ namespace Infrastructure.Repositories
         }
         public async Task<Guid> AddAsync(FullAddress fullAddress, CancellationToken cancellationToken)
         {
-            //if (await _dbContext.FullAddresses.AnyAsync(fa => fa.Equals(fullAddress)))
+
+            if (fullAddress.PropertyAddress != null)
+            {
+                FullAddress? addressFound = await FindFullAddressWithPropertyAddress(fullAddress, cancellationToken);
+                if (addressFound != null) throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
+            }
+            else
+            {
+                FullAddress? addressFound = await FindFullAddressWithoutPropertyAddress(fullAddress, cancellationToken);
+                if (addressFound != null) throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
+            }
+
+            //if (await _dbContext.FullAddresses.AnyAsync(fa =>fullAddress.Equals(fa)))
             //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-            if (await _dbContext.FullAddresses.AnyAsync(fa => 
-            fa.BuildingAddressId == fullAddress.BuildingAddressId 
-            && fa.PropertyAddress.VenueNumber.ToUpper() == fullAddress.PropertyAddress.VenueNumber.ToUpper()
-            && fa.PropertyAddress.StaircaseNumber.ToUpper() == fullAddress.PropertyAddress.StaircaseNumber.ToUpper()))
-                throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
+            //fa.BuildingAddressId == fullAddress.BuildingAddressId && fa.PropertyAddress!=null
+            //&& fa.PropertyAddress.VenueNumber.ToUpper() == fullAddress.PropertyAddress.VenueNumber.ToUpper()
+            //&& fa.PropertyAddress.StaircaseNumber.ToUpper() == fullAddress.PropertyAddress.StaircaseNumber.ToUpper()))
+            //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
 
             await _dbContext.AddAsync(fullAddress);
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -34,12 +45,20 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<FullAddress>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.FullAddresses.ToArrayAsync(cancellationToken);
+            return await _dbContext.FullAddresses
+                .Include(fa => fa.BuildingAddress)
+                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.VenueNumber)
+                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.StaircaseNumber)
+                .ToArrayAsync(cancellationToken);
         }
 
         public async Task<FullAddress?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.FullAddresses.Include(fa=>fa.BuildingAddress).FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
+            return await _dbContext.FullAddresses
+                .Include(fa=>fa.BuildingAddress)
+                .Include(fa=>fa.PropertyAddress).ThenInclude(pa=>pa.VenueNumber)
+                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.StaircaseNumber)
+                .FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)
@@ -58,13 +77,19 @@ namespace Infrastructure.Repositories
             _dbContext.FullAddresses.Remove(fullAddress);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        public async Task<FullAddress?> FindFullAddress(FullAddress address, CancellationToken cancellationToken)
+        public async Task<FullAddress?> FindFullAddressWithPropertyAddress(FullAddress address, CancellationToken cancellationToken)
         {
             FullAddress? faFromDB = await _dbContext.FullAddresses
                 .FirstOrDefaultAsync(
-                fa => fa.BuildingAddressId==address.BuildingAddressId
+                fa => fa.BuildingAddressId==address.BuildingAddressId && fa.PropertyAddress!=null
                 && fa.PropertyAddress.VenueNumber==address.PropertyAddress.VenueNumber
-                && fa.PropertyAddress.StaircaseNumber==address.PropertyAddress.StaircaseNumber);
+                && fa.PropertyAddress.StaircaseNumber==address.PropertyAddress.StaircaseNumber, cancellationToken);
+            return faFromDB;
+        }
+        public async Task<FullAddress?> FindFullAddressWithoutPropertyAddress(FullAddress address, CancellationToken cancellationToken)
+        {
+            FullAddress? faFromDB = await _dbContext.FullAddresses
+                .FirstOrDefaultAsync(fa => fa.BuildingAddressId == address.BuildingAddressId);
             return faFromDB;
         }
     }

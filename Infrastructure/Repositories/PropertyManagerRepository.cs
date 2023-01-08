@@ -33,13 +33,22 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<PropertyManager>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).ToArrayAsync(cancellationToken);
+            return await _dbContext.PropertyManagers
+                .Include(pm=>pm.FullAddress)
+                    .ThenInclude(fa=>fa.BuildingAddress)
+                .Include(pm=>pm.FullAddress)
+                    .ThenInclude(fa => fa.PropertyAddress)
+                .ToArrayAsync(cancellationToken);
         }
 
         public async Task<PropertyManager?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).
-                ThenInclude(pm=>pm.BuildingAddress).FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
+            return await _dbContext.PropertyManagers
+                .Include(pm => pm.FullAddress)
+                    .ThenInclude(fa => fa.BuildingAddress)
+                .Include(pm => pm.FullAddress)
+                    .ThenInclude(fa => fa.PropertyAddress)
+                .FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)

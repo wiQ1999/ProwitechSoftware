@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Models.Domain
+namespace Application.FullAddresses.DTOs
 {
-    public class PropertyAddress
+    public record PropertyAddressDTO
     {
-        public Guid Id { get; set; }
         public string? VenueNumber { get; set; }
         public string? StaircaseNumber { get; set; }
     }

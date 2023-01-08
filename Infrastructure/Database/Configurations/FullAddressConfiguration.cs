@@ -15,12 +15,12 @@ namespace Infrastructure.Database.Configurations
         {
             builder
                 .HasOne(fa => fa.BuildingAddress)
-                .WithOne()
+                .WithMany()
                 .OnDelete(DeleteBehavior.Cascade);
             builder
                 .HasOne(fa => fa.PropertyAddress)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
     

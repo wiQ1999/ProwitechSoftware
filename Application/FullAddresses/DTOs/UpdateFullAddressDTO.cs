@@ -10,7 +10,7 @@ namespace Application.FullAddresses.DTOs
     {
         public Guid BuildingAddressId { get; set; }
         
-        public string? VenueNumber { get; set; }
-        public string? StaircaseNumber { get; set; }
+        public PropertyAddressDTO? PropertyAddress { get; set; }
+        
     }
 }
