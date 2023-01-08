@@ -26,10 +26,6 @@ namespace Infrastructure.Repositories
 
         public async Task<BuildingAddress> AddAsync(BuildingAddress address, CancellationToken cancellationToken)
         {
-            if (await _dbContext.BuildingAddresses.AnyAsync(
-                b => b.CityName == address.CityName && b.StreetName == address.StreetName && b.BuildingNumber == address.BuildingNumber
-                ))
-                throw new Exception($"Dodawany adres już istnieje w bazie danych!");
             address.Id = Guid.NewGuid();
             await _dbContext.AddAsync(address);
             await _dbContext.SaveChangesAsync(cancellationToken);

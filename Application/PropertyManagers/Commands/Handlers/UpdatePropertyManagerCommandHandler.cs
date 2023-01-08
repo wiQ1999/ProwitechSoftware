@@ -65,20 +65,12 @@ namespace Application.PropertyManagers.Commands.Handlers
                     //stary PropertyAddress != null
                     if (faFromDB.PropertyAddress != null)
                     {
-                        //faFromDB.PropertyAddress.VenueNumber = command.UpdateFullAddressDTO.PropertyAddress.VenueNumber;
-                        //faFromDB.PropertyAddress.StaircaseNumber = command.UpdateFullAddressDTO.PropertyAddress.StaircaseNumber;
-                        _propertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId.Value, cancellationToken);
+                        await _propertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId.Value, cancellationToken);
                     }
                     // stary PropertyAddress == null
                     else
                     {
-                        //var propAddress = new PropertyAddress()
-                        //{
-                        //    VenueNumber = command.UpdateFullAddressDTO.PropertyAddress.VenueNumber,
-                        //    StaircaseNumber = command.UpdateFullAddressDTO.PropertyAddress.StaircaseNumber
-                        //};
-                        //var propertyAddressId = await _propertyAddressRepository.AddAsync(propAddress, cancellationToken);
-                        //faFromDB.PropertyAddressId = propertyAddressId;
+                        
                     }
 
                 }

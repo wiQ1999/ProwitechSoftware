@@ -1,6 +1,7 @@
 ﻿                using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +24,9 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.Buildings.AnyAsync(b => b.BuildingAddressId == building.BuildingAddressId))
                 throw new Exception($"Istnieje już budynek mający adres o Id: {building.BuildingAddressId}");
+
+            if(building.Type!=BuildingType.WIELOLOKALOWY.ToString() && building.Type!=BuildingType.JEDNOLOKALOWY.ToString())
+                throw new Exception($"Próba dodania niedozwolonego typu budynku: {building.Type}");
 
             await _dbContext.AddAsync(building, cancellationToken);
             await _dbContext.SaveChangesAsync();

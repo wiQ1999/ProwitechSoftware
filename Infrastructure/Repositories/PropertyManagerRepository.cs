@@ -23,8 +23,6 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.Name == propMan.Name))
                 throw new Exception($"Istnieje już Zarządca Nieruchomości o nazwie {propMan.Name}");
-            //if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.FullAddress.Equals(propMan.FullAddress)))
-            //    throw new Exception($"Istnieje już Zarządca Nieruchomości o adresie {propMan.FullAddress.ToString()}");
             await _dbContext.AddAsync(propMan, cancellationToken);
             await _dbContext.SaveChangesAsync();
             return propMan.Id;
@@ -61,14 +59,6 @@ namespace Infrastructure.Repositories
             PropertyManager? propMan = await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
             if(propMan == null)
                 throw new Exception($"Brak Zarządcy Nieruchomości o identyfikatorze {id}.");
-            //Guid? fullAddressId = propMan.FullAddressId;
-            //if(fullAddressId != null)
-            //{
-            //    FullAddress? faFromDB = await _dbContext.FullAddresses
-            //        .FirstOrDefaultAsync(fa => fa.Id == fullAddressId, cancellationToken);
-            //    if (faFromDB != null)
-            //        _dbContext.FullAddresses.Remove(faFromDB);
-            //}
             
             _dbContext.PropertyManagers.Remove(propMan);
             await _dbContext.SaveChangesAsync(cancellationToken);

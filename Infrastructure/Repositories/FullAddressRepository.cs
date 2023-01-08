@@ -20,24 +20,6 @@ namespace Infrastructure.Repositories
         public async Task<Guid> AddAsync(FullAddress fullAddress, CancellationToken cancellationToken)
         {
 
-            if (fullAddress.PropertyAddress != null)
-            {
-                FullAddress? addressFound = await FindFullAddressWithPropertyAddress(fullAddress, cancellationToken);
-                if (addressFound != null) throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-            }
-            else
-            {
-                FullAddress? addressFound = await FindFullAddressWithoutPropertyAddress(fullAddress, cancellationToken);
-                if (addressFound != null) throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-            }
-
-            //if (await _dbContext.FullAddresses.AnyAsync(fa =>fullAddress.Equals(fa)))
-            //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-            //fa.BuildingAddressId == fullAddress.BuildingAddressId && fa.PropertyAddress!=null
-            //&& fa.PropertyAddress.VenueNumber.ToUpper() == fullAddress.PropertyAddress.VenueNumber.ToUpper()
-            //&& fa.PropertyAddress.StaircaseNumber.ToUpper() == fullAddress.PropertyAddress.StaircaseNumber.ToUpper()))
-            //    throw new Exception($"Dodawany pełny adres już istnieje w bazie danych!");
-
             await _dbContext.AddAsync(fullAddress);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return fullAddress.Id;
@@ -47,8 +29,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbContext.FullAddresses
                 .Include(fa => fa.BuildingAddress)
-                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.VenueNumber)
-                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.StaircaseNumber)
+                .Include(fa => fa.PropertyAddress)
                 .ToArrayAsync(cancellationToken);
         }
 
@@ -56,8 +37,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbContext.FullAddresses
                 .Include(fa=>fa.BuildingAddress)
-                .Include(fa=>fa.PropertyAddress).ThenInclude(pa=>pa.VenueNumber)
-                .Include(fa => fa.PropertyAddress).ThenInclude(pa => pa.StaircaseNumber)
+                .Include(fa=>fa.PropertyAddress)
                 .FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
         }
 
@@ -74,6 +54,15 @@ namespace Infrastructure.Repositories
                 FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
             if (fullAddress == null)
                 throw new Exception($"Brak Adresu o identyfikatorze {id}");
+            if (fullAddress.PropertyAddress != null)
+            {
+                _dbContext.PropertyAddresses.Remove(fullAddress.PropertyAddress);
+            }
+            if (fullAddress.BuildingAddress != null)
+            {
+                _dbContext.BuildingAddresses.Remove(fullAddress.BuildingAddress);
+            }
+                
             _dbContext.FullAddresses.Remove(fullAddress);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
