@@ -36,14 +36,7 @@
       force: false,
       onlyAddress: false,
     };
-    let foundBuildingAddressId = await getBuildingAddressIdIfAlredyExists(
-      buildingAddressDTO
-    );
-    if (foundBuildingAddressId != null) {
-      buildingAddressId = foundBuildingAddressId;
-      await createPropertyManager();
-      return;
-    }
+    
     buildingAddressPostResult = await postBuildingAddress(
       buildingAddressDTO,
       optionalArguments
@@ -72,8 +65,8 @@
     let PropertyManagerCommand;
 
     if (
-      propertyManagerDTO.fullAddress.propertyAddress.venueNumber != null ||
-      propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != null
+      propertyManagerDTO.fullAddress.propertyAddress.venueNumber != "" ||
+      propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != ""
     ) {
       PropertyManagerCommand = {
         name: propertyManagerDTO.name,
@@ -110,8 +103,7 @@
 
     if (postPropertyManagerId instanceof Error) {
       //delete building address of property manager (bo nie udało się go dodać, więc nie przechowujmy tego)
-      //adnotacja 05-01-2023 - nie usuwamy BuildingAddress, bo może być potrzebny dla innych FullAddresses
-      // await deleteBuildingAddress(buildingAddressId);
+      await deleteBuildingAddress(buildingAddressId);
       formVisibility = true;
       // window.location.reload();
     } else if (postPropertyManagerId instanceof Response) {

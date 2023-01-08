@@ -90,8 +90,8 @@ export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
 function prepareUpdatePropertyManagerCommand(newPropertyManagerDTO) {
   let updatePropertyManagerCommand;
   if (
-    newPropertyManagerDTO.fullAddress.propertyAddress.venueNumber != null ||
-    newPropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != null
+    newPropertyManagerDTO.fullAddress.propertyAddress.venueNumber != "" ||
+    newPropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != ""
   ) {
     updatePropertyManagerCommand = {
       id: newPropertyManagerDTO.id,

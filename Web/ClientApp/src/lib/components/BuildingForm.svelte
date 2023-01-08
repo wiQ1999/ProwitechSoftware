@@ -24,7 +24,11 @@
     { id: "Poznań", name: "Poznań" },
     { id: "Wrocław", name: "Wrocław" },
   ];
-  let buildingTypes = ["jednorodzinny", "wielolokalowy", "lokal usługowy"];
+  let buildingTypes = [
+    { id: "JEDNOLOKALOWY", name: "jednorodzinny" },
+    { id: "WIELOLOKALOWY", name: "wielolokalowy" },
+    { id: "JEDNOLOKALOWY", name: "lokal usługowy" },
+  ];
 
   onMount(async () => {
     readMode = editMode;
@@ -43,12 +47,12 @@
         id: element.id,
         name: element.name,
         fullAddressInShort: {
-          cityName: element.fullAddress.buildingAddress.cityName,
-          streetName: element.fullAddress.buildingAddress.streetName,
-          buildingNumber: element.fullAddress.buildingAddress.buildingNumber,
-          postalCode: element.fullAddress.buildingAddress.postalCode,
-          venueNumber: element.fullAddress.propertyAddress.venueNumber,
-          staircaseNumber: element.fullAddress.propertyAddress.staircaseNumber,
+          cityName: element.fullAddress?.buildingAddress.cityName,
+          streetName: element.fullAddress?.buildingAddress.streetName,
+          buildingNumber: element.fullAddress?.buildingAddress.buildingNumber,
+          postalCode: element.fullAddress?.buildingAddress.postalCode,
+          venueNumber: element.fullAddress?.propertyAddress.venueNumber,
+          staircaseNumber: element.fullAddress?.propertyAddress.staircaseNumber,
         },
       });
     }
@@ -111,7 +115,7 @@
       <label for="building-type">Typ budynku</label>
       <select bind:value={buildingType} disabled={readMode}>
         {#each buildingTypes as btype}
-          <option value={btype}>{btype}</option>
+          <option value={btype.id}>{btype.name}</option>
         {/each}
       </select>
     </div>

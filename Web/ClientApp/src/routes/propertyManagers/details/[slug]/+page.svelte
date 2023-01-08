@@ -33,7 +33,10 @@
   } from "$lib/stores/PropertyManager";
   import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
   import EditBuildingAddressPopUp from "$lib/components/EditBuildingAddressPopUp.svelte";
-  import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
+  import {
+    AddUpdateBuildingAddressRequestResult,
+    setProperty,
+  } from "$lib/js-lib/helpers";
 
   //dane pobrane z getPropertyManagerById - pierwotne i podlegające zmianie
   let updateBuildingAddressDTO;
@@ -96,6 +99,13 @@
     if (propertyManagerResponse instanceof Response) {
       originalPropertyManagerDTO = await propertyManagerResponse.json();
       updatePropertyManagerDTO = structuredClone(originalPropertyManagerDTO);
+      if (updatePropertyManagerDTO.fullAddress.propertyAddress == null) {
+        updatePropertyManagerDTO.fullAddress.propertyAddress = {
+          venueNumber: "",
+          staircaseNumber: "",
+        };
+      }
+
       originalBuildingAddressDTO =
         originalPropertyManagerDTO.fullAddress.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
