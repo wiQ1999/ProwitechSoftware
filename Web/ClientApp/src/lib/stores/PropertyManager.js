@@ -61,41 +61,71 @@ export async function deletePropertyManager(id) {
   }
 }
 export function checkIfPropManagersDiffer(newPropMan, oldPropMan) {
+  let namesDiffer = !(newPropMan.name == oldPropMan.name);
+  let phoneNumbersDiffer = !(newPropMan.phoneNumber == oldPropMan.phoneNumber);
+  let propertyAddressesDiffer;
+
   if (
-    newPropMan.name != oldPropMan.name ||
-    newPropMan.phoneNumber != oldPropMan.phoneNumber ||
-    newPropMan.fullAddress.localNumber != oldPropMan.fullAddress.localNumber ||
-    newPropMan.fullAddress.staircaseNumber !=
-      oldPropMan.fullAddress.staircaseNumber
-  )
+    oldPropMan.fullAddress.propertyAddress == null &&
+    newPropMan.fullAddress.propertyAddress.venueNumber == null &&
+    newPropMan.fullAddress.propertyAddress.staircaseNumber == null
+  ) {
+    propertyAddressesDiffer = false;
+  } else if (
+    oldPropMan.fullAddress.propertyAddress != null &&
+    oldPropMan.fullAddress.propertyAddress.venueNumber ==
+      newPropMan.fullAddress.propertyAddress.venueNumber &&
+    oldPropMan.fullAddress.propertyAddress.staircaseNumber ==
+      newPropMan.fullAddress.propertyAddress.staircaseNumber
+  ) {
+    propertyAddressesDiffer = false;
+  } else {
+    propertyAddressesDiffer = true;
+  }
+  if (namesDiffer || phoneNumbersDiffer || propertyAddressesDiffer) {
     return true;
+  }
   return false;
 }
-// STRUKTURA UpdatePropertyManagerCommand
-// {
-//   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//   "name": "string",
-//   "phoneNumber": "string",
-//   "updateFullAddressDTO": {
-//     "buildingAddressId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     "localNumber": "string",
-//     "staircaseNumber": "string"
-//   }
-// }
+function prepareUpdatePropertyManagerCommand(newPropertyManagerDTO) {
+  let updatePropertyManagerCommand;
+  if (
+    newPropertyManagerDTO.fullAddress.propertyAddress.venueNumber != null ||
+    newPropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != null
+  ) {
+    updatePropertyManagerCommand = {
+      id: newPropertyManagerDTO.id,
+      name: newPropertyManagerDTO.name,
+      phoneNumber: newPropertyManagerDTO.phoneNumber,
+      updateFullAddressDTO: {
+        buildingAddressId: newPropertyManagerDTO.fullAddress.buildingAddressId,
+        propertyAddress: {
+          venueNumber:
+            newPropertyManagerDTO.fullAddress.propertyAddress.venueNumber,
+          staircaseNumber:
+            newPropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber,
+        },
+      },
+    };
+  } else {
+    updatePropertyManagerCommand = {
+      id: newPropertyManagerDTO.id,
+      name: newPropertyManagerDTO.name,
+      phoneNumber: newPropertyManagerDTO.phoneNumber,
+      updateFullAddressDTO: {
+        buildingAddressId: newPropertyManagerDTO.fullAddress.buildingAddressId,
+      },
+    };
+  }
+  return updatePropertyManagerCommand;
+}
 export async function updatePropertyManager(newPropertyManagerDTO) {
-  let propertyManagerPutBody = {
-    id: newPropertyManagerDTO.id,
-    name: newPropertyManagerDTO.name,
-    phoneNumber: newPropertyManagerDTO.phoneNumber,
-    updateFullAddressDTO: {
-      buildingAddressId: newPropertyManagerDTO.fullAddress.buildingAddressId,
-      localNumber: newPropertyManagerDTO.fullAddress.localNumber,
-      staircaseNumber: newPropertyManagerDTO.fullAddress.staircaseNumber,
-    },
-  };
+  let updatePropertyManagerCommand = prepareUpdatePropertyManagerCommand(
+    newPropertyManagerDTO
+  );
   let propManGotUpdated = await putPropertyManager(
-    propertyManagerPutBody.id,
-    propertyManagerPutBody
+    updatePropertyManagerCommand.id,
+    updatePropertyManagerCommand
   );
   if (propManGotUpdated instanceof Response) {
     return true;

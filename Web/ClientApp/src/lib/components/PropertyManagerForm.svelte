@@ -36,8 +36,10 @@
     phoneNumber: "",
     fullAddress: {
       buildingAddressId: "",
-      localNumber: "",
-      staircaseNumber: "",
+      propertyAddress: {
+        venueNumber: "",
+        staircaseNumber: "",
+      },
     },
   };
 
@@ -48,6 +50,7 @@
   ];
   onMount(() => {
     readMode = editMode;
+    console.log(propertyManagerDTO);
   });
   function changeEditingStatus() {
     readMode = !readMode;
@@ -96,7 +99,7 @@
     >
     <input
       type="text"
-      bind:value={propertyManagerDTO.fullAddress.localNumber}
+      bind:value={propertyManagerDTO.fullAddress.propertyAddress.venueNumber}
       disabled={readMode}
     />
     <label for="property-manager-staircase-number"
@@ -104,7 +107,8 @@
     >
     <input
       type="text"
-      bind:value={propertyManagerDTO.fullAddress.staircaseNumber}
+      bind:value={propertyManagerDTO.fullAddress.propertyAddress
+        .staircaseNumber}
       disabled={readMode}
     />
   </div>

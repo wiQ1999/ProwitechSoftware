@@ -47,8 +47,8 @@
           streetName: element.fullAddress.buildingAddress.streetName,
           buildingNumber: element.fullAddress.buildingAddress.buildingNumber,
           postalCode: element.fullAddress.buildingAddress.postalCode,
-          localNumber: element.fullAddress.localNumber,
-          staircaseNumber: element.fullAddress.staircaseNumber,
+          venueNumber: element.fullAddress.propertyAddress.venueNumber,
+          staircaseNumber: element.fullAddress.propertyAddress.staircaseNumber,
         },
       });
     }
@@ -60,7 +60,7 @@
         streetName: null,
         buildingNumber: null,
         postalCode: null,
-        localNumber: null,
+        venueNumber: null,
         staircaseNumber: null,
       },
     });
@@ -123,7 +123,7 @@
           {propman.fullAddressInShort.streetName} |
           {propman.fullAddressInShort.buildingNumber} |
           {propman.fullAddressInShort.staircaseNumber} |
-          {propman.fullAddressInShort.localNumber} |
+          {propman.fullAddressInShort.venueNumber} |
           {propman.fullAddressInShort.postalCode}
           {propman.fullAddressInShort.cityName}</option
         >

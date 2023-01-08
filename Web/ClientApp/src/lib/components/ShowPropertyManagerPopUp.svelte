@@ -33,14 +33,17 @@
     <br />
     {PropertyManagerDTO.fullAddress.buildingAddress.buildingNumber}
     <br />
-    {#if PropertyManagerDTO.fullAddress.localNumber != null}
-      {PropertyManagerDTO.fullAddress.localNumber}
-      <br />
+    {#if PropertyManagerDTO.fullAddress.propertyAddress != null}
+      {#if PropertyManagerDTO.fullAddress.propertyAddress.venueNumber != null}
+        {PropertyManagerDTO.fullAddress.propertyAddress.venueNumber}
+        <br />
+      {/if}
+      {#if PropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != null}
+        {PropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber}
+        <br />
+      {/if}
     {/if}
-    {#if PropertyManagerDTO.fullAddress.staircaseNumber != null}
-      {PropertyManagerDTO.fullAddress.staircaseNumber}
-      <br />
-    {/if}
+
     {#if PropertyManagerDTO.fullAddress.buildingAddress.postalCode != null}
       {PropertyManagerDTO.fullAddress.buildingAddress.postalCode}
     {/if}

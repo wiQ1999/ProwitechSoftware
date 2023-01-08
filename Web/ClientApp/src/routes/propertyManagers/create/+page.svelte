@@ -67,19 +67,43 @@
     }
   }
 
+  function preparePropertyManagerCommand() {
+    console.log(propertyManagerDTO);
+    let PropertyManagerCommand;
+
+    if (
+      propertyManagerDTO.fullAddress.propertyAddress.venueNumber != null ||
+      propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != null
+    ) {
+      PropertyManagerCommand = {
+        name: propertyManagerDTO.name,
+        phoneNumber: propertyManagerDTO.phoneNumber,
+        fullAddressDTO: {
+          buildingAddressId: buildingAddressId,
+          propertyAddressDTO: {
+            venueNumber:
+              propertyManagerDTO.fullAddress.propertyAddress.venueNumber,
+            staircaseNumber:
+              propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber,
+          },
+        },
+      };
+    } else {
+      PropertyManagerCommand = {
+        name: propertyManagerDTO.name,
+        phoneNumber: propertyManagerDTO.phoneNumber,
+        fullAddressDTO: {
+          buildingAddressId: buildingAddressId,
+        },
+      };
+    }
+    return PropertyManagerCommand;
+  }
+
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
-
-    let PropertyManagerCommand = {
-      name: propertyManagerDTO.name,
-      phoneNumber: propertyManagerDTO.phoneNumber,
-      fullAddressDTO: {
-        buildingAddressId: buildingAddressId,
-        localNumber: propertyManagerDTO.fullAddress.localNumber,
-        staircaseNumber: propertyManagerDTO.fullAddress.staircaseNumber,
-      },
-    };
-
+    let PropertyManagerCommand = preparePropertyManagerCommand();
+    console.log(PropertyManagerCommand);
     let postPropertyManagerId = await postPropertyManager(
       PropertyManagerCommand
     );
