@@ -23,8 +23,8 @@ public class RoleRepository : IRoleRepository
         => await TryGetRoleByIdAsync(id, cancellationToken);
 
     private async Task<Role> TryGetRoleByIdAsync(Guid id, CancellationToken cancellationToken)
-        => (await _dbContext.Roles.FirstOrDefaultAsync(u
-            => u.Id == id, cancellationToken)) ??
+        => (await _dbContext.Roles.FirstOrDefaultAsync(role
+            => role.Id == id, cancellationToken)) ??
                 throw new NotFoundInDbExcption(AppSource.Roles, id);
 
     public async Task<Guid> CreateRoleAsync(Role role, CancellationToken cancellationToken)
@@ -47,8 +47,19 @@ public class RoleRepository : IRoleRepository
 
     public async Task DeleteRoleAsync(Guid id, CancellationToken cancellationToken)
     {
-        Role role = await TryGetRoleByIdAsync(id, cancellationToken);
+        var role = await TryGetRoleByIdAsync(id, cancellationToken);
         _dbContext.Roles.Remove(role);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteRolesAsync(Guid[] ids, CancellationToken cancellationToken)
+    {
+        foreach (Guid id in ids)
+        {
+            Role role = await TryGetRoleByIdAsync(id, cancellationToken);
+            _dbContext.Roles.Remove(role);
+        }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

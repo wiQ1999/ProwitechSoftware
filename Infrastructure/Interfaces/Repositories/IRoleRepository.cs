@@ -8,4 +8,5 @@ public interface IRoleRepository
     Task<Guid> CreateRoleAsync(Role role, CancellationToken cancellationToken);
     Task UpdateRoleAsync(Role role, CancellationToken cancellationToken);
     Task DeleteRoleAsync(Guid id, CancellationToken cancellationToken);
+    Task DeleteRolesAsync(Guid[] ids, CancellationToken cancellationToken);
 }
