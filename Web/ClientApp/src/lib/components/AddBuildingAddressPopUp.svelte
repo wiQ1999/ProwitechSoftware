@@ -79,36 +79,44 @@
   }
 </script>
 
-<div class="add-building-address-POP-UP">
+<div class="fixed top-0 left-0 h-[100%] w-[100%] bg-black/70">
+<div class="w-[50%] h-[50%] my-[10%] mx-auto p-[2%] bg-white rounded-lg text-center justify-center">
   {#if question_window_show}
-    <div class="question-window">
+    <div class="w-[100%] h-[50%]">
       {corrdinates_not_found_message}
-      <button
+      <button class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
         on:click|preventDefault={() =>
           addBuildingAddress(force_option.optionalArguments, false)}
         >{force_option.info}</button
       >
-      <button
+      <button class="bg-red-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
         on:click|preventDefault={() =>
           addBuildingAddress(only_address_option.optionalArguments, true)}
         >{only_address_option.info}</button
-      >
-      <a href="/index" class="button">{abandon_option.info}</a>
+      >  
+      <a href="/Building/getAll">
+        <button class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer">{abandon_option.info}</button>
+      </a>
     </div>
+    
   {/if}
   {#if result_window_show}
     <div class="result-window">
       {result_message}
       {#if buttonContinueVisibility}
-        <button on:click|preventDefault={async () => await continueAdding()}
+        <button on:click|preventDefault={async () => await continueAdding()} class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
           >Kontynuuj</button
         >
       {/if}
       {#if buttonErrorVisibility}
-        <button on:click|preventDefault={() => window.location.reload()}
+        <button on:click|preventDefault={() => window.location.reload()} class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
           >Spróbuj ponownie</button
         >
+        <a href="/Building/getAll">
+          <button class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"> Powrót do listy budynków </button>
+        </a>
       {/if}
     </div>
   {/if}
+</div>
 </div>

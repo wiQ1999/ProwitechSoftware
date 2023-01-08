@@ -103,7 +103,6 @@
   }
 </script>
 
-<a href="/">Powrót</a>
 <BaseList
   {collection}
   {headerDictionary}

@@ -42,33 +42,35 @@
   //       "staircaseNumber": "C"
   //     }
   //   }
+
+    import Page from "../../routes/PropertyManager/getAll/+page.svelte";
+
   // }
   export let BuildingDTO;
   export let message1;
   export let message2;
 </script>
 
-<div>
+<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-lg pt-10 p-1">
   {#if BuildingDTO == null}
     Nie udało się odczytać danych budynku.
   {:else}
-    {message1}
+    <p>{message1}</p>
     <br />
 
-    {BuildingDTO.buildingAddress.streetName}
+    Ulica: <span class="font-semibold">{BuildingDTO.buildingAddress.streetName}
+    {BuildingDTO.buildingAddress.buildingNumber} </span>
     <br />
-    {BuildingDTO.buildingAddress.buildingNumber}
-    <br />
-    {BuildingDTO.buildingAddress.cityName}
+    Miasto: <span class="font-semibold">{BuildingDTO.buildingAddress.cityName} </span>
     <br />
     {#if BuildingDTO.buildingAddress.postalCode != null}
-      {BuildingDTO.buildingAddress.postalCode}
+      Kod pocztowy: <span class="font-semibold">{BuildingDTO.buildingAddress.postalCode} </span>
     {/if}
     <br />
-    {BuildingDTO.type}
+    Rodzaj: <span class="font-semibold">{BuildingDTO.type} </span>
     {#if BuildingDTO.propertyManager}
-      {message2}
-      {BuildingDTO.propertyManager.name}
+      <p>{message2}
+        <span class="font-semibold">{BuildingDTO.propertyManager.name} </span> </p>
     {/if}
     <br />
   {/if}

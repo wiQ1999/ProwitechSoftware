@@ -29,38 +29,36 @@
     }
 </script>
 
-<h3>Dodaj użytkownika</h3>
+<form on:submit|preventDefault={submitHandler} class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+    <button on:click|preventDefault={closeHandler} class="py-5 px-10 bg-red-500 text-lg font-normal rounded-md w-[20%] mb-3 flexbox justify-center cursor-pointer">Zamknij</button>
+    <button type="submit" class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[70%] mb-3 flexbox justify-center cursor-pointer">Utwórz</button>
+    
+    <legend class="font-bold text-2xl py-5">Dodaj użytkownika</legend>
 
-<form on:submit|preventDefault={submitHandler}>
-    <button type="submit">Utwórz</button>
-    <button on:click|preventDefault={closeHandler}>Zamknij</button>
-
-    <br />
-    <br />
-
-    <label for="user.login">Login</label>
-    <input type="text" bind:value={user.login} required />
-    <br />
-    <label for="user.password">Hasło</label>
-    <input type="password" bind:value={user.password} required />
-    <br />
-    <label for="user.firstName">Imię</label>
-    <input type="text" bind:value={user.firstName} required />
-    <br />
-    <label for="user.lastName">Nazwisko</label>
-    <input type="text" bind:value={user.lastName} required />
-    <br />
-    <label for="user.email">Email</label>
-    <input type="text" bind:value={user.email} />
-    <br />
-    <label for="user.phoneNumber">Numer telefonu</label>
-    <input type="text" bind:value={user.phoneNumber} />
-    <br />
-    <label for="user.roleId">Rola</label>
-    <select bind:value={user.roleId}>
+    <label for="user.roleId" class="block">Rola</label>
+    <select bind:value={user.roleId} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" >
         {#each roles as role}
             <option value={role.id}>{role.name}</option>
         {/each}
     </select>
+    <label for="user.login" class="block">Login</label>
+    <input type="text" bind:value={user.login} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    <label for="user.password" class="block">Hasło</label>
+    <input type="password" bind:value={user.password} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    <label for="user.firstName" class="block">Imię</label>
+    <input type="text" bind:value={user.firstName} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    <label for="user.lastName" class="block">Nazwisko</label>
+    <input type="text" bind:value={user.lastName} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    <label for="user.email" class="block">Email</label>
+    <input type="text" bind:value={user.email} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    <label for="user.phoneNumber" class="block">Numer telefonu</label>
+    <input type="text" bind:value={user.phoneNumber} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]" />
+    <br />
+    
     <br />
 </form>

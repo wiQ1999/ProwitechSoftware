@@ -103,9 +103,9 @@
   }
 </script>
 
-<div>
+<div class="flex justify-center mb-8">
   {#if displayBuildingInfo}
-    <div class="building-info">
+    <div class="building-info border-2 border-black">
       <table>
         <tr>
           <td>Ulica</td>
@@ -132,7 +132,7 @@
     </div>
   {/if}
   {#if mapVisibility}
-    <div class="full-screen" bind:this={container} />
+    <div class="full-screen border-2 border-black" bind:this={container} />
   {/if}
   {#if loadError == true}
     <div>

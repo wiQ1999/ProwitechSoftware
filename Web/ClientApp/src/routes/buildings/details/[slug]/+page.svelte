@@ -276,7 +276,9 @@
   }
 </script>
 
-<a href="/buildings/getAll">Powrót</a>
+<a href="/buildings/getAll">
+  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+</a>
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp

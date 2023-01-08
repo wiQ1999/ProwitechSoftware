@@ -88,12 +88,13 @@
 
 <br />
 
-<button on:click={onDeleteSelected}>Usuń</button>
-<button on:click={onAdd}>Dodaj</button>
 
-<table>
-  <tr>
-    <th>
+<button on:click={onAdd} class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] flex justify-center" >Dodaj</button>
+<button on:click={onDeleteSelected} class="mx-auto rounded-sm w-[90%] bg-red-500 border-2 border-b-0 border-slate-600 flex justify-center">Usuń zaznaczone</button>
+<table class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[90%] text-left pl-2">
+  <tbody class="[&>*:nth-child(even)]:bg-[#dee8f5]">
+  <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
+    <th class="text-center border-r-2 border-slate-600">
       <input
         type="checkbox"
         bind:checked={isAllChecked}
@@ -101,12 +102,12 @@
       />
     </th>
     {#each getHeaderNames() as header}
-      <th>{header}</th>
+      <th class="pl-2">{header}</th>
     {/each}
   </tr>
   {#each collection as row, i}
     <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
-      <td>
+      <td class="text-center border-r-2 border-slate-600">
         <input
           type="checkbox"
           bind:checked={checkCollection[i]}
@@ -114,16 +115,17 @@
         />
       </td>
       {#each getHeaderProperties() as property}
-        <td>{getDataFrmRow(row, property)}</td>
+        <td class="pl-2">{getDataFrmRow(row, property)}</td>
       {/each}
       <td>
-        <button on:click={onDetail(row)}> Szczegóły </button>
+        <button on:click={onDetail(row)} class="bg-blue-400 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"> Szczegóły </button>
       </td>
       <td>
-        <button on:click={onDelete(row, i)}> Usuń </button>
+        <button on:click={onDelete(row, i)} class="bg-red-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"> Usuń </button>
       </td>
     </tr>
   {/each}
+</tbody>
 </table>
 
 {#if collection.length == 0}
