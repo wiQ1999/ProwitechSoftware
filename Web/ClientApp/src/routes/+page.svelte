@@ -3,6 +3,7 @@
 	let pwd = '';
 </script>
 
+
 <main>
   <slot>
     <!-- elementy strony -->

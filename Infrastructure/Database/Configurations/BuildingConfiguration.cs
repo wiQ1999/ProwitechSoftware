@@ -14,7 +14,11 @@ namespace Infrastructure.Database.Configurations
         public void Configure(EntityTypeBuilder<Building> builder)
         {
             builder.Property(b => b.Type).HasMaxLength(50).IsRequired();
-            
+            builder
+                .HasOne(b => b.PropertyManager)
+                .WithMany(pm => pm.Buildings)
+                .HasForeignKey(b => b.PropertyManagerId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

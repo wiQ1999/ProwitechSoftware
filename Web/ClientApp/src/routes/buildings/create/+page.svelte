@@ -139,6 +139,9 @@
   }
 </script>
 
+<a href="/buildings/getAll">
+  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+</a>
 <div>
   {#if buildingAddressConfirmPopUpVisibility}
     <AddBuildingAddressPopUp
@@ -161,7 +164,7 @@
       onSubmit={async () => await tryToAddBuildingAddress(buildingAddressDTO)}
     />{/if}
   {#if showBuildingPopUpVisibility}
-  <div class="w-[100%] h-[100%] fixed m-0 p-0 top-0 left-0 bg-black/70">
+  <div>
     <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
   </div>
     {/if}

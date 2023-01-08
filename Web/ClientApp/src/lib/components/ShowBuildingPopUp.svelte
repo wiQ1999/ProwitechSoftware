@@ -51,7 +51,7 @@
   export let message2;
 </script>
 
-<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl pt-10 p-1">
+<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-lg pt-10 p-1">
   {#if BuildingDTO == null}
     Nie udało się odczytać danych budynku.
   {:else}

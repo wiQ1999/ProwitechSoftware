@@ -32,14 +32,12 @@
     {/if}
     {PropertyManagerDTO.fullAddress.buildingAddress.cityName}, 
     {PropertyManagerDTO.fullAddress.buildingAddress.streetName}
-    {PropertyManagerDTO.fullAddress.buildingAddress.buildingNumber}
-    </span>
-    {#if PropertyManagerDTO.fullAddress.localNumber != ""}
-      /{PropertyManagerDTO.fullAddress.localNumber} 
+    {PropertyManagerDTO.fullAddress.buildingAddress.buildingNumber}{#if PropertyManagerDTO.fullAddress.localNumber != ""}
+    /{PropertyManagerDTO.fullAddress.localNumber} 
     {/if}
     {#if PropertyManagerDTO.fullAddress.staircaseNumber != ""}
       klatka {PropertyManagerDTO.fullAddress.staircaseNumber}
-    {/if}
+    {/if} </span>
     <br />
      <p>Nr telefonu:
       <span class="font-semibold">{PropertyManagerDTO.phoneNumber}</span>

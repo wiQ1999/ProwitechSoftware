@@ -1,7 +1,6 @@
 ﻿using Application.Authentication.Services;
 using Application.Interfaces.Services;
 using Application.Permissions.Services;
-using Infrastructure.Authentication;
 using Infrastructure.Models.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
