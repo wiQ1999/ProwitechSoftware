@@ -48,7 +48,7 @@
     {/if}
     
     <fieldset class="border-none">
-    <legend class="font-bold text-lg py-5">Dodaj Zarządce budynku</legend>
+    <legend class="font-bold text-lg py-5">Szczegóły roli</legend>
 
     <label for="role.name" class="block">Nazwa</label>
     <input type="text" bind:value={role.name} disabled={!isEditing} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"/>
