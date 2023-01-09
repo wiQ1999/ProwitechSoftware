@@ -33,10 +33,7 @@
   } from "$lib/stores/PropertyManager";
   import PropertyManagerForm from "$lib/components/PropertyManagerForm.svelte";
   import EditBuildingAddressPopUp from "$lib/components/EditBuildingAddressPopUp.svelte";
-  import {
-    AddUpdateBuildingAddressRequestResult,
-    setProperty,
-  } from "$lib/js-lib/helpers";
+  import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
 
   //dane pobrane z getPropertyManagerById - pierwotne i podlegające zmianie
   let updateBuildingAddressDTO;
@@ -254,7 +251,10 @@
 </script>
 
 <a href="/propertyManagers/getAll">
-<button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
 
 <div class="add-property-manager-form">
@@ -294,5 +294,3 @@
     />
   {/if}
 </div>
-
-
