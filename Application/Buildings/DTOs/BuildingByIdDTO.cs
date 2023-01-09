@@ -10,15 +10,18 @@ namespace Application.Buildings.DTOs
 {
     public class BuildingByIdDTO
     {
-        public Guid Id { get; set; }
-        public BuildingAddress BuildingAddress { get; set; }
+        //public Guid Id { get; set; }
+        //public BuildingAddress BuildingAddress { get; set; }
 
-        public string Type { get; set; }
+        //public string Type { get; set; }
 
-        //Navigate Property
-        //public ICollection<Local>? Locals { get; set; }
+        ////Navigate Property
+        ////public ICollection<Local>? Locals { get; set; }
 
-        public PropertyManagerDTO PropertyManager { get; set; }
+        //public PropertyManagerDTO PropertyManager { get; set; }
+
+        public Building Building { get; set; }
+        public IEnumerable<Property> Properties { get; set; }
 
     }
 }

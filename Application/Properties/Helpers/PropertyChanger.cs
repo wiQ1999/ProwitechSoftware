@@ -27,7 +27,7 @@ namespace Application.Properties.Helpers
             if (oldBuildingType==BuildingType.JEDNOLOKALOWY.ToString()
                 && newBuildingType == BuildingType.WIELOLOKALOWY.ToString())
             {
-                var propertyToDelete = await _propertyRepository.GetPropertyOfParticularBuilding(buildingFromDB.Id, cancellationToken);
+                var propertyToDelete = await _propertyRepository.GetOnePropertyOfParticularBuilding(buildingFromDB.Id, cancellationToken);
                 var propertyAddressToDeleteId = propertyToDelete?.PropertyAddressId;
                 if (propertyAddressToDeleteId!=null)
                     await _propertyAddressRepository.DeleteAsync(propertyAddressToDeleteId.Value, cancellationToken);

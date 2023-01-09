@@ -26,11 +26,18 @@ namespace Infrastructure.Repositories
             return property.Id;
         }
 
-        
+
+        public async Task<IEnumerable<Property>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Properties
+                .Where(p=>p.BuildingId==buildingId)
+                .Include(p=>p.PropertyAddress)
+                .ToArrayAsync(cancellationToken);
+        }
 
         public async Task<IEnumerable<Property>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.Properties.ToArrayAsync();
+            return await _dbContext.Properties.ToArrayAsync(cancellationToken);
         }
 
         public async Task<Property?> GetAsync(Guid id, CancellationToken cancellationToken)
@@ -52,7 +59,7 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Property?> GetPropertyOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken)
+        public async Task<Property?> GetOnePropertyOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken)
         {
             return await _dbContext.Properties.FirstOrDefaultAsync(p => p.BuildingId== buildingId, cancellationToken);
         }

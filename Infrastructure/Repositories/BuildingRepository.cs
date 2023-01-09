@@ -51,11 +51,14 @@ namespace Infrastructure.Repositories
                 Include(b => b.BuildingAddress).
                 Include(b => b.PropertyManager).
                     ThenInclude(pm => pm.FullAddress).
-                    ThenInclude(fa=>fa.BuildingAddress).
+                    ThenInclude(fa => fa.BuildingAddress).
                 Include(b => b.PropertyManager).
                     ThenInclude(pm => pm.FullAddress).
                     ThenInclude(fa => fa.PropertyAddress).
-                        FirstOrDefaultAsync(b => b.Id == id);
+            //Include(b => b.Properties).
+            //    ThenInclude(p => p.PropertyAddress).
+            FirstOrDefaultAsync(b => b.Id == id);
+            //return await _dbContext.Buildings.Where(b => b.Id == id).Include(b => b.Properties).FirstOrDefaultAsync();
         }
         public async Task UpdateBuildingAsync(Building building, CancellationToken cancellationToken)
         {
