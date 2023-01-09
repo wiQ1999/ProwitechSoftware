@@ -37,7 +37,11 @@ namespace Infrastructure.Repositories
             return await _dbContext.Buildings.
                 Include(b => b.BuildingAddress).
                 Include(b => b.PropertyManager).
-                    ThenInclude(pm => pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).
+                    ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(fa => fa.BuildingAddress).
+                Include(b => b.PropertyManager).
+                    ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(fa => fa.PropertyAddress).
                         ToArrayAsync(cancellationToken);
         }
 
@@ -47,6 +51,10 @@ namespace Infrastructure.Repositories
                 Include(b => b.BuildingAddress).
                 Include(b => b.PropertyManager).
                     ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(fa=>fa.BuildingAddress).
+                Include(b => b.PropertyManager).
+                    ThenInclude(pm => pm.FullAddress).
+                    ThenInclude(fa => fa.PropertyAddress).
                         FirstOrDefaultAsync(b => b.Id == id);
         }
         public async Task UpdateBuildingAsync(Building building, CancellationToken cancellationToken)
@@ -60,6 +68,14 @@ namespace Infrastructure.Repositories
             Building? buildingToDelete = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");
+            
+            
+            //TODO sprawdz czy przy usuwaniu budynku lokale tez sie usuwaja
+            //if(buildingToDelete.Properties!=null && buildingToDelete.Properties.Count > 0)
+            //{
+
+            //}
+
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
             if (buildingAddressIdToDelete != null)
             {

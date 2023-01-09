@@ -22,6 +22,7 @@ public static class ConfigureServices
         services.AddScoped<IFullAddressRepository, FullAddressRepository>();
         services.AddScoped<IPropertyManagerRepository, PropertyManagerRepository>();
         services.AddScoped<IBuildingRepository, BuildingRepository>();
+        services.AddScoped<IPropertyRepository, PropertyRepository>();
         
 
         return services;
