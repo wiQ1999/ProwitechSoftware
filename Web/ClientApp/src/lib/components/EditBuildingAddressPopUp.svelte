@@ -128,19 +128,19 @@
             true
           )}>{only_address_option.info}</button
       >
-      <a href="/" class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer">{abandon_option.info}</a>
+      <a href="/" class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer">{abandon_option.info}</a>
     </div>
   {/if}
   {#if result_window_show}
     <div class="result-window">
       {result_message}
       {#if buttonContinueVisibility}
-        <button on:click|preventDefault={async () => await returnToParent()} class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
+        <button on:click|preventDefault={async () => await returnToParent()} class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
           >Kontynuuj</button
         >
       {/if}
       {#if buttonErrorVisibility}
-        <button on:click|preventDefault={() => window.location.reload()} class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
+        <button on:click|preventDefault={() => window.location.reload()} class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
           >Spróbuj ponownie</button
         >
       {/if}

@@ -102,7 +102,7 @@
       />
     </th>
     {#each getHeaderNames() as header}
-      <th class="pl-2">{header}</th>
+      <th class="pl-[1%]">{header}</th>
     {/each}
   </tr>
   {#each collection as row, i}
@@ -115,7 +115,7 @@
         />
       </td>
       {#each getHeaderProperties() as property}
-        <td class="pl-2">{getDataFrmRow(row, property)}</td>
+        <td class="pl-[1%]">{getDataFrmRow(row, property)}</td>
       {/each}
       <td>
         <button on:click={onDetail(row)} class="bg-blue-400 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"> Szczegóły </button>

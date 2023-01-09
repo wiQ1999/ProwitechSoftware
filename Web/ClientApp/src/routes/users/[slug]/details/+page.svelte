@@ -72,60 +72,65 @@
     }
 </script>
 
-<h3>Szczegóły</h3>
 
-<form on:submit|preventDefault={submitHandler}>
+
+<form on:submit|preventDefault={submitHandler} class="w-1/2 mt-[10px] mb-10 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
     {#if isEditing}
         <button type="submit">Zapisz</button>
     {:else}
         <button on:click|preventDefault={editHandler}>Edytuj</button>
     {/if}
 
-    <br />
-    <br />
+    <fieldset class="border-none">
+    <legend class="font-bold text-lg py-5">Szczegóły użytkownika</legend>
 
-    <label for="login">Login</label>
+    <label for="login" class="block">Login</label>
     <input
         name="login"
         type="text"
         bind:value={user.login}
         disabled={!isEditing}
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
     <br />
-    <label for="firstName">Imię</label>
+    <label for="firstName" class="block">Imię</label>
     <input
         name="firstName"
         type="text"
         bind:value={user.firstName}
         disabled={!isEditing}
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
     <br />
-    <label for="lastName">Nazwisko</label>
+    <label for="lastName" class="block">Nazwisko</label>
     <input
         name="lastName"
         type="text"
         bind:value={user.lastName}
         disabled={!isEditing}
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
     <br />
-    <label for="email">Email</label>
+    <label for="email" class="block">Email</label>
     <input
         name="email"
         type="text"
         bind:value={user.email}
         disabled={!isEditing}
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
     <br />
-    <label for="phoneNumber">Numer telefonu</label>
+    <label for="phoneNumber" class="block">Numer telefonu</label>
     <input
         name="phoneNumber"
         type="text"
         bind:value={user.phoneNumber}
         disabled={!isEditing}
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
     <br />
-    <label for="role">Rola</label>
-    <select name="role" on:input={roleInputHangler} disabled={!isEditing}>
+    <label for="role" class="block">Rola</label>
+    <select name="role" on:input={roleInputHangler} disabled={!isEditing} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
         {#each roles as role}
             {#if user.role != null && user.role.id == role.id}
                 <option value={role.id} selected>{role.name}</option>
@@ -134,4 +139,5 @@
             {/if}
         {/each}
     </select>
+</fieldset>
 </form>

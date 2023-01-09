@@ -42,7 +42,7 @@
 
 <form on:submit|preventDefault={submitHandler} class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
     {#if isEditing}
-        <button type="submit">Zapisz</button>
+        <button type="submit">Zakończ edycję</button>
     {:else}
         <button on:click|preventDefault={editHandler}>Edytuj</button>
     {/if}
