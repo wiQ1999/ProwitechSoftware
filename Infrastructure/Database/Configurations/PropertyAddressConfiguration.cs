@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class BuildingAddressConfiguration : IEntityTypeConfiguration<BuildingAddress>
+    internal class PropertyAddressConfiguration : IEntityTypeConfiguration<PropertyAddress>
     {
-        public void Configure(EntityTypeBuilder<BuildingAddress> builder)
+        public void Configure(EntityTypeBuilder<PropertyAddress> builder)
         {
             //builder
-            //    .HasOne(ba => ba.FullAddress)
-            //    .WithOne(fa => fa.BuildingAddress)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            //   .HasOne(ba => ba.FullAddress)
+            //   .WithOne(fa => fa.PropertyAddress)
+            //   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

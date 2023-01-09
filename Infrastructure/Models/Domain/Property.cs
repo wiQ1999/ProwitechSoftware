@@ -9,8 +9,11 @@ namespace Infrastructure.Models.Domain
     public class Property
     {
         public Guid Id { get; set; }
-        public Guid FullAddressId { get; set; }
-        public FullAddress FullAddress { get; set; }
-        public ICollection<Resident> Residents { get; set; }
+        public Guid BuildingId { get; set; }
+        public Building Building { get; set; }
+        public Guid? PropertyAddressId { get; set; }
+        public PropertyAddress? PropertyAddress { get; set; }
+        //public Guid InspectionProtocolId { get; set; }
+        //public InspectionProtocol? Protocol { get; set; }
     }
 }

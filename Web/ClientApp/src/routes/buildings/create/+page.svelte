@@ -54,6 +54,8 @@
   import {
     getBuildingAddressById,
     postBuildingAddress,
+    getBuildingAddressIdIfAlredyExists,
+    deleteBuildingAddress,
   } from "$lib/stores/BuildingAddress";
   import { prepareCoordinatesNotFoundMessage } from "$lib/js-lib/helpers";
   import { onMount } from "svelte";
@@ -120,6 +122,8 @@
         let buildingId = await buildingPostResult.json();
         // console.log(buildingId);
         await showNewBuilding(buildingId);
+      } else if (buildingPostResult instanceof Error) {
+        await deleteBuildingAddress(baId);
       }
     }
   }

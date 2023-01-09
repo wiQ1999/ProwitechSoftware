@@ -24,7 +24,11 @@
     { id: "Poznań", name: "Poznań" },
     { id: "Wrocław", name: "Wrocław" },
   ];
-  let buildingTypes = ["jednorodzinny", "wielolokalowy", "lokal usługowy"];
+  let buildingTypes = [
+    { id: "JEDNOLOKALOWY", name: "jednorodzinny" },
+    { id: "WIELOLOKALOWY", name: "wielolokalowy" },
+    { id: "JEDNOLOKALOWY", name: "lokal usługowy" },
+  ];
 
   onMount(async () => {
     readMode = editMode;
@@ -43,12 +47,12 @@
         id: element.id,
         name: element.name,
         fullAddressInShort: {
-          cityName: element.fullAddress.buildingAddress.cityName,
-          streetName: element.fullAddress.buildingAddress.streetName,
-          buildingNumber: element.fullAddress.buildingAddress.buildingNumber,
-          postalCode: element.fullAddress.buildingAddress.postalCode,
-          localNumber: element.fullAddress.localNumber,
-          staircaseNumber: element.fullAddress.staircaseNumber,
+          cityName: element.fullAddress?.buildingAddress.cityName,
+          streetName: element.fullAddress?.buildingAddress.streetName,
+          buildingNumber: element.fullAddress?.buildingAddress.buildingNumber,
+          postalCode: element.fullAddress?.buildingAddress.postalCode,
+          venueNumber: element.fullAddress?.propertyAddress.venueNumber,
+          staircaseNumber: element.fullAddress?.propertyAddress.staircaseNumber,
         },
       });
     }
@@ -56,12 +60,12 @@
       id: null,
       name: "Brak zarządcy",
       fullAddressInShort: {
-        cityName: "",
-        streetName: "",
-        buildingNumber: "",
-        postalCode: "",
-        localNumber: "",
-        staircaseNumber: "",
+        cityName: null,
+        streetName: null,
+        buildingNumber: null,
+        postalCode: null,
+        venueNumber: null,
+        staircaseNumber: null,
       },
     });
     console.log(propertyManagers);
@@ -111,7 +115,7 @@
 
       <select bind:value={buildingType} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
         {#each buildingTypes as btype}
-          <option value={btype}>{btype}</option>
+          <option value={btype.id}>{btype.name}</option>
         {/each}
       </select>
 

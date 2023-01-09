@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Application.FullAddresses.DTOs
 {
-    public record UpdateFullAddressDTO
+    public record PropertyAddressDTO
     {
-        public Guid BuildingAddressId { get; set; }
-        
-        public PropertyAddressDTO? PropertyAddress { get; set; }
-        
+        public string? VenueNumber { get; set; }
+        public string? StaircaseNumber { get; set; }
     }
 }

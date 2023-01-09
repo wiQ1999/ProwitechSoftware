@@ -1,6 +1,7 @@
 ﻿                using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +24,9 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.Buildings.AnyAsync(b => b.BuildingAddressId == building.BuildingAddressId))
                 throw new Exception($"Istnieje już budynek mający adres o Id: {building.BuildingAddressId}");
+
+            if(building.Type!=BuildingType.WIELOLOKALOWY.ToString() && building.Type!=BuildingType.JEDNOLOKALOWY.ToString())
+                throw new Exception($"Próba dodania niedozwolonego typu budynku: {building.Type}");
 
             await _dbContext.AddAsync(building, cancellationToken);
             await _dbContext.SaveChangesAsync();
@@ -59,10 +63,10 @@ namespace Infrastructure.Repositories
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
             if (buildingAddressIdToDelete != null)
             {
-                BuildingAddress buildingAddressToDelete=await _dbContext.BuildingAddresses.
+                BuildingAddress? buildingAddressToDelete=await _dbContext.BuildingAddresses.
                     FirstOrDefaultAsync(b => b.Id == buildingAddressIdToDelete, cancellationToken);
-
-                _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
+                if(buildingAddressToDelete != null)
+                    _dbContext.BuildingAddresses.Remove(buildingAddressToDelete);
             }
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");

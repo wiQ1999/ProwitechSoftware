@@ -36,8 +36,10 @@
     phoneNumber: "",
     fullAddress: {
       buildingAddressId: "",
-      localNumber: "",
-      staircaseNumber: "",
+      propertyAddress: {
+        venueNumber: "",
+        staircaseNumber: "",
+      },
     },
   };
 
@@ -48,6 +50,7 @@
   ];
   onMount(() => {
     readMode = editMode;
+    console.log(propertyManagerDTO);
   });
   function changeEditingStatus() {
     readMode = !readMode;
@@ -107,7 +110,7 @@
     >
     <input
       type="text"
-      bind:value={propertyManagerDTO.fullAddress.localNumber}
+      bind:value={propertyManagerDTO.fullAddress.propertyAddress.venueNumber}
       disabled={readMode}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
     />
@@ -116,7 +119,8 @@
     >
     <input
       type="text"
-      bind:value={propertyManagerDTO.fullAddress.staircaseNumber}
+      bind:value={propertyManagerDTO.fullAddress.propertyAddress
+        .staircaseNumber}
       disabled={readMode}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
     />

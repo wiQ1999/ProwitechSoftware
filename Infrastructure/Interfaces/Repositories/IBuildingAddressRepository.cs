@@ -14,5 +14,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task<BuildingAddress> AddAsync(BuildingAddress address, CancellationToken cancellationToken);
         Task UpdateBuildingAddressAsync(BuildingAddress address, CancellationToken cancellationToken);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<BuildingAddress?> FindBuildingAddress(BuildingAddress address, CancellationToken cancellationToken);
     }
 }

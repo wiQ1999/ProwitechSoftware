@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Models.Domain;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +9,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class FullAddressConfiguration: IEntityTypeConfiguration<FullAddress>
+    public class InspectionTaskConfiguration : IEntityTypeConfiguration<InspectionTask>
     {
-        public void Configure(EntityTypeBuilder<FullAddress> builder)
+        public void Configure(EntityTypeBuilder<InspectionTask> builder)
         {
             builder
-                .HasOne(fa => fa.BuildingAddress)
+                .HasOne(it => it.Building)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
             builder
-                .HasOne(fa => fa.PropertyAddress)
+                .HasOne(it => it.TaskDelegator)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
         }
     }
-    
 }

@@ -2,6 +2,7 @@
   import {
     postBuildingAddress,
     deleteBuildingAddress,
+    getBuildingAddressIdIfAlredyExists,
   } from "$lib/stores/BuildingAddress.js";
   import {
     postPropertyManager,
@@ -35,12 +36,11 @@
       force: false,
       onlyAddress: false,
     };
-
+    
     buildingAddressPostResult = await postBuildingAddress(
       buildingAddressDTO,
       optionalArguments
     );
-
     if (buildingAddressPostResult instanceof Error) {
       // window.location.reload();
     } else if (buildingAddressPostResult instanceof Response) {
@@ -60,19 +60,43 @@
     }
   }
 
+  function preparePropertyManagerCommand() {
+    console.log(propertyManagerDTO);
+    let PropertyManagerCommand;
+
+    if (
+      propertyManagerDTO.fullAddress.propertyAddress.venueNumber != "" ||
+      propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != ""
+    ) {
+      PropertyManagerCommand = {
+        name: propertyManagerDTO.name,
+        phoneNumber: propertyManagerDTO.phoneNumber,
+        fullAddressDTO: {
+          buildingAddressId: buildingAddressId,
+          propertyAddressDTO: {
+            venueNumber:
+              propertyManagerDTO.fullAddress.propertyAddress.venueNumber,
+            staircaseNumber:
+              propertyManagerDTO.fullAddress.propertyAddress.staircaseNumber,
+          },
+        },
+      };
+    } else {
+      PropertyManagerCommand = {
+        name: propertyManagerDTO.name,
+        phoneNumber: propertyManagerDTO.phoneNumber,
+        fullAddressDTO: {
+          buildingAddressId: buildingAddressId,
+        },
+      };
+    }
+    return PropertyManagerCommand;
+  }
+
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
-
-    let PropertyManagerCommand = {
-      name: propertyManagerDTO.name,
-      phoneNumber: propertyManagerDTO.phoneNumber,
-      fullAddressDTO: {
-        buildingAddressId: buildingAddressId,
-        localNumber: propertyManagerDTO.fullAddress.localNumber,
-        staircaseNumber: propertyManagerDTO.fullAddress.staircaseNumber,
-      },
-    };
-
+    let PropertyManagerCommand = preparePropertyManagerCommand();
+    console.log(PropertyManagerCommand);
     let postPropertyManagerId = await postPropertyManager(
       PropertyManagerCommand
     );

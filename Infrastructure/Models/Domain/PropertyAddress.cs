@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Domain
 {
-    public class Resident
+    public class PropertyAddress
     {
         public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? VenueNumber { get; set; }
+        public string? StaircaseNumber { get; set; }
     }
 }
