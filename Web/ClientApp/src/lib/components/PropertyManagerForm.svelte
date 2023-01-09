@@ -1,26 +1,29 @@
 <script>
   import { onMount } from "svelte";
-
   // struktura propertyManageraDTO (GET)
   // {
-  //   "id": "4b8855bc-1057-41dd-0a56-08dabf373e96",
-  //   "name": "AZS",
-  //   "phoneNumber": "+48 563 212 321",
+  //   "id": "c9ddf3b2-517d-4ca8-1d90-08daf254a448",
+  //   "name": "Admico",
+  //   "phoneNumber": "555555555",
   //   "fullAddress": {
-  //     "id": "d3bc1437-a363-4d7c-5487-08dabf373e80",
-  //     "buildingAddressId": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //     "id": "46c83a7e-0842-4ead-b2a3-08daf254a437",
+  //     "buildingAddressId": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
   //     "buildingAddress": {
-  //       "id": "47054ff8-e3c3-4034-8629-bdc4da733944",
+  //       "id": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
   //       "cityName": "Bydgoszcz",
-  //       "streetName": "Nowodworska",
-  //       "buildingNumber": "23",
-  //       "longitude": 17.9975397,
-  //       "latitude": 53.1179582,
+  //       "streetName": "Sienkiewicza",
+  //       "buildingNumber": "22",
+  //       "longitude": 18.0014692,
+  //       "latitude": 53.130996,
   //       "coordinateType": "ROOFTOP",
-  //       "postalCode": "85-124"
+  //       "postalCode": "85-000"
   //     },
-  //     "localNumber": "1",
-  //     "staircaseNumber": "25"
+  //     "propertyAddressId": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
+  //     "propertyAddress": {
+  //       "id": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
+  //       "venueNumber": "33",
+  //       "staircaseNumber": "12"
+  //     }
   //   }
   // }
   export let editMode = false;
