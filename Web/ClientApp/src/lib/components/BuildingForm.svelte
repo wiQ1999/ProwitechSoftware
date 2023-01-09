@@ -134,8 +134,8 @@
           {#if propman.fullAddressInShort.staircaseNumber}
           kl. {propman.fullAddressInShort.staircaseNumber}
           {/if}
-          {#if propman.fullAddressInShort.localNumber}
-          m. {propman.fullAddressInShort.localNumber}
+          {#if propman.fullAddressInShort.venueNumber}
+          m. {propman.fullAddressInShort.venueNumber}
           {/if}
           {#if propman.fullAddressInShort.postalCode}
           | {propman.fullAddressInShort.postalCode}
