@@ -2,7 +2,7 @@ import { addOptionalParameters } from "./helpers";
 import { HttpMethodError } from "./errors";
 import { json } from "@sveltejs/kit";
 
-const apiAddress = "http://localhost:7186";
+const apiAddress = "https://localhost:7186";
 
 export async function genericPost(
   route,
