@@ -75,14 +75,11 @@
 
 
 <form on:submit|preventDefault={submitHandler} class="w-1/2 mt-[10px] mb-10 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
-    {#if isEditing}
-        <button type="submit">Zapisz</button>
-    {:else}
-        <button on:click|preventDefault={editHandler}>Edytuj</button>
-    {/if}
+    
 
     <fieldset class="border-none">
-    <legend class="font-bold text-lg py-5">Szczegóły użytkownika</legend>
+    <legend class="font-bold text-2xl py-5" >Szczegóły użytkownika</legend>
+    
 
     <label for="login" class="block">Login</label>
     <input
@@ -139,5 +136,10 @@
             {/if}
         {/each}
     </select>
+    {#if isEditing}
+        <button type="submit" class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400">Zapisz</button>
+    {:else}
+        <button on:click|preventDefault={editHandler} class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400">Edytuj</button>
+    {/if}
 </fieldset>
 </form>

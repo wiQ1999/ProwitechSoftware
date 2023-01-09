@@ -57,12 +57,14 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    editMode = false;
+    editMode = !editMode;
   }
 </script>
 
 {#if editMode}
   <button on:click={() => changeEditingStatus()} class="flex right-0 font-semibold">Włącz edytowanie</button>
+{:else}
+  <button on:click={() => changeEditingStatus()} class="flex right-0 font-semibold">Wyłącz edytowanie</button>
 {/if}
 
 <form on:submit|preventDefault={onSubmit}
