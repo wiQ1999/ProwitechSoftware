@@ -61,11 +61,6 @@
     });
   }
 
-  function addStyleToDeleteButton() {
-    let style = document.getElementById("deleteSelectedButton").style;
-    style.background = "gray";
-  }
-
   function getHeaderNames() {
     return Object.keys(headerDictionary);
   }
