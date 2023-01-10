@@ -171,7 +171,7 @@
     {#if !readMode}
       <button
         type="submit"
-        class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
+        class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400"
         >{submitButtonMessage}</button
       >
     {/if}

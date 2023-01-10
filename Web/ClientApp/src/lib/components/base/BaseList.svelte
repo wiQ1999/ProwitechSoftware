@@ -94,7 +94,7 @@
 
 <button
   on:click={onAdd}
-  class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] flex justify-center"
+  class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] text-white font-semibold flex justify-center"
   >Dodaj</button
 >
 
@@ -142,7 +142,7 @@
         <td>
           <button
             on:click={onDetail(row)}
-            class="bg-blue-400 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"
+            class="bg-blue-400 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
           >
             Szczegóły
           </button>
@@ -150,7 +150,7 @@
         <td>
           <button
             on:click={onDelete(row, i)}
-            class="bg-red-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"
+            class="bg-red-500 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
           >
             Usuń
           </button>

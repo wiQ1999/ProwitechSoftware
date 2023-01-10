@@ -88,7 +88,7 @@
       <input type="text" bind:value={postalCodeFromUpdate} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8]"/>
       <button
       type="submit"
-      class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
+      class="py-5 px-10 border-2 border-[#0078c8] hover:bg-blue-400 text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
       >EDYTUJ</button
     >
   </form>

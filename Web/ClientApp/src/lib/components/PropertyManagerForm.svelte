@@ -155,7 +155,7 @@
   {#if !readMode}
   <button
     type="submit"
-    class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
+    class="py-5 px-10 border-2 border-[#0078c8] hover:bg-blue-400 text-lg font-semibold rounded-md w-[90%] mb-3 justify-center cursor-pointer"
     disabled={readMode}>{submit_button_message}</button
   >
   {/if}

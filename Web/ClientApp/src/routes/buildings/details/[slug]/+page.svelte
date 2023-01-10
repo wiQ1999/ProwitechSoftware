@@ -294,7 +294,6 @@
   >
 </a>
 
-
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
@@ -341,7 +340,7 @@
   <p class="font-bold">{postalCode}</p>
   <a href="/buildings/details/{data.id}/postal-code"
     >
-    <button class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white">Edytuj kod pocztowy</button>
+    <button class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md">Edytuj kod pocztowy</button>
     </a
   >
 </div>
