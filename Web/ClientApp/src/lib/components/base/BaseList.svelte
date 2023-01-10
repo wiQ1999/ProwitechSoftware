@@ -91,8 +91,7 @@
 </script>
 
 <br />
-{checkCollection.length}
-{isDeleteSelectedDisabled}
+
 <button
   on:click={onAdd}
   class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] flex justify-center"
@@ -103,7 +102,7 @@
   <button
     on:click={onDeleteSelected}
     disabled
-    class="mx-auto rounded-sm w-[95%] bg-red-500 border-2 border-b-0 border-slate-600 flex justify-center"
+    class="mx-auto rounded-sm w-[95%] bg-gray-300 border-2 border-b-0 border-slate-600 flex justify-center pointer-events-none"
     >Usuń zaznaczone</button
   >
 {:else}
@@ -127,12 +126,6 @@
       {#each getHeaderNames() as header}
         <th class="pl-2">{header}</th>
       {/each}
-      <td class="justify-center">
-        <button on:click={onDetail(row)} class="bg-blue-400 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"> Szczegóły </button>
-      </td>
-      <td>
-        <button on:click={onDelete(row, i)} class="bg-red-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"> Usuń </button>
-      </td>
     </tr>
     {#each collection as row, i}
       <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
