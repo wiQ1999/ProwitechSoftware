@@ -14,25 +14,5 @@ namespace Infrastructure.Models.Domain
         public Guid? PropertyAddressId { get; set; }
         public PropertyAddress? PropertyAddress { get; set; }
 
-        public override bool Equals(object? obj)
-        {
-            if(obj is not FullAddress)
-            {
-                return false;
-            }
-            FullAddress address = (FullAddress) obj;
-            if (address.BuildingAddressId != BuildingAddressId) return false;
-
-            if(PropertyAddress==null && address.PropertyAddress!=null) return false;
-            if(PropertyAddress!=null && address.PropertyAddress==null) return false;
-            if(PropertyAddress!=null && address.PropertyAddress != null)
-            {
-                if(PropertyAddress.VenueNumber!=address.PropertyAddress.VenueNumber) return false;
-                if(PropertyAddress.StaircaseNumber!=address.PropertyAddress.StaircaseNumber) return false;
-            }
-            return true;
-
-        }
-
     }
 }

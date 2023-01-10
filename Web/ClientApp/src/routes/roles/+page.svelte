@@ -61,6 +61,7 @@
 </script>
 
 <BaseList
+  listName={"ROLE"}
   {collection}
   {headerDictionary}
   {tableRowsClassName}

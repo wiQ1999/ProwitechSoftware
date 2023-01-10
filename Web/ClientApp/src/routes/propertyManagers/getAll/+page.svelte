@@ -104,6 +104,7 @@
 </script>
 
 <BaseList
+  listName={"ZARZĄDCY NIERUCHOMOŚCI"}
   {collection}
   {headerDictionary}
   {tableRowsClassName}

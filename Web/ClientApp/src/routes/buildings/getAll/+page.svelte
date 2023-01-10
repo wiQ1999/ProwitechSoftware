@@ -120,6 +120,7 @@
 </script>
 
 <BaseList
+  listName={"BUDYNKI"}
   {collection}
   {headerDictionary}
   {tableRowsClassName}
