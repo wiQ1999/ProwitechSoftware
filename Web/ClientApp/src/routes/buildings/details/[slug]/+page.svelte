@@ -66,6 +66,8 @@
   let BuildingDTO;
   let AddUpdateBuildingAddressResponse;
 
+  let postalCode = "BRAK";
+
   onMount(async () => {
     updatedBuildingPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
@@ -106,12 +108,21 @@
     let buildingResponse = await getBuildingById(buildingId);
     if (buildingResponse instanceof Response) {
       originalBuildingDTO = await buildingResponse.json();
+      console.log(originalBuildingDTO);
+      if (originalBuildingDTO.buildingAddress.postalCode != null) {
+        postalCode = originalBuildingDTO.buildingAddress.postalCode;
+        if (postalCode == "") postalCode = "BRAK";
+      }
       // updateBuildingDTO = structuredClone(originalBuildingDTO);
       // //--
       originalBuildingAddressDTO = originalBuildingDTO.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
       //--
-      originalPropertyManagerId = originalBuildingDTO.propertyManager.id;
+      if (originalBuildingDTO.propertyManager != null) {
+        originalPropertyManagerId = originalBuildingDTO.propertyManager.id;
+      } else {
+        originalPropertyManagerId = null;
+      }
       updatePropertyManagerId = structuredClone(originalPropertyManagerId);
       //--
       originalBuildingType = originalBuildingDTO.type;
@@ -277,8 +288,16 @@
 </script>
 
 <a href="/buildings/getAll">
-  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
+<div class="building-postal-code">
+  Kod pocztowy budynku:
+  {postalCode}
+  <a href="/buildings/details/{data.id}/postal-code">EDYTUJ KOD POCZTOWY</a>
+</div>
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp

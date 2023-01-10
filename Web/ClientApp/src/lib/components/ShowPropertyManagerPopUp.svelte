@@ -38,9 +38,7 @@
   {:else}
     <p>{message}</p>
     <p>
-      Imię i nazwisko: <span class="font-semibold"
-        >{PropertyManagerDTO.name}</span
-      >
+      Nazwa: <span class="font-semibold">{PropertyManagerDTO.name}</span>
     </p>
     Adres:
     <span class="font-semibold">
@@ -50,11 +48,14 @@
       {PropertyManagerDTO.fullAddress.buildingAddress.cityName},
       {PropertyManagerDTO.fullAddress.buildingAddress.streetName}
       {PropertyManagerDTO.fullAddress.buildingAddress.buildingNumber}
-      {#if PropertyManagerDTO.fullAddress.propertyAddress.venueNumber != ""}
-        m. {PropertyManagerDTO.fullAddress.propertyAddress.venueNumber}
-      {/if}
-      {#if PropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != ""}
-        klatka {PropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber}
+      {#if PropertyManagerDTO.fullAddress.propertyAddress}
+        {#if PropertyManagerDTO.fullAddress.propertyAddress.venueNumber != ""}
+          m. {PropertyManagerDTO.fullAddress.propertyAddress.venueNumber}
+        {/if}
+        {#if PropertyManagerDTO.fullAddress.propertyAddress.staircaseNumber != ""}
+          klatka {PropertyManagerDTO.fullAddress.propertyAddress
+            .staircaseNumber}
+        {/if}
       {/if}
     </span>
     <br />

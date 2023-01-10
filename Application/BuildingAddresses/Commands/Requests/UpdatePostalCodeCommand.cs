@@ -11,7 +11,7 @@ namespace Application.BuildingAddresses.Commands.Requests
     public record UpdatePostalCodeCommand:IRequest
     {
         public Guid Id { get; set; }
-        [Required]
+        
         public string PostalCode { get; set; }
     }
 }

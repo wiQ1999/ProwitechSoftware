@@ -1,5 +1,7 @@
 ﻿using Application.Buildings.Commands.Requests;
+using Application.Properties.Helpers;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Models.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,11 +15,15 @@ namespace Application.Buildings.Commands.Handlers
     {
         private readonly IBuildingRepository _buildingRepository;
         private readonly IPropertyManagerRepository _propertyManagerRepository;
+        private readonly IPropertyRepository _propertyRepository;
+        private readonly IPropertyAddressRepository _propertyAddressRepository;
 
-        public UpdateBuildingCommandHandler(IBuildingRepository buildingRepository, IPropertyManagerRepository propertyManagerRepository)
+        public UpdateBuildingCommandHandler(IBuildingRepository buildingRepository, IPropertyManagerRepository propertyManagerRepository, IPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
         {
             _buildingRepository = buildingRepository;
             _propertyManagerRepository = propertyManagerRepository;
+            _propertyRepository = propertyRepository;
+            _propertyAddressRepository = propertyAddressRepository;
         }
 
         public async Task<Unit> Handle(UpdateBuildingCommand request, CancellationToken cancellationToken)
@@ -38,6 +44,19 @@ namespace Application.Buildings.Commands.Handlers
             {
                 bFromDB.PropertyManagerId = null;
             }
+            //TODO SPRAWDZIĆ CZY TEN IF DOBRZE DZIAŁA PRZY WIELOLOKALOWY
+            if(bFromDB.Properties!=null
+                && bFromDB.Properties.Count > 0 
+                && bFromDB.Type==BuildingType.WIELOLOKALOWY.ToString()
+                && request.Type==BuildingType.JEDNOLOKALOWY.ToString())
+            {
+                throw new Exception($"Nie możesz zmienić typu budynku na jednolokalowy, ponieważ są już do niego przypisane lokale");
+            }
+            //TODO IF BUILDINGTYPE==JEDNOLOKALOWY && PROPERTY MA PRZYPISANY RAPORT - NIE WOLNO JUŻ NIC ZMIENIĆ
+            // NAJPIERW TRZEBA USUNĄĆ RAPORT
+            PropertyChanger propertyChanger = new PropertyChanger(_propertyRepository, _propertyAddressRepository);
+            await propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
+
             bFromDB.Type = request.Type;
             await _buildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);
             return Unit.Value;

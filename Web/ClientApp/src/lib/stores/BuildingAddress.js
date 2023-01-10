@@ -4,8 +4,31 @@ import {
   genericDelete,
   genericGetById,
   genericPut,
+  genericPutWithAdditionalUrl,
 } from "$lib/js-lib/httpMethods.js";
 import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
+
+export async function updateBuildingAddressPostalCode(
+  buildingAddressId,
+  newPostalCode
+) {
+  let UpdatePostalCodeCommand = {
+    Id: buildingAddressId,
+    PostalCode: newPostalCode,
+  };
+  console.log(UpdatePostalCodeCommand);
+  let response;
+  try {
+    response = await genericPutWithAdditionalUrl(
+      `/BuildingAddress/postalCode/${buildingAddressId}`,
+      UpdatePostalCodeCommand
+    );
+    return response;
+  } catch (err) {
+    handleError(err, "edycja Kodu Pocztowego Adresu Budynku");
+    return err;
+  }
+}
 
 export async function getBuildingAddressIdIfAlredyExists(bDTO) {
   let findBuildingAddressQuery = {

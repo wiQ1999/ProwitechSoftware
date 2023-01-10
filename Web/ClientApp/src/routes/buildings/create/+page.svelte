@@ -126,6 +126,7 @@
         await deleteBuildingAddress(baId);
       }
     }
+    buildingAddressConfirmPopUpVisibility = false;
   }
   async function showNewBuilding(bId) {
     let newBuildingGetResult = await getBuildingById(bId);
@@ -168,9 +169,8 @@
       onSubmit={async () => await tryToAddBuildingAddress(buildingAddressDTO)}
     />{/if}
   {#if showBuildingPopUpVisibility}
-  <div>
-    <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
-  </div>
-    {/if}
+    <div>
+      <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
+    </div>
+  {/if}
 </div>
-

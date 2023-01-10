@@ -13,11 +13,13 @@
   export let onSubmit = async () => {};
   export let editMode = false;
   let readMode = false;
+  let upper_message = "Dodaj budynek";
   export let building = null;
 
   let formVisibility;
   let propertyManagers = [];
-  let button_message = "Edytuj";
+  let button_turn_on_edition_message = "Włącz edycję";
+  let submitButtonMessage = "DODAJ";
 
   let cities = [
     { id: "Bydgoszcz", name: "Bydgoszcz" },
@@ -25,9 +27,8 @@
     { id: "Wrocław", name: "Wrocław" },
   ];
   let buildingTypes = [
-    { id: "JEDNOLOKALOWY", name: "jednorodzinny" },
     { id: "WIELOLOKALOWY", name: "wielolokalowy" },
-    { id: "JEDNOLOKALOWY", name: "lokal usługowy" },
+    { id: "JEDNOLOKALOWY", name: "jednolokalowy" },
   ];
 
   onMount(async () => {
@@ -37,6 +38,10 @@
       // displayAll = false;
       // displayGetAllProblem = true;
       return;
+    }
+    if (editMode) {
+      submitButtonMessage = "EDYTUJ";
+      upper_message = "Szczegóły budynku";
     }
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
@@ -51,8 +56,9 @@
           streetName: element.fullAddress?.buildingAddress.streetName,
           buildingNumber: element.fullAddress?.buildingAddress.buildingNumber,
           postalCode: element.fullAddress?.buildingAddress.postalCode,
-          venueNumber: element.fullAddress?.propertyAddress.venueNumber,
-          staircaseNumber: element.fullAddress?.propertyAddress.staircaseNumber,
+          venueNumber: element.fullAddress?.propertyAddress?.venueNumber,
+          staircaseNumber:
+            element.fullAddress?.propertyAddress?.staircaseNumber,
         },
       });
     }
@@ -75,21 +81,31 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    if (button_message == "Edytuj") {
-      button_message = "Zakończ edycję";
+    if (button_turn_on_edition_message == "Włącz edycję") {
+      button_turn_on_edition_message = "Zakończ edycję";
     } else {
-      button_message = "Edytuj";
+      button_turn_on_edition_message = "Włącz edycję";
     }
+    if (readMode) upper_message = "Szczegóły budynku";
+    else upper_message = "Edytuj budynek";
     // editMode = false;
   }
 </script>
+
 {#if formVisibility}
-{#if editMode}
-<button on:click={() => changeEditingStatus()} class="flex bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white font-semibold">{button_message}</button>
-{/if}
-  <form on:submit|preventDefault={async () => await onSubmit()} class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+  {#if editMode}
+    <button
+      on:click={() => changeEditingStatus()}
+      class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white"
+      >{button_turn_on_edition_message}</button
+    >
+  {/if}
+  <form
+    on:submit|preventDefault={async () => await onSubmit()}
+    class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+  >
     <fieldset class="border-none">
-      <legend class="font-bold text-lg py-5"> Dodaj budynek </legend>
+      <legend class="font-bold text-lg py-5"> {upper_message} </legend>
       <label for="building-address-city-name" class="block">Miejscowość</label>
       <select bind:value={buildingAddressDTO.cityName} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
         {#each cities as city}
@@ -104,7 +120,9 @@
         disabled={readMode}
         required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       />
-      <label for="building-address-building-number" class="block">Numer budynku</label>
+      <label for="building-address-building-number" class="block"
+        >Numer budynku</label
+      >
       <input
         type="text"
         bind:value={buildingAddressDTO.buildingNumber}
@@ -150,7 +168,11 @@
 
     </fieldset>
     {#if !readMode}
-    <button type="submit" class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer">DODAJ!</button>
+      <button
+        type="submit"
+        class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
+        >{submitButtonMessage}</button
+      >
     {/if}
   </form>
   {#if readMode}

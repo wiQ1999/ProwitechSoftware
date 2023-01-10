@@ -1,4 +1,5 @@
-﻿using Application.PropertyManagers.DTOs;
+﻿using Application.Properties.DTOs;
+using Application.PropertyManagers.DTOs;
 using Infrastructure.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,10 @@ namespace Application.Buildings.DTOs
     {
         public Guid Id { get; set; }
         public BuildingAddress BuildingAddress { get; set; }
-
         public string Type { get; set; }
+        public PropertyManagerDTO? PropertyManager { get; set; }
 
-        //Navigate Property
-        //public ICollection<Local>? Locals { get; set; }
-
-        public PropertyManagerDTO PropertyManager { get; set; }
+        public IEnumerable<PropertyInListDTO>? Properties { get; set; }
 
     }
 }
