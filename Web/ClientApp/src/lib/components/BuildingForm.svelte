@@ -13,6 +13,7 @@
   export let onSubmit = async () => {};
   export let editMode = false;
   let readMode = false;
+  let upper_message = "Dodaj budynek";
   export let building = null;
 
   let formVisibility;
@@ -38,7 +39,10 @@
       // displayGetAllProblem = true;
       return;
     }
-    if (editMode) submitButtonMessage = "EDYTUJ";
+    if (editMode) {
+      submitButtonMessage = "EDYTUJ";
+      upper_message = "Szczegóły budynku";
+    }
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
     console.log(propertyManagersResultJSON);
@@ -82,6 +86,8 @@
     } else {
       button_turn_on_edition_message = "Włącz edycję";
     }
+    if (readMode) upper_message = "Szczegóły budynku";
+    else upper_message = "Edytuj budynek";
     // editMode = false;
   }
 </script>
@@ -99,7 +105,7 @@
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
   >
     <fieldset class="border-none">
-      <legend class="font-bold text-lg py-5"> Dodaj budynek </legend>
+      <legend class="font-bold text-lg py-5"> {upper_message} </legend>
       <label for="building-address-city-name" class="block">Miejscowość</label>
       <select
         bind:value={buildingAddressDTO.cityName}

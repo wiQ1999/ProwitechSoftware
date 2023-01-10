@@ -57,7 +57,7 @@
   onMount(() => {
     readMode = editMode;
     if (editMode) {
-      form_upper_message = "Edytuj Zarządcę Nieruchomości";
+      form_upper_message = "Szczegóły Zarządcy Nieruchomości";
       submit_button_message = "EDYTUJ";
     }
     console.log(propertyManagerDTO);
@@ -69,7 +69,8 @@
     } else {
       button_turn_on_edition_message = "Włącz edycję";
     }
-    // editMode = false;
+    if (readMode) form_upper_message = "Szczegóły Zarządcy Nieruchomości";
+    else form_upper_message = "Edytuj Zarządcę Nieruchomości";
   }
 </script>
 

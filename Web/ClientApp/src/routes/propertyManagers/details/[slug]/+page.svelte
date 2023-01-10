@@ -50,6 +50,7 @@
   let showPropertyManagerPopUpMessage;
   //---------------------------------------
   let buildingAddressId;
+  let postalCode = "BRAK";
 
   let buildingAddressChanged;
   let otherPropManagerDataChanged;
@@ -102,6 +103,10 @@
           staircaseNumber: "",
         };
       }
+      postalCode =
+        originalPropertyManagerDTO.fullAddress?.buildingAddress?.postalCode;
+      if (postalCode == undefined || postalCode == null || postalCode == "")
+        postalCode = "BRAK";
 
       originalBuildingAddressDTO =
         originalPropertyManagerDTO.fullAddress.buildingAddress;
@@ -256,6 +261,13 @@
     >Powrót</button
   >
 </a>
+<div class="property-manager-building-postal-code">
+  Kod pocztowy budynku:
+  {postalCode}
+  <a href="/propertyManagers/details/{data.id}/postal-code"
+    >EDYTUJ KOD POCZTOWY</a
+  >
+</div>
 
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}

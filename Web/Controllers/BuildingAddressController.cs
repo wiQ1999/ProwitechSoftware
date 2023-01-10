@@ -53,11 +53,11 @@ namespace Web.Controllers
         public async Task<IActionResult> Delete(Guid id) =>
             Ok(await Mediator.Send(new DeleteBuildingAddressCommand() { Id = id }));
 
-        [HttpPost("find")]
-        public async Task<IActionResult> CheckIfBuildingAddressExists([FromBody] FindBuildingAddressQuery query)
-        {
-            return Ok(await Mediator.Send(query));
-        }
+        //[HttpPost("find")]
+        //public async Task<IActionResult> CheckIfBuildingAddressExists([FromBody] FindBuildingAddressQuery query)
+        //{
+        //    return Ok(await Mediator.Send(query));
+        //}
 
     }
 }

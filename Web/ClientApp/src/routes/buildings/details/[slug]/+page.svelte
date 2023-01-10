@@ -66,6 +66,8 @@
   let BuildingDTO;
   let AddUpdateBuildingAddressResponse;
 
+  let postalCode = "BRAK";
+
   onMount(async () => {
     updatedBuildingPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
@@ -106,6 +108,11 @@
     let buildingResponse = await getBuildingById(buildingId);
     if (buildingResponse instanceof Response) {
       originalBuildingDTO = await buildingResponse.json();
+      console.log(originalBuildingDTO);
+      if (originalBuildingDTO.buildingAddress.postalCode != null) {
+        postalCode = originalBuildingDTO.buildingAddress.postalCode;
+        if (postalCode == "") postalCode = "BRAK";
+      }
       // updateBuildingDTO = structuredClone(originalBuildingDTO);
       // //--
       originalBuildingAddressDTO = originalBuildingDTO.buildingAddress;
@@ -286,6 +293,11 @@
     >Powrót</button
   >
 </a>
+<div class="building-postal-code">
+  Kod pocztowy budynku:
+  {postalCode}
+  <a href="/buildings/details/{data.id}/postal-code">EDYTUJ KOD POCZTOWY</a>
+</div>
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
