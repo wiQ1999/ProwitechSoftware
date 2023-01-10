@@ -1,45 +1,44 @@
 <script>
   import { page } from "$app/stores";
   import { onMount } from "svelte";
-  import { getBuildingById, updateBuilding } from "$lib/stores/Building.js";
   import { updateBuildingAddressPostalCode } from "$lib/stores/BuildingAddress.js";
   import { openModal } from "svelte-modals";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
 
-  export let buildingId;
   export let upperInfo = "";
   export let redirectionHref = "";
-
-  let building;
-  let postalCodeOriginal = "";
-  let postalCodeFromUpdate = "";
-  let buildingAddressDTO = {
+  export let buildingAddressDTO = {
+    id: "",
     cityName: "",
     streetName: "",
     buildingNumber: "",
+    postalCode: "",
   };
+  export let prepareForm = async () => {};
+
+  let postalCodeOriginal = "";
+  let postalCodeFromUpdate = "";
+
   let buildingAddressId;
   onMount(async () => {
-    await prepareForm($page.params.slug);
+    await prepareForm();
+    prepareVariables();
   });
 
-  async function prepareForm(buildingId) {
-    let buildingResponse = await getBuildingById(buildingId);
-    if (buildingResponse instanceof Response) {
-      building = await buildingResponse.json();
-      console.log(building);
-      postalCodeOriginal = building.buildingAddress.postalCode;
-      postalCodeFromUpdate = structuredClone(postalCodeOriginal);
-      buildingAddressId = building.buildingAddress.id;
-      console.log(buildingAddressId);
-      buildingAddressDTO = {
-        cityName: building.buildingAddress.cityName,
-        streetName: building.buildingAddress.streetName,
-        buildingNumber: building.buildingAddress.buildingNumber,
-      };
-    }
+  function prepareVariables() {
+    postalCodeOriginal = buildingAddressDTO.postalCode;
+    postalCodeFromUpdate = structuredClone(postalCodeOriginal);
+    buildingAddressId = buildingAddressDTO.id;
   }
   const updatePostalCode = async () => {
+    let updateResult = await tryToUpdatePostalCode();
+    // if (updateResult == -1) {
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 2000);
+    // }
+  };
+  const tryToUpdatePostalCode = async () => {
     let codesDiffer = checkIfPostalCodesDiffer(
       postalCodeOriginal,
       postalCodeFromUpdate
@@ -50,7 +49,7 @@
         message: "Nowy kod pocztowy nie różni się od starego!",
         reloadRequired: false,
       });
-      return;
+      return 0;
     }
     let updated = await updateBuildingAddressPostalCode(
       buildingAddressId,
@@ -64,8 +63,12 @@
         redirectionRequired: true,
         redirectionHref: redirectionHref,
       });
+      return 1;
+    } else {
+      return -1;
     }
   };
+
   function checkIfPostalCodesDiffer(oldCode, newCode) {
     if (oldCode == newCode) return false;
     return true;

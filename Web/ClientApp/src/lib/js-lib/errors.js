@@ -24,5 +24,9 @@ export function handleError(error, actionName) {
     alert_message = `Wystąpił inny błąd: ${error.message}\n${error.stack}\nWykonywana akcja: [${actionName}]`;
   }
   // alert(alert_message);
-  openModal(BasePopUp, { title: "Błąd", message: alert_message });
+  openModal(BasePopUp, {
+    title: "Błąd",
+    message: alert_message,
+    reloadRequired: true,
+  });
 }

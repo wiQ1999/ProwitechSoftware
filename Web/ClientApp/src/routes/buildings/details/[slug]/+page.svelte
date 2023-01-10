@@ -111,6 +111,7 @@
       console.log(originalBuildingDTO);
       if (originalBuildingDTO.buildingAddress.postalCode != null) {
         postalCode = originalBuildingDTO.buildingAddress.postalCode;
+        if (postalCode == "") postalCode = "BRAK";
       }
       // updateBuildingDTO = structuredClone(originalBuildingDTO);
       // //--
