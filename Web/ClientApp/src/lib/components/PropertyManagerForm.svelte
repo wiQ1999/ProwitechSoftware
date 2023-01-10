@@ -70,7 +70,7 @@
       button_turn_on_edition_message = "Włącz edycję";
     }
     if (readMode) form_upper_message = "Szczegóły Zarządcy Nieruchomości";
-    else form_upper_message = "Edytuj Zarządcę Nieruchomości";
+    else form_upper_message = "Edycja Zarządcy Nieruchomości";
   }
 </script>
 
@@ -152,9 +152,11 @@
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
   </fieldset>
+  {#if !readMode}
   <button
     type="submit"
     class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
     disabled={readMode}>{submit_button_message}</button
   >
+  {/if}
 </form>

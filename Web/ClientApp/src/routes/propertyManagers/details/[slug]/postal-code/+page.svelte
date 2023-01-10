@@ -26,7 +26,7 @@
   };
 </script>
 
-<a href={redirectionHref}>POWRÓT</a>
+<a href={redirectionHref} class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">POWRÓT</a>
 <PostalCodeForm
   {upperInfo}
   {redirectionHref}

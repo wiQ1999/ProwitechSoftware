@@ -76,17 +76,17 @@
 </script>
 
 <div>
-  <div class="postal-code-building-address-info">
-    {upperInfo}
-    {buildingAddressDTO.streetName}
-    {buildingAddressDTO.buildingNumber},
-    {buildingAddressDTO.cityName}
-  </div>
-
-  <form on:submit|preventDefault={updatePostalCode}>
-    <label for="postal-code-value">Kod pocztowy</label>
-    <input type="text" bind:value={postalCodeFromUpdate} />
-    <button
+  <form on:submit|preventDefault={updatePostalCode} class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+    <fieldset class="border-none">
+      <legend class="font-semibold text-lg py-5"> {upperInfo} </legend>
+      <div class="postal-code-building-address-info text-2xl font-semibold mb-5">
+        {buildingAddressDTO.streetName}
+        {buildingAddressDTO.buildingNumber},
+        {buildingAddressDTO.cityName}
+      </div>
+      <label for="postal-code-value" class="block">Kod pocztowy</label>
+      <input type="text" bind:value={postalCodeFromUpdate} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8]"/>
+      <button
       type="submit"
       class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
       >EDYTUJ</button

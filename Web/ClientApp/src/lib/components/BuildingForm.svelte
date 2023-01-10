@@ -87,7 +87,7 @@
       button_turn_on_edition_message = "Włącz edycję";
     }
     if (readMode) upper_message = "Szczegóły budynku";
-    else upper_message = "Edytuj budynek";
+    else upper_message = "Edycja budynku";
     // editMode = false;
   }
 </script>
@@ -100,6 +100,7 @@
       >{button_turn_on_edition_message}</button
     >
   {/if}
+  
   <form
     on:submit|preventDefault={async () => await onSubmit()}
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"

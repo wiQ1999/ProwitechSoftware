@@ -261,13 +261,7 @@
     >Powrót</button
   >
 </a>
-<div class="property-manager-building-postal-code">
-  Kod pocztowy budynku:
-  {postalCode}
-  <a href="/propertyManagers/details/{data.id}/postal-code"
-    >EDYTUJ KOD POCZTOWY</a
-  >
-</div>
+
 
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
@@ -305,4 +299,14 @@
       message={showPropertyManagerPopUpMessage}
     />
   {/if}
+</div>
+
+<div class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+  Kod pocztowy Zarządcy Nieruchomości
+  <p class="font-bold">{postalCode}</p>
+  <a href="/propertyManagers/details/{data.id}/postal-code"
+    >
+    <button class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white">Edytuj kod pocztowy</button>
+    </a
+  >
 </div>
