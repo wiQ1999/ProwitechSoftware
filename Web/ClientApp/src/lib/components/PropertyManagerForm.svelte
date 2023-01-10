@@ -77,7 +77,7 @@
 {#if editMode}
   <button
     on:click={() => changeEditingStatus()}
-    class="flex right-0 font-semibold">{button_turn_on_edition_message}</button
+    class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white">{button_turn_on_edition_message}</button
   >
 {/if}
 
