@@ -77,10 +77,10 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    if (button_turn_on_edition_message == "Edytuj") {
+    if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
     } else {
-      button_turn_on_edition_message = "Edytuj";
+      button_turn_on_edition_message = "Włącz edycję";
     }
     // editMode = false;
   }

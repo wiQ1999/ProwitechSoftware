@@ -38,9 +38,7 @@
   {:else}
     <p>{message}</p>
     <p>
-      Imię i nazwisko: <span class="font-semibold"
-        >{PropertyManagerDTO.name}</span
-      >
+      Nazwa: <span class="font-semibold">{PropertyManagerDTO.name}</span>
     </p>
     Adres:
     <span class="font-semibold">
