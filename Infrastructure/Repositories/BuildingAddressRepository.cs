@@ -37,6 +37,7 @@ namespace Infrastructure.Repositories
                 b => b.CityName.ToUpper() == address.CityName.ToUpper()
                 && b.StreetName.ToUpper() == address.StreetName.ToUpper()
                 && b.BuildingNumber.ToUpper() == address.BuildingNumber.ToUpper()
+                && b.Id!=address.Id
                 ))
                 throw new Exception($"W bazie danych istnieje już podany adres!");
             _dbContext.Entry(address).State = EntityState.Modified;

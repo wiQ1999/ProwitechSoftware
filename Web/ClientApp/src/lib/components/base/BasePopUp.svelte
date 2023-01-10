@@ -1,16 +1,22 @@
 <script>
   import { closeModal } from "svelte-modals";
+  import { goto } from "$app/navigation";
   // provided by <Modals />
   export let isOpen;
 
   export let title;
   export let message;
   export let reloadRequired = false;
+  export let redirectionRequired = false;
+  export let redirectionHref = "";
 
   const handleClick = () => {
     closeModal();
     if (reloadRequired) {
       window.location.reload();
+    }
+    if (redirectionRequired) {
+      goto(redirectionHref);
     }
   };
 </script>

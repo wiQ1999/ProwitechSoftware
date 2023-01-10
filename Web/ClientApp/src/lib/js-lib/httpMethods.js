@@ -134,3 +134,27 @@ export async function genericPut(
 
   return response;
 }
+export async function genericPutWithAdditionalUrl(halfUrl, bodyToJsonize) {
+  let response;
+
+  let fetchData = {
+    method: "PUT",
+    body: JSON.stringify(bodyToJsonize),
+    headers: new Headers({
+      "content-type": "application/json",
+    }),
+  };
+  let url = apiAddress.concat(halfUrl);
+  response = await fetch(url, fetchData);
+
+  if (!response.ok) {
+    let json = await response.clone().json();
+    let message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
+    if (json.title == "One or more validation errors occurred.") {
+      throw new HttpMethodError(message, json.errors);
+    }
+    throw new HttpMethodError(message);
+  }
+
+  return response;
+}
