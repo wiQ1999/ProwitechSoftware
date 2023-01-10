@@ -44,6 +44,7 @@ namespace Application.Buildings.Commands.Handlers
             {
                 bFromDB.PropertyManagerId = null;
             }
+            //TODO SPRAWDZIĆ CZY TEN IF DOBRZE DZIAŁA PRZY WIELOLOKALOWY
             if(bFromDB.Properties!=null
                 && bFromDB.Properties.Count > 0 
                 && bFromDB.Type==BuildingType.WIELOLOKALOWY.ToString()
@@ -51,9 +52,10 @@ namespace Application.Buildings.Commands.Handlers
             {
                 throw new Exception($"Nie możesz zmienić typu budynku na jednolokalowy, ponieważ są już do niego przypisane lokale");
             }
-
+            //TODO IF BUILDINGTYPE==JEDNOLOKALOWY && PROPERTY MA PRZYPISANY RAPORT - NIE WOLNO JUŻ NIC ZMIENIĆ
+            // NAJPIERW TRZEBA USUNĄĆ RAPORT
             PropertyChanger propertyChanger = new PropertyChanger(_propertyRepository, _propertyAddressRepository);
-            propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
+            await propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
 
             bFromDB.Type = request.Type;
             await _buildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);

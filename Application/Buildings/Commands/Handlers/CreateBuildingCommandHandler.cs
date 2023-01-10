@@ -60,7 +60,7 @@ namespace Application.Buildings.Commands.Handlers
                 };
             }
             
-            var buildingId= await _buildingRepository.AddAsync(building, cancellationToken);
+            var buildingId= await _buildingRepository.AddAsync(building, request.BuildingAddressId, cancellationToken);
             if(building.Type==BuildingType.JEDNOLOKALOWY.ToString())
             {
                 PropertyAddress propertyAddress = new PropertyAddress();

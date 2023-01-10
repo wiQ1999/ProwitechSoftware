@@ -1,5 +1,6 @@
 ﻿using Application.BuildingAddresses.DTOs;
 using Application.Buildings.DTOs;
+using Application.Properties.DTOs;
 using Application.PropertyManagers.DTOs;
 using AutoMapper;
 using Infrastructure.Models.Domain;
@@ -18,6 +19,7 @@ namespace Application.Buildings.Profiles
             CreateMap<Building, AllBuildingsDTO>().ReverseMap();
             CreateMap<Building, BuildingByIdDTO>().ReverseMap();
             CreateMap<PropertyManager, PropertyManagerDTO>().ReverseMap();
+            CreateMap<Property, PropertyInListDTO>().ReverseMap();
         }
     }
     

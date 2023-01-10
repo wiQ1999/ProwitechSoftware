@@ -31,8 +31,6 @@ namespace Application.Properties.Helpers
                 var propertyAddressToDeleteId = propertyToDelete?.PropertyAddressId;
                 if (propertyAddressToDeleteId!=null)
                     await _propertyAddressRepository.DeleteAsync(propertyAddressToDeleteId.Value, cancellationToken);
-                if (propertyToDelete != null)
-                    await _propertyRepository.DeleteAsync(propertyToDelete.Id, cancellationToken);
             }
             else if (oldBuildingType == BuildingType.WIELOLOKALOWY.ToString()
                 && newBuildingType == BuildingType.JEDNOLOKALOWY.ToString())

@@ -17,7 +17,8 @@
 
   let formVisibility;
   let propertyManagers = [];
-  let button_message = "Edytuj";
+  let button_turn_on_edition_message = "Włącz edycję";
+  let submitButtonMessage = "DODAJ";
 
   let cities = [
     { id: "Bydgoszcz", name: "Bydgoszcz" },
@@ -37,6 +38,7 @@
       // displayGetAllProblem = true;
       return;
     }
+    if (editMode) submitButtonMessage = "EDYTUJ";
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
     console.log(propertyManagersResultJSON);
@@ -50,8 +52,9 @@
           streetName: element.fullAddress?.buildingAddress.streetName,
           buildingNumber: element.fullAddress?.buildingAddress.buildingNumber,
           postalCode: element.fullAddress?.buildingAddress.postalCode,
-          venueNumber: element.fullAddress?.propertyAddress.venueNumber,
-          staircaseNumber: element.fullAddress?.propertyAddress.staircaseNumber,
+          venueNumber: element.fullAddress?.propertyAddress?.venueNumber,
+          staircaseNumber:
+            element.fullAddress?.propertyAddress?.staircaseNumber,
         },
       });
     }
@@ -74,10 +77,10 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    if (button_message == "Edytuj") {
-      button_message = "Zakończ edycję";
+    if (button_turn_on_edition_message == "Edytuj") {
+      button_turn_on_edition_message = "Zakończ edycję";
     } else {
-      button_message = "Edytuj";
+      button_turn_on_edition_message = "Edytuj";
     }
     // editMode = false;
   }
@@ -88,7 +91,7 @@
     <button
       on:click={() => changeEditingStatus()}
       class="flex font-semibold bg-blue-400 p-4 text-white"
-      >{button_message}</button
+      >{button_turn_on_edition_message}</button
     >
   {/if}
   <form
@@ -178,7 +181,7 @@
       <button
         type="submit"
         class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer"
-        >DODAJ!</button
+        >{submitButtonMessage}</button
       >
     {/if}
   </form>

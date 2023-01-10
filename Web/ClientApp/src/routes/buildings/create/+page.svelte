@@ -126,6 +126,7 @@
         await deleteBuildingAddress(baId);
       }
     }
+    buildingAddressConfirmPopUpVisibility = false;
   }
   async function showNewBuilding(bId) {
     let newBuildingGetResult = await getBuildingById(bId);
@@ -144,7 +145,10 @@
 </script>
 
 <a href="/buildings/getAll">
-  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
 <div>
   {#if buildingAddressConfirmPopUpVisibility}
@@ -168,9 +172,8 @@
       onSubmit={async () => await tryToAddBuildingAddress(buildingAddressDTO)}
     />{/if}
   {#if showBuildingPopUpVisibility}
-  <div>
-    <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
-  </div>
-    {/if}
+    <div>
+      <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
+    </div>
+  {/if}
 </div>
-
