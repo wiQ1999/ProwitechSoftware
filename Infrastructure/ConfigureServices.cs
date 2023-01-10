@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
+
 public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(
@@ -14,6 +15,7 @@ public static class ConfigureServices
         services.AddDbContext<ProwitechDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ProwitechConnection")));
        
+        services.AddScoped<IUnitOfWork, UniteOfWork>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionsRepository, PermissionRepository>();
