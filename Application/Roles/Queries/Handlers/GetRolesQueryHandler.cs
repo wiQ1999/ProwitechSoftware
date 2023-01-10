@@ -9,20 +9,20 @@ namespace Application.Roles.Queries.Handlers;
 public class GetRolesQueryHandler 
     : IRequestHandler<GetRolesQuery, IEnumerable<RoleDto>>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public GetRolesQueryHandler(
-        IRoleRepository roleRepository, IMapper mapper)
+        IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<IEnumerable<RoleDto>> Handle(
         GetRolesQuery request, CancellationToken cancellationToken)
     {
-        var roles = await _roleRepository.GetRolesAsync(cancellationToken);
+        var roles = await _unitOfWork.RolesRepository.GetAllAsync(cancellationToken);
 
         return roles.Select(r => _mapper.Map<RoleDto>(r));
     }
