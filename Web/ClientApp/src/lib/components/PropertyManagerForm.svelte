@@ -58,7 +58,7 @@
     readMode = editMode;
     if (editMode) {
       form_upper_message = "Szczegóły Zarządcy Nieruchomości";
-      submit_button_message = "EDYTUJ";
+      submit_button_message = "ZATWIERDŹ";
     }
     console.log(propertyManagerDTO);
   });
@@ -74,12 +74,7 @@
   }
 </script>
 
-{#if editMode}
-  <button
-    on:click={() => changeEditingStatus()}
-    class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white">{button_turn_on_edition_message}</button
-  >
-{/if}
+
 
 <form
   on:submit|preventDefault={onSubmit}
@@ -87,6 +82,12 @@
 >
   <fieldset class="border-none">
     <legend class="font-bold text-lg py-5">{form_upper_message}</legend>
+    {#if editMode}
+  <button
+    on:click|preventDefault={() => changeEditingStatus()}
+    class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white">{button_turn_on_edition_message}</button
+  >
+{/if}
     <label for="building-address-city-name" class="block">Miejscowość</label>
     <select bind:value={buildingAddressDTO.cityName} disabled={readMode} class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9] disabled:bg-[#e8eeef]">
       {#each cities as city}

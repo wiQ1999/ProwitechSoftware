@@ -40,7 +40,7 @@
       return;
     }
     if (editMode) {
-      submitButtonMessage = "EDYTUJ";
+      submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły budynku";
     }
 
@@ -93,13 +93,6 @@
 </script>
 
 {#if formVisibility}
-  {#if editMode}
-    <button
-      on:click={() => changeEditingStatus()}
-      class="flex font-semibold bg-blue-400 mt-4 p-4 mx-auto rounded-md text-white"
-      >{button_turn_on_edition_message}</button
-    >
-  {/if}
   
   <form
     on:submit|preventDefault={async () => await onSubmit()}
@@ -107,6 +100,13 @@
   >
     <fieldset class="border-none">
       <legend class="font-bold text-lg py-5"> {upper_message} </legend>
+      {#if editMode}
+    <button
+      on:click|preventDefault={() => changeEditingStatus()}
+      class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white"
+      >{button_turn_on_edition_message}</button
+    >
+  {/if}
       <label for="building-address-city-name" class="block">Miejscowość</label>
       <select bind:value={buildingAddressDTO.cityName} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
         {#each cities as city}
@@ -175,6 +175,7 @@
         >{submitButtonMessage}</button
       >
     {/if}
+    
   </form>
   {#if readMode}
     <Map {building} displayLink={false} />
