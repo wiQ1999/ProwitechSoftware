@@ -4,22 +4,23 @@ using Infrastructure.Models.Domain;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
+
 public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateRoleCommandHandler(IRoleRepository roleRepository)
+    public CreateRoleCommandHandler(IUnitOfWork unitOfWork)
     {
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
         Role role = new() 
         { 
-            Name = request.Name 
+            Name = request.Name
         };
 
-        return await _roleRepository.CreateRoleAsync(role, cancellationToken);
+        return await _unitOfWork.RolesRepository.CreateAsync(role, cancellationToken);
     }
 }
