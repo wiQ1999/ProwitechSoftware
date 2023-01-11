@@ -11,15 +11,15 @@ public class UniteOfWork : IUnitOfWork
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
-        => _rolesRepository ??= new GenericRepository<Role>(_context);
+        => _rolesRepository ??= new GenericRoleRepository(_context);
 
     public UniteOfWork(ProwitechDbContext context)
     {
         _context = context;
     }
 
-    public void Save()
-        => _context.SaveChanges();
+    public async Task SaveChangesAsync()
+        => await _context.SaveChangesAsync();
 
     public void Dispose()
     {

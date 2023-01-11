@@ -6,5 +6,5 @@ public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<Role> RolesRepository { get; }
 
-    void Save();
+    Task SaveChangesAsync();
 }
