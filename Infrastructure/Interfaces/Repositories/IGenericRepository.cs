@@ -6,7 +6,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task InsertAsync(TEntity entity, CancellationToken cancellationToken);
+    Task<Guid> CreateAsync(TEntity entity, CancellationToken cancellationToken);
 
     Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken);
 
