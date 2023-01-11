@@ -25,7 +25,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         => await TryGetByIdAsync(id, cancellationToken);
 
     private async Task<TEntity> TryGetByIdAsync(Guid id, CancellationToken cancellationToken)
-        => (await DbSet.FindAsync(id, cancellationToken)) ??
+        => (await DbSet.FindAsync(new object[] { id }, cancellationToken)) ??
             throw new NotFoundInDbExcption(AppSource.Roles, id);
 
     public virtual async Task<Guid> CreateAsync(TEntity entity, CancellationToken cancellationToken)
