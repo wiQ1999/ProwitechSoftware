@@ -3,18 +3,21 @@ using Infrastructure.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
+
 public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteRoleCommandHandler(IRoleRepository roleRepository)
+    public DeleteRoleCommandHandler(IUnitOfWork unitOfWork)
     {
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
-        await _roleRepository.DeleteRoleAsync(request.Id, cancellationToken);
+        await _unitOfWork.RolesRepository.DeleteAsync(request.Id, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync();
 
         return Unit.Value;
     }

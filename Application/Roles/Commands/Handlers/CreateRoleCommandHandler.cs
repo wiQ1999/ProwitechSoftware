@@ -21,6 +21,10 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
             Name = request.Name
         };
 
-        return await _unitOfWork.RolesRepository.CreateAsync(role, cancellationToken);
+        var guid = await _unitOfWork.RolesRepository.CreateAsync(role, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return guid;
     }
 }
