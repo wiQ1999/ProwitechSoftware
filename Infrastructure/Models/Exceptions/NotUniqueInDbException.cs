@@ -16,7 +16,7 @@ public class NotUniqueInDbException : Exception
         : base($"W zasobach \"{source.GetDescription()}\" istnieje już rekord zawierający wartość \"{value}\".")
     { }
 
-    public NotUniqueInDbException(AppSource source, string propertyName, string value)
+    public NotUniqueInDbException(AppSource source, string value, string propertyName)
         : base($"W zasobach \"{source.GetDescription()}\" istnieje już rekord zawierający wartość \"{value}\" dla właściwości \"{propertyName}\".")
     { }
 }
