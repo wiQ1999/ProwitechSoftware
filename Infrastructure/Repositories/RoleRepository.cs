@@ -16,7 +16,7 @@ public class RoleRepository : IRoleRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Role>> GetRolesAsync(CancellationToken cancellationToken) 
+    public async Task<IEnumerable<Role>> GetRolesAsync(CancellationToken cancellationToken)
         => await _dbContext.Roles.ToArrayAsync(cancellationToken);
 
     public async Task<Role> GetRoleByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ public class RoleRepository : IRoleRepository
     public async Task<Guid> CreateRoleAsync(Role role, CancellationToken cancellationToken)
     {
         if (await _dbContext.Roles.AnyAsync(r => r.Name == role.Name, cancellationToken))
-            throw new NotUniqueInDbException(AppSource.Roles, nameof(role.Name), role.Name);
+            throw new NotUniqueInDbException(AppSource.Roles, role.Name, nameof(role.Name));
 
         await _dbContext.Roles.AddAsync(role, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
