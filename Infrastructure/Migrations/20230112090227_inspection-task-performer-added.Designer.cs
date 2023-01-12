@@ -4,6 +4,7 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ProwitechDbContext))]
-    partial class ProwitechDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230112090227_inspection-task-performer-added")]
+    partial class inspectiontaskperformeradded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,9 +255,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("InspectionDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("InspectionPerformerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("InspectionTaskId")
                         .HasColumnType("uniqueidentifier");
 
@@ -263,14 +262,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ResidentId")
+                    b.Property<Guid?>("ResidentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InspectedPropertyId");
-
-                    b.HasIndex("InspectionPerformerId");
 
                     b.HasIndex("InspectionTaskId");
 
@@ -285,16 +282,16 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BuildingId")
+                    b.Property<Guid?>("BuildingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DueStartDateTime")
+                    b.Property<DateTime>("DueStartDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EndDateTime")
+                    b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("StartDateTime")
+                    b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -357,124 +354,124 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c70dc02d-cb2a-4c19-8c60-bb4cf6240954"),
+                            Id = new Guid("3c936e66-c06d-4973-8519-e40395ee178c"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("6de4c080-33fa-4aed-bb3e-6d0bbede6208"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5742c7fd-94bd-4ac4-912f-c8ce46b5bbae"),
+                            Id = new Guid("170a9930-bf1e-46da-b2d5-b69491e8ee8a"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("6de4c080-33fa-4aed-bb3e-6d0bbede6208"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5edacfc0-d370-4ff6-ad0e-30f0c0b61ab7"),
+                            Id = new Guid("290daab5-2eeb-4697-b436-59844e14ae5c"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("6de4c080-33fa-4aed-bb3e-6d0bbede6208"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("d2cfe8d8-4366-44d6-9d64-2edbb0113414"),
+                            Id = new Guid("8c0406c9-03ac-4e87-a908-ac7f3ee7d8ff"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("26890951-57d2-40ca-9b8c-64c72077d04f"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5e09f7bd-6f96-4dcc-9382-909d55f7cb98"),
+                            Id = new Guid("9e15e718-0d1d-4c09-aada-8335a43a8617"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("26890951-57d2-40ca-9b8c-64c72077d04f"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("daa4764e-e02a-44d0-9421-1374d33dd749"),
+                            Id = new Guid("d0992a3c-ea88-4d5f-8f60-1c76b76c7a7a"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("26890951-57d2-40ca-9b8c-64c72077d04f"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("e19bfa5b-a187-4fbd-9c16-98665325f0de"),
+                            Id = new Guid("10cec43f-2875-4fd9-a8e3-021c74e1ba72"),
                             Create = false,
                             Delete = false,
                             Read = true,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d"),
                             Source = "Roles",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("385b4aec-0b0d-4cac-8203-bb0c24078a33"),
+                            Id = new Guid("bd551cbe-e63a-4e0e-ae4c-bff0254400cc"),
                             Create = false,
                             Delete = false,
                             Read = true,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d"),
                             Source = "Users",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("dec0e7a9-f1c0-4b5d-a846-8353e4b269e4"),
+                            Id = new Guid("44e4f671-079a-46a5-8af0-9f5471430ed7"),
                             Create = false,
                             Delete = false,
                             Read = false,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d"),
                             Source = "Permissions",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("35e64eee-de67-4a4a-a4ad-a64e9305bbfb"),
+                            Id = new Guid("8c1adffc-5c1c-49a5-944d-77045df3c4c1"),
                             Read = false,
                             Source = "Roles",
-                            UserId = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4")
+                            UserId = new Guid("ce55c1d3-c618-40cc-b7b3-1ad4dab6fae6")
                         },
                         new
                         {
-                            Id = new Guid("b460e062-02b3-44ca-9344-97ddf46ae8b7"),
+                            Id = new Guid("0b29b796-e629-4275-84f2-22fe46b6059b"),
                             Read = false,
                             Source = "Users",
-                            UserId = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4")
+                            UserId = new Guid("ce55c1d3-c618-40cc-b7b3-1ad4dab6fae6")
                         },
                         new
                         {
-                            Id = new Guid("09d218c6-f2b5-45c9-b423-4e0d748328e1"),
+                            Id = new Guid("9ed1b03b-0a24-4e02-ba46-41eec695eb31"),
                             Create = true,
                             Source = "Roles",
                             Update = true,
-                            UserId = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078")
+                            UserId = new Guid("3eb25eb8-0d70-40be-8caa-101578a5cb76")
                         },
                         new
                         {
-                            Id = new Guid("0cc6e628-3bb1-458e-aa06-8942257cbbcd"),
+                            Id = new Guid("aabf63d0-aa00-4d73-8296-51a91e4f8ccb"),
                             Create = true,
                             Delete = true,
                             Source = "Users",
                             Update = true,
-                            UserId = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078")
+                            UserId = new Guid("3eb25eb8-0d70-40be-8caa-101578a5cb76")
                         });
                 });
 
@@ -583,17 +580,17 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            Id = new Guid("6de4c080-33fa-4aed-bb3e-6d0bbede6208"),
                             Name = "Administrator"
                         },
                         new
                         {
-                            Id = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            Id = new Guid("26890951-57d2-40ca-9b8c-64c72077d04f"),
                             Name = "Szef"
                         },
                         new
                         {
-                            Id = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            Id = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d"),
                             Name = "Pracownik"
                         });
                 });
@@ -645,58 +642,58 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("abc8fccc-314b-423b-b9e6-d782f51430ae"),
+                            Id = new Guid("c20120a8-240e-4337-8cba-14f71ef939ab"),
                             Email = "",
                             FirstName = "admin",
                             LastName = "",
                             Login = "admin",
                             Password = "admin",
                             PhoneNumber = "",
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567")
+                            RoleId = new Guid("6de4c080-33fa-4aed-bb3e-6d0bbede6208")
                         },
                         new
                         {
-                            Id = new Guid("537c41d9-d2b0-4445-8822-12c86a254330"),
+                            Id = new Guid("bbc0815c-6328-46d6-8ee3-cb24de01e908"),
                             Email = "k.tumiel@gmail.com",
                             FirstName = "Krzysztof",
                             LastName = "Tumiel",
                             Login = "k.tumiel",
                             Password = "",
                             PhoneNumber = "123 456 789",
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040")
+                            RoleId = new Guid("26890951-57d2-40ca-9b8c-64c72077d04f")
                         },
                         new
                         {
-                            Id = new Guid("ac12db6f-39fb-485e-b075-bd9474f089be"),
+                            Id = new Guid("4a67dd12-d14c-4791-80ed-11fc8ab90797"),
                             Email = "j.kowalski@gmail.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
                             Login = "w1",
                             Password = "",
                             PhoneNumber = "+48 321 654 987",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d")
                         },
                         new
                         {
-                            Id = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4"),
+                            Id = new Guid("ce55c1d3-c618-40cc-b7b3-1ad4dab6fae6"),
                             Email = "z.pietka@gmail.com",
                             FirstName = "Zdzisław",
                             LastName = "Piętka",
                             Login = "w2",
                             Password = "",
                             PhoneNumber = "987654321",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d")
                         },
                         new
                         {
-                            Id = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078"),
+                            Id = new Guid("3eb25eb8-0d70-40be-8caa-101578a5cb76"),
                             Email = "m.wioslo@gmail.com",
                             FirstName = "Marek",
                             LastName = "Wiosło",
                             Login = "w3",
                             Password = "",
                             PhoneNumber = "+48 312645978",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("f640d588-6b85-458e-8023-105fd75d9f7d")
                         });
                 });
 
@@ -744,12 +741,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Domain.User", "InspectionPerformer")
-                        .WithMany()
-                        .HasForeignKey("InspectionPerformerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Infrastructure.Models.Domain.InspectionTask", "InspectionTask")
                         .WithMany("InspectionProtocols")
                         .HasForeignKey("InspectionTaskId")
@@ -758,12 +749,9 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Models.Domain.Resident", "Resident")
                         .WithMany()
                         .HasForeignKey("ResidentId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("InspectedProperty");
-
-                    b.Navigation("InspectionPerformer");
 
                     b.Navigation("InspectionTask");
 
@@ -775,8 +763,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Models.Domain.Building", "Building")
                         .WithMany()
                         .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Infrastructure.Models.Domain.User", "TaskDelegator")
                         .WithMany()

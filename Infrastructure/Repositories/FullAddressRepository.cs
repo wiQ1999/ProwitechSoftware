@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
-    internal class FullAddressRepository : IFullAddressRepository
+    public class FullAddressRepository : IFullAddressRepository
     {
         private readonly ProwitechDbContext _dbContext;
         public FullAddressRepository(ProwitechDbContext prowitechDbContext)
