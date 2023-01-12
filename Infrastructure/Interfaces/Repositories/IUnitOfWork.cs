@@ -6,6 +6,7 @@ public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<Role> RolesRepository { get; }
     IGenericRepository<User> UsersRepository { get; }
+    IGenericRepository<Permission> PermissionsRepository { get; }
 
     Task SaveChangesAsync();
 }
