@@ -26,7 +26,7 @@ public class UniteOfWork : IUnitOfWork
         _context = context;
     }
 
-    public async Task SaveChangesAsync()
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
         => await _context.SaveChangesAsync();
 
     public void Dispose()

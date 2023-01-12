@@ -17,7 +17,7 @@ public class DeleteRoleCommandHandler : IRequestHandler<DeleteRoleCommand>
     {
         await _unitOfWork.RolesRepository.DeleteAsync(request.Id, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

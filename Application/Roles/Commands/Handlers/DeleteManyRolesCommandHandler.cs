@@ -18,7 +18,7 @@ public class DeleteManyRolesCommandHandler : IRequestHandler<DeleteManyRolesComm
         foreach (var id in request.Ids)
             await _unitOfWork.RolesRepository.DeleteAsync(id, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

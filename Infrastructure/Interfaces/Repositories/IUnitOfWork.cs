@@ -8,5 +8,5 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<User> UsersRepository { get; }
     IGenericRepository<Permission> PermissionsRepository { get; }
 
-    Task SaveChangesAsync();
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }
