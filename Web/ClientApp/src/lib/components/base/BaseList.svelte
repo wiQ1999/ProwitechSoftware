@@ -91,7 +91,9 @@
 </script>
 
 <br />
-
+<div class="base-list-listName">
+  {listName}
+</div>
 <button
   on:click={onAdd}
   class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] text-white font-semibold flex justify-center"
@@ -113,7 +115,9 @@
     >Usuń zaznaczone</button
   >
 {/if}
-<table class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2">
+<table
+  class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2"
+>
   <tbody class="[&>*:nth-child(even)]:bg-[#dee8f5]">
     <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
       <th class="text-center border-r-2 border-slate-600">
