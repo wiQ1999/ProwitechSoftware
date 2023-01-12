@@ -22,6 +22,9 @@ public class GenericRoleRepository : GenericRepository<Role>
         if (role.Name == null)
             throw new RequiredValueException(AppSource.Roles, nameof(role.Name));
 
+        if (role.Name!.Length > 50)
+            throw new InvalidLengthException(AppSource.Roles, nameof(role.Name), 50);
+
         if (await DbSet.AnyAsync(r => r.Name == role.Name, cancellationToken))
             throw new NotUniqueInDbException(AppSource.Roles, role.Name, nameof(role.Name));
     }
