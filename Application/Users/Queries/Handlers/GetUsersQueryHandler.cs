@@ -5,20 +5,21 @@ using Infrastructure.Interfaces.Repositories;
 using MediatR;
 
 namespace Application.Users.Queries.Handlers;
+
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserDto>>
 {
-    private readonly IUsersRepository _usersRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetUsersQueryHandler(IUsersRepository usersRepository, IMapper mapper)
+    public GetUsersQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _usersRepository = usersRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<IEnumerable<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _usersRepository.GetUsersAsync(cancellationToken);
+        var users = await _unitOfWork.UsersRepository.GetAllAsync(cancellationToken);
 
         return users.Select(u => _mapper.Map<UserDto>(u));
     }

@@ -1,6 +1,7 @@
 ﻿using Application.Roles.DTOs;
 
 namespace Application.Users.DTOs;
+
 public class UserDto
 {
     public Guid Id { get; set; }

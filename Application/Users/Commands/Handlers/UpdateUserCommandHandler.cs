@@ -1,27 +1,24 @@
 ﻿using Application.Users.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
-using Infrastructure.Models.Enums;
-using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
+
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly IRoleRepository _roleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateUserCommandHandler(IUsersRepository usersRepository, IRoleRepository roleRepository)
+    public UpdateUserCommandHandler(IUnitOfWork unitOfWork)
     {
-        _usersRepository = usersRepository;
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetUserByIdAsync(request.Id, cancellationToken);
+        var user = await _unitOfWork.UsersRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (request.RoleId != null)
-            await _roleRepository.GetRoleByIdAsync((Guid)request.RoleId, cancellationToken);
+            await _unitOfWork.RolesRepository.GetByIdAsync((Guid)request.RoleId, cancellationToken);
 
         user.Login = request.Login;
         user.FirstName = request.FirstName;
@@ -30,7 +27,9 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
         user.PhoneNumber = request.PhoneNumber;
         user.RoleId = request.RoleId;
 
-        await _usersRepository.UpdateUserAsync(user, cancellationToken);
+        await _unitOfWork.UsersRepository.UpdateAsync(user, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         
         return Unit.Value;
     }
