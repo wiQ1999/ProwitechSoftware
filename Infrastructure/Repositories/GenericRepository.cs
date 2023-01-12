@@ -7,26 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+public class GenericRepository<TEntity> : IGenericRepository<TEntity>  where TEntity : BaseEntity
 {
     internal ProwitechDbContext Context;
     internal DbSet<TEntity> DbSet;
+    internal AppSource Source;
 
-    public GenericRepository(ProwitechDbContext context)
+    public GenericRepository(ProwitechDbContext context, AppSource source)
     {
         Context = context;
         DbSet = context.Set<TEntity>();
+        Source = source;
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
         => await DbSet.ToArrayAsync(cancellationToken);
 
     public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        => await TryGetByIdAsync(id, cancellationToken);
-
-    private async Task<TEntity> TryGetByIdAsync(Guid id, CancellationToken cancellationToken)
         => (await DbSet.FindAsync(new object[] { id }, cancellationToken)) ??
-            throw new NotFoundInDbExcption(AppSource.Roles, id);
+            throw new NotFoundInDbExcption(Source, id);
 
     public virtual async Task<Guid> CreateAsync(TEntity entity, CancellationToken cancellationToken)
     {
@@ -37,7 +36,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
-        await TryGetByIdAsync(entity.Id, cancellationToken);
+        await GetByIdAsync(entity.Id, cancellationToken);
 
         if (Context.Entry(entity).State == EntityState.Detached)
             DbSet.Attach(entity);
@@ -47,7 +46,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        TEntity entity = await TryGetByIdAsync(id, cancellationToken);
+        TEntity entity = await GetByIdAsync(id, cancellationToken);
 
         if (Context.Entry(entity).State == EntityState.Detached)
             DbSet.Attach(entity);
