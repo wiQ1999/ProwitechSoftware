@@ -25,8 +25,6 @@ namespace Infrastructure.Repositories
             var building = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == inspectionTask.BuildingId);
             if (building == null)
                 throw new Exception($"Nie mozna utworzyć Zadania: podane Id Budynku nie istnieje");
-            if (await _dbContext.InspectionTasks.AnyAsync(t => t.BuildingId == inspectionTask.BuildingId))
-                throw new Exception($"Nie mozna utworzyć Zadania: Istnieje Zadanie dla wybranego Budynku");
             var delegator = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == inspectionTask.TaskDelegatorId);
             if (delegator == null)
                 throw new Exception($"Nie mozna utworzyć Zadania: Nie istnieje Zlecający Zadanie o podanym Id");
@@ -83,9 +81,10 @@ namespace Infrastructure.Repositories
                 FirstOrDefaultAsync(it => it.Id == id);
         }
 
-        public Task UpdateAsync(InspectionTask inspectionTask, CancellationToken cancellationToken)
+        public async Task UpdateAsync(InspectionTask inspectionTask, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(inspectionTask).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         //public async Task<IEnumerable<FullAddress>> GetAllAsync(CancellationToken cancellationToken)

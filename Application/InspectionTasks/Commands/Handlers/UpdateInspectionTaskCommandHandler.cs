@@ -37,7 +37,7 @@ namespace Application.InspectionTasks.Commands.Handlers
             taskFromDB.BuildingId = request.BuildingId;
             taskFromDB.TaskDelegatorId = request.TaskDelegatorId;
             taskFromDB.TaskPerformerId = request.TaskPerformerId;
-            taskFromDB.Status = request.Status;
+            taskFromDB.Status = request.Status.ToUpper();
             if(request.DueStartDateTime!=null)
                 taskFromDB.DueStartDateTime = request.DueStartDateTime;
             if(request.StartDateTime!=null)
