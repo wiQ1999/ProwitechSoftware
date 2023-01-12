@@ -91,7 +91,9 @@
 </script>
 
 <br />
-
+<div class="absolute ml-[2.5%] opacity-30 z-[-1] text-black text-[40px]">
+  {listName}
+</div>
 <button
   on:click={onAdd}
   class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] text-white font-semibold flex justify-center"
