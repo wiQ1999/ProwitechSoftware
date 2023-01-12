@@ -19,6 +19,9 @@ public class GenericRoleRepository : GenericRepository<Role>
 
     private async Task ThrowIfNotValid(Role role, CancellationToken cancellationToken)
     {
+        if (role.Name == null)
+            throw new RequiredValueException(AppSource.Roles, nameof(role.Name));
+
         if (await DbSet.AnyAsync(r => r.Name == role.Name, cancellationToken))
             throw new NotUniqueInDbException(AppSource.Roles, role.Name, nameof(role.Name));
     }
