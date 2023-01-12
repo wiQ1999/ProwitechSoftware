@@ -6,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRoleRepository : GenericRepository<Role>
+public class GenericRolesRepository : GenericRepository<Role>
 {
-    public GenericRoleRepository(ProwitechDbContext dbContext) : base(dbContext)
+    public GenericRolesRepository(ProwitechDbContext dbContext) 
+        : base(dbContext, AppSource.Roles)
     { }
 
     public override async Task<Guid> CreateAsync(Role role, CancellationToken cancellationToken)
@@ -20,13 +21,13 @@ public class GenericRoleRepository : GenericRepository<Role>
     private async Task ThrowIfNotValid(Role role, CancellationToken cancellationToken)
     {
         if (role.Name == null)
-            throw new RequiredValueException(AppSource.Roles, nameof(role.Name));
+            throw new RequiredValueException(Source, nameof(role.Name));
 
         if (role.Name!.Length > 50)
-            throw new InvalidLengthException(AppSource.Roles, nameof(role.Name), 50);
+            throw new InvalidLengthException(Source, nameof(role.Name), 50);
 
         if (await DbSet.AnyAsync(r => r.Name == role.Name, cancellationToken))
-            throw new NotUniqueInDbException(AppSource.Roles, role.Name, nameof(role.Name));
+            throw new NotUniqueInDbException(Source, role.Name, nameof(role.Name));
     }
 
     public override async Task UpdateAsync(Role role, CancellationToken cancellationToken)
