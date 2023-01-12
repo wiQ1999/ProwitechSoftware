@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Application.Roles.Commands.Requests;
+﻿namespace Application.Roles.Commands.Requests;
 
 public record BaseRoleDataCommand
 {
