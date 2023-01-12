@@ -6,12 +6,20 @@ namespace Infrastructure.Repositories;
 
 public class UniteOfWork : IUnitOfWork
 {
-    private ProwitechDbContext _context;
+    private readonly ProwitechDbContext _context;
     private IGenericRepository<Role>? _rolesRepository;
+    private IGenericRepository<User>? _usersRepository;
+    private IGenericRepository<Permission>? _permissionsRepository;
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
-        => _rolesRepository ??= new GenericRoleRepository(_context);
+        => _rolesRepository ??= new GenericRolesRepository(_context);
+
+    public IGenericRepository<User> UsersRepository 
+        => _usersRepository ??= new GenericUsersRepository(_context);
+
+    public IGenericRepository<Permission> PermissionsRepository
+        => _permissionsRepository ??= new GenericPermissionsRepository(_context);
 
     public UniteOfWork(ProwitechDbContext context)
     {
