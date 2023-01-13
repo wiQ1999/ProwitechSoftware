@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Buildings.Commands.Requests
+namespace Application.InspectionTasks.Commands.Requests
 {
-    public record DeleteBuildingCommand:IRequest
+    public record DeleteInspectionTaskCommand:IRequest
     {
         [Required]
         public Guid Id { get; set; }
