@@ -3,7 +3,7 @@
 public class PermissionCountException : Exception
 {
 	public PermissionCountException()
-		: base("Ilość uprawnień niezgadza się z dostępnymi zasobami")
+		: base("Ilość uprawnień niezgadza się z dostępnymi zasobami.")
 	{ }
 
 	public PermissionCountException(string message)
