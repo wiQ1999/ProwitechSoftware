@@ -21,13 +21,13 @@ namespace Web.Controllers
         //    Ok(await Mediator.Send(new GetInspectionTaskByIdQuery() { Id = id }));
 
 
-        //[HttpPut("{id:Guid}")]
-        //public async Task<IActionResult> Update(Guid id, UpdateInspectionTaskCommand command)
-        //{
-        //    if (id != command.Id)
-        //        return BadRequest();
-        //    return Ok(await Mediator.Send(command));
-        //}
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateRealPropertyCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+            return Ok(await Mediator.Send(command));
+        }
 
         //[HttpDelete("{id:Guid}")]
         //public async Task<IActionResult> Delete(Guid id) =>

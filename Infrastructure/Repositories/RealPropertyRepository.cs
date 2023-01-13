@@ -29,7 +29,6 @@ namespace Infrastructure.Repositories
                 _dbContext.PropertyAddresses.Remove(property.PropertyAddress);
                 await _dbContext.SaveChangesAsync(cancellationToken);
                 throw new Exception($"W bazie danych istnieje już podana Nieruchomość!");
-
             }
                 
             await _dbContext.AddAsync(property, cancellationToken);
@@ -53,7 +52,11 @@ namespace Infrastructure.Repositories
 
         public async Task<RealProperty?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.RealProperties.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            return await _dbContext.RealProperties.
+                Include(rp=>rp.PropertyAddress).
+                Include(rp=>rp.Building).
+                    ThenInclude(b=>b.BuildingAddress).
+                FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(RealProperty property, CancellationToken cancellationToken)
