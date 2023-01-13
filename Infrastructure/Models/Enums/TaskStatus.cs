@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Enums
 {
-    public enum TaskStatus
+    public enum InspectionTaskStatus
     {
         NEW = 0,
         IN_PROGRESS= 1,

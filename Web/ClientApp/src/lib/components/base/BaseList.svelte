@@ -115,7 +115,9 @@
     >Usuń zaznaczone</button
   >
 {/if}
-<table class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2">
+<table
+  class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2"
+>
   <tbody class="[&>*:nth-child(even)]:bg-[#dee8f5]">
     <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
       <th class="text-center border-r-2 border-slate-600">

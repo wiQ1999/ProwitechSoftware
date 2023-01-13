@@ -36,7 +36,7 @@ namespace Web.Controllers
         }
         
         [HttpDelete("{id:Guid}")]
-        public async Task<IActionResult> Detele(Guid id) =>
+        public async Task<IActionResult> Delete(Guid id) =>
             Ok(await Mediator.Send(new DeleteBuildingCommand
             {
                 Id = id

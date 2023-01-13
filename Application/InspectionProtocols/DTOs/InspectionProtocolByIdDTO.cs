@@ -1,31 +1,30 @@
-﻿using System;
+﻿using Application.InspectionTasks.DTOs;
+using Application.Properties.DTOs;
+using Infrastructure.Models.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Models.Domain
+namespace Application.InspectionProtocols.DTOs
 {
-    public class InspectionProtocol
+    public class InspectionProtocolByIdDTO
     {
         public Guid Id { get; set; }
         public string Number { get; set; }
-        public Guid? InspectionTaskId { get; set; }
-        public InspectionTask? InspectionTask { get; set; }
-        public DateTime InspectionDateTime { get; set; }
-        public Guid InspectedPropertyId { get; set; }
-        public Guid InspectionPerformerId { get; set; }
         public User InspectionPerformer { get; set; }
-        public Property InspectedProperty { get; set; }
-        public Guid ResidentId { get; set; }
-        public Resident Resident { get; set; }
+        public AllInspectionTasksDTO? InspectionTaskDTO { get; set; }
+        public DateTime InspectionDateTime { get; set; }
+        public AllPropertiesDTO InspectedProperty { get; set; }
+        public Resident? Resident { get; set; }
         public string A_Gazomierz_umiejscowienie { get; set; }
-        public string A_Gazomierz_szafka_wentylowana{ get; set; }
-        public string A_Gazomierz_szczelnosc{ get; set; }
+        public string A_Gazomierz_szafka_wentylowana { get; set; }
+        public string A_Gazomierz_szczelnosc { get; set; }
         public string A_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika { get; set; }
         public string A_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr { get; set; }
         public string A_Gazomierz_kurek_przed_gazomierzem { get; set; }
-        
+
         public string A_M_Przewody_rodzaj { get; set; }
         public string A_M_Przewody_przebieg { get; set; }
         public string A_M_Przewody_sposob_prowadzenia { get; set; }
@@ -59,8 +58,5 @@ namespace Infrastructure.Models.Domain
         public bool A_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci { get; set; }
         public bool A_Propan_butan { get; set; }
         public string A_Inne_uwagi { get; set; }
-
-
-
     }
 }
