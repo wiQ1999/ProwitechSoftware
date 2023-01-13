@@ -16,9 +16,9 @@ namespace Application.Buildings.Queries.Handlers
     {
         private readonly IBuildingRepository _buildingRepository;
         private readonly IMapper _mapper;
-        private readonly IPropertyRepository _propertyRepository;
+        private readonly IRealPropertyRepository _propertyRepository;
 
-        public GetBuildingByIdQueryHandler(IBuildingRepository buildingRepository, IMapper mapper, IPropertyRepository propertyRepository)
+        public GetBuildingByIdQueryHandler(IBuildingRepository buildingRepository, IMapper mapper, IRealPropertyRepository propertyRepository)
         {
             _buildingRepository = buildingRepository;
             _mapper = mapper;

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application.Properties.Helpers
 {
-    public class PropertyChanger
+    public class RealPropertyHelper
     {
-        private readonly IPropertyRepository _propertyRepository;
+        private readonly IRealPropertyRepository _propertyRepository;
         private readonly IPropertyAddressRepository _propertyAddressRepository;
 
-        public PropertyChanger(IPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
+        public RealPropertyHelper(IRealPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
         {
             _propertyRepository = propertyRepository;
             _propertyAddressRepository = propertyAddressRepository;
@@ -38,7 +38,7 @@ namespace Application.Properties.Helpers
                 PropertyAddress propertyAddress = new PropertyAddress();
                 var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
 
-                Property property = new Property()
+                RealProperty property = new RealProperty()
                 {
                     BuildingId = buildingFromDB.Id,
                     PropertyAddressId = propertyAddressId

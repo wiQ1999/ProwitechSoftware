@@ -18,9 +18,9 @@ namespace Application.Buildings.Commands.Handlers
         private readonly IPropertyManagerRepository _propertyManagerRepository;
         private readonly IBuildingRepository _buildingRepository;
         private readonly IPropertyAddressRepository _propertyAddressRepository;
-        private readonly IPropertyRepository _propertyRepository;
+        private readonly IRealPropertyRepository _propertyRepository;
 
-        public CreateBuildingCommandHandler(IBuildingAddressRepository buildingAddressRepository, IPropertyManagerRepository propertyManagerRepository, IBuildingRepository buildingRepository, IPropertyAddressRepository propertyAddressRepository, IPropertyRepository propertyRepository)
+        public CreateBuildingCommandHandler(IBuildingAddressRepository buildingAddressRepository, IPropertyManagerRepository propertyManagerRepository, IBuildingRepository buildingRepository, IPropertyAddressRepository propertyAddressRepository, IRealPropertyRepository propertyRepository)
         {
             _buildingAddressRepository = buildingAddressRepository;
             _propertyManagerRepository = propertyManagerRepository;
@@ -66,7 +66,7 @@ namespace Application.Buildings.Commands.Handlers
                 PropertyAddress propertyAddress = new PropertyAddress();
                 var propertyAddressId= await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
 
-                Property property = new Property()
+                RealProperty property = new RealProperty()
                 {
                     BuildingId = buildingId,
                     PropertyAddressId = propertyAddressId

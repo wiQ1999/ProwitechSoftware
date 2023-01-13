@@ -1,5 +1,5 @@
 ﻿using Application.InspectionTasks.DTOs;
-using Application.Properties.DTOs;
+using Application.RealProperties.DTOs;
 using Infrastructure.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Application.InspectionProtocols.DTOs
         public User InspectionPerformer { get; set; }
         public AllInspectionTasksDTO? InspectionTaskDTO { get; set; }
         public DateTime InspectionDateTime { get; set; }
-        public AllPropertiesDTO InspectedProperty { get; set; }
+        public AllRealPropertiesDTO InspectedProperty { get; set; }
         public Resident? Resident { get; set; }
         public string A_Gazomierz_umiejscowienie { get; set; }
         public string A_Gazomierz_szafka_wentylowana { get; set; }

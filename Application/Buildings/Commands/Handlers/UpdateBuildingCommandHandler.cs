@@ -15,10 +15,10 @@ namespace Application.Buildings.Commands.Handlers
     {
         private readonly IBuildingRepository _buildingRepository;
         private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IPropertyRepository _propertyRepository;
+        private readonly IRealPropertyRepository _propertyRepository;
         private readonly IPropertyAddressRepository _propertyAddressRepository;
 
-        public UpdateBuildingCommandHandler(IBuildingRepository buildingRepository, IPropertyManagerRepository propertyManagerRepository, IPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
+        public UpdateBuildingCommandHandler(IBuildingRepository buildingRepository, IPropertyManagerRepository propertyManagerRepository, IRealPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
         {
             _buildingRepository = buildingRepository;
             _propertyManagerRepository = propertyManagerRepository;
@@ -54,7 +54,7 @@ namespace Application.Buildings.Commands.Handlers
             }
             //TODO IF BUILDINGTYPE==JEDNOLOKALOWY && PROPERTY MA PRZYPISANY RAPORT - NIE WOLNO JUŻ NIC ZMIENIĆ
             // NAJPIERW TRZEBA USUNĄĆ RAPORT
-            PropertyChanger propertyChanger = new PropertyChanger(_propertyRepository, _propertyAddressRepository);
+            RealPropertyHelper propertyChanger = new RealPropertyHelper(_propertyRepository, _propertyAddressRepository);
             await propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
 
             bFromDB.Type = request.Type;

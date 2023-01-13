@@ -1,5 +1,5 @@
 ﻿using Application.InspectionTasks.DTOs;
-using Application.Properties.DTOs;
+using Application.RealProperties.DTOs;
 using Infrastructure.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Application.InspectionProtocols.DTOs
         public Guid Id { get; set; }
         public string Number { get; set; }
         public DateTime InspectionDateTime { get; set; }
-        public AllPropertiesDTO InspectedPropertyDTO { get; set; }
+        public AllRealPropertiesDTO InspectedPropertyDTO { get; set; }
         public Resident? Resident { get; set; }
     }
 }

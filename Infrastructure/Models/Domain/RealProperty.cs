@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Domain
 {
-    public class Property
+    public class RealProperty
     {
         public Guid Id { get; set; }
         public Guid BuildingId { get; set; }
