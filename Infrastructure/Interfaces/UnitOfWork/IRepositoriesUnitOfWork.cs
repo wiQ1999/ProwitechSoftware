@@ -7,7 +7,7 @@ namespace Infrastructure.Interfaces.UnitOfWork;
 public interface IRepositoriesUnitOfWork : IDisposable
 {
     IGenericRepository<Role> RolesRepository { get; }
-    IGenericRepository<User> UsersRepository { get; }
+    IUsersRepository UsersRepository { get; }
     IPermissionsRepository PermissionsRepository { get; }
 
     Task SaveChangesAsync(CancellationToken cancellationToken);

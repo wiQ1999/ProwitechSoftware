@@ -10,14 +10,14 @@ public class UniteOfWork : IRepositoriesUnitOfWork
 {
     private readonly ProwitechDbContext _context;
     private IGenericRepository<Role>? _rolesRepository;
-    private IGenericRepository<User>? _usersRepository;
+    private IUsersRepository? _usersRepository;
     private IPermissionsRepository? _permissionsRepository;
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
         => _rolesRepository ??= new GenericRolesRepository(_context);
 
-    public IGenericRepository<User> UsersRepository 
+    public IUsersRepository UsersRepository 
         => _usersRepository ??= new GenericUsersRepository(_context);
 
     public IPermissionsRepository PermissionsRepository
