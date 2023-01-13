@@ -1,6 +1,7 @@
 ﻿using Application.InspectionTasks.Commands.Requests;
 using Application.InspectionTasks.Helpers;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,14 @@ namespace Application.InspectionTasks.Commands.Handlers
 {
     public class UpdateInspectionTaskCommandHandler : IRequestHandler<UpdateInspectionTaskCommand>
     {
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IInspectionTaskRepository _inspectionTaskRepository;
         private readonly IBuildingRepository _buildingRepository;
         private readonly IUsersRepository _usersRepository;
 
-        public UpdateInspectionTaskCommandHandler(IInspectionTaskRepository inspectionTaskRepository, IBuildingRepository buildingRepository, IUsersRepository usersRepository)
+        public UpdateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork, IInspectionTaskRepository inspectionTaskRepository, IBuildingRepository buildingRepository, IUsersRepository usersRepository)
         {
+            _unitOfWork = unitOfWork;
             _inspectionTaskRepository = inspectionTaskRepository;
             _buildingRepository = buildingRepository;
             _usersRepository = usersRepository;
@@ -55,10 +58,10 @@ namespace Application.InspectionTasks.Commands.Handlers
             var building = await _buildingRepository.GetAsync(request.BuildingId, cancellationToken);
             if (building == null)
                 throw new Exception($"Nie można edytować Zadania: podane Id Budynku nie istnieje");
-            var delegator = await _usersRepository.GetUserByIdAsync(request.TaskDelegatorId, cancellationToken);
+            var delegator = await _unitOfWork.UsersRepository.GetByIdAsync(request.TaskDelegatorId, cancellationToken);
             if (delegator == null)
                 throw new Exception($"Nie można edytować Zadania: Nie istnieje Zlecający Zadanie o podanym Id");
-            var performer = await _usersRepository.GetUserByIdAsync(request.TaskPerformerId, cancellationToken);
+            var performer = await _unitOfWork.UsersRepository.GetByIdAsync(request.TaskPerformerId, cancellationToken);
             if (performer == null)
                 throw new Exception($"Nie można edytować Zadania: Nie istnieje Wykonujący Zadanie o podanym Id");
 
