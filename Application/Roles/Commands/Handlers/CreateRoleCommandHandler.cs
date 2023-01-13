@@ -1,5 +1,5 @@
 ﻿using Application.Roles.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 
@@ -7,9 +7,9 @@ namespace Application.Roles.Commands.Handlers;
 
 public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public CreateRoleCommandHandler(IUnitOfWork unitOfWork)
+    public CreateRoleCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

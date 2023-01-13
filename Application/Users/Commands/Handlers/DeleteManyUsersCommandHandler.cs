@@ -1,14 +1,14 @@
 ﻿using Application.Users.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
-namespace Application.Roles.Commands.Handlers;
+namespace Application.Users.Commands.Handlers;
 
 public class DeleteManyUsersCommandHandler : IRequestHandler<DeleteManyUsersCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public DeleteManyUsersCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteManyUsersCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

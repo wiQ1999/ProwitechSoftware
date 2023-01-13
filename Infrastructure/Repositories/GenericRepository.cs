@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Database;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.Repositories.Generics;
 using Infrastructure.Models.Common;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;

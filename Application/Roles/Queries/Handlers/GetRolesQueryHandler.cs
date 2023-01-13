@@ -1,7 +1,7 @@
 ﻿using Application.Roles.DTOs;
 using Application.Roles.Queries.Requests;
 using AutoMapper;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Roles.Queries.Handlers;
@@ -9,11 +9,11 @@ namespace Application.Roles.Queries.Handlers;
 public class GetRolesQueryHandler 
     : IRequestHandler<GetRolesQuery, IEnumerable<RoleDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public GetRolesQueryHandler(
-        IUnitOfWork unitOfWork, IMapper mapper)
+        IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;

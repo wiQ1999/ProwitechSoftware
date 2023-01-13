@@ -1,5 +1,5 @@
 ﻿using Application.Users.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 
@@ -7,9 +7,9 @@ namespace Application.Users.Commands.Handlers;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public CreateUserCommandHandler(IUnitOfWork unitOfWork)
+    public CreateUserCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

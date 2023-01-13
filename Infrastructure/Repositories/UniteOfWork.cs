@@ -1,10 +1,11 @@
 ﻿using Infrastructure.Database;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.Repositories.Generics;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 
 namespace Infrastructure.Repositories;
 
-public class UniteOfWork : IUnitOfWork
+public class UniteOfWork : IRepositoriesUnitOfWork
 {
     private readonly ProwitechDbContext _context;
     private IGenericRepository<Role>? _rolesRepository;

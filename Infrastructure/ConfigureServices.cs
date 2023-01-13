@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +16,7 @@ public static class ConfigureServices
         services.AddDbContext<ProwitechDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("ProwitechConnection")));
        
-        services.AddScoped<IUnitOfWork, UniteOfWork>();
+        services.AddScoped<IRepositoriesUnitOfWork, UniteOfWork>();
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionsRepository, PermissionRepository>();

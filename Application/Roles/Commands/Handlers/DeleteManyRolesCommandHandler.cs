@@ -1,14 +1,14 @@
 ﻿using Application.Roles.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
 
 public class DeleteManyRolesCommandHandler : IRequestHandler<DeleteManyRolesCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public DeleteManyRolesCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteManyRolesCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

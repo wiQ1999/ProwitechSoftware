@@ -1,14 +1,14 @@
 ﻿using Application.Users.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
 
 public class ChangeUserPasswordCommandHandler : IRequestHandler<ChangeUserPasswordCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public ChangeUserPasswordCommandHandler(IUnitOfWork unitOfWork)
+    public ChangeUserPasswordCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

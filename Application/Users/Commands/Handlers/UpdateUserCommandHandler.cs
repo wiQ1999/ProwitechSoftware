@@ -1,14 +1,14 @@
 ﻿using Application.Users.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Users.Commands.Handlers;
 
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public UpdateUserCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateUserCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

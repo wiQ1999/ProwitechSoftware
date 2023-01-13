@@ -1,14 +1,14 @@
 ﻿using Application.Roles.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
 
 public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public UpdateRoleCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateRoleCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
