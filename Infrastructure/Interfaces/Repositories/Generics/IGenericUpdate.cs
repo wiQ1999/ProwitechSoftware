@@ -2,5 +2,5 @@
 
 public interface IGenericUpdate<TEntity> where TEntity : class
 {
-    Task UpdateAsync(TEntity entityToUpdate, CancellationToken cancellationToken);
+    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
 }
