@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Infrastructure.Interfaces.Repositories
         Task<Guid> AddAsync(InspectionTask inspectionTask, CancellationToken cancellationToken);
         Task UpdateAsync(InspectionTask inspectionTask, CancellationToken cancellationToken);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<InspectionTask>> GetTasksOfParticularPerformer(Guid userId, CancellationToken cancellationToken);
+        Task<IEnumerable<InspectionTask>> GetTasksOfParticularPerformerWithParticularStatus(Guid userId, string status, CancellationToken cancellationToken);
     }
 }

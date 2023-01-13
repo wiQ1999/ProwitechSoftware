@@ -87,46 +87,36 @@ namespace Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        //public async Task<IEnumerable<FullAddress>> GetAllAsync(CancellationToken cancellationToken)
-        //{
-        //    return await _dbContext.FullAddresses
-        //        .Include(fa => fa.BuildingAddress)
-        //        .Include(fa => fa.PropertyAddress)
-        //        .ToArrayAsync(cancellationToken);
-        //}
+        public async Task<IEnumerable<InspectionTask>> GetTasksOfParticularPerformer(Guid userId, CancellationToken cancellationToken)
+        {
+            if(await _dbContext.Users.FirstOrDefaultAsync(u=>u.Id==userId)==null)
+                throw new Exception($"Nie można pobrać zadań wybranego użytkownika: Użytkownik o podanym ID nie istnieje");
+            return await _dbContext.InspectionTasks.
+                Include(it => it.TaskDelegator).
+                Include(it => it.TaskPerformer).
+                Include(it => it.Building).
+                    ThenInclude(b => b.BuildingAddress).
+                Include(it => it.Building).
+                    ThenInclude(b => b.PropertyManager).
+                Where(it => it.TaskPerformerId == userId).ToArrayAsync(cancellationToken);
+        }
 
-        //public async Task<FullAddress?> GetAsync(Guid id, CancellationToken cancellationToken)
-        //{
-        //    return await _dbContext.FullAddresses
-        //        .Include(fa => fa.BuildingAddress)
-        //        .Include(fa => fa.PropertyAddress)
-        //        .FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
-        //}
+        public async Task<IEnumerable<InspectionTask>> GetTasksOfParticularPerformerWithParticularStatus(Guid userId, string status, CancellationToken cancellationToken)
+        {
+            if (await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId) == null)
+                throw new Exception($"Nie można pobrać zadań wybranego użytkownika o statusie {status}: Użytkownik o podanym ID nie istnieje");
+            return await _dbContext.InspectionTasks.
+                Include(it => it.TaskDelegator).
+                Include(it => it.TaskPerformer).
+                Include(it => it.Building).
+                    ThenInclude(b => b.BuildingAddress).
+                Include(it => it.Building).
+                    ThenInclude(b => b.PropertyManager).
+                Where
+                (it => it.TaskPerformerId == userId 
+                && it.Status==status.ToUpper()).ToArrayAsync(cancellationToken);
+        }
 
-        //public async Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)
-        //{
-        //    _dbContext.Entry(address).State = EntityState.Modified;
-        //    await _dbContext.SaveChangesAsync(cancellationToken);
-        //}
-
-        //public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
-        //{
-
-        //    FullAddress? fullAddress = await _dbContext.FullAddresses.
-        //        FirstOrDefaultAsync(fa => fa.Id == id, cancellationToken);
-        //    if (fullAddress == null)
-        //        throw new Exception($"Brak Adresu o identyfikatorze {id}");
-        //    if (fullAddress.PropertyAddress != null)
-        //    {
-        //        _dbContext.PropertyAddresses.Remove(fullAddress.PropertyAddress);
-        //    }
-        //    if (fullAddress.BuildingAddress != null)
-        //    {
-        //        _dbContext.BuildingAddresses.Remove(fullAddress.BuildingAddress);
-        //    }
-
-        //    _dbContext.FullAddresses.Remove(fullAddress);
-        //    await _dbContext.SaveChangesAsync(cancellationToken);
-        //}
+        
     }
 }

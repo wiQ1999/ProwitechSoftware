@@ -10,20 +10,20 @@ public class SourcePermissionsAttribute : TypeFilterAttribute
     private readonly IClaimProvider _claimProvider = new ClaimProvider();
 
     public SourcePermissionsAttribute(
-        AppSource source, PermissionProperty permissionProeprty)
+        AppSource source, PermissionProperty permissionProperty)
         : base(typeof(SourcePermissionsFilter))
     {
         Arguments = new object[]
         {
-            _claimProvider.CreateClaim(source, permissionProeprty)
+            _claimProvider.CreateClaim(source, permissionProperty)
         };
     }
 
     public SourcePermissionsAttribute(
-        AppSource source, params PermissionProperty[] permissionProeprties)
+        AppSource source, params PermissionProperty[] permissionProperties)
         : base(typeof(SourcePermissionsFilter))
     {
-        var claims = permissionProeprties.Select(pp
+        var claims = permissionProperties.Select(pp
             => _claimProvider.CreateClaim(source, pp));
 
         Arguments = claims.ToArray<object>();

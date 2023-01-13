@@ -28,7 +28,6 @@ namespace Application.InspectionTasks.Queries.Handlers
             var iT=await _inspectionTaskRepository.GetAsync(request.Id, cancellationToken);
             var mapped= _mapper.Map<InspectionTaskByIdDTO>(iT);
             return mapped;
-            return _mapper.Map<InspectionTaskByIdDTO>(iT);
         }
     }
 }

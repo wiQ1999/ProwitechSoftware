@@ -3,6 +3,7 @@ using Application.Buildings.Queries.Requests;
 using Application.InspectionTasks.Commands.Requests;
 using Application.InspectionTasks.Queries.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Web.Authorization;
 
 namespace Web.Controllers
 {
@@ -36,6 +37,19 @@ namespace Web.Controllers
             {
                 Id = id
             }));
+        [HttpGet("performerTasks/{id:Guid}")]
+        public async Task<IActionResult> GetInspectionTasksOfParticularPerformer(Guid id) =>
+            Ok(await Mediator.Send(new GetInspectionTasksOfParticularPerformerQuery() { Id = id }));
+
+        [HttpGet("performerTasks/{id:Guid}/status/{status}")]
+        public async Task<IActionResult> GetInspectionTasksOfParticularPerformerAndStatus(Guid id, string status) =>
+            Ok(await Mediator.Send(
+                new GetInspectionTasksOfParticularPerformerAndStatusQuery()
+                {
+                    Id = id,
+                    Status = status
+                }
+                ));
 
     }
 }
