@@ -7,6 +7,7 @@ using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 
 namespace Application.Permissions.Profiles;
+
 public class TranslatedNullablePermissionProfile : Profile
 {
 	public TranslatedNullablePermissionProfile()

@@ -1,4 +1,5 @@
 ﻿namespace Application.Permissions.DTOs;
+
 public class TranslatedNullablePermissionDto
 {
     public string Source { get; set; } = default!;
