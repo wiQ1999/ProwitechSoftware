@@ -7,58 +7,44 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Infrastructure.Repositories;
-public class PermissionRepository : IPermissionsRepository
+
+public class PermissionRepository : GenericRepository<Permission>, IPermissionsRepository
 {
-    private readonly ProwitechDbContext _dbContext;
-
     public PermissionRepository(ProwitechDbContext dbContext)
+        : base(dbContext, AppSource.Permissions)
+    { }
+
+    public async Task<IEnumerable<Permission>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken)
+        => await DbSet.Where(p => p.RoleId == roleId).ToArrayAsync(cancellationToken);
+
+    public async Task<IEnumerable<Permission>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        => await DbSet.Where(p => p.UserId == userId).ToArrayAsync(cancellationToken);
+
+    public override async Task<Guid> CreateAsync(Permission permission, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
+        await ThrowIfNotValid(permission, cancellationToken);
+        return await base.CreateAsync(permission, cancellationToken);
     }
 
-    public async Task<IEnumerable<Permission>> GetRolePermissionsAsync(
-        Guid roleId, CancellationToken cancellationToken)
-        => await _dbContext.Permissions
-        .Where(p => p.RoleId == roleId)
-        .ToArrayAsync(cancellationToken);
-
-    public async Task<IEnumerable<Permission>> GetUserPermissionsAsync(
-        Guid userId, CancellationToken cancellationToken)
-        => await _dbContext.Permissions
-        .Where(p => p.UserId == userId)
-        .ToArrayAsync(cancellationToken);
-
-    public async Task<Guid> CreatePermissionsAsync(
-        Permission permission, CancellationToken cancellation)
+    private async Task ThrowIfNotValid(Permission permission, CancellationToken cancellationToken)
     {
-        if (permission.RoleId == null && permission.UserId == null)
-            throw new PermissionCountException("Uprawnienie musi być przypisane do roli lub użytkownika");
+        bool isHostsNull = permission.RoleId == null && permission.UserId == null;
+        bool isHostsNotNull = permission.RoleId != null && permission.UserId != null;
 
-        await _dbContext.Permissions.AddAsync(permission, cancellation);
-        await _dbContext.SaveChangesAsync(cancellation);
+        if (isHostsNull || isHostsNotNull)
+            throw new RequiredValueException("Uprawnienie musi być przypisane do roli lub użytkownika.");
 
-        return permission.Id;
+        bool isHostSourceNotUnique = await DbSet.AnyAsync(
+            p => p.Source == permission.Source && (p.RoleId == permission.RoleId || p.UserId == permission.UserId),
+            cancellationToken);
+
+        if (isHostSourceNotUnique)
+            throw new NotUniqueInDbException(Source, permission.Id);
     }
 
-    public async Task UpdatePermissionsAsync(
-        Permission permission, CancellationToken cancellationToken)
+    public override async Task UpdateAsync(Permission permission, CancellationToken cancellationToken)
     {
-        await TryGetPermissionsByIdAsync(permission.Id, cancellationToken);
-        _dbContext.Entry(permission).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task<Permission> TryGetPermissionsByIdAsync(
-        Guid id, CancellationToken cancellationToken)
-        => (await _dbContext.Permissions.FirstOrDefaultAsync(p
-            => p.Id == id, cancellationToken)) ??
-                throw new NotFoundInDbExcption(AppSource.Permissions, id);
-
-    public async Task DeletePermissionsAsync(Guid id, CancellationToken cancellationToken)
-    {
-        Permission permission = await TryGetPermissionsByIdAsync(id, cancellationToken);
-        _dbContext.Permissions.Remove(permission);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await ThrowIfNotValid(permission, cancellationToken);
+        await base.UpdateAsync(permission, cancellationToken);
     }
 }
