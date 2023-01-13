@@ -20,14 +20,12 @@ namespace Application.InspectionTasks.Commands.Handlers
         private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IInspectionTaskRepository _inspectionTaskRepository;
         private readonly IBuildingRepository _buildingRepository;
-        private readonly IUsersRepository _usersRepository;
 
-        public UpdateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork, IInspectionTaskRepository inspectionTaskRepository, IBuildingRepository buildingRepository, IUsersRepository usersRepository)
+        public UpdateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork, IInspectionTaskRepository inspectionTaskRepository, IBuildingRepository buildingRepository)
         {
             _unitOfWork = unitOfWork;
             _inspectionTaskRepository = inspectionTaskRepository;
             _buildingRepository = buildingRepository;
-            _usersRepository = usersRepository;
         }
 
         public async Task<Unit> Handle(UpdateInspectionTaskCommand request, CancellationToken cancellationToken)
