@@ -12,10 +12,10 @@ public class GenericUsersRepository : GenericRepository<User>
         : base(dbContext, AppSource.Users)
     { }
 
-    public override async Task<Guid> CreateAsync(User role, CancellationToken cancellationToken)
+    public override async Task<Guid> CreateAsync(User user, CancellationToken cancellationToken)
     {
-        await ThrowIfNotValid(role, cancellationToken);
-        return await base.CreateAsync(role, cancellationToken);
+        await ThrowIfNotValid(user, cancellationToken);
+        return await base.CreateAsync(user, cancellationToken);
     }
 
     private async Task ThrowIfNotValid(User user, CancellationToken cancellationToken)
@@ -48,9 +48,9 @@ public class GenericUsersRepository : GenericRepository<User>
             throw new InvalidLengthException(Source, nameof(user.PhoneNumber), 50);
     }
 
-    public override async Task UpdateAsync(User role, CancellationToken cancellationToken)
+    public override async Task UpdateAsync(User user, CancellationToken cancellationToken)
     {
-        await ThrowIfNotValid(role, cancellationToken);
-        await base.UpdateAsync(role, cancellationToken);
+        await ThrowIfNotValid(user, cancellationToken);
+        await base.UpdateAsync(user, cancellationToken);
     }
 }
