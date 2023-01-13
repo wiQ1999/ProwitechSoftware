@@ -14,30 +14,17 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         : base(dbContext, AppSource.Users)
     { }
 
+    public override async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
+        => await DbSet.Include(u => u.Role).ToArrayAsync(cancellationToken);
+
+    public override async Task<User> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        => await DbSet.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id, cancellationToken) ??
+            throw new NotFoundInDbExcption(Source, id);
+
     public async Task<User?> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
-    {
-        await ThrowIfLoginNotValid(login, password, cancellationToken);
-
-        return await DbSet.FindAsync(new object[] { login, password }, cancellationToken);
-    }
-
-    private async Task ThrowIfLoginNotValid(string login, string password, CancellationToken cancellationToken)
-    {
-        if (login != null)
-            throw new RequiredValueException(Source, nameof(login));
-
-        if (login!.Length > 50)
-            throw new InvalidLengthException(Source, nameof(login), 50);
-
-        if (await DbSet.AnyAsync(u => u.Login == login, cancellationToken))
-            throw new NotUniqueInDbException(Source, login, nameof(login));
-
-        if (password != null)
-            throw new RequiredValueException(Source, nameof(password));
-
-        if (password!.Length > 50)
-            throw new InvalidLengthException(Source, nameof(password), 50);
-    }
+        => await DbSet
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Login == login && u.Password == password, cancellationToken);
 
     public override async Task<Guid> CreateAsync(User user, CancellationToken cancellationToken)
     {
@@ -47,7 +34,20 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
 
     private async Task ThrowIfNotValid(User user, CancellationToken cancellationToken)
     {
-        await ThrowIfLoginNotValid(user.Login, user.Password, cancellationToken);
+        if (string.IsNullOrWhiteSpace(user.Login))
+            throw new RequiredValueException(Source, nameof(user.Login));
+
+        if (user.Login!.Length > 50)
+            throw new InvalidLengthException(Source, nameof(user.Login), 50);
+
+        if (await DbSet.AnyAsync(u => u.Login == user.Login && u.Id != user.Id, cancellationToken))
+            throw new NotUniqueInDbException(Source, user.Login, nameof(user.Login));
+
+        if (string.IsNullOrWhiteSpace(user.Password))
+            throw new RequiredValueException(Source, nameof(user.Password));
+
+        if (user.Password!.Length > 50)
+            throw new InvalidLengthException(Source, nameof(user.Password), 50);
 
         if (user.FirstName != null && user.FirstName.Length > 50)
             throw new InvalidLengthException(Source, nameof(user.FirstName), 50);

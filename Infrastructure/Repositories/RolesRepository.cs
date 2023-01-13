@@ -21,13 +21,13 @@ public class RolesRepository : GenericRepository<Role>
 
     private async Task ThrowIfNotValid(Role role, CancellationToken cancellationToken)
     {
-        if (role.Name == null)
+        if (string.IsNullOrWhiteSpace(role.Name))
             throw new RequiredValueException(Source, nameof(role.Name));
 
         if (role.Name!.Length > 50)
             throw new InvalidLengthException(Source, nameof(role.Name), 50);
 
-        if (await DbSet.AnyAsync(r => r.Name == role.Name, cancellationToken))
+        if (await DbSet.AnyAsync(r => r.Name == role.Name && r.Id != role.Id, cancellationToken))
             throw new NotUniqueInDbException(Source, role.Name, nameof(role.Name));
     }
 
