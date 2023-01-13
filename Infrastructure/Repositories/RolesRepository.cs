@@ -2,13 +2,14 @@
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
+using Infrastructure.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRolesRepository : GenericRepository<Role>
+public class RolesRepository : GenericRepository<Role>
 {
-    public GenericRolesRepository(ProwitechDbContext dbContext) 
+    public RolesRepository(ProwitechDbContext dbContext) 
         : base(dbContext, AppSource.Roles)
     { }
 

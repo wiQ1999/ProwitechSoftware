@@ -3,14 +3,15 @@ using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
+using Infrastructure.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Infrastructure.Repositories;
 
-public class PermissionRepository : GenericRepository<Permission>, IPermissionsRepository
+public class PermissionsRepository : GenericRepository<Permission>, IPermissionsRepository
 {
-    public PermissionRepository(ProwitechDbContext dbContext)
+    public PermissionsRepository(ProwitechDbContext dbContext)
         : base(dbContext, AppSource.Permissions)
     { }
 

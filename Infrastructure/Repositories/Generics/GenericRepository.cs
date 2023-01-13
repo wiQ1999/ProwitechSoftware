@@ -5,9 +5,9 @@ using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.Generics;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity>  where TEntity : BaseEntity
+public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     internal ProwitechDbContext Context;
     internal DbSet<TEntity> DbSet;
@@ -24,7 +24,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>  where TEn
         => await DbSet.ToArrayAsync(cancellationToken);
 
     public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        => (await DbSet.FindAsync(new object[] { id }, cancellationToken)) ??
+        => await DbSet.FindAsync(new object[] { id }, cancellationToken) ??
             throw new NotFoundInDbExcption(Source, id);
 
     public virtual async Task<Guid> CreateAsync(TEntity entity, CancellationToken cancellationToken)

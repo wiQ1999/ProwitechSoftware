@@ -3,13 +3,14 @@ using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
+using Infrastructure.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericUsersRepository : GenericRepository<User>, IUsersRepository
+public class UsersRepository : GenericRepository<User>, IUsersRepository
 {
-    public GenericUsersRepository(ProwitechDbContext dbContext) 
+    public UsersRepository(ProwitechDbContext dbContext) 
         : base(dbContext, AppSource.Users)
     { }
 
