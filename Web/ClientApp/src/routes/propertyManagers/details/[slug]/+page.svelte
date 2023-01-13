@@ -50,6 +50,7 @@
   let showPropertyManagerPopUpMessage;
   //---------------------------------------
   let buildingAddressId;
+  let postalCode = "BRAK";
 
   let buildingAddressChanged;
   let otherPropManagerDataChanged;
@@ -96,10 +97,21 @@
     if (propertyManagerResponse instanceof Response) {
       originalPropertyManagerDTO = await propertyManagerResponse.json();
       updatePropertyManagerDTO = structuredClone(originalPropertyManagerDTO);
+      if (updatePropertyManagerDTO.fullAddress.propertyAddress == null) {
+        updatePropertyManagerDTO.fullAddress.propertyAddress = {
+          venueNumber: "",
+          staircaseNumber: "",
+        };
+      }
+      postalCode =
+        originalPropertyManagerDTO.fullAddress?.buildingAddress?.postalCode;
+      if (postalCode == undefined || postalCode == null || postalCode == "")
+        postalCode = "BRAK";
+
       originalBuildingAddressDTO =
         originalPropertyManagerDTO.fullAddress.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
-
+      console.log(updatePropertyManagerDTO);
       formVisibility = true;
     } else {
       errorDivVisibility = true;
@@ -244,8 +256,12 @@
 </script>
 
 <a href="/propertyManagers/getAll">
-<button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
+
 
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
@@ -285,4 +301,12 @@
   {/if}
 </div>
 
-
+<div class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+  Kod pocztowy Zarządcy Nieruchomości
+  <p class="font-bold">{postalCode}</p>
+  <a href="/propertyManagers/details/{data.id}/postal-code"
+    >
+    <button class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md">Edytuj kod pocztowy</button>
+    </a
+  >
+</div>

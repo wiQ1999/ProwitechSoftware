@@ -2,13 +2,14 @@
 using Application.BuildingAddresses.Commands.Requests;
 using Application.BuildingAddresses.DTOs;
 using Application.BuildingAddresses.Queries.Requests;
+using Application.FullAddresses.Commands.Requests;
 using Application.PropertyManagers.Commands.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
     [Route("[controller]")]
-    public class FullAddressController:ApiControllerBase
+    public class FullAddressController : ApiControllerBase
     {
         //[HttpGet]
         //public async Task<IActionResult> Get() =>
@@ -18,11 +19,10 @@ namespace Web.Controllers
         //public async Task<IActionResult> Get(Guid id) =>
         //    Ok(await Mediator.Send(new GetFullAddressByIdQuery(id)));
 
-        //[HttpPost]
-        //[HttpPost]
-        //public async Task<IActionResult> Create(CreatePropertyManagerCommand command)
-        //{
-        //    return Ok(await Mediator.Send(command));
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateFullAddressCommand command)
+        {
+            return Ok(await Mediator.Send(command));
         }
         //[HttpPut("{id:Guid}")]
         //public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBuildingAddressDTO address, bool? force, bool? onlyAddress)
@@ -44,7 +44,5 @@ namespace Web.Controllers
         //        return BadRequest();
         //    return Ok(await Mediator.Send(command));
         //}
-
     }
-    
-//}
+}

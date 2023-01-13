@@ -33,8 +33,8 @@
 </script>
 
 {#if isOpen}
-  <div role="dialog" class="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center pointer-events-none">
-    <div class="min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between pointer-events-none">
+  <div role="dialog" class="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center bg-black/70">
+    <div class="min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between">
       <h2 class="text-center text-2xl">{title}</h2>
       <p class="text-center mt-4">{message}</p>
       <div class="mt-8 flex justify-end">
@@ -44,3 +44,16 @@
     </div>
   </div>
 {/if}
+
+<!-- {#if isOpen}
+  <div role="dialog" class="modal">
+    <div class="contents">
+      <h2>{title}</h2>
+      <p>{message}</p>
+      <div class="actions">
+        <button on:click={_onOkay}>OK</button>
+        <button on:click={_onCancel}>Anuluj</button>
+      </div>
+    </div>
+  </div>
+{/if} -->

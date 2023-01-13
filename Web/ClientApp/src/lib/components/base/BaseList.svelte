@@ -4,10 +4,13 @@
   export let collection = [];
   export let headerDictionary = {};
   export let tableRowsClassName = "base-list";
+  export let listName = "";
 
   let dispatch = createEventDispatcher();
   let isAllChecked = false;
   let checkCollection = [];
+
+  $: isDeleteSelectedDisabled = checkCollection.every((c) => c === false);
 
   setCheckCollection(isAllChecked);
 
@@ -43,6 +46,7 @@
     changeStyleOfSelectedRows();
     dispatch("listDeleteSelected", { rows });
   }
+
   function changeStyleOfSelectedRows() {
     const rowsElems = Array.from(
       document.getElementsByClassName(tableRowsClassName)
@@ -87,45 +91,77 @@
 </script>
 
 <br />
+<div class="base-list-listName">
+  {listName}
+</div>
+<button
+  on:click={onAdd}
+  class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] text-white font-semibold flex justify-center"
+  >Dodaj</button
+>
 
-
-<button on:click={onAdd} class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] flex justify-center" >Dodaj</button>
-<button on:click={onDeleteSelected} class="mx-auto rounded-sm w-[90%] bg-red-500 border-2 border-b-0 border-slate-600 flex justify-center">Usuń zaznaczone</button>
-<table class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[90%] text-left pl-2">
+{#if isDeleteSelectedDisabled}
+  <button
+    on:click={onDeleteSelected}
+    disabled
+    class="mx-auto rounded-sm w-[95%] bg-gray-300 border-2 border-b-0 border-slate-600 flex justify-center pointer-events-none"
+    >Usuń zaznaczone</button
+  >
+{:else}
+  <button
+    on:click={onDeleteSelected}
+    disabled={isDeleteSelectedDisabled}
+    class="mx-auto rounded-sm w-[95%] bg-red-500 border-2 border-b-0 border-slate-600 flex justify-center"
+    >Usuń zaznaczone</button
+  >
+{/if}
+<table
+  class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2"
+>
   <tbody class="[&>*:nth-child(even)]:bg-[#dee8f5]">
-  <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
-    <th class="text-center border-r-2 border-slate-600">
-      <input
-        type="checkbox"
-        bind:checked={isAllChecked}
-        on:change={setCheckCollection(isAllChecked)}
-      />
-    </th>
-    {#each getHeaderNames() as header}
-      <th class="pl-2">{header}</th>
-    {/each}
-  </tr>
-  {#each collection as row, i}
-    <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
-      <td class="text-center border-r-2 border-slate-600">
+    <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
+      <th class="text-center border-r-2 border-slate-600">
         <input
           type="checkbox"
-          bind:checked={checkCollection[i]}
-          id="{tableRowsClassName}-{row.id}-checkbox"
+          bind:checked={isAllChecked}
+          on:change={setCheckCollection(isAllChecked)}
         />
-      </td>
-      {#each getHeaderProperties() as property}
-        <td class="pl-2">{getDataFrmRow(row, property)}</td>
+      </th>
+      {#each getHeaderNames() as header}
+        <th class="pl-2">{header}</th>
       {/each}
-      <td>
-        <button on:click={onDetail(row)} class="bg-blue-400 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"> Szczegóły </button>
-      </td>
-      <td>
-        <button on:click={onDelete(row, i)} class="bg-red-500 decoration-none text-black text-base py-[1%] m-[5%] rounded-sm justify-center cursor-pointer flex w-[70%] h-[50%]"> Usuń </button>
-      </td>
     </tr>
-  {/each}
-</tbody>
+    {#each collection as row, i}
+      <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
+        <td class="text-center border-r-2 border-slate-600">
+          <input
+            type="checkbox"
+            bind:checked={checkCollection[i]}
+            id="{tableRowsClassName}-{row.id}-checkbox"
+          />
+        </td>
+        {#each getHeaderProperties() as property}
+          <td class="pl-2">{getDataFrmRow(row, property)}</td>
+        {/each}
+        <td>
+          <button
+            on:click={onDetail(row)}
+            class="bg-blue-400 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
+          >
+            Szczegóły
+          </button>
+        </td>
+        <td>
+          <button
+            on:click={onDelete(row, i)}
+            class="bg-red-500 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
+          >
+            Usuń
+          </button>
+        </td>
+      </tr>
+    {/each}
+  </tbody>
 </table>
 
 {#if collection.length == 0}

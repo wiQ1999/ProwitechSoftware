@@ -64,6 +64,7 @@
 </script>
 
 <BaseList
+  listName={"UŻYTKOWNICY"}
   {collection}
   {headerDictionary}
   {tableRowsClassName}

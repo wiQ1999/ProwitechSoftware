@@ -1,76 +1,67 @@
 <script>
-  //struktura propertyManagerDTO
-  // let PropertyManagerDTO = {
-  //   id: "",
-  //   name: "",
-  //   phoneNumber: "",
-  //   fullAddress: {
-  //     buildingAddress: {
-  //       cityName: "",
-  //       streetName: "",
-  //       buildingNumber: "",
-  //       postalCode: "",
-  //     },
-  //     localNumber: "",
-  //     staircaseNumber: "",
-  //   },
-  // };
-  //struktura BuildingDTO (GET/{id}):
-  //   {
-  //   "id": "472e6029-2cfb-483e-f2ff-08daca1119fe",
-  //   "buildingAddress": {
-  //     "id": "d24bd875-c5f8-4a7c-a1c3-ff33f67b6c67",
-  //     "cityName": "Poznań",
-  //     "streetName": "Heweliusza",
-  //     "buildingNumber": "3",
-  //     "longitude": 16.8725373,
-  //     "latitude": 52.394716,
-  //     "coordinateType": "ROOFTOP",
-  //     "postalCode": "61-001"
-  //   },
-  //   "type": "wielolokalowy",
-  //   "locals": [],
-  //   "propertyManager": {
-  //     "id": "a9cc9b5b-9f73-4bc6-0f76-08dac7a32061",
-  //     "name": "Fruwające krowy",
-  //     "phoneNumber": "+48 956 232 125",
+  // struktura propertyManageraDTO (GET)
+  //  {
+  //     "id": "c9ddf3b2-517d-4ca8-1d90-08daf254a448",
+  //     "name": "Admico",
+  //     "phoneNumber": "555555555",
   //     "fullAddress": {
-  //       "id": "69220a87-62c1-4953-4cde-08dac7a32055",
-  //       "buildingAddressId": "c16ec69d-0583-4df6-b00f-6ea20754b392",
-  //       "buildingAddress": null,
-  //       "localNumber": "15",
-  //       "staircaseNumber": "C"
+  //       "id": "46c83a7e-0842-4ead-b2a3-08daf254a437",
+  //       "buildingAddressId": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
+  //       "buildingAddress": {
+  //         "id": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
+  //         "cityName": "Bydgoszcz",
+  //         "streetName": "Sienkiewicza",
+  //         "buildingNumber": "22",
+  //         "longitude": 18.0014692,
+  //         "latitude": 53.130996,
+  //         "coordinateType": "ROOFTOP",
+  //         "postalCode": "85-000"
+  //       },
+  //       "propertyAddressId": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
+  //       "propertyAddress": {
+  //         "id": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
+  //         "venueNumber": "33",
+  //         "staircaseNumber": "12"
+  //       }
   //     }
   //   }
 
-    import Page from "../../routes/PropertyManager/getAll/+page.svelte";
-
-  // }
+  //TODO  struktura BuildingDTO (GET/{id}):
   export let BuildingDTO;
   export let message1;
   export let message2;
 </script>
 
-<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-lg pt-10 p-1">
+<div
+  class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-lg pt-10 p-1"
+>
   {#if BuildingDTO == null}
     Nie udało się odczytać danych budynku.
   {:else}
     <p>{message1}</p>
     <br />
 
-    Ulica: <span class="font-semibold">{BuildingDTO.buildingAddress.streetName}
-    {BuildingDTO.buildingAddress.buildingNumber} </span>
+    Ulica:
+    <span class="font-semibold"
+      >{BuildingDTO.buildingAddress.streetName}
+      {BuildingDTO.buildingAddress.buildingNumber}
+    </span>
     <br />
-    Miasto: <span class="font-semibold">{BuildingDTO.buildingAddress.cityName} </span>
+    Miasto:
+    <span class="font-semibold">{BuildingDTO.buildingAddress.cityName} </span>
     <br />
     {#if BuildingDTO.buildingAddress.postalCode != null}
-      Kod pocztowy: <span class="font-semibold">{BuildingDTO.buildingAddress.postalCode} </span>
+      Kod pocztowy: <span class="font-semibold"
+        >{BuildingDTO.buildingAddress.postalCode}
+      </span>
     {/if}
     <br />
     Rodzaj: <span class="font-semibold">{BuildingDTO.type} </span>
     {#if BuildingDTO.propertyManager}
-      <p>{message2}
-        <span class="font-semibold">{BuildingDTO.propertyManager.name} </span> </p>
+      <p>
+        {message2}
+        <span class="font-semibold">{BuildingDTO.propertyManager.name} </span>
+      </p>
     {/if}
     <br />
   {/if}

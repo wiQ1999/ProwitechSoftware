@@ -13,18 +13,23 @@
   export let onSubmit = async () => {};
   export let editMode = false;
   let readMode = false;
+  let upper_message = "Dodaj budynek";
   export let building = null;
 
   let formVisibility;
   let propertyManagers = [];
-  let button_message = "Edytuj";
+  let button_turn_on_edition_message = "Włącz edycję";
+  let submitButtonMessage = "DODAJ";
 
   let cities = [
     { id: "Bydgoszcz", name: "Bydgoszcz" },
     { id: "Poznań", name: "Poznań" },
     { id: "Wrocław", name: "Wrocław" },
   ];
-  let buildingTypes = ["jednorodzinny", "wielolokalowy", "lokal usługowy"];
+  let buildingTypes = [
+    { id: "WIELOLOKALOWY", name: "wielolokalowy" },
+    { id: "JEDNOLOKALOWY", name: "jednolokalowy" },
+  ];
 
   onMount(async () => {
     readMode = editMode;
@@ -33,6 +38,10 @@
       // displayAll = false;
       // displayGetAllProblem = true;
       return;
+    }
+    if (editMode) {
+      submitButtonMessage = "ZATWIERDŹ";
+      upper_message = "Szczegóły budynku";
     }
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
@@ -43,12 +52,13 @@
         id: element.id,
         name: element.name,
         fullAddressInShort: {
-          cityName: element.fullAddress.buildingAddress.cityName,
-          streetName: element.fullAddress.buildingAddress.streetName,
-          buildingNumber: element.fullAddress.buildingAddress.buildingNumber,
-          postalCode: element.fullAddress.buildingAddress.postalCode,
-          localNumber: element.fullAddress.localNumber,
-          staircaseNumber: element.fullAddress.staircaseNumber,
+          cityName: element.fullAddress?.buildingAddress.cityName,
+          streetName: element.fullAddress?.buildingAddress.streetName,
+          buildingNumber: element.fullAddress?.buildingAddress.buildingNumber,
+          postalCode: element.fullAddress?.buildingAddress.postalCode,
+          venueNumber: element.fullAddress?.propertyAddress?.venueNumber,
+          staircaseNumber:
+            element.fullAddress?.propertyAddress?.staircaseNumber,
         },
       });
     }
@@ -56,12 +66,12 @@
       id: null,
       name: "Brak zarządcy",
       fullAddressInShort: {
-        cityName: "",
-        streetName: "",
-        buildingNumber: "",
-        postalCode: "",
-        localNumber: "",
-        staircaseNumber: "",
+        cityName: null,
+        streetName: null,
+        buildingNumber: null,
+        postalCode: null,
+        venueNumber: null,
+        staircaseNumber: null,
       },
     });
     console.log(propertyManagers);
@@ -71,23 +81,34 @@
   });
   function changeEditingStatus() {
     readMode = !readMode;
-    if (button_message == "Edytuj") {
-      button_message = "Zakończ edycję";
+    if (button_turn_on_edition_message == "Włącz edycję") {
+      button_turn_on_edition_message = "Zakończ edycję";
     } else {
-      button_message = "Edytuj";
+      button_turn_on_edition_message = "Włącz edycję";
     }
+    if (readMode) upper_message = "Szczegóły budynku";
+    else upper_message = "Edycja budynku";
     // editMode = false;
   }
 </script>
+
 {#if formVisibility}
-{#if editMode}
-<button on:click={() => changeEditingStatus()} class="flex font-semibold bg-blue-400 p-4 text-white">{button_message}</button>
-{/if}
-  <form on:submit|preventDefault={async () => await onSubmit()} class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+  
+  <form
+    on:submit|preventDefault={async () => await onSubmit()}
+    class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+  >
     <fieldset class="border-none">
-      <legend class="font-bold text-lg py-5"> Dodaj budynek </legend>
+      <legend class="font-bold text-lg py-5"> {upper_message} </legend>
+      {#if editMode}
+    <button
+      on:click|preventDefault={() => changeEditingStatus()}
+      class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white"
+      >{button_turn_on_edition_message}</button
+    >
+  {/if}
       <label for="building-address-city-name" class="block">Miejscowość</label>
-      <select bind:value={buildingAddressDTO.cityName} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+      <select bind:value={buildingAddressDTO.cityName} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
         {#each cities as city}
           <option value={city.id}>{city.name}</option>
         {/each}
@@ -98,25 +119,27 @@
         type="text"
         bind:value={buildingAddressDTO.streetName}
         disabled={readMode}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       />
-      <label for="building-address-building-number" class="block">Numer budynku</label>
+      <label for="building-address-building-number" class="block"
+        >Numer budynku</label
+      >
       <input
         type="text"
         bind:value={buildingAddressDTO.buildingNumber}
         disabled={readMode}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
+        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       />
       <label for="building-type">Typ budynku</label>
 
-      <select bind:value={buildingType} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+      <select bind:value={buildingType} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
         {#each buildingTypes as btype}
-          <option value={btype}>{btype}</option>
+          <option value={btype.id}>{btype.name}</option>
         {/each}
       </select>
 
     <label for="building-property-manager" class="block">Zarządca Nieruchomości</label>
-    <select bind:value={propertyManagerId} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]">
+    <select bind:value={propertyManagerId} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
 
       {#each propertyManagers as propman}
         <option value={propman.id}
@@ -130,8 +153,8 @@
           {#if propman.fullAddressInShort.staircaseNumber}
           kl. {propman.fullAddressInShort.staircaseNumber}
           {/if}
-          {#if propman.fullAddressInShort.localNumber}
-          m. {propman.fullAddressInShort.localNumber}
+          {#if propman.fullAddressInShort.venueNumber}
+          m. {propman.fullAddressInShort.venueNumber}
           {/if}
           {#if propman.fullAddressInShort.postalCode}
           | {propman.fullAddressInShort.postalCode}
@@ -146,8 +169,13 @@
 
     </fieldset>
     {#if !readMode}
-    <button type="submit" class="py-5 px-10 bg-[#0078c8] text-lg font-normal rounded-md w-[90%] mb-3 justify-center cursor-pointer">DODAJ!</button>
+      <button
+        type="submit"
+        class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400"
+        >{submitButtonMessage}</button
+      >
     {/if}
+    
   </form>
   {#if readMode}
     <Map {building} displayLink={false} />

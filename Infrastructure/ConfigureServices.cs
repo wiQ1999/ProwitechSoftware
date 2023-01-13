@@ -19,9 +19,13 @@ public static class ConfigureServices
        
         services.AddScoped<IRepositoriesUnitOfWork, RepositoriesUnitOfWork>();
         services.AddScoped<IBuildingAddressRepository, BuildingAddressRepository>();
+        services.AddScoped<IPropertyAddressRepository, PropertyAddressRepository>();
         services.AddScoped<IFullAddressRepository, FullAddressRepository>();
         services.AddScoped<IPropertyManagerRepository, PropertyManagerRepository>();
         services.AddScoped<IBuildingRepository, BuildingRepository>();
+        services.AddScoped<IPropertyRepository, PropertyRepository>();
+        services.AddScoped<IInspectionTaskRepository, InspectionTaskRepository>();
+        
 
         return services;
     }

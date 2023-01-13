@@ -13,6 +13,9 @@ namespace Infrastructure.Interfaces.Repositories
         Task<FullAddress> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<Guid> AddAsync(FullAddress address, CancellationToken cancellationToken);
         Task UpdateAsync(FullAddress address, CancellationToken cancellationToken);
+        Task<FullAddress?> FindFullAddressWithPropertyAddress(FullAddress address, CancellationToken cancellationToken);
+        Task<FullAddress?> FindFullAddressWithoutPropertyAddress(FullAddress address, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 
 }

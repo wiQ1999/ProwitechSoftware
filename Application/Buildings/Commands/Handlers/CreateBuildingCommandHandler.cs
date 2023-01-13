@@ -1,6 +1,7 @@
 ﻿using Application.Buildings.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
@@ -16,12 +17,16 @@ namespace Application.Buildings.Commands.Handlers
         private readonly IBuildingAddressRepository _buildingAddressRepository;
         private readonly IPropertyManagerRepository _propertyManagerRepository;
         private readonly IBuildingRepository _buildingRepository;
+        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IPropertyRepository _propertyRepository;
 
-        public CreateBuildingCommandHandler(IBuildingAddressRepository buildingAddressRepository, IPropertyManagerRepository propertyManagerRepository, IBuildingRepository buildingRepository)
+        public CreateBuildingCommandHandler(IBuildingAddressRepository buildingAddressRepository, IPropertyManagerRepository propertyManagerRepository, IBuildingRepository buildingRepository, IPropertyAddressRepository propertyAddressRepository, IPropertyRepository propertyRepository)
         {
             _buildingAddressRepository = buildingAddressRepository;
             _propertyManagerRepository = propertyManagerRepository;
             _buildingRepository = buildingRepository;
+            _propertyAddressRepository = propertyAddressRepository;
+            _propertyRepository = propertyRepository;
         }
 
         public async Task<Guid> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
@@ -55,7 +60,21 @@ namespace Application.Buildings.Commands.Handlers
                 };
             }
             
-            return await _buildingRepository.AddAsync(building, cancellationToken);
+            var buildingId= await _buildingRepository.AddAsync(building, request.BuildingAddressId, cancellationToken);
+            if(building.Type==BuildingType.JEDNOLOKALOWY.ToString())
+            {
+                PropertyAddress propertyAddress = new PropertyAddress();
+                var propertyAddressId= await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+
+                Property property = new Property()
+                {
+                    BuildingId = buildingId,
+                    PropertyAddressId = propertyAddressId
+                };
+                await _propertyRepository.AddAsync(property, cancellationToken);
+
+            }
+            return buildingId;
         }
     }
 }

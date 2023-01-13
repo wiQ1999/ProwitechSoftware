@@ -23,8 +23,6 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.Name == propMan.Name))
                 throw new Exception($"Istnieje już Zarządca Nieruchomości o nazwie {propMan.Name}");
-            //if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.FullAddress.Equals(propMan.FullAddress)))
-            //    throw new Exception($"Istnieje już Zarządca Nieruchomości o adresie {propMan.FullAddress.ToString()}");
             await _dbContext.AddAsync(propMan, cancellationToken);
             await _dbContext.SaveChangesAsync();
             return propMan.Id;
@@ -33,13 +31,22 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<PropertyManager>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).ThenInclude(fa=>fa.BuildingAddress).ToArrayAsync(cancellationToken);
+            return await _dbContext.PropertyManagers
+                .Include(pm=>pm.FullAddress)
+                    .ThenInclude(fa=>fa.BuildingAddress)
+                .Include(pm=>pm.FullAddress)
+                    .ThenInclude(fa => fa.PropertyAddress)
+                .ToArrayAsync(cancellationToken);
         }
 
         public async Task<PropertyManager?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.PropertyManagers.Include(pm=>pm.FullAddress).
-                ThenInclude(pm=>pm.BuildingAddress).FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
+            return await _dbContext.PropertyManagers
+                .Include(pm => pm.FullAddress)
+                    .ThenInclude(fa => fa.BuildingAddress)
+                .Include(pm => pm.FullAddress)
+                    .ThenInclude(fa => fa.PropertyAddress)
+                .FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
         }
 
         public async Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)
@@ -52,6 +59,7 @@ namespace Infrastructure.Repositories
             PropertyManager? propMan = await _dbContext.PropertyManagers.FirstOrDefaultAsync(pm => pm.Id == id, cancellationToken);
             if(propMan == null)
                 throw new Exception($"Brak Zarządcy Nieruchomości o identyfikatorze {id}.");
+            
             _dbContext.PropertyManagers.Remove(propMan);
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

@@ -41,8 +41,8 @@
     Miasto: "fullAddress.buildingAddress.cityName",
     Ulica: "fullAddress.buildingAddress.streetName",
     "Numer budynku": "fullAddress.buildingAddress.buildingNumber",
-    "Numer lokalu": "fullAddress.localNumber",
-    "Numer klatki": "fullAddress.staircaseNumber",
+    "Numer lokalu": "fullAddress.propertyAddress.venueNumber",
+    "Numer klatki": "fullAddress.propertyAddress.staircaseNumber",
     "Kod pocztowy": "fullAddress.buildingAddress.postalCode",
   };
   function addHandler(event) {
@@ -104,6 +104,7 @@
 </script>
 
 <BaseList
+  listName={"ZARZĄDCY NIERUCHOMOŚCI"}
   {collection}
   {headerDictionary}
   {tableRowsClassName}

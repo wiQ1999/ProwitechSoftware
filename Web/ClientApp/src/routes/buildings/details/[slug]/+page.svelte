@@ -66,6 +66,8 @@
   let BuildingDTO;
   let AddUpdateBuildingAddressResponse;
 
+  let postalCode = "BRAK";
+
   onMount(async () => {
     updatedBuildingPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
@@ -106,12 +108,21 @@
     let buildingResponse = await getBuildingById(buildingId);
     if (buildingResponse instanceof Response) {
       originalBuildingDTO = await buildingResponse.json();
+      console.log(originalBuildingDTO);
+      if (originalBuildingDTO.buildingAddress.postalCode != null) {
+        postalCode = originalBuildingDTO.buildingAddress.postalCode;
+        if (postalCode == "") postalCode = "BRAK";
+      }
       // updateBuildingDTO = structuredClone(originalBuildingDTO);
       // //--
       originalBuildingAddressDTO = originalBuildingDTO.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
       //--
-      originalPropertyManagerId = originalBuildingDTO.propertyManager.id;
+      if (originalBuildingDTO.propertyManager != null) {
+        originalPropertyManagerId = originalBuildingDTO.propertyManager.id;
+      } else {
+        originalPropertyManagerId = null;
+      }
       updatePropertyManagerId = structuredClone(originalPropertyManagerId);
       //--
       originalBuildingType = originalBuildingDTO.type;
@@ -277,8 +288,12 @@
 </script>
 
 <a href="/buildings/getAll">
-  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
+
 <div class="add-property-manager-form">
   {#if editBuildingAddressPopUpVisibility}
     <EditBuildingAddressPopUp
@@ -318,4 +333,14 @@
       message2="podlegający pod Zarządcę Nieruchomości:"
     />
   {/if}
+</div>
+
+<div class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+  Kod pocztowy budynku
+  <p class="font-bold">{postalCode}</p>
+  <a href="/buildings/details/{data.id}/postal-code"
+    >
+    <button class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md">Edytuj kod pocztowy</button>
+    </a
+  >
 </div>

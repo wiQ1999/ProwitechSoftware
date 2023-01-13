@@ -16,11 +16,13 @@ namespace Application.Buildings.Queries.Handlers
     {
         private readonly IBuildingRepository _buildingRepository;
         private readonly IMapper _mapper;
+        private readonly IPropertyRepository _propertyRepository;
 
-        public GetBuildingByIdQueryHandler(IBuildingRepository buildingRepository, IMapper mapper)
+        public GetBuildingByIdQueryHandler(IBuildingRepository buildingRepository, IMapper mapper, IPropertyRepository propertyRepository)
         {
             _buildingRepository = buildingRepository;
             _mapper = mapper;
+            _propertyRepository = propertyRepository;
         }
 
         public async Task<BuildingByIdDTO> Handle(GetBuildingByIdQuery request, CancellationToken cancellationToken)
