@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Database;
+using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.Repositories.Generics;
 using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
@@ -10,7 +11,7 @@ public class UniteOfWork : IRepositoriesUnitOfWork
     private readonly ProwitechDbContext _context;
     private IGenericRepository<Role>? _rolesRepository;
     private IGenericRepository<User>? _usersRepository;
-    private IGenericRepository<Permission>? _permissionsRepository;
+    private IPermissionsRepository? _permissionsRepository;
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
@@ -19,8 +20,8 @@ public class UniteOfWork : IRepositoriesUnitOfWork
     public IGenericRepository<User> UsersRepository 
         => _usersRepository ??= new GenericUsersRepository(_context);
 
-    public IGenericRepository<Permission> PermissionsRepository
-        => _permissionsRepository ??= new GenericPermissionsRepository(_context);
+    public IPermissionsRepository PermissionsRepository
+        => _permissionsRepository ??= new PermissionRepository(_context);
 
     public UniteOfWork(ProwitechDbContext context)
     {
