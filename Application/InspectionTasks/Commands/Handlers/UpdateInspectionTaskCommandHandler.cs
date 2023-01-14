@@ -18,19 +18,15 @@ namespace Application.InspectionTasks.Commands.Handlers
     public class UpdateInspectionTaskCommandHandler : IRequestHandler<UpdateInspectionTaskCommand>
     {
         private readonly IRepositoriesUnitOfWork _unitOfWork;
-        private readonly IInspectionTaskRepository _inspectionTaskRepository;
-        private readonly IBuildingRepository _buildingRepository;
 
-        public UpdateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork, IInspectionTaskRepository inspectionTaskRepository, IBuildingRepository buildingRepository)
+        public UpdateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _inspectionTaskRepository = inspectionTaskRepository;
-            _buildingRepository = buildingRepository;
         }
 
         public async Task<Unit> Handle(UpdateInspectionTaskCommand request, CancellationToken cancellationToken)
         {
-            var taskFromDB = await _inspectionTaskRepository.GetAsync(request.Id, cancellationToken);
+            var taskFromDB = await _unitOfWork.InspectionTaskRepository.GetAsync(request.Id, cancellationToken);
             if (taskFromDB == null)
                 throw new Exception($"Nie można edytować Zadania: Nie istnieje Zadanie o Id: {request.Id}");
             await CheckIfUpdatedValuesAreAllowed(request, cancellationToken);
@@ -47,13 +43,13 @@ namespace Application.InspectionTasks.Commands.Handlers
             { 
                 taskFromDB.EndDateTime = request.EndDateTime;
             }
-            await _inspectionTaskRepository.UpdateAsync(taskFromDB, cancellationToken);
-
+            await _unitOfWork.InspectionTaskRepository.UpdateAsync(taskFromDB, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
         private async Task CheckIfUpdatedValuesAreAllowed(UpdateInspectionTaskCommand request, CancellationToken cancellationToken)
         {
-            var building = await _buildingRepository.GetAsync(request.BuildingId, cancellationToken);
+            var building = await _unitOfWork.BuildingRepository.GetAsync(request.BuildingId, cancellationToken);
             if (building == null)
                 throw new Exception($"Nie można edytować Zadania: podane Id Budynku nie istnieje");
             var delegator = await _unitOfWork.UsersRepository.GetByIdAsync(request.TaskDelegatorId, cancellationToken);

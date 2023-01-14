@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database.Configurations
 {
-    public class PropertyConfiguration : IEntityTypeConfiguration<Property>
+    public class RealPropertyConfiguration : IEntityTypeConfiguration<RealProperty>
     {
-        public void Configure(EntityTypeBuilder<Property> builder)
+        public void Configure(EntityTypeBuilder<RealProperty> builder)
         {
             builder
                 .HasOne(p => p.Building)

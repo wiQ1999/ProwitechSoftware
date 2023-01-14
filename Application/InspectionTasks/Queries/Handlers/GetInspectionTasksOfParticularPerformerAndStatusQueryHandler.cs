@@ -3,6 +3,7 @@ using Application.InspectionTasks.Helpers;
 using Application.InspectionTasks.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,12 @@ namespace Application.InspectionTasks.Queries.Handlers
     public class GetInspectionTasksOfParticularPerformerAndStatusQueryHandler :
         IRequestHandler<GetInspectionTasksOfParticularPerformerAndStatusQuery, IEnumerable<AllInspectionTasksDTO>>
     {
-        private readonly IInspectionTaskRepository _inspectionTaskRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetInspectionTasksOfParticularPerformerAndStatusQueryHandler(IInspectionTaskRepository inspectionTaskRepository, IMapper mapper)
+        public GetInspectionTasksOfParticularPerformerAndStatusQueryHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            _inspectionTaskRepository = inspectionTaskRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -30,7 +31,7 @@ namespace Application.InspectionTasks.Queries.Handlers
                 throw new Exception
                     ($"Nie pobrać zadań konkretnego użytkownika o konkretnym statusie: Niedozwolony status");
 
-            var tasks = await _inspectionTaskRepository
+            var tasks = await _unitOfWork.InspectionTaskRepository
                 .GetTasksOfParticularPerformerWithParticularStatus(request.Id, request.Status, cancellationToken);
             return _mapper.Map<List<AllInspectionTasksDTO>>(tasks);
         }

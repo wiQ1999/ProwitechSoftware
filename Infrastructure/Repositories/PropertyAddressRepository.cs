@@ -19,9 +19,8 @@ namespace Infrastructure.Repositories
         }
         public async Task<Guid> AddAsync(PropertyAddress propAddress, CancellationToken cancellationToken)
         {
-            //TO SPRAWDZIC CZY NIE TRZEBA CZEGOS SPRAWDZIC
+            //TODO SPRAWDZIC CZY NIE TRZEBA CZEGOS SPRAWDZIC
             await _dbContext.AddAsync(propAddress);
-            await _dbContext.SaveChangesAsync(cancellationToken);
             return propAddress.Id;
         }
 
@@ -38,7 +37,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(PropertyAddress propAddress, CancellationToken cancellationToken)
         {
             _dbContext.Entry(propAddress).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -49,7 +47,6 @@ namespace Infrastructure.Repositories
             if (propAddress == null)
                 throw new Exception($"Brak Adresu Nieruchomości o identyfikatorze {id}");
             _dbContext.PropertyAddresses.Remove(propAddress);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

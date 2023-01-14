@@ -32,7 +32,6 @@ namespace Infrastructure.Repositories
             if (performer == null)
                 throw new Exception($"Nie mozna utworzyć Zadania: Nie istnieje Wykonujący Zadanie o podanym Id");
             await _dbContext.AddAsync(inspectionTask);
-            await _dbContext.SaveChangesAsync(cancellationToken);
             return inspectionTask.Id;
         }
 
@@ -42,7 +41,6 @@ namespace Infrastructure.Repositories
             if (taskToDelete == null)
                 throw new Exception($"Brak Zadania o identyfikatorze {id}.");
             _dbContext.InspectionTasks.Remove(taskToDelete);
-            await _dbContext.SaveChangesAsync(cancellationToken);
 
         }
 
@@ -84,7 +82,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(InspectionTask inspectionTask, CancellationToken cancellationToken)
         {
             _dbContext.Entry(inspectionTask).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<InspectionTask>> GetTasksOfParticularPerformer(Guid userId, CancellationToken cancellationToken)

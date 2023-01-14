@@ -1,6 +1,7 @@
 ﻿using Application.BuildingAddresses.Commands.Requests;
 using Application.PropertyManagers.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,17 @@ namespace Application.BuildingAddresses.Commands.Handlers
 {
     public class DeleteBuildingAddressCommandHandler : IRequestHandler<DeleteBuildingAddressCommand>
     {
-        private readonly IBuildingAddressRepository _buildingAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public DeleteBuildingAddressCommandHandler(IBuildingAddressRepository buildingAddressRepository)
+        public DeleteBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _buildingAddressRepository = buildingAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(DeleteBuildingAddressCommand request, CancellationToken cancellationToken)
         {
-            await _buildingAddressRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.BuildingAddressRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

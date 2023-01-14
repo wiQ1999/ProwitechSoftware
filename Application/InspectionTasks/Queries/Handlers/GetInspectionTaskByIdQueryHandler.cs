@@ -2,6 +2,7 @@
 using Application.InspectionTasks.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,18 @@ namespace Application.InspectionTasks.Queries.Handlers
 {
     public class GetInspectionTaskByIdQueryHandler : IRequestHandler<GetInspectionTaskByIdQuery, InspectionTaskByIdDTO>
     {
-        private readonly IInspectionTaskRepository _inspectionTaskRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetInspectionTaskByIdQueryHandler(IInspectionTaskRepository inspectionTaskRepository, IMapper mapper)
+        public GetInspectionTaskByIdQueryHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            _inspectionTaskRepository = inspectionTaskRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<InspectionTaskByIdDTO> Handle(GetInspectionTaskByIdQuery request, CancellationToken cancellationToken)
         {
-            var iT=await _inspectionTaskRepository.GetAsync(request.Id, cancellationToken);
+            var iT=await _unitOfWork.InspectionTaskRepository.GetAsync(request.Id, cancellationToken);
             var mapped= _mapper.Map<InspectionTaskByIdDTO>(iT);
             return mapped;
         }
