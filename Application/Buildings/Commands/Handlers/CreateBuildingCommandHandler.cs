@@ -67,7 +67,7 @@ namespace Application.Buildings.Commands.Handlers
                     PropertyAddressId = propertyAddressId
                 };
                 await _unitOfWork.RealPropertyRepository.AddAsync(property, cancellationToken);
-
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             return buildingId;
         }
