@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Application.Buildings.DTOs;
 using Application.PropertyManagers.DTOs;
 using Application.InspectionProtocols.DTOs;
-using Application.Properties.DTOs;
+using Application.RealProperties.DTOs;
 using Application.Users.DTOs;
 
 namespace Application.InspectionTasks.Profiles
@@ -23,7 +23,7 @@ namespace Application.InspectionTasks.Profiles
             CreateMap<Building, AllBuildingsDTO>().ReverseMap();
             CreateMap<PropertyManager, PropertyManagerDTO>().ReverseMap();
             CreateMap<InspectionProtocol, AllInspectionProtocolsDTO>().ReverseMap();
-            CreateMap<Property, AllPropertiesDTO>().ReverseMap();
+            CreateMap<RealProperty, AllRealPropertiesDTO>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
         }
     }

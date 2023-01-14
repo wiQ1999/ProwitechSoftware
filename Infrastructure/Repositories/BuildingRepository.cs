@@ -104,7 +104,7 @@ namespace Infrastructure.Repositories
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");
 
-            var buildingProperties = await _dbContext.Properties.Where(p => p.BuildingId == id).ToArrayAsync(cancellationToken);
+            var buildingProperties = await _dbContext.RealProperties.Where(p => p.BuildingId == id).ToArrayAsync(cancellationToken);
             foreach(var property in buildingProperties)
             {
                 var propAddress = await _dbContext.PropertyAddresses.FirstOrDefaultAsync(pa => pa.Id == property.PropertyAddressId, cancellationToken);

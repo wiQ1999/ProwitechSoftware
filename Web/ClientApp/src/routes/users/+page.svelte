@@ -15,7 +15,7 @@
   const headerDictionary = {
     Imię: "firstName",
     Nazwisko: "lastName",
-    Emial: "email",
+    Email: "email",
     "Numer tel.": "phoneNumber",
     Rola: "role.name",
   };
