@@ -22,10 +22,10 @@ namespace Application.PropertyManagers.Commands.Handlers
 
         public async Task<Unit> Handle(DeletePropertyManagerCommand request, CancellationToken cancellationToken)
         {
-            PropertyManager pm = await _unitOfWork.PropertyManagerRepository.GetAsync(request.Id, cancellationToken);
+            PropertyManager? pm = await _unitOfWork.PropertyManagerRepository.GetAsync(request.Id, cancellationToken);
             if(pm!=null && pm.FullAddress != null)
             {
-                await _unitOfWork.FullAddressRepository.DeleteAsync(pm.FullAddressId.Value, cancellationToken);
+                await _unitOfWork.FullAddressRepository.DeleteAsync(pm.FullAddressId!.Value, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             await _unitOfWork.PropertyManagerRepository.DeleteAsync(request.Id, cancellationToken);

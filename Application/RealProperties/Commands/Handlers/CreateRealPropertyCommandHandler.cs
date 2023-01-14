@@ -17,6 +17,11 @@ namespace Application.RealProperties.Commands.Handlers
     {
         private readonly IRepositoriesUnitOfWork _unitOfWork;
 
+        public CreateRealPropertyCommandHandler(IRepositoriesUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public async Task<Guid> Handle(CreateRealPropertyCommand request, CancellationToken cancellationToken)
         {
             var building = await _unitOfWork.BuildingRepository.GetAsync(request.BuildingId, cancellationToken);

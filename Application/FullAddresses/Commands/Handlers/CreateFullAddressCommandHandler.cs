@@ -48,7 +48,9 @@ namespace Application.FullAddresses.Commands.Handlers
                 };
             }
 
-            return await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            var newFullAddress =await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return newFullAddress;
         }
     }
 }

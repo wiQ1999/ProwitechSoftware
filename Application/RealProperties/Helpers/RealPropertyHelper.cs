@@ -14,15 +14,6 @@ namespace Application.Properties.Helpers
 {
     public class RealPropertyHelper
     {
-        //private readonly IRealPropertyRepository _propertyRepository;
-        //private readonly IPropertyAddressRepository _propertyAddressRepository;
-
-        //public RealPropertyHelper(IRealPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
-        //{
-        //    _propertyRepository = propertyRepository;
-        //    _propertyAddressRepository = propertyAddressRepository;
-        //}
-
         private readonly IRepositoriesUnitOfWork _unitOfWork;
 
         public RealPropertyHelper(IRepositoriesUnitOfWork unitOfWork)

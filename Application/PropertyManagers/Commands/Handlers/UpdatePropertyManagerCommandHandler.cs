@@ -63,7 +63,7 @@ namespace Application.PropertyManagers.Commands.Handlers
                     //stary PropertyAddress != null
                     if (faFromDB.PropertyAddress != null)
                     {
-                        await _unitOfWork.PropertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId.Value, cancellationToken);
+                        await _unitOfWork.PropertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId!.Value, cancellationToken);
                         await _unitOfWork.SaveChangesAsync(cancellationToken);
                     }
                     // stary PropertyAddress == null
