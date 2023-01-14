@@ -32,10 +32,6 @@ namespace Application.PropertyManagers.Commands.Handlers
             if (baFromDB == null)
                 throw new Exception($"W bazie danych nie ma adresu budynku o id: {faDTO.BuildingAddressId}");
 
-            //FullAddressCRUDHelper helper = new FullAddressCRUDHelper(_fullAddressRepository, _propertyAddressRepository);
-            //Guid fullAddressId = await helper.GetCreatedOrAlreadyExistingFullAddressId(request.FullAddressDTO, cancellationToken)
-            //
-            //;
             var fullAddressDTO = request.FullAddressDTO;
             FullAddress fullAddress;
             Guid fullAddressId;
