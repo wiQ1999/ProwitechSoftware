@@ -2,6 +2,7 @@
 using Application.BuildingAddresses.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,12 @@ namespace Application.BuildingAddresses.Queries.Handlers
 {
     public class FindBuildingAddressQueryHandler:IRequestHandler<FindBuildingAddressQuery, BuildingAddressDTO>
     {
-        private readonly IBuildingAddressRepository buildingAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper mapper;
 
-        public FindBuildingAddressQueryHandler(IBuildingAddressRepository buildingAddressRepository, IMapper mapper)
+        public FindBuildingAddressQueryHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.buildingAddressRepository = buildingAddressRepository;
+            _unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
@@ -33,7 +34,7 @@ namespace Application.BuildingAddresses.Queries.Handlers
                 StreetName=request.StreetName,
                 BuildingNumber=request.BuildingNumber
             };
-            var buildingAddressFromDB = await buildingAddressRepository.FindBuildingAddress(buildingAddress, cancellationToken);
+            var buildingAddressFromDB = await _unitOfWork.BuildingAddressRepository.FindBuildingAddress(buildingAddress, cancellationToken);
             if (buildingAddressFromDB == null)
                 return null;
             var addressDTO = mapper.Map<BuildingAddressDTO>(buildingAddressFromDB);

@@ -13,6 +13,7 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
     private IGenericRepository<Role>? _rolesRepository;
     private IUsersRepository? _usersRepository;
     private IPermissionsRepository? _permissionsRepository;
+    private IBuildingAddressRepository? _buildingAddressRepository;
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
@@ -23,6 +24,9 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
 
     public IPermissionsRepository PermissionsRepository
         => _permissionsRepository ??= new PermissionsRepository(_context);
+
+    public IBuildingAddressRepository BuildingAddressRepository 
+        => _buildingAddressRepository ??= new BuildingAddressRepository(_context);
 
     public RepositoriesUnitOfWork(ProwitechDbContext context)
     {

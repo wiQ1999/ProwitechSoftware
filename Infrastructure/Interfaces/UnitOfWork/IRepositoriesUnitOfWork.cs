@@ -10,5 +10,10 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IUsersRepository UsersRepository { get; }
     IPermissionsRepository PermissionsRepository { get; }
 
+    IBuildingAddressRepository BuildingAddressRepository { get; }
+    //IBuildingRepository BuildingRepository { get; }
+    //IFullAddressRepository
+
+
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }
