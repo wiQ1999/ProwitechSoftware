@@ -1,5 +1,6 @@
 ﻿using Application.FullAddresses.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 using System;
@@ -12,13 +13,11 @@ namespace Application.FullAddresses.Commands.Handlers
 {
     public class CreateFullAddressCommandHandler : IRequestHandler<CreateFullAddressCommand, Guid>
     {
-        private readonly IFullAddressRepository _fullAddressRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public CreateFullAddressCommandHandler(IFullAddressRepository fullAddressRepository, IPropertyAddressRepository propertyAddressRepository)
+        public CreateFullAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _fullAddressRepository = fullAddressRepository;
-            _propertyAddressRepository = propertyAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> Handle(CreateFullAddressCommand request, CancellationToken cancellationToken)
@@ -33,7 +32,8 @@ namespace Application.FullAddresses.Commands.Handlers
                     VenueNumber = request.PropertyAddressDTO.VenueNumber,
                     StaircaseNumber = request.PropertyAddressDTO.StaircaseNumber
                 };
-                var propertyAddressId=await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                var propertyAddressId=await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
                 fullAddress = new FullAddress()
                 {
                     BuildingAddressId = request.BuildingAddressId,
@@ -48,7 +48,7 @@ namespace Application.FullAddresses.Commands.Handlers
                 };
             }
 
-            return await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            return await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Buildings.Commands.Requests;
 using Application.Properties.Helpers;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Enums;
 using MediatR;
 using System;
@@ -13,29 +14,23 @@ namespace Application.Buildings.Commands.Handlers
 {
     public class UpdateBuildingCommandHandler : IRequestHandler<UpdateBuildingCommand>
     {
-        private readonly IBuildingRepository _buildingRepository;
-        private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IRealPropertyRepository _propertyRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public UpdateBuildingCommandHandler(IBuildingRepository buildingRepository, IPropertyManagerRepository propertyManagerRepository, IRealPropertyRepository propertyRepository, IPropertyAddressRepository propertyAddressRepository)
+        public UpdateBuildingCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _buildingRepository = buildingRepository;
-            _propertyManagerRepository = propertyManagerRepository;
-            _propertyRepository = propertyRepository;
-            _propertyAddressRepository = propertyAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(UpdateBuildingCommand request, CancellationToken cancellationToken)
         {
             
                 
-            var bFromDB = await _buildingRepository.GetAsync(request.Id, cancellationToken);
+            var bFromDB = await _unitOfWork.BuildingRepository.GetAsync(request.Id, cancellationToken);
             if (bFromDB == null)
                 throw new Exception($"Brak w bazie danych budynku o Id: {request.Id}");
             if (request.PropertyManagerId != Guid.Empty)
             {
-                var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
+                var pmFromDB = await _unitOfWork.PropertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
                 if (pmFromDB == null)
                     throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
                 bFromDB.PropertyManagerId = request.PropertyManagerId;
@@ -54,11 +49,12 @@ namespace Application.Buildings.Commands.Handlers
             }
             //TODO IF BUILDINGTYPE==JEDNOLOKALOWY && PROPERTY MA PRZYPISANY RAPORT - NIE WOLNO JUŻ NIC ZMIENIĆ
             // NAJPIERW TRZEBA USUNĄĆ RAPORT
-            RealPropertyHelper propertyChanger = new RealPropertyHelper(_propertyRepository, _propertyAddressRepository);
+            RealPropertyHelper propertyChanger = new RealPropertyHelper(_unitOfWork);
             await propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
 
             bFromDB.Type = request.Type;
-            await _buildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);
+            await _unitOfWork.BuildingRepository.UpdateBuildingAsync(bFromDB, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
 
         }

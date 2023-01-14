@@ -42,7 +42,6 @@ namespace Infrastructure.Repositories
             
 
             await _dbContext.AddAsync(building, cancellationToken);
-            await _dbContext.SaveChangesAsync();
             return building.Id;
         }
         public async Task<IEnumerable<Building>> GetAllAsync(CancellationToken cancellationToken)
@@ -71,12 +70,10 @@ namespace Infrastructure.Repositories
             Include(b => b.Properties).
                 ThenInclude(p => p.PropertyAddress).
             FirstOrDefaultAsync(b => b.Id == id);
-            //return await _dbContext.Buildings.Where(b => b.Id == id).Include(b => b.Properties).FirstOrDefaultAsync();
         }
         public async Task UpdateBuildingAsync(Building building, CancellationToken cancellationToken)
         {
             _dbContext.Entry(building).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -113,7 +110,6 @@ namespace Infrastructure.Repositories
             }
             
             _dbContext.Buildings.Remove(buildingToDelete);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.RealProperties
                 .AnyAsync(p => p.BuildingId == property.BuildingId
-                && p.PropertyAddress.VenueNumber == property.PropertyAddress.VenueNumber
+                && p.PropertyAddress.VenueNumber == property.PropertyAddress!.VenueNumber
                 && p.PropertyAddress.StaircaseNumber == property.PropertyAddress.StaircaseNumber, cancellationToken))
             {
                 _dbContext.PropertyAddresses.Remove(property.PropertyAddress);

@@ -11,8 +11,13 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IPermissionsRepository PermissionsRepository { get; }
 
     IBuildingAddressRepository BuildingAddressRepository { get; }
-    //IBuildingRepository BuildingRepository { get; }
-    //IFullAddressRepository
+    
+    IBuildingRepository BuildingRepository { get; }
+    IFullAddressRepository FullAddressRepository { get; }
+    IInspectionTaskRepository InspectionTaskRepository { get; }
+    IPropertyAddressRepository PropertyAddressRepository { get; }
+    IPropertyManagerRepository PropertyManagerRepository { get; }
+    IRealPropertyRepository RealPropertyRepository { get; }
 
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
