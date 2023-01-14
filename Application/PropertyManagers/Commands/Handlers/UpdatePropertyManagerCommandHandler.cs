@@ -1,5 +1,6 @@
 ﻿using Application.PropertyManagers.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 using System;
@@ -12,20 +13,16 @@ namespace Application.PropertyManagers.Commands.Handlers
 {
     internal class UpdatePropertyManagerCommandHandler : IRequestHandler<UpdatePropertyManagerCommand>
     {
-        private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IFullAddressRepository _fullAddressRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public UpdatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository, IFullAddressRepository fullAddressRepository, IPropertyAddressRepository propertyAddressRepository)
+        public UpdatePropertyManagerCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _propertyManagerRepository = propertyManagerRepository;
-            _fullAddressRepository = fullAddressRepository;
-            _propertyAddressRepository = propertyAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(UpdatePropertyManagerCommand command, CancellationToken cancellationToken)
         {
-            var pmFromDb = await _propertyManagerRepository.GetAsync(command.Id, cancellationToken);
+            var pmFromDb = await _unitOfWork.PropertyManagerRepository.GetAsync(command.Id, cancellationToken);
             if (pmFromDb == null)
                 throw new Exception($"W bazie danych nie ma szukanego Zarządcy Nieruchomości, aby móc go edytować");
 
@@ -34,7 +31,7 @@ namespace Application.PropertyManagers.Commands.Handlers
 
             if (command.UpdateFullAddressDTO != null && pmFromDb.FullAddressId != null)
             {
-                FullAddress faFromDB = await _fullAddressRepository.GetAsync(pmFromDb.FullAddressId.Value, cancellationToken);
+                FullAddress faFromDB = await _unitOfWork.FullAddressRepository.GetAsync(pmFromDb.FullAddressId.Value, cancellationToken);
                 if (command.UpdateFullAddressDTO.BuildingAddressId != Guid.Empty)
                     faFromDB.BuildingAddressId = command.UpdateFullAddressDTO.BuildingAddressId;
 
@@ -55,7 +52,8 @@ namespace Application.PropertyManagers.Commands.Handlers
                             VenueNumber = command.UpdateFullAddressDTO.PropertyAddress.VenueNumber,
                             StaircaseNumber = command.UpdateFullAddressDTO.PropertyAddress.StaircaseNumber
                         };
-                        var propertyAddressId = await _propertyAddressRepository.AddAsync(propAddress, cancellationToken);
+                        var propertyAddressId = await _unitOfWork.PropertyAddressRepository.AddAsync(propAddress, cancellationToken);
+                        await _unitOfWork.SaveChangesAsync(cancellationToken);
                         faFromDB.PropertyAddressId = propertyAddressId;
                     }
                 }
@@ -65,7 +63,8 @@ namespace Application.PropertyManagers.Commands.Handlers
                     //stary PropertyAddress != null
                     if (faFromDB.PropertyAddress != null)
                     {
-                        await _propertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId.Value, cancellationToken);
+                        await _unitOfWork.PropertyAddressRepository.DeleteAsync(faFromDB.PropertyAddressId!.Value, cancellationToken);
+                        await _unitOfWork.SaveChangesAsync(cancellationToken);
                     }
                     // stary PropertyAddress == null
                     else
@@ -75,10 +74,11 @@ namespace Application.PropertyManagers.Commands.Handlers
 
                 }
 
-                await _fullAddressRepository.UpdateAsync(faFromDB, cancellationToken);
+                await _unitOfWork.FullAddressRepository.UpdateAsync(faFromDB, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
-            await _propertyManagerRepository.UpdateAsync(pmFromDb, cancellationToken);
-
+            await _unitOfWork.PropertyManagerRepository.UpdateAsync(pmFromDb, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

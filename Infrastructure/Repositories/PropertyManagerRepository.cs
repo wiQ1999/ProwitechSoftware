@@ -24,7 +24,6 @@ namespace Infrastructure.Repositories
             if (await _dbContext.PropertyManagers.AnyAsync(pm => pm.Name == propMan.Name))
                 throw new Exception($"Istnieje już Zarządca Nieruchomości o nazwie {propMan.Name}");
             await _dbContext.AddAsync(propMan, cancellationToken);
-            await _dbContext.SaveChangesAsync();
             return propMan.Id;
 
         }
@@ -52,7 +51,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(PropertyManager propMan, CancellationToken cancellationToken)
         {
             _dbContext.Entry(propMan).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -61,7 +59,6 @@ namespace Infrastructure.Repositories
                 throw new Exception($"Brak Zarządcy Nieruchomości o identyfikatorze {id}.");
             
             _dbContext.PropertyManagers.Remove(propMan);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

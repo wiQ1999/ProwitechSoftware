@@ -1,5 +1,6 @@
 ﻿using Application.FullAddresses.DTOs;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Repositories;
 using System;
@@ -12,13 +13,11 @@ namespace Application.FullAddresses.HelperMethods
 {
     public class FullAddressCRUDHelper
     {
-        private readonly IFullAddressRepository _fullAddressRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public FullAddressCRUDHelper(IFullAddressRepository fullAddressRepository, IPropertyAddressRepository propertyAddressRepository)
+        public FullAddressCRUDHelper(IRepositoriesUnitOfWork unitOfWork)
         {
-            _fullAddressRepository = fullAddressRepository;
-            _propertyAddressRepository = propertyAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> GetCreatedOrAlreadyExistingFullAddressId(FullAddressDTO fullAddressDTO, CancellationToken cancellationToken)
@@ -38,17 +37,20 @@ namespace Application.FullAddresses.HelperMethods
                     BuildingAddressId = fullAddressDTO.BuildingAddressId,
                     PropertyAddress = propertyAddress
                 };
-                var faFromDB = await _fullAddressRepository.FindFullAddressWithPropertyAddress(fullAddress, cancellationToken);
+                var faFromDB = await _unitOfWork.FullAddressRepository.FindFullAddressWithPropertyAddress(fullAddress, cancellationToken);
 
                 if (faFromDB == null)
                 {
-                    var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                    var propertyAddressId = await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
                     fullAddress = new FullAddress()
                     {
                         BuildingAddressId = fullAddressDTO.BuildingAddressId,
                         PropertyAddressId = propertyAddressId
                     };
-                    fullAddressId = await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
+                    fullAddressId = await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+
                 }
                 else
                 {
@@ -61,11 +63,12 @@ namespace Application.FullAddresses.HelperMethods
                 {
                     BuildingAddressId = fullAddressDTO.BuildingAddressId,
                 };
-                var faFromDB = await _fullAddressRepository.FindFullAddressWithoutPropertyAddress(fullAddress, cancellationToken);
+                var faFromDB = await _unitOfWork.FullAddressRepository.FindFullAddressWithoutPropertyAddress(fullAddress, cancellationToken);
 
                 if (faFromDB == null)
                 {
-                    fullAddressId = await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
+                    fullAddressId = await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
                 }
                 else
                 {

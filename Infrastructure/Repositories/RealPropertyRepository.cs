@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.RealProperties
                 .AnyAsync(p => p.BuildingId == property.BuildingId
-                && p.PropertyAddress.VenueNumber == property.PropertyAddress.VenueNumber
+                && p.PropertyAddress.VenueNumber == property.PropertyAddress!.VenueNumber
                 && p.PropertyAddress.StaircaseNumber == property.PropertyAddress.StaircaseNumber, cancellationToken))
             {
                 _dbContext.PropertyAddresses.Remove(property.PropertyAddress);
@@ -32,7 +32,6 @@ namespace Infrastructure.Repositories
             }
                 
             await _dbContext.AddAsync(property, cancellationToken);
-            await _dbContext.SaveChangesAsync();
             return property.Id;
         }
 
@@ -62,7 +61,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(RealProperty property, CancellationToken cancellationToken)
         {
             _dbContext.Entry(property).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -70,7 +68,6 @@ namespace Infrastructure.Repositories
             if(property==null)
                 throw new Exception($"Brak Nieruchomości o identyfikatorze {id}.");
             _dbContext.RealProperties.Remove(property);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<RealProperty?> GetOnePropertyOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken)

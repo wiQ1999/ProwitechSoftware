@@ -21,7 +21,6 @@ namespace Infrastructure.Repositories
         {
 
             await _dbContext.AddAsync(fullAddress);
-            await _dbContext.SaveChangesAsync(cancellationToken);
             return fullAddress.Id;
         }
 
@@ -44,7 +43,6 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(FullAddress address, CancellationToken cancellationToken)
         {
             _dbContext.Entry(address).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -64,7 +62,6 @@ namespace Infrastructure.Repositories
             }
                 
             _dbContext.FullAddresses.Remove(fullAddress);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task<FullAddress?> FindFullAddressWithPropertyAddress(FullAddress address, CancellationToken cancellationToken)
         {

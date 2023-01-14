@@ -1,5 +1,6 @@
 ﻿using Application.Buildings.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,17 @@ namespace Application.Buildings.Commands.Handlers
 {
     public class DeleteBuildingCommandHandler : IRequestHandler<DeleteBuildingCommand>
     {
-        private readonly IBuildingRepository _buildingRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public DeleteBuildingCommandHandler(IBuildingRepository buildingRepository)
+        public DeleteBuildingCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _buildingRepository = buildingRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(DeleteBuildingCommand request, CancellationToken cancellationToken)
         {
-            await _buildingRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.BuildingRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }
