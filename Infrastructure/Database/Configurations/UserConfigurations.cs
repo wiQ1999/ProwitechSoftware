@@ -14,7 +14,7 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.HasIndex(up => up.Login)
             .IsUnique();
         builder.Property(up => up.Password)
-            .HasMaxLength(50)
+            .HasMaxLength(250)
             .IsRequired();
         builder.Property(up => up.FirstName)
             .HasMaxLength(50);
