@@ -1,5 +1,6 @@
 ﻿using Application.RealProperties.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Repositories;
 using MediatR;
@@ -14,20 +15,11 @@ namespace Application.RealProperties.Commands.Handlers
 {
     public class CreateRealPropertyCommandHandler : IRequestHandler<CreateRealPropertyCommand, Guid>
     {
-        private readonly IRealPropertyRepository _realPropertyRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
-        private readonly IBuildingRepository _buildingRepository;
-
-        public CreateRealPropertyCommandHandler(IRealPropertyRepository realPropertyRepository, IPropertyAddressRepository propertyAddressRepository, IBuildingRepository buildingRepository)
-        {
-            _realPropertyRepository = realPropertyRepository;
-            _propertyAddressRepository = propertyAddressRepository;
-            _buildingRepository = buildingRepository;
-        }
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
         public async Task<Guid> Handle(CreateRealPropertyCommand request, CancellationToken cancellationToken)
         {
-            var building = await _buildingRepository.GetAsync(request.BuildingId, cancellationToken);
+            var building = await _unitOfWork.BuildingRepository.GetAsync(request.BuildingId, cancellationToken);
             if (building == null)
                 throw new Exception($"Nie można utworzyć Nieruchomości: Brak w bazie danych Budynku o Id: {request.BuildingId}");
 
@@ -36,14 +28,17 @@ namespace Application.RealProperties.Commands.Handlers
                 VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber,
                 StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber
             };
-            var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+            var propertyAddressId = await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             RealProperty realProperty = new RealProperty()
             {
                 BuildingId = request.BuildingId,
                 PropertyAddressId = propertyAddressId,
                 PropertyAddress=propertyAddress
             };
-            return await _realPropertyRepository.AddAsync(realProperty, cancellationToken);
+            var newRealProp= await _unitOfWork.RealPropertyRepository.AddAsync(realProperty, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return newRealProp;
         }
         
         

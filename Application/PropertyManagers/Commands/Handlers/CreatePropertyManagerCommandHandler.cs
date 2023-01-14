@@ -4,6 +4,7 @@ using Application.PropertyManagers.Commands.Requests;
 using Application.Roles.Commands.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 using System;
@@ -16,27 +17,18 @@ namespace Application.PropertyManagers.Commands.Handlers
 {
     public class CreatePropertyManagerCommandHandler : IRequestHandler<CreatePropertyManagerCommand, Guid>
     {
-        private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IFullAddressRepository _fullAddressRepository;
-        private readonly IBuildingAddressRepository _buildingAddressRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public CreatePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository,
-            IFullAddressRepository fullAddressRepository,
-            IBuildingAddressRepository buildingAddressRepository,
-            IPropertyAddressRepository propertyAddressRepository)
+        public CreatePropertyManagerCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _propertyManagerRepository = propertyManagerRepository;
-            _fullAddressRepository = fullAddressRepository;
-            _buildingAddressRepository = buildingAddressRepository;
-            _propertyAddressRepository = propertyAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> Handle(CreatePropertyManagerCommand request, CancellationToken cancellationToken)
         {
             var faDTO = request.FullAddressDTO;
 
-            var baFromDB = await _buildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
+            var baFromDB = await _unitOfWork.BuildingAddressRepository.GetAsync(faDTO.BuildingAddressId, cancellationToken);
             if (baFromDB == null)
                 throw new Exception($"W bazie danych nie ma adresu budynku o id: {faDTO.BuildingAddressId}");
 
@@ -54,7 +46,8 @@ namespace Application.PropertyManagers.Commands.Handlers
                     VenueNumber = fullAddressDTO.PropertyAddressDTO.VenueNumber,
                     StaircaseNumber = fullAddressDTO.PropertyAddressDTO.StaircaseNumber
                 };
-                var propertyAddressId = await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                var propertyAddressId = await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
                 fullAddress = new FullAddress()
                 {
                     BuildingAddressId = fullAddressDTO.BuildingAddressId,
@@ -68,8 +61,8 @@ namespace Application.PropertyManagers.Commands.Handlers
                     BuildingAddressId = fullAddressDTO.BuildingAddressId
                 };
             }
-            fullAddressId = await _fullAddressRepository.AddAsync(fullAddress, cancellationToken);
-
+            fullAddressId = await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             PropertyManager propertyManager = new()
             {
                 Name = request.Name,
@@ -77,7 +70,9 @@ namespace Application.PropertyManagers.Commands.Handlers
                 FullAddressId = fullAddressId,
 
             };
-            return await _propertyManagerRepository.AddAsync(propertyManager, cancellationToken);
+            var newPropMan= await _unitOfWork.PropertyManagerRepository.AddAsync(propertyManager, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return newPropMan;
         }
     }
 }
