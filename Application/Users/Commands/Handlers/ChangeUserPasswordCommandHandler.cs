@@ -5,7 +5,6 @@ using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 
 namespace Application.Users.Commands.Handlers;
 
