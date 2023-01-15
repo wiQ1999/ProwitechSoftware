@@ -1,9 +1,11 @@
 ﻿using Application.Authentication.Services;
 using Application.Interfaces.Services;
 using Application.Permissions.Services;
+using Infrastructure.Models.Domain;
 using Infrastructure.Models.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +24,7 @@ public static class ConfigureServices
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddScoped<IPermissionsSelector, PermissionsSelector>();
         services.AddScoped<IClaimProvider, ClaimProvider>();
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
         return services;
     }

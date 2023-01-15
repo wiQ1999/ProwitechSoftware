@@ -5,5 +5,5 @@ namespace Infrastructure.Interfaces.Repositories;
 
 public interface IUsersRepository : IGenericRepository<User>
 {
-    Task<User?> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken);
+    Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken);
 }

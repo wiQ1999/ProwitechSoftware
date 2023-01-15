@@ -21,10 +21,10 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         => await DbSet.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id, cancellationToken) ??
             throw new NotFoundInDbExcption(Source, id);
 
-    public async Task<User?> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
+    public async Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken)
         => await DbSet
             .Include(u => u.Role)
-            .FirstOrDefaultAsync(u => u.Login == login && u.Password == password, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Login == login, cancellationToken);
 
     public override async Task<Guid> CreateAsync(User user, CancellationToken cancellationToken)
     {
@@ -46,8 +46,8 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         if (string.IsNullOrWhiteSpace(user.Password))
             throw new RequiredValueException(Source, nameof(user.Password));
 
-        if (user.Password!.Length > 50)
-            throw new InvalidLengthException(Source, nameof(user.Password), 50);
+        if (user.Password!.Length > 250)
+            throw new InvalidLengthException(Source, nameof(user.Password), 250);
 
         if (user.FirstName != null && user.FirstName.Length > 50)
             throw new InvalidLengthException(Source, nameof(user.FirstName), 50);
