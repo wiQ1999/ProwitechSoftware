@@ -3,11 +3,14 @@ using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Properties.Helpers
@@ -25,7 +28,7 @@ namespace Application.Properties.Helpers
         {
             string oldBuildingType = buildingFromDB.Type;
 
-            if (oldBuildingType==BuildingType.JEDNOLOKALOWY.ToString()
+            if (oldBuildingType == BuildingType.JEDNOLOKALOWY.ToString()
                 && newBuildingType == BuildingType.WIELOLOKALOWY.ToString())
             {
                 var propertyToDelete = await _unitOfWork.RealPropertyRepository.GetOnePropertyOfParticularBuilding(buildingFromDB.Id, cancellationToken);
@@ -36,7 +39,7 @@ namespace Application.Properties.Helpers
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 }
-                    
+
             }
             else if (oldBuildingType == BuildingType.WIELOLOKALOWY.ToString()
                 && newBuildingType == BuildingType.JEDNOLOKALOWY.ToString())
@@ -49,11 +52,28 @@ namespace Application.Properties.Helpers
                 {
                     BuildingId = buildingFromDB.Id,
                     PropertyAddressId = propertyAddressId,
-                    PropertyAddress=propertyAddress
+                    PropertyAddress = propertyAddress
                 };
                 await _unitOfWork.RealPropertyRepository.AddAsync(property, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
+
+        public async Task CheckIfRealPropertyAlreadyExists(RealProperty property, bool creationMode, CancellationToken cancellationToken)
+        {
+            if (await _unitOfWork.RealPropertyRepository.CheckIfRealPropertyAlreadyExists(property, cancellationToken))
+            {
+
+                if (creationMode)
+                {
+                    await _unitOfWork.PropertyAddressRepository.DeleteAsync(property.PropertyAddressId.Value, cancellationToken);
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                }
+                throw new Exception($"W bazie danych istnieje już podana Nieruchomość!");
+            }
+
+        }
+
     }
 }

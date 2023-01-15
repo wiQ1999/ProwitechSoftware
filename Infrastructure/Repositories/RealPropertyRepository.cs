@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Models.Domain;
+using Infrastructure.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,26 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Guid> AddAsync(RealProperty property, CancellationToken cancellationToken)
+        public async Task<bool> CheckIfRealPropertyAlreadyExists(RealProperty property, CancellationToken cancellationToken)
         {
             if (await _dbContext.RealProperties
                 .AnyAsync(p => p.BuildingId == property.BuildingId
                 && p.PropertyAddress.VenueNumber == property.PropertyAddress!.VenueNumber
                 && p.PropertyAddress.StaircaseNumber == property.PropertyAddress.StaircaseNumber, cancellationToken))
             {
-                _dbContext.PropertyAddresses.Remove(property.PropertyAddress);
-                await _dbContext.SaveChangesAsync(cancellationToken);
-                throw new Exception($"W bazie danych istnieje już podana Nieruchomość!");
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<Guid> AddAsync(RealProperty property, CancellationToken cancellationToken)
+        {
+            var building = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == property.BuildingId);
+            var buildingType = building!.Type;
+
+            if(building.Type==BuildingType.JEDNOLOKALOWY.ToString() && building.Properties!= null && building.Properties.Count == 1)
+            {
+                throw new Exception($"Nie można dodać nieruchomości: Budynek posiada już jedną nieruchomość, a jest JEDNOLOKALOWY");
             }
                 
             await _dbContext.AddAsync(property, cancellationToken);

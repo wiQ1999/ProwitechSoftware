@@ -64,7 +64,8 @@ namespace Application.Buildings.Commands.Handlers
                 RealProperty property = new RealProperty()
                 {
                     BuildingId = buildingId,
-                    PropertyAddressId = propertyAddressId
+                    PropertyAddressId = propertyAddressId,
+                    PropertyAddress = propertyAddress
                 };
                 await _unitOfWork.RealPropertyRepository.AddAsync(property, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);

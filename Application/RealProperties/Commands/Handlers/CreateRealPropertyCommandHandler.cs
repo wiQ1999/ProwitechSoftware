@@ -1,4 +1,5 @@
-﻿using Application.RealProperties.Commands.Requests;
+﻿using Application.Properties.Helpers;
+using Application.RealProperties.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
@@ -41,6 +42,10 @@ namespace Application.RealProperties.Commands.Handlers
                 PropertyAddressId = propertyAddressId,
                 PropertyAddress=propertyAddress
             };
+            bool creationMode = true;
+            RealPropertyHelper propertyHelper = new RealPropertyHelper(_unitOfWork);
+            await propertyHelper.CheckIfRealPropertyAlreadyExists(realProperty, creationMode, cancellationToken);
+            
             var newRealProp= await _unitOfWork.RealPropertyRepository.AddAsync(realProperty, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return newRealProp;
