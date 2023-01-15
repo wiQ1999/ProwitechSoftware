@@ -9,7 +9,7 @@ namespace Infrastructure.Interfaces.Repositories
 {
     public interface IRealPropertyRepository
     {
-        //Task CheckIfRealPropertyAlreadyExists(RealProperty property, CancellationToken cancellationToken);
+        Task<bool> CheckIfRealPropertyAlreadyExists(RealProperty property, CancellationToken cancellationToken);
         Task<IEnumerable<RealProperty>> GetAllAsync(CancellationToken cancellationToken);
         Task<RealProperty?> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<Guid> AddAsync(RealProperty property, CancellationToken cancellationToken);
@@ -17,6 +17,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
         Task <RealProperty?> GetOnePropertyOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken);
-        Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken);
+        //Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken);
     }
 }

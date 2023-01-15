@@ -1,4 +1,5 @@
-﻿using Application.RealProperties.Commands.Requests;
+﻿using Application.Properties.Helpers;
+using Application.RealProperties.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
@@ -29,6 +30,21 @@ namespace Application.RealProperties.Commands.Handlers
             var building = await _unitOfWork.BuildingRepository.GetAsync(request.BuildingId, cancellationToken);
             if (building == null)
                 throw new Exception($"Nie można utworzyć Nieruchomości: Brak w bazie danych Budynku o Id: {request.BuildingId}");
+
+            var propertyAfterUpdate = new RealProperty()
+            {
+                BuildingId = request.BuildingId,
+                PropertyAddress = new PropertyAddress()
+                {
+                    VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber,
+                    StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber,
+                },
+                PropertyAddressId=realProperty.PropertyAddressId
+            };
+
+            bool creationMode = false;
+            RealPropertyHelper propertyHelper = new RealPropertyHelper(_unitOfWork);
+            await propertyHelper.CheckIfRealPropertyAlreadyExists(propertyAfterUpdate, creationMode, cancellationToken);
 
             realProperty.BuildingId = building.Id;
             realProperty.PropertyAddress!.VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber;

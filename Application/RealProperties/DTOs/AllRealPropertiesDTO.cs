@@ -11,7 +11,7 @@ namespace Application.RealProperties.DTOs
     public class AllRealPropertiesDTO
     {
         public Guid Id { get; set; }
-        public AllBuildingsDTO BuildingDTO { get; set; }
+        public AllBuildingsDTO Building { get; set; }
         public PropertyAddress? PropertyAddress { get; set; }
     }
 }
