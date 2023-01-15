@@ -17,6 +17,6 @@ namespace Infrastructure.Interfaces.Repositories
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
         Task <RealProperty?> GetOnePropertyOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken);
-        Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken);
+        //Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken);
     }
 }

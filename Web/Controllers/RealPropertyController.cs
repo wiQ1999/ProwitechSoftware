@@ -1,4 +1,5 @@
 ﻿using Application.RealProperties.Commands.Requests;
+using Application.RealProperties.Queries.Requests;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
@@ -8,9 +9,9 @@ namespace Web.Controllers
     [Route("[controller]")]
     public class RealPropertyController : ApiControllerBase
     {
-        //[HttpGet]
-        //public async Task<IActionResult> Get() =>
-        //        Ok(await Mediator.Send(new GetAllInspectionTasksQuery()));
+        [HttpGet]
+        public async Task<IActionResult> Get() =>
+                Ok(await Mediator.Send(new GetAllRealPropertiesQuery()));
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateRealPropertyCommand command) =>

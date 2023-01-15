@@ -47,17 +47,23 @@ namespace Infrastructure.Repositories
         }
 
 
-        public async Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken)
-        {
-            return await _dbContext.RealProperties
-                .Where(p=>p.BuildingId==buildingId)
-                .Include(p=>p.PropertyAddress)
-                .ToArrayAsync(cancellationToken);
-        }
+        //public async Task<IEnumerable<RealProperty>> GetAllPropertiesOfBuilding(Guid buildingId, CancellationToken cancellationToken)
+        //{
+        //    return await _dbContext.RealProperties
+        //        .Where(p=>p.BuildingId==buildingId)
+        //        .Include(p=>p.PropertyAddress)
+        //        .ToArrayAsync(cancellationToken);
+        //}
 
         public async Task<IEnumerable<RealProperty>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.RealProperties.ToArrayAsync(cancellationToken);
+            return await _dbContext.RealProperties.
+                Include(rp => rp.PropertyAddress).
+                Include(rp => rp.Building).
+                    ThenInclude(b => b.BuildingAddress).
+                Include(rp => rp.Building).
+                    ThenInclude(b => b.PropertyManager).
+                    ToArrayAsync(cancellationToken);
         }
 
         public async Task<RealProperty?> GetAsync(Guid id, CancellationToken cancellationToken)
@@ -66,6 +72,9 @@ namespace Infrastructure.Repositories
                 Include(rp=>rp.PropertyAddress).
                 Include(rp=>rp.Building).
                     ThenInclude(b=>b.BuildingAddress).
+                Include(rp=>rp.Building).
+                    ThenInclude(b=>b.PropertyManager).
+                        ThenInclude(pm=>pm.FullAddress).
                 FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         }
 

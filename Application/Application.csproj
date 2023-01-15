@@ -29,8 +29,6 @@
   <ItemGroup>
     <Folder Include="InspectionProtocols\Profiles\" />
     <Folder Include="RealProperties\Profiles\" />
-    <Folder Include="RealProperties\Queries\Handlers\" />
-    <Folder Include="RealProperties\Queries\Requests\" />
   </ItemGroup>
 
 </Project>
