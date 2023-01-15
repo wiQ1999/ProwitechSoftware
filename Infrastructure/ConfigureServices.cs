@@ -1,8 +1,10 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
+using Infrastructure.Models.Domain;
 using Infrastructure.Repositories;
 using Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +27,9 @@ public static class ConfigureServices
         services.AddScoped<IBuildingRepository, BuildingRepository>();
         services.AddScoped<IRealPropertyRepository, RealPropertyRepository>();
         services.AddScoped<IInspectionTaskRepository, InspectionTaskRepository>();
-        
+
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
         return services;
     }
