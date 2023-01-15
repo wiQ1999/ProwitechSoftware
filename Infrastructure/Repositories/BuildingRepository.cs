@@ -88,6 +88,8 @@ namespace Infrastructure.Repositories
             //{
 
             //}
+
+            //TODO nie wolno usunąć budynku, który jest w jakimś zadaniu (?)
             //TODO sprawdź czy przy usuwaniu WIELOLOKALOWY usuwają się Properties oraz PropertiesAddresses
 
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;

@@ -68,14 +68,22 @@ namespace Infrastructure.Repositories
 
         public async Task<RealProperty?> GetAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbContext.RealProperties.
+            var realProp = await _dbContext.RealProperties.
                 Include(rp=>rp.PropertyAddress).
                 Include(rp=>rp.Building).
                     ThenInclude(b=>b.BuildingAddress).
                 Include(rp=>rp.Building).
                     ThenInclude(b=>b.PropertyManager).
                         ThenInclude(pm=>pm.FullAddress).
+                        ThenInclude(fa=>fa.BuildingAddress).
+                Include(rp => rp.Building).
+                    ThenInclude(b => b.PropertyManager).
+                        ThenInclude(pm => pm.FullAddress).
+                        ThenInclude(fa => fa.PropertyAddress).
                 FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            if (realProp == null)
+                throw new Exception($"W bazie danych nie znaleziono Nieruchomości o ID: {id}");
+            return realProp;
         }
 
         public async Task UpdateAsync(RealProperty property, CancellationToken cancellationToken)
@@ -87,6 +95,12 @@ namespace Infrastructure.Repositories
             var property = await _dbContext.RealProperties.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
             if(property==null)
                 throw new Exception($"Brak Nieruchomości o identyfikatorze {id}.");
+            if (property.PropertyAddressId != null)
+            {
+                var propAddress = await _dbContext.PropertyAddresses.FirstOrDefaultAsync(a=>a.Id==property.PropertyAddressId, cancellationToken);
+                _dbContext.PropertyAddresses.Remove(propAddress!);
+            }
+            //TODO nie wolno usunąć Property, do której jest przypisany Protokół
             _dbContext.RealProperties.Remove(property);
         }
 
