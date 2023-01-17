@@ -16,15 +16,14 @@ namespace Application.InspectionProtocols.Helpers
             if(!ibaseAnswer.GetAnswers().Contains(givenAnswer))
                 throw new NotAllowedProtocolAnswerException(givenAnswer, ibaseAnswer.GetQuestion());
         }
-        static public bool MultipleAnswersContain(IBaseAnswer ibaseAnswer, string givenAnswer)
+        static public void MultipleAnswersContain(IBaseAnswer ibaseAnswer, string givenAnswer)
         {
             string[] answers = givenAnswer.Split(',');
             foreach (var a in answers)
             {
                 if (!ibaseAnswer.GetAnswers().Contains(a))
-                    return false;
+                    throw new NotAllowedProtocolAnswerException(givenAnswer, ibaseAnswer.GetQuestion());
             }
-            return true;
         }
     }
 }

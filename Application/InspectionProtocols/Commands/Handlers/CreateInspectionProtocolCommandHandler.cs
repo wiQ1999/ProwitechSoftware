@@ -25,9 +25,15 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
         public async Task<Guid> Handle(CreateInspectionProtocolCommand request, CancellationToken cancellationToken)
         {
-            InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(request.InspectionProtocolDTO);
+            var inspectionProtocolDTO = request.InspectionProtocolDTO;
+            
+            
+            
+            InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(inspectionProtocolDTO);
 
-            InspectionProtocol ip = _mapper.Map<InspectionProtocol>(request.InspectionProtocolDTO);
+
+
+            InspectionProtocol ip = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
 
             var protocolId = await _unitOfWork.InspectionProtocolsRepository.AddAsync(ip, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

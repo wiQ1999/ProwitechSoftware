@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.InspectionProtocolAnswers
 {
-    public class E02_B_Gazomierz_szafka_wentylowana : IBaseAnswer
+    public class E02_Gazomierz_szafka_wentylowana_B : IBaseAnswer
     {
         static public readonly string QUESTION = "Szafka wentylowana";
         static public readonly bool[] ANSWERS = { true, false };
