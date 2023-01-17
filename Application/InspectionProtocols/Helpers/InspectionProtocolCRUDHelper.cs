@@ -36,7 +36,7 @@ namespace Application.InspectionProtocols.Helpers
                 
                 if (p.Name.EndsWith("_M"))
                 {
-                    string givenAnswer = (string)p.GetValue(protocolDTO, null);
+                    string givenAnswer = (string)p.GetValue(protocolDTO, null)!;
                     AnswerChecker.MultipleAnswersContain
                         (
                         (IBaseAnswer)Activator.CreateInstance(classToInitialize)!, givenAnswer!
@@ -44,7 +44,7 @@ namespace Application.InspectionProtocols.Helpers
                 }
                 else if (p.Name.ToString()!.EndsWith("_B"))
                 {
-                    string givenAnswer = p.GetValue(protocolDTO, null).ToString();
+                    string givenAnswer = p.GetValue(protocolDTO, null)!.ToString()!;
                     AnswerChecker.AnswersContain
                         (
                         (IBaseAnswer)Activator.CreateInstance(classToInitialize)!, givenAnswer!
@@ -52,7 +52,7 @@ namespace Application.InspectionProtocols.Helpers
                 }
                 else if (p.Name.ToString()!.StartsWith("A"))
                 {
-                    string givenAnswer = (string)p.GetValue(protocolDTO, null);
+                    string givenAnswer = (string)p.GetValue(protocolDTO, null)!;
                     AnswerChecker.AnswersContain
                         (
                         (IBaseAnswer)Activator.CreateInstance(classToInitialize)!, givenAnswer!
