@@ -20,16 +20,31 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<bool> CheckIfRealPropertyAlreadyExists(RealProperty property, CancellationToken cancellationToken)
+        public async Task<bool> CheckIfRealPropertyAlreadyExists(RealProperty property, bool creationMode, CancellationToken cancellationToken)
         {
-            if (await _dbContext.RealProperties
+            if (creationMode)
+            {
+                if (await _dbContext.RealProperties
                 .AnyAsync(p => p.BuildingId == property.BuildingId
                 && p.PropertyAddress.VenueNumber == property.PropertyAddress!.VenueNumber
                 && p.PropertyAddress.StaircaseNumber == property.PropertyAddress.StaircaseNumber, cancellationToken))
+                {
+                    return true;
+                }
+            }
+            else
             {
-                return true;
+                if (await _dbContext.RealProperties
+                .AnyAsync(p => p.Id!= property.Id && p.BuildingId == property.BuildingId
+                && p.PropertyAddress.VenueNumber == property.PropertyAddress!.VenueNumber
+                && p.PropertyAddress.StaircaseNumber == property.PropertyAddress.StaircaseNumber, cancellationToken))
+                {
+                    return true;
+                }
             }
             return false;
+
+
         }
 
         public async Task<Guid> AddAsync(RealProperty property, CancellationToken cancellationToken)

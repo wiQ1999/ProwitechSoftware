@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Guid> AddAsync(Building building, Guid buildingAddressId, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(Building building, CancellationToken cancellationToken)
         {
             if (await _dbContext.Buildings.AnyAsync(b => b.BuildingAddressId == building.BuildingAddressId))
                 throw new Exception($"Istnieje już budynek mający adres o Id: {building.BuildingAddressId}");
@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
                 throw new Exception($"Próba dodania niedozwolonego typu budynku: {building.Type}");
 
             var buildingAddressAssociatedWithNewBuilding = await _dbContext.BuildingAddresses
-                .FirstOrDefaultAsync(ba => ba.Id == buildingAddressId);
+                .FirstOrDefaultAsync(ba => ba.Id == building.BuildingAddressId);
             if (buildingAddressAssociatedWithNewBuilding != null)
             {
                 var buildingWithTheSameBuildingAddressData = await _dbContext.Buildings.Where(
