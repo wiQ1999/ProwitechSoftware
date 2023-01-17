@@ -14,9 +14,10 @@ namespace Infrastructure.Models.Domain
         public InspectionTask? InspectionTask { get; set; }
         public DateTime InspectionDateTime { get; set; }
         public Guid InspectedPropertyId { get; set; }
+        public RealProperty InspectedProperty { get; set; }
         public Guid InspectionPerformerId { get; set; }
         public User InspectionPerformer { get; set; }
-        public RealProperty InspectedProperty { get; set; }
+       
         public Guid ResidentId { get; set; }
         public Resident Resident { get; set; }
         public string A_Gazomierz_umiejscowienie { get; set; }
