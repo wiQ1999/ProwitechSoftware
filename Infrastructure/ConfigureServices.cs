@@ -27,6 +27,7 @@ public static class ConfigureServices
         services.AddScoped<IBuildingRepository, BuildingRepository>();
         services.AddScoped<IRealPropertyRepository, RealPropertyRepository>();
         services.AddScoped<IInspectionTaskRepository, InspectionTaskRepository>();
+        services.AddScoped<IInspectionProtocolsRepository, InspectionProtocolsRepository>();
 
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 

@@ -1,6 +1,8 @@
 ﻿using Application.InspectionProtocols.Commands.Requests;
+using Application.InspectionProtocols.Helpers;
 using AutoMapper;
 using Infrastructure.Interfaces.UnitOfWork;
+using Infrastructure.Models.Domain;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -23,8 +25,13 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
         public async Task<Guid> Handle(CreateInspectionProtocolCommand request, CancellationToken cancellationToken)
         {
-            Guid id = Guid.NewGuid();
-            return id;
+            InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(request.InspectionProtocolDTO);
+
+            InspectionProtocol ip = _mapper.Map<InspectionProtocol>(request.InspectionProtocolDTO);
+
+            var protocolId = await _unitOfWork.InspectionProtocolsRepository.AddAsync(ip, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return protocolId;
         }
     }
 }

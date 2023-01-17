@@ -18,6 +18,7 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IPropertyAddressRepository PropertyAddressRepository { get; }
     IPropertyManagerRepository PropertyManagerRepository { get; }
     IRealPropertyRepository RealPropertyRepository { get; }
+    IInspectionProtocolsRepository InspectionProtocolsRepository { get; }
 
 
     Task SaveChangesAsync(CancellationToken cancellationToken);

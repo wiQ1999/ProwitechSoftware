@@ -1,32 +1,34 @@
-﻿using System;
+﻿using Infrastructure.Models.Domain;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Models.Domain
+namespace Application.InspectionProtocols.DTOs
 {
-    public class InspectionProtocol
+    public class CreateOrUpdateInspectionProtocolDTO
     {
-        public Guid Id { get; set; }
-        public string Number { get; set; }
-        public Guid? InspectionTaskId { get; set; }
-        public InspectionTask? InspectionTask { get; set; }
-        public DateTime InspectionDateTime { get; set; }
-        public Guid InspectedPropertyId { get; set; }
-        public RealProperty InspectedProperty { get; set; }
-        public Guid InspectionPerformerId { get; set; }
-        public User InspectionPerformer { get; set; }
-       
-        public Guid ResidentId { get; set; }
-        public Resident Resident { get; set; }
+        //public Guid Id { get; set; }
+        //public string Number { get; set; }
+        //public Guid? InspectionTaskId { get; set; }
+        //public InspectionTask? InspectionTask { get; set; }
+        //public DateTime InspectionDateTime { get; set; }
+        //public Guid InspectedPropertyId { get; set; }
+        //public RealProperty InspectedProperty { get; set; }
+        //public Guid InspectionPerformerId { get; set; }
+        //public User InspectionPerformer { get; set; }
+
+        //public Guid ResidentId { get; set; }
+        //public Resident Resident { get; set; }
         public string A01_Gazomierz_umiejscowienie { get; set; }
-        public bool A02_B_Gazomierz_szafka_wentylowana{ get; set; }
-        public bool A03_B_Gazomierz_szczelnosc{ get; set; }
+        public bool A02_B_Gazomierz_szafka_wentylowana { get; set; }
+        public bool A03_B_Gazomierz_szczelnosc { get; set; }
         public string A04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika { get; set; }
         public string A05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr { get; set; }
         public string A06_Gazomierz_kurek_przed_gazomierzem { get; set; }
-        
+
         public string A07_M_Przewody_rodzaj { get; set; }
         public string A08_M_Przewody_przebieg { get; set; }
         public string A09_M_Przewody_sposob_prowadzenia { get; set; }
@@ -60,8 +62,5 @@ namespace Infrastructure.Models.Domain
         public bool A33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci { get; set; }
         public bool A34_Propan_butan { get; set; }
         public string A35_Inne_uwagi { get; set; }
-
-
-
     }
 }
