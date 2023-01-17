@@ -19,8 +19,8 @@ namespace Application.InspectionProtocols.DTOs
         public AllRealPropertiesDTO InspectedProperty { get; set; }
         public Resident? Resident { get; set; }
         public string A_Gazomierz_umiejscowienie { get; set; }
-        public string A_Gazomierz_szafka_wentylowana { get; set; }
-        public string A_Gazomierz_szczelnosc { get; set; }
+        public bool A_Gazomierz_szafka_wentylowana { get; set; }
+        public bool A_Gazomierz_szczelnosc { get; set; }
         public string A_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika { get; set; }
         public string A_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr { get; set; }
         public string A_Gazomierz_kurek_przed_gazomierzem { get; set; }
