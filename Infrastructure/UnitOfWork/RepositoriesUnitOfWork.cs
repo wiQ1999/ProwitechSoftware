@@ -21,6 +21,7 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
     private IPropertyManagerRepository? _propertyManagerRepository;
     private IRealPropertyRepository? _realPropertyRepository;
     private IInspectionProtocolsRepository? _inspectionProtocolsRepository;
+    private IResidentsRepository? _residentsRepository;
     private bool disposed = false;
 
     public IGenericRepository<Role> RolesRepository
@@ -50,6 +51,8 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
 
     public IInspectionProtocolsRepository InspectionProtocolsRepository
         => _inspectionProtocolsRepository ??= new InspectionProtocolsRepository(_context);
+
+    public IResidentsRepository ResidentsRepository => _residentsRepository ??= new ResidentsRepository(_context);
 
     public RepositoriesUnitOfWork(ProwitechDbContext context)
     {

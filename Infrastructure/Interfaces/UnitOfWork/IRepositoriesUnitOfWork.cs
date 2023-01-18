@@ -20,6 +20,7 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IRealPropertyRepository RealPropertyRepository { get; }
     IInspectionProtocolsRepository InspectionProtocolsRepository { get; }
 
+    IResidentsRepository ResidentsRepository { get; }
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

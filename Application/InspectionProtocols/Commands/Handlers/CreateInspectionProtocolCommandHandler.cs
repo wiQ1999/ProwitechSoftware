@@ -25,17 +25,18 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
         public async Task<Guid> Handle(CreateInspectionProtocolCommand request, CancellationToken cancellationToken)
         {
+            var resident = _mapper.Map<Resident>(request.ResidentDTO);
             var inspectionProtocolDTO = request.InspectionProtocolDTO;
-            
-            
+
+            var residentId = await _unitOfWork.ResidentsRepository.CreateOrGetResident(resident, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(inspectionProtocolDTO);
+            InspectionProtocol inspectionProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
 
+            inspectionProtocol.ResidentId=residentId;
 
-
-            InspectionProtocol ip = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
-
-            var protocolId = await _unitOfWork.InspectionProtocolsRepository.AddAsync(ip, cancellationToken);
+            var protocolId = await _unitOfWork.InspectionProtocolsRepository.AddAsync(inspectionProtocol, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return protocolId;
         }

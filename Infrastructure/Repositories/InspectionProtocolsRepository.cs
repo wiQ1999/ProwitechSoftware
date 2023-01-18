@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
                 (p => p.InspectedPropertyId == inspectionProtocol.InspectedPropertyId
                 && p.InspectionTaskId == inspectionProtocol.InspectionTaskId))
                     throw new Exception
-                        ($"Nie można dodać protokołu przeglądu: Istnieje już protokół Nieruchomości od ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
+                        ($"Nie można dodać protokołu przeglądu: Istnieje już protokół Nieruchomości o ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
             }
             await _dbContext.AddAsync(inspectionProtocol, cancellationToken);
             return inspectionProtocol.Id;
@@ -40,7 +40,7 @@ namespace Infrastructure.Repositories
         public async Task UpdateAsync(InspectionProtocol inspectionProtocol, CancellationToken cancellationToken)
         {
             if (await _dbContext.InspectionProtocols.AnyAsync(p => p.Id != inspectionProtocol.Id && p.Number == inspectionProtocol.Number))
-                throw new Exception($"Nie można dodać protokołu przeglądu: Numer protokołu musi być oryginalny");
+                throw new Exception($"Nie można edytować protokołu przeglądu: Numer protokołu musi być oryginalny");
 
             if (inspectionProtocol.InspectionTaskId != null)
             {
@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
                 (p => p.Id!=inspectionProtocol.Id && p.InspectedPropertyId == inspectionProtocol.InspectedPropertyId
                 && p.InspectionTaskId == inspectionProtocol.InspectionTaskId))
                     throw new Exception
-                        ($"Nie można dodać protokołu przeglądu: Istnieje już protokół Nieruchomości od ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
+                        ($"Nie można edytować protokołu przeglądu: Istnieje już protokół Nieruchomości o ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
             }
             _dbContext.Entry(inspectionProtocol).State = EntityState.Modified;
         }
@@ -103,7 +103,7 @@ namespace Infrastructure.Repositories
                     ThenInclude(p => p.PropertyAddress).
                     Where(ip => ip.InspectionTaskId == inspectionTaskId).ToArrayAsync(cancellationToken);
         }
-
+        
 
     }
 }

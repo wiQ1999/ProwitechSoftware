@@ -3,6 +3,7 @@ using Application.InspectionProtocols.DTOs;
 using Application.InspectionTasks.DTOs;
 using Application.PropertyManagers.DTOs;
 using Application.RealProperties.DTOs;
+using Application.Residents.DTOs;
 using Application.Users.DTOs;
 using AutoMapper;
 using Infrastructure.Models.Domain;
@@ -25,6 +26,7 @@ namespace Application.InspectionProtocols.Profiles
             CreateMap<InspectionProtocol, AllInspectionProtocolsDTO>().ReverseMap();
             CreateMap<RealProperty, AllRealPropertiesDTO>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Resident, ResidentDTO>().ReverseMap();
         }
     }
 }

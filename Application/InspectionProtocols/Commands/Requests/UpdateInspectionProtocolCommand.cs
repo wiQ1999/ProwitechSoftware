@@ -1,5 +1,4 @@
 ﻿using Application.InspectionProtocols.DTOs;
-using Application.Residents.DTOs;
 using Infrastructure.Models.Domain;
 using MediatR;
 using System;
@@ -11,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace Application.InspectionProtocols.Commands.Requests
 {
-    public record CreateInspectionProtocolCommand : IRequest<Guid>
+    public record UpdateInspectionProtocolCommand : IRequest
     {
         [Required]
-        public ResidentDTO ResidentDTO {get;set;}
+        public Guid Id { get; set; }
         [Required]
-       public CreateOrUpdateInspectionProtocolDTO InspectionProtocolDTO { get; set; }
+        public Resident Resident { get; set; }
+        [Required]
+        public CreateOrUpdateInspectionProtocolDTO InspectionProtocolDTO { get; set; }
     }
 }
