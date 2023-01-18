@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.InspectionProtocols.Queries.Requests
 {
-    internal class GetInspectionProtocolByIdQuery
+    public class GetInspectionProtocolByIdQuery 
     {
     }
 }

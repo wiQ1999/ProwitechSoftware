@@ -103,7 +103,7 @@ namespace Infrastructure.Models.Domain
         // ------------------------
 
         [MaxLength(600)]
-        public string Inne_uwagi { get; set; }
+        public string? Inne_uwagi { get; set; }
 
 
 

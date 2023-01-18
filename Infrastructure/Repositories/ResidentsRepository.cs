@@ -34,6 +34,15 @@ namespace Infrastructure.Repositories
         {
             _dbContext.Entry(resident).State = EntityState.Modified;
         }
+        
+        public async Task DeleteResidentIfNoProtocolsAreAssignedToThem(Resident resident, CancellationToken cancellationToken)
+        {
+            if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.ResidentId == resident.Id))
+            {
+                await DeleteAsync(resident.Id, cancellationToken);
+            }
+        }
+        
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             Resident? resident = await _dbContext.Residents.FirstOrDefaultAsync(ba => ba.Id == id, cancellationToken);
@@ -50,7 +59,7 @@ namespace Infrastructure.Repositories
             if(residentFromDB!=null) return residentFromDB.Id;
             return await AddAsync(resident, cancellationToken);
         }
-        public async Task<Guid> UpdateOrGetResident(Resident newResident, Resident oldResident, Guid inspectionProtocolId, CancellationToken cancellationToken)
+        public async Task<Guid> UpdateOrGetOrCreateResident(Resident newResident, Resident oldResident, Guid inspectionProtocolId, CancellationToken cancellationToken)
         {
            Resident? residentWithTheSameDataFromDB = await _dbContext.Residents.FirstOrDefaultAsync(
                 r =>
@@ -58,9 +67,11 @@ namespace Infrastructure.Repositories
                 && r.FirstName == newResident.FirstName
                 && r.LastName == newResident.LastName
                 && r.PhoneNumber == newResident.PhoneNumber, cancellationToken);
+            //OPCJA 1:
+            //W DB znajduje się już Resident o podanych danych
             if (residentWithTheSameDataFromDB != null)
             {
-                //jeżeli Resident nie jest przypisany do żadnego innego protokołu poza obecnym, usuń go
+                //jeżeli stary Resident nie jest przypisany do żadnego innego protokołu poza obecnym, usuń go
                 if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != inspectionProtocolId && ip.ResidentId == oldResident.Id))
                 {
                     await DeleteAsync(oldResident.Id, cancellationToken);
@@ -68,7 +79,17 @@ namespace Infrastructure.Repositories
                 }
                 return residentWithTheSameDataFromDB.Id;
             }
-            
+            //OPCJA 2:
+            //W DB nie ma Residenta o podanych danych, ale do starego Residenta są przypisane Protokoły
+            //--> utwórz nowego Residenta, a starego nie ruszaj
+            if (await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != inspectionProtocolId && ip.ResidentId == oldResident.Id))
+            {
+                return await AddAsync(newResident, cancellationToken);
+            }
+
+            //OPCJA 3:
+            //W DB nie ma Residenta o podanych danych i do starego Residenta nie ma przypisanych żadnych protokołów oprócz tego
+            //--> utwórz nowego Residenta, a starego nie ruszaj
             oldResident.FirstName = newResident.FirstName;
             oldResident.LastName= newResident.LastName;
             oldResident.PhoneNumber = newResident.PhoneNumber;

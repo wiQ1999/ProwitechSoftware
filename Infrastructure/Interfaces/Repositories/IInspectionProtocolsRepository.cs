@@ -12,9 +12,12 @@ namespace Infrastructure.Interfaces.Repositories
         Task<IEnumerable<InspectionProtocol>> GetAllAsync(CancellationToken cancellationToken);
         Task<InspectionProtocol> GetAsync(Guid id, CancellationToken cancellationToken);
         Task<Guid> AddAsync(InspectionProtocol inspectionProtocol, CancellationToken cancellationToken);
-        Task UpdateAsync(InspectionProtocol inspectionProtocol, CancellationToken cancellationToken);
+        Task UpdateAsync(InspectionProtocol inspectionProtocol, Guid oldResidentId, CancellationToken cancellationToken);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken);
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularTask(Guid inspectionTaskId, CancellationToken cancellationToken);
+
+        //Task CheckIfInspectionProtocolWithThisNumberExists(InspectionProtocol oldProtocol, string newNumber, CancellationToken cancellation);
+        Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation);
     }
 }

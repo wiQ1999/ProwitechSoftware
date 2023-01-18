@@ -13,6 +13,8 @@ namespace Application.InspectionProtocols.Helpers
 {
     public class InspectionProtocolCRUDHelper
     {
+        
+        
         public static void CheckIfAllAnswersAreCorrect(CreateOrUpdateInspectionProtocolDTO protocolDTO)
         {
 
@@ -27,7 +29,7 @@ namespace Application.InspectionProtocols.Helpers
                 
                 if (p.Name.StartsWith("M_"))
                 {
-                    string givenAnswer = (string)p.GetValue(protocolDTO, null)!;
+                    string givenAnswer = ((string)p.GetValue(protocolDTO, null)!).ToUpper();
                     AnswerChecker.MultipleAnswersContain
                         (
                         (IBaseAnswer)Activator.CreateInstance(classToInitialize)!, givenAnswer!
@@ -43,7 +45,7 @@ namespace Application.InspectionProtocols.Helpers
                 }
                 else if (p.Name.ToString()!.StartsWith("A_"))
                 {
-                    string givenAnswer = (string)p.GetValue(protocolDTO, null)!;
+                    string givenAnswer = ((string)p.GetValue(protocolDTO, null)!).ToUpper();
                     AnswerChecker.AnswersContain
                         (
                         (IBaseAnswer)Activator.CreateInstance(classToInitialize)!, givenAnswer!

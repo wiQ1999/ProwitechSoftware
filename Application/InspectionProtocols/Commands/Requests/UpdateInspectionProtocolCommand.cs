@@ -14,6 +14,10 @@ namespace Application.InspectionProtocols.Commands.Requests
     {
         [Required]
         public Guid Id { get; set; }
+
+        [Required]
+        public string Number { get; set; }
+
         [Required]
         public Resident Resident { get; set; }
         [Required]

@@ -15,6 +15,10 @@ namespace Application.InspectionProtocols.Commands.Requests
     {
         [Required]
         public ResidentDTO ResidentDTO {get;set;}
+
+        [Required]
+        public string Number { get; set; }
+
         [Required]
        public CreateOrUpdateInspectionProtocolDTO InspectionProtocolDTO { get; set; }
     }

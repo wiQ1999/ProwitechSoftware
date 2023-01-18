@@ -10,8 +10,6 @@ namespace Application.InspectionProtocols.DTOs
 {
     public class CreateOrUpdateInspectionProtocolDTO
     {
-        [Required]
-        public string Number { get; set; }
         public Guid? InspectionTaskId { get; set; }
         [Required]
         public DateTime InspectionDateTime { get; set; }
@@ -109,6 +107,6 @@ namespace Application.InspectionProtocols.DTOs
         // ------------------------
 
         [MaxLength(600)]
-        public string Inne_uwagi { get; set; }
+        public string? Inne_uwagi { get; set; }
     }
 }

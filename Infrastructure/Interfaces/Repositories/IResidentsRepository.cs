@@ -20,6 +20,7 @@ namespace Infrastructure.Interfaces.Repositories
 
         public Task<Guid> CreateOrGetResident(Resident resident, CancellationToken cancellationToken);
 
-        public Task<Guid> UpdateOrGetResident(Resident newResident, Resident oldResident, Guid inspectionProtocolId, CancellationToken cancellationToken);
+        public Task<Guid> UpdateOrGetOrCreateResident(Resident newResident, Resident oldResident, Guid inspectionProtocolId, CancellationToken cancellationToken);
+        public Task DeleteResidentIfNoProtocolsAreAssignedToThem(Resident resident, CancellationToken cancellationToken);
     }
 }

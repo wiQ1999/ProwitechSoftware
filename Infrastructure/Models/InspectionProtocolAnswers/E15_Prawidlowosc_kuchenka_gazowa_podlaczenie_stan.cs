@@ -8,11 +8,11 @@ namespace Infrastructure.Models.InspectionProtocolAnswers
 {
     public class E15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan : IBaseAnswer
     {
-        static private readonly string SZTYWNE = "SZTYWNE";
-        static private readonly string WAZ_ATESTOWANY_DO_WYMIANY = "WĄŻ (ATESTOWANY) DO WYMIANY";
+        static private readonly string SZCZELNE = "SZCZELNE";
+        static private readonly string NIESZCZELNE = "NIESZCZELNE";
 
         static public readonly string QUESTION = "Podłączenie kuchenki gazowej";
-        static public readonly string[] ANSWERS = { SZTYWNE, WAZ_ATESTOWANY_DO_WYMIANY };
+        static public readonly string[] ANSWERS = { SZCZELNE, NIESZCZELNE };
         public string GetQuestion()
         {
             return QUESTION;

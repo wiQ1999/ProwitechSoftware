@@ -28,13 +28,17 @@ namespace Application.InspectionProtocols.Commands.Handlers
             var resident = _mapper.Map<Resident>(request.ResidentDTO);
             var inspectionProtocolDTO = request.InspectionProtocolDTO;
 
-            var residentId = await _unitOfWork.ResidentsRepository.CreateOrGetResident(resident, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            
+            InspectionProtocolGuidsChecker checker = new InspectionProtocolGuidsChecker(_unitOfWork);
+            await checker.CheckExistanceOfGuidsInDB(inspectionProtocolDTO, "dodać", cancellationToken);
+
             InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(inspectionProtocolDTO);
             InspectionProtocol inspectionProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
 
+            var residentId = await _unitOfWork.ResidentsRepository.CreateOrGetResident(resident, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             inspectionProtocol.ResidentId=residentId;
+            inspectionProtocol.Number = request.Number;
 
             var protocolId = await _unitOfWork.InspectionProtocolsRepository.AddAsync(inspectionProtocol, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

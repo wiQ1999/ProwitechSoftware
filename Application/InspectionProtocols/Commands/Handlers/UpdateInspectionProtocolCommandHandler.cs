@@ -28,41 +28,41 @@ namespace Application.InspectionProtocols.Commands.Handlers
         public async Task<Unit> Handle(UpdateInspectionProtocolCommand request, CancellationToken cancellationToken)
         {
             var protocolId = request.Id;
+            var protocolNumber = request.Number;
+            var updatedResident = _mapper.Map<Resident>(request.Resident);
+            var inspectionProtocolDTO = request.InspectionProtocolDTO; 
+
             if (await _unitOfWork.InspectionProtocolsRepository.GetAsync(protocolId, cancellationToken) == null)
                 throw new Exception($"Nie można edytować Protokołu - w bazie danych nie istnieje protokół o ID: {protocolId}");
-            var updatedResident = _mapper.Map<Resident>(request.Resident);
-            var inspectionProtocolDTO = request.InspectionProtocolDTO;
-
+            
 
             Resident? oldResidentFromDB = await _unitOfWork.ResidentsRepository.GetAsync(updatedResident.Id, cancellationToken); 
             if (oldResidentFromDB == null)
-                throw new Exception($"Nie można edytować Mieszkańca Nieruchomości: W bazie danych nie istnieje Mieszkaniec o ID: {updatedResident.Id}");
+                throw new Exception($"Nie można edytować Mieszkańca Nieruchomości przypisanego do Protokołu: W bazie danych nie istnieje Mieszkaniec o ID: {updatedResident.Id}");
 
+            InspectionProtocolGuidsChecker checker = new InspectionProtocolGuidsChecker(_unitOfWork);
+            await checker.CheckExistanceOfGuidsInDB(inspectionProtocolDTO, "edytować",cancellationToken);
 
-            var residentId = await _unitOfWork.ResidentsRepository.UpdateOrGetResident(updatedResident, oldResidentFromDB, protocolId, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-
-            await CheckExistanceOfGuidsInDB(request.InspectionProtocolDTO, cancellationToken);
             InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(inspectionProtocolDTO);
+
+
+            var residentId = await _unitOfWork.ResidentsRepository.UpdateOrGetOrCreateResident(updatedResident, oldResidentFromDB, protocolId, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);            
 
 
             InspectionProtocol inspectionProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
             inspectionProtocol.ResidentId = residentId;
-            await _unitOfWork.InspectionProtocolsRepository.UpdateAsync(inspectionProtocol, cancellationToken);
+
+            //await _unitOfWork.InspectionProtocolsRepository.CheckIfInspectionProtocolWithThisNumberExists(inspectionProtocol, protocolNumber,cancellationToken);
+
+            inspectionProtocol.Number = protocolNumber;
+
+            await _unitOfWork.InspectionProtocolsRepository.UpdateAsync(inspectionProtocol, oldResidentFromDB.Id, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
-        public async Task CheckExistanceOfGuidsInDB(CreateOrUpdateInspectionProtocolDTO protocol, CancellationToken cancellationToken)
-        {
-            if (protocol.InspectionTaskId!=Guid.Empty
-                && await _unitOfWork.InspectionTaskRepository.GetAsync(protocol.InspectionTaskId.Value, cancellationToken) == null)
-                throw new Exception($"Nie można edytować Protokołu Inspekcji - w bazie danych brak Zadania o ID: {protocol.InspectionTaskId}");
-            if(await _unitOfWork.RealPropertyRepository.GetAsync(protocol.InspectedPropertyId, cancellationToken)==null)
-                throw new Exception($"Nie można edytować Protokołu Inspekcji - w bazie danych brak Nieruchomości o ID: {protocol.InspectedPropertyId}");
-            if (await _unitOfWork.UsersRepository.GetByIdAsync(protocol.InspectionPerformerId, cancellationToken) == null)
-                throw new Exception($"Nie można edytować Protokołu Inspekcji - w bazie danych brak Użytkownika o ID: {protocol.InspectionPerformerId}");
-        }
+        
 
     }
 }

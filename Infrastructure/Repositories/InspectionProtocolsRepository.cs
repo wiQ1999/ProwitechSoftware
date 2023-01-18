@@ -22,33 +22,89 @@ namespace Infrastructure.Repositories
         public async Task<Guid> AddAsync(InspectionProtocol inspectionProtocol, CancellationToken cancellationToken)
         {
             if (await _dbContext.InspectionProtocols.AnyAsync(p => p.Number == inspectionProtocol.Number))
-                throw new Exception($"Nie można dodać protokołu przeglądu: Numer protokołu musi być oryginalny");
-            
-            if(inspectionProtocol.InspectionTaskId != null)
+            {
+                //PRZED WYRZUCENIEM WYJĄTKU, USUŃ RESIDENTA PRZYPISANEGO DO PROTOKOŁU, JEŻELI NIE JEST PRZYPISANY
+                //DO ŻADNEGO INNEGO PROTOKOŁU
+                
+                if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.ResidentId == inspectionProtocol.ResidentId,cancellationToken))
+                {
+                    var residentToDelete = await _dbContext.Residents.FirstOrDefaultAsync(r => r.Id == inspectionProtocol.ResidentId);
+                    _dbContext.Remove(residentToDelete!);
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+               throw new Exception($"Nie można dodać protokołu przeglądu: Numer protokołu musi być oryginalny");
+            }
+
+            if (inspectionProtocol.InspectionTaskId != null)
             {
                 if (await _dbContext.InspectionProtocols.AnyAsync
                 (p => p.InspectedPropertyId == inspectionProtocol.InspectedPropertyId
                 && p.InspectionTaskId == inspectionProtocol.InspectionTaskId))
+                {
+                    //PRZED WYRZUCENIEM WYJĄTKU, USUŃ RESIDENTA PRZYPISANEGO DO PROTOKOŁU, JEŻELI NIE JEST PRZYPISANY
+                    //DO ŻADNEGO INNEGO PROTOKOŁU
+                    if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.ResidentId == inspectionProtocol.ResidentId))
+                    {
+                        var residentToDelete = await _dbContext.Residents.FirstOrDefaultAsync(r => r.Id == inspectionProtocol.ResidentId);
+                        _dbContext.Remove(residentToDelete!);
+                        await _dbContext.SaveChangesAsync(cancellationToken);
+                    }
                     throw new Exception
-                        ($"Nie można dodać protokołu przeglądu: Istnieje już protokół Nieruchomości o ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
+                        ($"Nie można dodać protokołu przeglądu: Istnieje już protokół Nieruchomości o ID:" +
+                        $"{inspectionProtocol.InspectedPropertyId} przypisany do" +
+                        $"zadania od ID: {inspectionProtocol.InspectionTaskId}");
+                }
+                    
             }
             await _dbContext.AddAsync(inspectionProtocol, cancellationToken);
             return inspectionProtocol.Id;
 
         }
 
-        public async Task UpdateAsync(InspectionProtocol inspectionProtocol, CancellationToken cancellationToken)
+        public async Task UpdateAsync(InspectionProtocol inspectionProtocol, Guid oldResidentId, CancellationToken cancellationToken)
         {
             if (await _dbContext.InspectionProtocols.AnyAsync(p => p.Id != inspectionProtocol.Id && p.Number == inspectionProtocol.Number))
+            {
+                //PRZED WYRZUCENIEM WYJĄTKU, USUŃ RESIDENTA, JEŻELI ZOSTAŁ STWORZONY LUB POBRANY PRZY UPDACIE, JEŻELI NIE
+                //MA PROTOKOŁÓW PRZYPISANYCH DO NIEGO
+                if (inspectionProtocol.ResidentId != oldResidentId)
+                {
+                    if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.ResidentId == inspectionProtocol.ResidentId))
+                    {
+                        var residentToDelete = await _dbContext.Residents.FirstOrDefaultAsync(r => r.Id == inspectionProtocol.ResidentId);
+                        _dbContext.Remove(residentToDelete!);
+                        await _dbContext.SaveChangesAsync(cancellationToken);
+                    }
+                }
+                
                 throw new Exception($"Nie można edytować protokołu przeglądu: Numer protokołu musi być oryginalny");
+            }
 
             if (inspectionProtocol.InspectionTaskId != null)
             {
                 if (await _dbContext.InspectionProtocols.AnyAsync
                 (p => p.Id!=inspectionProtocol.Id && p.InspectedPropertyId == inspectionProtocol.InspectedPropertyId
                 && p.InspectionTaskId == inspectionProtocol.InspectionTaskId))
+                {
+                    //PRZED WYRZUCENIEM WYJĄTKU, USUŃ RESIDENTA, JEŻELI ZOSTAŁ STWORZONY LUB POBRANY PRZY UPDACIE, JEŻELI NIE
+                    //MA PROTOKOŁÓW PRZYPISANYCH DO NIEGO
+                    if (inspectionProtocol.ResidentId != oldResidentId)
+                    {
+                        if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.ResidentId == inspectionProtocol.ResidentId))
+                        {
+                            var residentToDelete = await _dbContext.Residents.FirstOrDefaultAsync(r => r.Id == inspectionProtocol.ResidentId);
+                            _dbContext.Remove(residentToDelete!);
+                            await _dbContext.SaveChangesAsync(cancellationToken);
+                        }
+                        
+                    }
                     throw new Exception
-                        ($"Nie można edytować protokołu przeglądu: Istnieje już protokół Nieruchomości o ID: {inspectionProtocol.InspectedPropertyId} przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
+                            ($"Nie można edytować protokołu przeglądu: Istnieje już " +
+                            $"protokół Nieruchomości o ID: {inspectionProtocol.InspectedPropertyId} " +
+                            $"przypisany do zadania od ID: {inspectionProtocol.InspectionTaskId}");
+
+                }
+                    
             }
             _dbContext.Entry(inspectionProtocol).State = EntityState.Modified;
         }
@@ -103,6 +159,31 @@ namespace Infrastructure.Repositories
                     ThenInclude(p => p.PropertyAddress).
                     Where(ip => ip.InspectionTaskId == inspectionTaskId).ToArrayAsync(cancellationToken);
         }
+        public async Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation)
+        {
+            var simmilarProtocols = await _dbContext.InspectionProtocols.Where(p => p.Number.StartsWith(today)).ToArrayAsync(cancellation);
+            if (simmilarProtocols == null)
+                return String.Concat(today, "_P01");
+            uint number = 0;
+            foreach(var protocol in simmilarProtocols)
+            {
+                int PsymbolIndex = protocol.Number.IndexOf("P");
+                uint numberFound = UInt32.Parse(protocol.Number.Substring(PsymbolIndex));
+                if (numberFound > number)
+                    number = numberFound;
+            }
+            string createdNumber;
+            if (number < 10)
+                createdNumber = number.ToString().PadLeft(2, '0');
+            else
+                createdNumber = number.ToString();
+            return String.Concat(today + "_P" + createdNumber);
+        }
+        //public async Task CheckIfInspectionProtocolWithThisNumberExists(InspectionProtocol oldProtocol, string newNumber, CancellationToken cancellation)
+        //{
+        //    if (await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != oldProtocol.Id && ip.Number == newNumber))
+        //        throw new Exception($"Nie można edytować Protokołu - Protokół o numerze {oldProtocol.Number} już istnieje");
+        //}
         
 
     }
