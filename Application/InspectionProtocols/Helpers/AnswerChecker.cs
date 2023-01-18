@@ -22,7 +22,7 @@ namespace Application.InspectionProtocols.Helpers
             foreach (var a in answers)
             {
                 if (!ibaseAnswer.GetAnswers().Contains(a))
-                    throw new NotAllowedProtocolAnswerException(givenAnswer, ibaseAnswer.GetQuestion());
+                    throw new NotAllowedProtocolAnswerException(a, ibaseAnswer.GetQuestion());
             }
         }
     }

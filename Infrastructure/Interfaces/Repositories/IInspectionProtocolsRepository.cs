@@ -17,7 +17,7 @@ namespace Infrastructure.Interfaces.Repositories
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken);
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularTask(Guid inspectionTaskId, CancellationToken cancellationToken);
 
-        //Task CheckIfInspectionProtocolWithThisNumberExists(InspectionProtocol oldProtocol, string newNumber, CancellationToken cancellation);
+        Task CheckIfInspectionProtocolWithThisNumberExists(Guid oldProtocolId, string newNumber, CancellationToken cancellation);
         Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation);
     }
 }

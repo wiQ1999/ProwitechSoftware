@@ -95,7 +95,7 @@ namespace Infrastructure.Repositories
             oldResident.PhoneNumber = newResident.PhoneNumber;
             
             UpdateAsync(oldResident, cancellationToken);
-            return newResident.Id;
+            return oldResident.Id;
         }
     }
 

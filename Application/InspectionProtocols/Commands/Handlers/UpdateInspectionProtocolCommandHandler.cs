@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +31,17 @@ namespace Application.InspectionProtocols.Commands.Handlers
             var protocolId = request.Id;
             var protocolNumber = request.Number;
             var updatedResident = _mapper.Map<Resident>(request.Resident);
-            var inspectionProtocolDTO = request.InspectionProtocolDTO; 
+            var inspectionProtocolDTO = request.InspectionProtocolDTO;
 
-            if (await _unitOfWork.InspectionProtocolsRepository.GetAsync(protocolId, cancellationToken) == null)
+            InspectionProtocol updatedProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
+
+            InspectionProtocol? protocolFromDB = await _unitOfWork.InspectionProtocolsRepository.GetAsync(protocolId, cancellationToken);
+
+            if (protocolFromDB == null)
                 throw new Exception($"Nie można edytować Protokołu - w bazie danych nie istnieje protokół o ID: {protocolId}");
-            
+
+            await _unitOfWork.InspectionProtocolsRepository.CheckIfInspectionProtocolWithThisNumberExists(protocolId, protocolNumber, cancellationToken);
+
 
             Resident? oldResidentFromDB = await _unitOfWork.ResidentsRepository.GetAsync(updatedResident.Id, cancellationToken); 
             if (oldResidentFromDB == null)
@@ -47,17 +54,20 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
 
             var residentId = await _unitOfWork.ResidentsRepository.UpdateOrGetOrCreateResident(updatedResident, oldResidentFromDB, protocolId, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+            foreach (PropertyInfo property in typeof(InspectionProtocol).GetProperties().Where(p => p.CanWrite))
+            {
+                property.SetValue(protocolFromDB, property.GetValue(updatedProtocol, null), null);
+            }
+            protocolFromDB.Id = protocolId;
+            protocolFromDB.ResidentId = residentId;
 
-            InspectionProtocol inspectionProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
-            inspectionProtocol.ResidentId = residentId;
+            var newOrOldResident = await _unitOfWork.ResidentsRepository.GetAsync(protocolFromDB.ResidentId.Value, cancellationToken);
 
-            //await _unitOfWork.InspectionProtocolsRepository.CheckIfInspectionProtocolWithThisNumberExists(inspectionProtocol, protocolNumber,cancellationToken);
-
-            inspectionProtocol.Number = protocolNumber;
-
-            await _unitOfWork.InspectionProtocolsRepository.UpdateAsync(inspectionProtocol, oldResidentFromDB.Id, cancellationToken);
+            protocolFromDB.Resident = newOrOldResident;
+            protocolFromDB.Number = protocolNumber;
+            await _unitOfWork.InspectionProtocolsRepository.UpdateAsync(protocolFromDB, oldResidentFromDB.Id, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

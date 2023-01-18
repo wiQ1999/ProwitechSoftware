@@ -179,12 +179,12 @@ namespace Infrastructure.Repositories
                 createdNumber = number.ToString();
             return String.Concat(today + "_P" + createdNumber);
         }
-        //public async Task CheckIfInspectionProtocolWithThisNumberExists(InspectionProtocol oldProtocol, string newNumber, CancellationToken cancellation)
-        //{
-        //    if (await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != oldProtocol.Id && ip.Number == newNumber))
-        //        throw new Exception($"Nie można edytować Protokołu - Protokół o numerze {oldProtocol.Number} już istnieje");
-        //}
-        
+        public async Task CheckIfInspectionProtocolWithThisNumberExists(Guid oldProtocolId, string newNumber, CancellationToken cancellation)
+        {
+            if (await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != oldProtocolId && ip.Number == newNumber))
+                throw new Exception($"Nie można edytować Protokołu - Protokół o numerze {newNumber} już istnieje");
+        }
+
 
     }
 }
