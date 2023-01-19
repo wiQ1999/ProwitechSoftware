@@ -19,7 +19,6 @@ namespace Infrastructure.Repositories
         }
         public async Task<Guid> AddAsync(PropertyAddress propAddress, CancellationToken cancellationToken)
         {
-            //TODO SPRAWDZIC CZY NIE TRZEBA CZEGOS SPRAWDZIC
             await _dbContext.AddAsync(propAddress);
             return propAddress.Id;
         }

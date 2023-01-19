@@ -115,7 +115,6 @@ namespace Infrastructure.Repositories
                 var propAddress = await _dbContext.PropertyAddresses.FirstOrDefaultAsync(a=>a.Id==property.PropertyAddressId, cancellationToken);
                 _dbContext.PropertyAddresses.Remove(propAddress!);
             }
-            //TODO nie wolno usunąć Property, do której jest przypisany Protokół
             _dbContext.RealProperties.Remove(property);
         }
 

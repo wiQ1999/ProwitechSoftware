@@ -75,7 +75,6 @@ namespace Infrastructure.Repositories
                 if (!await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != inspectionProtocolId && ip.ResidentId == oldResident.Id))
                 {
                     await DeleteAsync(oldResident.Id, cancellationToken);
-                    //TODO saveChangesAsync?
                 }
                 return residentWithTheSameDataFromDB.Id;
             }

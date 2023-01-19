@@ -213,6 +213,11 @@ namespace Infrastructure.Repositories
                     ToArrayAsync(cancellationToken);
         }
 
-
+        public async Task<IEnumerable<InspectionProtocol>> GetProtocolsOfParticularRealProperty(Guid realPropertyId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.InspectionProtocols.
+                Where(ip => ip.InspectedPropertyId == realPropertyId).
+                    ToArrayAsync(cancellationToken);
+        }
     }
 }
