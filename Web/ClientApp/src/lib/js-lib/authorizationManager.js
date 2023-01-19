@@ -1,25 +1,31 @@
 import Cookies from "js-cookie"
 import jwt_decode from "jwt-decode"
 
+const minDate = Date.UTC(1970, 0, 1)
+
 export function setToken(token) {
-    let decode = jwt_decode(token);
-    console.log(decode)
+    const decoded = jwt_decode(token)
 
-    if (decode.exp === undefined) return
-    console.log(decode.exp)
+    if (decoded.exp === undefined) return
 
-    let date = new Date(1970, 0, 1);
-    date.setSeconds(decode.exp)
+    let expDate = new Date(minDate)
+    expDate.setSeconds(decoded.exp)
 
-    console.log(date)
+    setCookieWithToken(token, expDate);
+}
 
-    Cookies.set('token', token, { expires: date });
+function setCookieWithToken(token, expDate) {
+    Cookies.set('token', token, { expires: expDate })
 }
 
 export function getToken() {
-    console.log("getToken")
+    const token = Cookies.get('token')
+    const decoded = jwt_decode(token)
+
+    return token; // ToDo
 }
 
 export function clearToken() {
-    console.log("clearToken")
+    const expDate = new Date(minDate);
+    setCookieWithToken('', expDate)
 }

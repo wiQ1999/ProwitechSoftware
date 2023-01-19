@@ -1,22 +1,45 @@
 <script>
-  import { setToken } from "$lib/js-lib/authorizationManager.js";
-
-  setToken(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWx1ZSI6WyI5NzNjNzg5OC04ZDEwLTQ1MGEtOTIyMy0zMWViNTM3Y2ZhZTQiLCJ3MSIsIkphbiIsIktvd2Fsc2tpIiwiai5rb3dhbHNraUBnbWFpbC5jb20iXSwiUm9sZUlkIjoiNDYwYjM4OWQtOTVmMC00YmM4LTk4YTctZDM3NmQ0ZWIxMmViIiwiUm9sZU5hbWUiOiJQcmFjb3duaWsiLCJQZXJtaXNzaW9ucyI6WyJSb2xlc19SZWFkIiwiVXNlcnNfUmVhZCJdLCJleHAiOjE2NzQxNjQzMjcsImlzcyI6IlByb3dpdGVjaFNvZnR3YXJlIiwiYXVkIjoiUHJvd2l0ZWNoU29mdHdhcmUifQ.NvfD3zecgt4lauKiEz4xsRmTYaZj-h7dkNbJug1xZ2Y"
-  );
+  import { getAuthenticated } from "$lib/stores/Authentication";
+  import {
+    setToken,
+    getToken,
+    clearToken,
+  } from "$lib/js-lib/authorizationManager.js";
 
   let login = "";
   let pwd = "";
+
+  async function submitHandler() {
+    const json = await getAuthenticated(login, pwd);
+    if (json.isGenerated) setToken(json.token);
+    else {
+      console.log("Login failed.");
+    }
+  }
+
+  function getCookie() {
+    console.log("GET");
+    const token = getToken();
+    console.log(token);
+  }
+
+  function clearCookie() {
+    console.log("CLEAR");
+    clearToken();
+  }
 </script>
+
+<button on:click={getCookie}>GET</button>
+<br />
+<button on:click={clearCookie}>CLEAR</button>
 
 <main>
   <slot>
-    <!-- elementy strony -->
     <section class="flex flex-col justify-center items-center flex-2/3">
       <div
         class="w-3/4 mx-auto my-0 pt-8 bg-white border-2 border-silver border-solid"
       >
-        <form class="m-0">
+        <form on:submit|preventDefault={submitHandler} class="m-0">
           <label
             class="block w-1/2 px-2 py-2 mx-[25%] my-0 text-left text-[#696969] text-base"
             for="username">Nazwa użytkownika:</label
@@ -39,10 +62,9 @@
             placeholder="Podaj hasło"
             id="password"
             required
-            pattern=".&#123;8,}"
             title="Musi zawierać co najmniej osiem znaków"
             bind:value={pwd}
-          />
+          /><!--pattern=".&#123;8,}" -->
           <div class="bg-[#ecf2f5] w-[100%] py-[1%] px-[2%] mt-4">
             <input
               class="w-1/5 px-3 py-4 border-2 border-solid border-[#005f85] text-white bg-[#007acc] relative left-[40%] cursor-pointer"
