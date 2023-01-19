@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace Application.InspectionProtocols.Queries.Requests
 {
-    public record GetInspectionProtocolByIdQuery :IRequest<InspectionProtocolByIdDTO>
+    public record GetTaskProtocolsQuery:IRequest<IEnumerable<AllInspectionProtocolsDTO>>
     {
-
         [Required]
-        public Guid Id { get; set; }
+        public Guid InspectionTaskId { get; set; }
     }
 }

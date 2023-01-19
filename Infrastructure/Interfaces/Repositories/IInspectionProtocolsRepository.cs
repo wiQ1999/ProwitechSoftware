@@ -16,7 +16,7 @@ namespace Infrastructure.Interfaces.Repositories
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken);
         Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularTask(Guid inspectionTaskId, CancellationToken cancellationToken);
-
+        Task<IEnumerable<InspectionProtocol>> GetProtocolsOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken);
         Task CheckIfInspectionProtocolWithThisNumberExists(Guid oldProtocolId, string newNumber, CancellationToken cancellation);
         Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation);
     }

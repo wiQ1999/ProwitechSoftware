@@ -112,6 +112,8 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<InspectionProtocol>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _dbContext.InspectionProtocols.
+                Include(ip => ip.InspectionPerformer).
+                Include(ip => ip.Resident).
                 Include(ip => ip.InspectedProperty).
                     ThenInclude(p => p.Building).
                         ThenInclude(b => b.BuildingAddress).
@@ -123,6 +125,15 @@ namespace Infrastructure.Repositories
         public async Task<InspectionProtocol> GetAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbContext.InspectionProtocols.
+                Include(ip=>ip.InspectionPerformer).
+                Include(ip=>ip.InspectionTask).
+                    ThenInclude(t=>t.TaskDelegator).
+                Include(ip => ip.InspectionTask).
+                    ThenInclude(t => t.TaskPerformer).
+                Include(ip => ip.InspectionTask).
+                    ThenInclude(t => t.Building).
+                        ThenInclude(b=>b.BuildingAddress).
+                Include(ip=>ip.Resident).
                 Include(ip => ip.InspectedProperty).
                     ThenInclude(p => p.Building).
                         ThenInclude(b => b.BuildingAddress).
@@ -141,6 +152,8 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken)
         {
             return await _dbContext.InspectionProtocols.
+                Include(ip => ip.InspectionPerformer).
+                Include(ip => ip.Resident).
                 Include(ip => ip.InspectedProperty).
                     ThenInclude(p => p.Building).
                         ThenInclude(b => b.BuildingAddress).
@@ -152,6 +165,8 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularTask(Guid inspectionTaskId, CancellationToken cancellationToken)
         {
             return await _dbContext.InspectionProtocols.
+                Include(ip => ip.InspectionPerformer).
+                Include(ip => ip.Resident).
                 Include(ip => ip.InspectedProperty).
                     ThenInclude(p => p.Building).
                         ThenInclude(b => b.BuildingAddress).
@@ -183,6 +198,19 @@ namespace Infrastructure.Repositories
         {
             if (await _dbContext.InspectionProtocols.AnyAsync(ip => ip.Id != oldProtocolId && ip.Number == newNumber))
                 throw new Exception($"Nie można edytować Protokołu - Protokół o numerze {newNumber} już istnieje");
+        }
+        public async Task<IEnumerable<InspectionProtocol>> GetProtocolsOfParticularBuilding(Guid buildingId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.InspectionProtocols.
+                Include(ip => ip.InspectionPerformer).
+                Include(ip => ip.Resident).
+                Include(ip => ip.InspectedProperty).
+                    ThenInclude(p => p.Building).
+                        ThenInclude(b => b.BuildingAddress).
+                Include(ip => ip.InspectedProperty).
+                    ThenInclude(p => p.PropertyAddress).
+                Where(ip=>ip.InspectedProperty.BuildingId==buildingId).
+                    ToArrayAsync(cancellationToken);
         }
 
 

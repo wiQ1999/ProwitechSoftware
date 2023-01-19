@@ -24,6 +24,7 @@ namespace Application.InspectionProtocols.Profiles
             CreateMap<Building, AllBuildingsDTO>().ReverseMap();
             CreateMap<PropertyManager, PropertyManagerDTO>().ReverseMap();
             CreateMap<InspectionProtocol, AllInspectionProtocolsDTO>().ReverseMap();
+            CreateMap<InspectionProtocol, InspectionProtocolByIdDTO>().ReverseMap();
             CreateMap<RealProperty, AllRealPropertiesDTO>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Resident, ResidentDTO>().ReverseMap();
