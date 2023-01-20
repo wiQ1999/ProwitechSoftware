@@ -31,7 +31,7 @@ namespace Infrastructure.Repositories
             var performer = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == inspectionTask.TaskPerformerId);
             if (performer == null)
                 throw new Exception($"Nie mozna utworzyć Zadania: Nie istnieje Wykonujący Zadanie o podanym Id");
-            await _dbContext.AddAsync(inspectionTask);
+            await _dbContext.AddAsync(inspectionTask, cancellationToken);
             return inspectionTask.Id;
         }
 

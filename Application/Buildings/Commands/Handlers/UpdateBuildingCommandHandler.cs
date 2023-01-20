@@ -2,6 +2,7 @@
 using Application.Properties.Helpers;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
+using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using MediatR;
 using System;
@@ -23,8 +24,6 @@ namespace Application.Buildings.Commands.Handlers
 
         public async Task<Unit> Handle(UpdateBuildingCommand request, CancellationToken cancellationToken)
         {
-            
-                
             var bFromDB = await _unitOfWork.BuildingRepository.GetAsync(request.Id, cancellationToken);
             if (bFromDB == null)
                 throw new Exception($"Brak w bazie danych budynku o Id: {request.Id}");
@@ -39,16 +38,8 @@ namespace Application.Buildings.Commands.Handlers
             {
                 bFromDB.PropertyManagerId = null;
             }
-            //TODO SPRAWDZIĆ CZY TEN IF DOBRZE DZIAŁA PRZY WIELOLOKALOWY
-            if(bFromDB.Properties!=null
-                && bFromDB.Properties.Count > 0 
-                && bFromDB.Type==BuildingType.WIELOLOKALOWY.ToString()
-                && request.Type==BuildingType.JEDNOLOKALOWY.ToString())
-            {
-                throw new Exception($"Nie możesz zmienić typu budynku na jednolokalowy, ponieważ są już do niego przypisane lokale");
-            }
-            //TODO IF BUILDINGTYPE==JEDNOLOKALOWY && PROPERTY MA PRZYPISANY RAPORT - NIE WOLNO JUŻ NIC ZMIENIĆ
-            // NAJPIERW TRZEBA USUNĄĆ RAPORT
+            await CheckIfBuildingTypeEditionIsAvailable(request, bFromDB, cancellationToken);
+            
             RealPropertyHelper propertyChanger = new RealPropertyHelper(_unitOfWork);
             await propertyChanger.AddOrRemovePropertyBasedOnBuildingType(bFromDB, request.Type, cancellationToken);
 
@@ -57,6 +48,29 @@ namespace Application.Buildings.Commands.Handlers
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
 
+        }
+        private async Task CheckIfBuildingTypeEditionIsAvailable(UpdateBuildingCommand request, Building bFromDB, CancellationToken cancellationToken)
+        {
+            if (bFromDB.Properties != null
+                && bFromDB.Properties.Count > 0
+                && bFromDB.Type == BuildingType.WIELOLOKALOWY.ToString()
+                && request.Type == BuildingType.JEDNOLOKALOWY.ToString())
+            {
+                throw new Exception($"Nie możesz zmienić typu budynku na jednolokalowy, ponieważ są już do niego przypisane lokale");
+            }
+
+            if (bFromDB.Type == BuildingType.JEDNOLOKALOWY.ToString() && request.Type == BuildingType.WIELOLOKALOWY.ToString())
+            {
+                var thisBuildingProperty = await _unitOfWork.RealPropertyRepository.
+                    GetOnePropertyOfParticularBuilding(bFromDB.Id, cancellationToken);
+                var thisBuildingPropertyProtocols = await _unitOfWork.InspectionProtocolsRepository.
+                    GetProtocolsOfParticularRealProperty(thisBuildingProperty!.Id, cancellationToken);
+
+                if (thisBuildingPropertyProtocols != null && thisBuildingPropertyProtocols.Count()>0)
+                    throw new Exception($"Nie możesz zmienić typu budynku na wielolokalowy," +
+                        $" ponieważ do Budynku jest już przypisany co najmniej jeden protokół");
+
+            }
         }
     }
 }

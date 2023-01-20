@@ -41,6 +41,10 @@ namespace Web.Controllers
         public async Task<IActionResult> GetInspectionTasksOfParticularPerformer(Guid id) =>
             Ok(await Mediator.Send(new GetInspectionTasksOfParticularPerformerQuery() { Id = id }));
 
+        [HttpGet("{id:Guid}/propertiesWithoutProtocols")]
+        public async Task<IActionResult> GetInspectionTaskPropertiesWithoutProtocols(Guid id) =>
+            Ok(await Mediator.Send(new GetTaskRealPropertiesWhichDontHaveProtocolsQuery { TaskId = id }));
+
         [HttpGet("performerTasks/{id:Guid}/status/{status}")]
         public async Task<IActionResult> GetInspectionTasksOfParticularPerformerAndStatus(Guid id, string status) =>
             Ok(await Mediator.Send(

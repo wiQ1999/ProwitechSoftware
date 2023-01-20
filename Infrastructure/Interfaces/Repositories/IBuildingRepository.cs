@@ -11,7 +11,7 @@ namespace Infrastructure.Interfaces.Repositories
     {
         Task<IEnumerable<Building>> GetAllAsync(CancellationToken cancellationToken);
         Task<Building> GetAsync(Guid id, CancellationToken cancellationToken);
-        Task<Guid> AddAsync(Building building, Guid buildingAddressId, CancellationToken cancellationToken);
+        Task<Guid> AddAsync(Building building, CancellationToken cancellationToken);
         Task UpdateBuildingAsync(Building building, CancellationToken cancellationToken);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }

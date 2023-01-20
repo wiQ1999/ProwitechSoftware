@@ -25,20 +25,22 @@ namespace Application.FullAddresses.Commands.Handlers
             FullAddress fullAddress;
 
 
-            if (request.PropertyAddressDTO != null)
+            if (request.PropertyAddressDTO != null
+                && (request.PropertyAddressDTO.VenueNumber != null || request.PropertyAddressDTO.StaircaseNumber != null))
             {
                 PropertyAddress propertyAddress = new PropertyAddress()
                 {
                     VenueNumber = request.PropertyAddressDTO.VenueNumber,
                     StaircaseNumber = request.PropertyAddressDTO.StaircaseNumber
                 };
-                var propertyAddressId=await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                var propertyAddressId = await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 fullAddress = new FullAddress()
                 {
                     BuildingAddressId = request.BuildingAddressId,
                     PropertyAddressId = propertyAddressId
                 };
+
             }
             else
             {
@@ -48,7 +50,7 @@ namespace Application.FullAddresses.Commands.Handlers
                 };
             }
 
-            var newFullAddress =await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
+            var newFullAddress = await _unitOfWork.FullAddressRepository.AddAsync(fullAddress, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return newFullAddress;
         }
