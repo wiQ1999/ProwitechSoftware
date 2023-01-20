@@ -6,11 +6,11 @@
   import { openModal } from "svelte-modals";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
+  import { getBuildingById } from "$lib/stores/Building";
   import {
-    getAllBuildings,
-    deleteBuilding,
-    getBuildingById,
-  } from "$lib/stores/Building";
+    deleteRealProperty,
+    compareRealPropertiesByVenueNumber,
+  } from "$lib/stores/RealProperty";
 
   let collection = [];
   let tableRowsClassName = "real-properties-base-list";
@@ -18,6 +18,7 @@
   let listName = "";
   let buildingTypeError = false;
   let baseListVisibility = false;
+  let buildingInfoVisibility = false;
   let buildingTypeErrorMessage;
   onMount(async () => {
     buildingTypeError = false;
@@ -25,25 +26,23 @@
 
     let buildingResponse = await getBuildingById($page.params.slug);
 
-    if (buildingResponse instanceof Response) {
-      building = await buildingResponse.json();
-      console.log(building);
-      if (building.type != "WIELOLOKALOWY") {
-        buildingTypeError = true;
-        buildingTypeErrorMessage = `Budynek pod adresem ${building.buildingAddress.streetName} ${building.buildingAddress.buildingNumber} ${building.buildingAddress.cityName} nie składa się z wielu lokali. BRAK LOKALI DO WYŚWIETLENIA`;
-        return;
-      }
+    if (buildingResponse instanceof Error) return;
+
+    building = await buildingResponse.json();
+    if (building.type != "WIELOLOKALOWY") {
+      buildingTypeError = true;
+      buildingTypeErrorMessage = `Budynek pod adresem ${building.buildingAddress.streetName} ${building.buildingAddress.buildingNumber} ${building.buildingAddress.cityName} nie składa się z wielu lokali. BRAK LOKALI DO WYŚWIETLENIA`;
+      return;
     }
+    listName = `${building.buildingAddress.streetName} ${building.buildingAddress.buildingNumber} ${building.buildingAddress.cityName} - LISTA LOKALI`;
+    collection = building.properties.sort(compareRealPropertiesByVenueNumber);
+    buildingInfoVisibility = true;
     baseListVisibility = true;
   });
 
   const headerDictionary = {
-    Miasto: "buildingAddress.cityName",
-    Ulica: "buildingAddress.streetName",
-    "Numer budynku": "buildingAddress.buildingNumber",
-    "Kod pocztowy": "buildingAddress.postalCode",
-    Typ: "type",
-    "Zarządca Nieruchomości": "propertyManager.name",
+    Numer: "propertyAddress.venueNumber",
+    "Numer klatki schodowej": "propertyAddress.staircaseNumber",
   };
 
   function addHandler(event) {
@@ -51,13 +50,15 @@
   }
 
   function detailHandler(event) {
-    goto(`/buildings/details/${event.detail.row.id}`);
+    goto(
+      `/buildings/details/${$page.params.slug}/real-properties/details/${event.detail.row.id}`
+    );
   }
 
   async function deleteHandler(event) {
     openModal(BaseConfirmPopUp, {
       title: "Potwierdź akcję",
-      message: "Czy na pewno chcesz usunąć wybrany budynek?",
+      message: "Czy na pewno chcesz usunąć wybraną nieruchomość?",
       onOkay: async () => await deleteAndReload(event.detail.row.id),
       undoSingleColorSelection: true,
       selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
@@ -65,11 +66,11 @@
   }
 
   async function deleteAndReload(id) {
-    let response = await deleteBuilding(id);
+    let response = await deleteRealProperty(id);
     if (response instanceof Response) {
       openModal(BasePopUp, {
         title: "Udana akcja",
-        message: "Pomyślnie usunięto wybrany budynek",
+        message: "Pomyślnie usunięto wybraną Nieruchomość",
         reloadRequired: true,
       });
     }
@@ -79,7 +80,7 @@
     const rows = event.detail.rows;
     openModal(BaseConfirmPopUp, {
       title: "Potwierdź akcję",
-      message: "Czy na pewno chcesz usunąć zaznaczone budynki?",
+      message: "Czy na pewno chcesz usunąć zaznaczone Nieruchomości?",
       onOkay: async () => await deleteSelectedAndReload(rows),
       undoMultipleColorSelection: true,
       selectedClassName: tableRowsClassName,
@@ -91,13 +92,13 @@
     let deleteResult;
 
     for (let i = 0; i < rows.length; i++) {
-      deleteResult = await deleteBuilding(rows[i].id);
+      deleteResult = await deleteRealProperty(rows[i].id);
       if (!(deleteResult instanceof Response)) errorOccured = true;
     }
     if (!errorOccured) {
       openModal(BasePopUp, {
         title: "Udana akcja",
-        message: "Pomyślnie usunięto zaznaczone budynki",
+        message: "Pomyślnie usunięto zaznaczone Nieruchomości",
         reloadRequired: true,
       });
     }
@@ -107,7 +108,6 @@
 {#if buildingTypeError}
   {buildingTypeErrorMessage}
 {/if}
-
 {#if baseListVisibility}
   <BaseList
     {listName}

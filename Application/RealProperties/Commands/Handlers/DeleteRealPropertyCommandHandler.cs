@@ -21,7 +21,7 @@ namespace Application.RealProperties.Commands.Handlers
         public async Task<Unit> Handle(DeleteRealPropertyCommand request, CancellationToken cancellationToken)
         {
             var thisPropertyProtocols = await _unitOfWork.InspectionProtocolsRepository.GetProtocolsOfParticularRealProperty(request.Id, cancellationToken);
-            if (thisPropertyProtocols != null)
+            if (thisPropertyProtocols != null && thisPropertyProtocols.Count()>0)
                 throw new Exception($"Nie wolno usunąć Nieruchomości o Id: {request.Id}," +
                     $" ponieważ jest do niej przypisany przynajmniej jeden protokół");
             
