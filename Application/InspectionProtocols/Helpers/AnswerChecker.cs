@@ -12,7 +12,6 @@ namespace Application.InspectionProtocols.Helpers
     {
         public static void AnswersContain(IBaseAnswer ibaseAnswer, string givenAnswer)
         {
-            var answers = ibaseAnswer.GetAnswers();
             if(!ibaseAnswer.GetAnswers().Contains(givenAnswer))
                 throw new NotAllowedProtocolAnswerException(givenAnswer, ibaseAnswer.GetQuestion());
         }

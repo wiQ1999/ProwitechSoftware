@@ -66,7 +66,7 @@ namespace Application.Buildings.Commands.Handlers
                 var thisBuildingPropertyProtocols = await _unitOfWork.InspectionProtocolsRepository.
                     GetProtocolsOfParticularRealProperty(thisBuildingProperty!.Id, cancellationToken);
 
-                if (thisBuildingPropertyProtocols != null)
+                if (thisBuildingPropertyProtocols != null && thisBuildingPropertyProtocols.Count()>0)
                     throw new Exception($"Nie możesz zmienić typu budynku na wielolokalowy," +
                         $" ponieważ do Budynku jest już przypisany co najmniej jeden protokół");
 
