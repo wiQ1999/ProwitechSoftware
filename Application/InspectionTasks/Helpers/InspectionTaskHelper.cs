@@ -11,9 +11,9 @@ namespace Application.InspectionTasks.Helpers
     {
         public static bool isStatusAllowed(string status)
         {
-            if (status.ToUpper() == InspectionTaskStatus.NEW.ToString()
-                || status.ToUpper() == InspectionTaskStatus.IN_PROGRESS.ToString()
-                || status.ToUpper() == InspectionTaskStatus.FINISHED.ToString())
+            if (status.ToUpper() == InspectionTaskStatus.NEW
+                || status.ToUpper() == InspectionTaskStatus.IN_PROGRESS
+                || status.ToUpper() == InspectionTaskStatus.FINISHED)
                 return true;
             return false;
         }

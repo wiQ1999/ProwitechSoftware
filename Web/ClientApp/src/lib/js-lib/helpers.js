@@ -40,3 +40,22 @@ export function chooseNewStringIfNewDiffersFromOld(oldStr, newStr) {
   }
   return oldStr;
 }
+
+function formatDate(inputDate) {
+  let date, month, year;
+
+  date = inputDate.getDate();
+  month = inputDate.getMonth() + 1;
+  year = inputDate.getFullYear();
+
+  date = date.toString().padStart(2, "0");
+
+  month = month.toString().padStart(2, "0");
+
+  // return `${date}/${month}/${year}`;
+  return `${year}-${month}-${date}`;
+}
+export function prepareDateTime(inputDate) {
+  let dateAsString = formatDate(inputDate);
+  return dateAsString + "T08:00";
+}
