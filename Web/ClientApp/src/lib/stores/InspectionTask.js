@@ -94,6 +94,17 @@ export function checkIfTasksDiffer(
   }
   return false;
 }
+export async function getInspectionTasksOfParticularPerformer(performerId) {
+  let route = "/InspectionTask/performerTasks";
+  let response;
+  try {
+    response = await genericGetById(route, performerId);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Zadań przypisanych do konkretnego Wykonawcy");
+    return err;
+  }
+}
 
 // export function compareRealPropertiesByVenueNumber(a, b) {
 //   let aVenueNumber = a.propertyAddress.venueNumber;
