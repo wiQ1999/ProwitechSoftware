@@ -1,5 +1,5 @@
-﻿using Application.Properties.Helpers;
-using Application.RealProperties.Commands.Requests;
+﻿using Application.RealProperties.Commands.Requests;
+using Application.RealProperties.Helpers;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;

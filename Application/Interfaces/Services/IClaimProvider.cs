@@ -5,7 +5,7 @@ namespace Application.Interfaces.Services;
 
 public interface IClaimProvider
 {
-    Claim CreateClaim(
-        AppSource source, 
-        PermissionProperty permissionProperty);
+    Claim CreateClaim(string type, string value);
+
+    Claim CreatePermissionClaim(AppSource source, PermissionProperty permissionProperty);
 }

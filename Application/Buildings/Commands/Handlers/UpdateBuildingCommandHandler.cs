@@ -1,5 +1,5 @@
 ﻿using Application.Buildings.Commands.Requests;
-using Application.Properties.Helpers;
+using Application.RealProperties.Helpers;
 using Infrastructure.Interfaces.Repositories;
 using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Enums;

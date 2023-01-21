@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Services;
+using Infrastructure.Helpers;
 using Infrastructure.Models.Enums;
 using System.Security.Claims;
 
@@ -6,13 +7,19 @@ namespace Application.Authentication.Services;
 
 public class ClaimProvider : IClaimProvider
 {
-    public const string CLAIM_TYPE = "Permissions";
+    const string CLAIM_TYPE = "permissions";
 
-    public Claim CreateClaim(
-        AppSource source, PermissionProperty permissionProperty)
+    public Claim CreateClaim(string type, string value)
+        => new (type, value);
+
+    public Claim CreatePermissionClaim(AppSource source, PermissionProperty permissionProperty)
     {
-        var value = $"{source}_{permissionProperty}";
-        var claim = new Claim(CLAIM_TYPE, value);
+        string sourceValue = source.SwapToJsonProperty();
+        string propertyValue = permissionProperty.SwapToJsonProperty();
+        string permission = $"{sourceValue}_{propertyValue}";
+
+        var claim = new Claim(CLAIM_TYPE, permission);
+
         return claim;
     }
 }

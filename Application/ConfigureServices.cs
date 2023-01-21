@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 
 namespace Application;
+
 public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(

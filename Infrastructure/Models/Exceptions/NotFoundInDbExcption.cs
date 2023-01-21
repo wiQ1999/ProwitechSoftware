@@ -1,4 +1,4 @@
-﻿using Infrastructure.Common.Helpers;
+﻿using Infrastructure.Helpers;
 using Infrastructure.Models.Enums;
 
 namespace Infrastructure.Models.Exceptions;

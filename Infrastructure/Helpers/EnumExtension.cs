@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace Infrastructure.Common.Helpers;
+namespace Infrastructure.Helpers;
 
 public static class EnumExtension
 {
@@ -17,7 +17,7 @@ public static class EnumExtension
         return value.ToString();
     }
 
-    public static T GetEnumFromDescription<T>(this string description) 
+    public static T GetEnumFromDescription<T>(this string description)
         where T : Enum
     {
         foreach (Enum enumValue in Enum.GetValues(typeof(T)))
@@ -26,5 +26,19 @@ public static class EnumExtension
                 return (T)enumValue;
         }
         throw new ArgumentException($"Nie znaleziono wartości {description}");
+    }
+
+    public static string SwapToJsonProperty(this Enum value)
+    {
+        string enumText = value.ToString();
+
+        char firstChar = char.ToLower(enumText[0]);
+
+        if (enumText.Length < 2)
+            return firstChar.ToString();
+
+        string result = firstChar + enumText.Substring(1);
+
+        return result;
     }
 }
