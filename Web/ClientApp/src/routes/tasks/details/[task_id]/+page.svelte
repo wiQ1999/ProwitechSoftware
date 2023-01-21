@@ -11,7 +11,6 @@
     checkIfTasksDiffer,
   } from "$lib/stores/InspectionTask";
   import { getBuildingById } from "$lib/stores/Building";
-  let unique = {};
   let editMode = true;
   let formVisibility = false;
   let href = `/tasks/getAll`;
@@ -27,15 +26,11 @@
     startDateTime: "",
     endDateTime: "",
   };
-  function restart() {
-    unique = {};
-  }
   onMount(async () => {
     let res = await getInspectionTaskById($page.params.task_id);
     if (res instanceof Response) {
       originalInspectionTask = await res.json();
 
-      //   console.log(originalInspectionTask);
       UpdateInspectionTaskCommand = {
         id: originalInspectionTask.id,
         taskDelegatorId: originalInspectionTask.taskDelegator.id,
@@ -44,13 +39,6 @@
         buildingId: originalInspectionTask.building.id,
         dueStartDateTime: originalInspectionTask.dueStartDateTime,
       };
-      //   if (originalInspectionTask.startDateTime == "0001-01-01T00:00:00") {
-      //     UpdateInspectionTaskCommand.startDateTime = null;
-      //   }
-
-      //   if (originalInspectionTask.endDateTime == "0001-01-01T00:00:00") {
-      //     UpdateInspectionTaskCommand.endDateTime = null;
-      //   }
     }
     let buildingResponse = await getBuildingById(
       originalInspectionTask.building.id
@@ -58,7 +46,6 @@
     if (buildingResponse instanceof Response) {
       building = await buildingResponse.json();
     }
-    console.log(building);
     formVisibility = true;
   });
   const updateInspectionTask = async () => {
@@ -78,20 +65,12 @@
       UpdateInspectionTaskCommand
     );
     if (result instanceof Response) {
-      restart();
-      //   formVisibility = false;
-      //   editMode = true;
-      //   formVisibility = true;
+      openModal(BasePopUp, {
+        title: "Sukces",
+        message: "Pomyślnie edytowano Zadanie",
+        reloadRequired: true,
+      });
     }
-    // if (result instanceof Response) {
-    //   openModal(BasePopUp, {
-    //     title: "Sukces",
-    //     message: "Pomyślnie edytowano Zadanie",
-    //     reloadRequired: false,
-    //     redirectionRequired: true,
-    //     redirectionHref: `/tasks/getAll`,
-    //   });
-    // }
   };
 </script>
 
@@ -102,12 +81,10 @@
   >
 </a>
 {#if formVisibility}
-  {#key unique}
-    <InspectionTaskForm
-      onSubmit={updateInspectionTask}
-      bind:CreateInspectionTaskCommand={UpdateInspectionTaskCommand}
-      {building}
-      {editMode}
-    />
-  {/key}
+  <InspectionTaskForm
+    onSubmit={updateInspectionTask}
+    bind:CreateInspectionTaskCommand={UpdateInspectionTaskCommand}
+    {building}
+    {editMode}
+  />
 {/if}

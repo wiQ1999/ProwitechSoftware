@@ -6,7 +6,10 @@
   import { openModal } from "svelte-modals";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
-  import { getAllInspectionTasks } from "$lib/stores/InspectionTask";
+  import {
+    getAllInspectionTasks,
+    deleteInspectionTask,
+  } from "$lib/stores/InspectionTask";
   import {
     deleteRealProperty,
     compareRealPropertiesByVenueNumber,
@@ -27,7 +30,6 @@
     let taskResponse = await getAllInspectionTasks();
     if (taskResponse instanceof Error) return;
     let tasks = await taskResponse.json();
-    console.log(tasks);
     listName = "ZADANIA";
     collection = tasks;
     buildingInfoVisibility = true;
@@ -55,51 +57,51 @@
   }
 
   async function deleteHandler(event) {
-    // openModal(BaseConfirmPopUp, {
-    //   title: "Potwierdź akcję",
-    //   message: "Czy na pewno chcesz usunąć wybraną nieruchomość?",
-    //   onOkay: async () => await deleteAndReload(event.detail.row.id),
-    //   undoSingleColorSelection: true,
-    //   selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
-    // });
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć wybrane Zadanie?",
+      onOkay: async () => await deleteAndReload(event.detail.row.id),
+      undoSingleColorSelection: true,
+      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
+    });
   }
 
   async function deleteAndReload(id) {
-    // let response = await deleteRealProperty(id);
-    // if (response instanceof Response) {
-    //   openModal(BasePopUp, {
-    //     title: "Udana akcja",
-    //     message: "Pomyślnie usunięto wybraną Nieruchomość",
-    //     reloadRequired: true,
-    //   });
-    // }
+    let response = await deleteInspectionTask(id);
+    if (response instanceof Response) {
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto wybrane Zadanie",
+        reloadRequired: true,
+      });
+    }
   }
 
   async function deleteSelectedHandler(event) {
-    // const rows = event.detail.rows;
-    // openModal(BaseConfirmPopUp, {
-    //   title: "Potwierdź akcję",
-    //   message: "Czy na pewno chcesz usunąć zaznaczone Nieruchomości?",
-    //   onOkay: async () => await deleteSelectedAndReload(rows),
-    //   undoMultipleColorSelection: true,
-    //   selectedClassName: tableRowsClassName,
-    // });
+    const rows = event.detail.rows;
+    openModal(BaseConfirmPopUp, {
+      title: "Potwierdź akcję",
+      message: "Czy na pewno chcesz usunąć zaznaczone Zadania?",
+      onOkay: async () => await deleteSelectedAndReload(rows),
+      undoMultipleColorSelection: true,
+      selectedClassName: tableRowsClassName,
+    });
   }
   async function deleteSelectedAndReload(rows) {
-    // if (rows == null) return;
-    // let errorOccured = false;
-    // let deleteResult;
-    // for (let i = 0; i < rows.length; i++) {
-    //   deleteResult = await deleteRealProperty(rows[i].id);
-    //   if (!(deleteResult instanceof Response)) errorOccured = true;
-    // }
-    // if (!errorOccured) {
-    //   openModal(BasePopUp, {
-    //     title: "Udana akcja",
-    //     message: "Pomyślnie usunięto zaznaczone Nieruchomości",
-    //     reloadRequired: true,
-    //   });
-    // }
+    if (rows == null) return;
+    let errorOccured = false;
+    let deleteResult;
+    for (let i = 0; i < rows.length; i++) {
+      deleteResult = await deleteInspectionTask(rows[i].id);
+      if (!(deleteResult instanceof Response)) errorOccured = true;
+    }
+    if (!errorOccured) {
+      openModal(BasePopUp, {
+        title: "Udana akcja",
+        message: "Pomyślnie usunięto zaznaczone Zadania",
+        reloadRequired: true,
+      });
+    }
   }
 </script>
 
