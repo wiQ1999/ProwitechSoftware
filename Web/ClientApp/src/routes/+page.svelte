@@ -4,6 +4,7 @@
     setToken,
     getToken,
     clearToken,
+    readPermissionPropertiesFor,
   } from "$lib/js-lib/authorizationManager.js";
 
   let login = "";
@@ -27,11 +28,19 @@
     console.log("CLEAR");
     clearToken();
   }
+
+  function readPermissionProperties() {
+    console.log("readPermissionProperties");
+    const result = readPermissionPropertiesFor("users");
+    console.log(result);
+  }
 </script>
 
 <button on:click={getCookie}>GET</button>
 <br />
 <button on:click={clearCookie}>CLEAR</button>
+<br />
+<button on:click={readPermissionProperties}>readPermissionProperties</button>
 
 <main>
   <slot>

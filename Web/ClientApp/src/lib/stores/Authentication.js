@@ -13,9 +13,6 @@ export async function getAuthenticated(login, password) {
     const response = await fetch(url, fetchData);
     const json = await response.clone().json();
 
-    console.log(response);
-    console.log(json);
-
     if (!response.ok) {
         const message = `Kod błędu: ${json.status} | Szczegóły: ${json.title}`;
 
