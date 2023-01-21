@@ -65,9 +65,19 @@
   function setButtonMessage(collectionItem) {
     if (collectionItem.status == "nowe") return "ROZPOCZNIJ ZADANIE";
     if (collectionItem.status == "w toku") return "KONTYNUUJ ZADANIE";
-    if (collectionItem.status == "zakonczone") return "SZCZEGÓŁY ZADANIA";
+    if (
+      collectionItem.status == "zakonczone" ||
+      collectionItem.status == "zakończone"
+    )
+      return "SZCZEGÓŁY ZADANIA";
     return firstButtonMessage;
   }
+  const todayIsEarlierThanDueStartDateTime = (collectionItem) => {
+    let taskDueStartDateTime = new Date(collectionItem.dueStartDateTime);
+    let today = new Date();
+    if (today >= taskDueStartDateTime) return false;
+    return true;
+  };
 </script>
 
 <br />
@@ -93,6 +103,7 @@
             <button
               on:click={firstButtonAction(row)}
               class="bg-blue-400 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
+              disabled={todayIsEarlierThanDueStartDateTime(row)}
             >
               {setButtonMessage(row)}
             </button>

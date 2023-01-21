@@ -1,8 +1,6 @@
 <script>
   import { Modals, closeModal } from "svelte-modals";
   import "../app.css";
-  //TODO ZMIENIAJ HREF W NAVBARZE W ZALEŻNOŚCI OD TEGO, KTO ZALOGOWANY
-  let personLoggedInId = "030B7529-173C-41A8-953D-75BA46B7FC21";
 </script>
 
 <header class="flex flex-col">
@@ -58,20 +56,19 @@
     >
 
     <a
-      href="/tasks/getAll"
-      data-item="Wszystkie zadania"
+      href="/tasks"
+      data-item="Zadania"
       class="decoration-none uppercase text-2xl text-[#8f8f8f] font-semibold tracking-widest relative
     before:absolute before:content-[attr(data-item)] before:text-[#007acc] before:top-0 before:left-0 before:bottom-0 before:w-0 before:overflow-hidden before:hover:w-[100%]"
-      >Wszystkie zadania</a
+      >Zadania</a
     >
-    <!-- TODO -->
-    <!-- AHREF = TASKS/[PERFORMED_ID]/PERFORMER_TASKS -->
+
     <a
-      href="/tasks/{personLoggedInId}/performer_tasks"
-      data-item="Moje zadania"
+      href="/protocols"
+      data-item="Protokoły"
       class="decoration-none uppercase text-2xl text-[#8f8f8f] font-semibold tracking-widest relative
     before:absolute before:content-[attr(data-item)] before:text-[#007acc] before:top-0 before:left-0 before:bottom-0 before:w-0 before:overflow-hidden before:hover:w-[100%]"
-      >Moje zadania</a
+      >Protokoły</a
     >
   </nav>
 </header>

@@ -8,6 +8,8 @@
   import {
     getInspectionTasksOfParticularPerformer,
     deleteInspectionTask,
+    changeInspectionTaskStatus,
+    getInspectionTaskById,
   } from "$lib/stores/InspectionTask";
 
   let collection = [];
@@ -40,8 +42,23 @@
     Zakończono: "endDateTime",
   };
 
-  function firstButtonHandler(event) {
-    goto(`/tasks/handle/${event.detail.row.id}`);
+  async function firstButtonHandler(event) {
+    let taskId = event.detail.row.id;
+    let optionalTaskStatusChange = await changeTaskStatusIfNeeded(taskId);
+    if (optionalTaskStatusChange) goto(`/tasks/handle/${taskId}`);
+  }
+  async function changeTaskStatusIfNeeded(taskId) {
+    let taskResponse = await getInspectionTaskById(taskId);
+    if (taskResponse instanceof Error) return;
+
+    let task = await taskResponse.json();
+    let taskStatus = task.status;
+
+    if (taskStatus == "nowe") {
+      let updateSuccess = await changeInspectionTaskStatus(taskId, true);
+      if (updateSuccess instanceof Error) return false;
+    }
+    return true;
   }
 
   function secondButtonHandler(event) {}
@@ -94,6 +111,13 @@
     }
   }
 </script>
+
+<a href="/tasks">
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
+</a>
 
 {#if baseListVisibility}
   <InspectionTaskDetailedList

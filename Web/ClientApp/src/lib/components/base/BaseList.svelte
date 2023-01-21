@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-
+  import { setResultFormatIfItIsDateTime } from "$lib/js-lib/helpers";
   export let collection = [];
   export let headerDictionary = {};
   export let tableRowsClassName = "base-list";
@@ -87,17 +87,6 @@
     }
 
     return setResultFormatIfItIsDateTime(property, result) ?? "";
-  }
-  function setResultFormatIfItIsDateTime(propertyName, propertyValue) {
-    if (propertyName.includes("DateTime")) {
-      if (propertyValue == "0001-01-01T00:00:00") return null;
-      let d = new Date(propertyValue);
-      return new Intl.DateTimeFormat("pl-PL", {
-        dateStyle: "short",
-        timeStyle: "short",
-      }).format(d);
-    }
-    return propertyValue;
   }
 </script>
 

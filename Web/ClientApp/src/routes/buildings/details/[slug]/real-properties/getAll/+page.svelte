@@ -109,6 +109,12 @@
   {buildingTypeErrorMessage}
 {/if}
 {#if baseListVisibility}
+  <a href="/buildings/details/{$page.params.slug}">
+    <button
+      class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+      >Powrót</button
+    >
+  </a>
   <BaseList
     {listName}
     {collection}

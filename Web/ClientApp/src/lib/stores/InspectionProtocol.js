@@ -78,6 +78,20 @@ export async function getInspectionProtocolsOfParticularTask(taskId) {
     return err;
   }
 }
+export function compareProtocolsByVenueNumber(a, b) {
+  let aVenueNumber = a.inspectedProperty.propertyAddress.venueNumber;
+  let bVenueNumber = b.inspectedProperty.propertyAddress.venueNumber;
+
+  let aInt = parseInt(aVenueNumber);
+  let bInt = parseInt(bVenueNumber);
+  if (aInt < bInt) {
+    return -1;
+  }
+  if (aInt > bInt) {
+    return 1;
+  }
+  return 0;
+}
 
 // export function checkIfTasksDiffer(
 //   inspectionTaskFromGet,
@@ -111,19 +125,4 @@ export async function getInspectionProtocolsOfParticularTask(taskId) {
 //       return true;
 //   }
 //   return false;
-// }
-
-// export function compareRealPropertiesByVenueNumber(a, b) {
-//   let aVenueNumber = a.propertyAddress.venueNumber;
-//   let bVenueNumber = b.propertyAddress.venueNumber;
-
-//   let aInt = parseInt(aVenueNumber);
-//   let bInt = parseInt(bVenueNumber);
-//   if (aInt < bInt) {
-//     return -1;
-//   }
-//   if (aInt > bInt) {
-//     return 1;
-//   }
-//   return 0;
 // }

@@ -4,7 +4,10 @@ import {
   genericGetById,
   genericPost,
   genericPut,
+  genericCustomGet,
+  genericCustomPut,
 } from "$lib/js-lib/httpMethods";
+import { formatDate } from "$lib/js-lib/helpers";
 import { handleError } from "$lib/js-lib/errors";
 
 const path = "/InspectionTask";
@@ -105,18 +108,66 @@ export async function getInspectionTasksOfParticularPerformer(performerId) {
     return err;
   }
 }
+export async function getInspectionTaskPropertiesWithoutProtocols(taskId) {
+  let route = `/InspectionTask/${taskId}/propertiesWithoutProtocols`;
+  let response;
+  try {
+    response = await genericCustomGet(route);
+    return response;
+  } catch (err) {
+    handleError(
+      err,
+      "pobieranie Nieruchomości przypisanych do Zadania, które nie posiadają Protokołów"
+    );
+    return err;
+  }
+}
+export async function getTaskProtocols(taskId) {
+  let route = `/InspectionProtocol/taskProtocols/${taskId}`;
+  let response;
+  try {
+    response = await genericCustomGet(route);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Protokołów przypisanych do wybranego zadania");
+    return err;
+  }
+}
+// {id:Guid}/changeStatusToInProgress"
 
-// export function compareRealPropertiesByVenueNumber(a, b) {
-//   let aVenueNumber = a.propertyAddress.venueNumber;
-//   let bVenueNumber = b.propertyAddress.venueNumber;
+export async function changeInspectionTaskStatus(
+  taskId,
+  inProgress = false,
+  finished = false
+) {
+  let date = new Date();
+  let inputDateTime = formatDate(date, true);
+  console.log(inputDateTime);
 
-//   let aInt = parseInt(aVenueNumber);
-//   let bInt = parseInt(bVenueNumber);
-//   if (aInt < bInt) {
-//     return -1;
-//   }
-//   if (aInt > bInt) {
-//     return 1;
-//   }
-//   return 0;
-// }
+  let changeTaskStatusCommand;
+  if (inProgress) {
+    changeTaskStatusCommand = {
+      id: taskId,
+      status: "w toku",
+      startDateTime: inputDateTime,
+    };
+  }
+  if (finished) {
+    changeTaskStatusCommand = {
+      id: taskId,
+      status: "zakończone",
+      endDateTime: inputDateTime,
+    };
+  }
+
+  console.log(changeTaskStatusCommand);
+  let route = `/InspectionTask/${taskId}/changeStatusToInProgress`;
+  let response;
+  try {
+    response = await genericCustomPut(route, changeTaskStatusCommand);
+    return response;
+  } catch (err) {
+    handleError(err, "Zmiana statusu Zadania z [nowe] na [w toku]");
+    return err;
+  }
+}

@@ -41,16 +41,24 @@ export function chooseNewStringIfNewDiffersFromOld(oldStr, newStr) {
   return oldStr;
 }
 
-function formatDate(inputDate) {
-  let date, month, year;
+export function formatDate(inputDate, addTime = false) {
+  let date, month, year, hour, minutes;
 
   date = inputDate.getDate();
   month = inputDate.getMonth() + 1;
   year = inputDate.getFullYear();
 
   date = date.toString().padStart(2, "0");
-
   month = month.toString().padStart(2, "0");
+
+  if (addTime) {
+    hour = inputDate.getHours();
+    minutes = inputDate.getMinutes();
+
+    hour = hour.toString().padStart(2, "0");
+    minutes = minutes.toString().padStart(2, "0");
+    return `${year}-${month}-${date}T${hour}:${minutes}`;
+  }
 
   // return `${date}/${month}/${year}`;
   return `${year}-${month}-${date}`;
@@ -58,4 +66,15 @@ function formatDate(inputDate) {
 export function prepareDateTime(inputDate) {
   let dateAsString = formatDate(inputDate);
   return dateAsString + "T08:00:00";
+}
+export function setResultFormatIfItIsDateTime(propertyName, propertyValue) {
+  if (propertyName.includes("DateTime")) {
+    if (propertyValue == "0001-01-01T00:00:00") return null;
+    let d = new Date(propertyValue);
+    return new Intl.DateTimeFormat("pl-PL", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(d);
+  }
+  return propertyValue;
 }
