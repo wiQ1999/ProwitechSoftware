@@ -23,7 +23,7 @@
     let taskResponse = await getAllInspectionTasks();
     if (taskResponse instanceof Error) return;
     let tasks = await taskResponse.json();
-    listName = "ZADANIA";
+    listName = "WSZYSTKIE ZADANIA";
     collection = tasks;
     buildingInfoVisibility = true;
     baseListVisibility = true;
@@ -36,7 +36,7 @@
     Delegujący: "taskDelegator.login",
     Wykonujący: "taskPerformer.login",
     Status: "status",
-    "Planowana data rozpoczęcia": "dueStartDateTime",
+    // "Planowana data rozpoczęcia": "dueStartDateTime",
     Rozpoczęto: "startDateTime",
     Zakończono: "endDateTime",
   };

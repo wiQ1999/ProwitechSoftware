@@ -27,10 +27,21 @@
     let tasks = await taskResponse.json();
     //TODO NAZWA LIST NAME = IMIĘ + NAZWISKO ZALOGOWANEGO + ZADANIA
     listName = "ALOJZY PTYŚ - ZADANIA";
-    collection = tasks;
+    collection = tasks.sort(compareTasksStatutes);
     baseListVisibility = true;
   });
+  function compareTasksStatutes(taskA, taskB) {
+    let statusA = taskA.status;
+    let statusB = taskB.status;
 
+    if (statusA < statusB) {
+      return -1;
+    }
+    if (statusA > statusB) {
+      return 1;
+    }
+    return 0;
+  }
   const headerDictionary = {
     Budynek: "building.buildingAddress.streetName",
     _nr: "building.buildingAddress.buildingNumber",

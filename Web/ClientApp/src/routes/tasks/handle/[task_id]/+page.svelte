@@ -109,10 +109,6 @@
     taskProtocols = await taskProtocolsResponse.json();
     console.log(taskProtocols);
     secondListName = "Utworzone protokoły";
-    //TODO posortować po numerach
-    // secondListCollection = taskProtocols.sort(
-    //   compareRealPropertiesByVenueNumber
-    // );
     collectionOfNewProtocols = taskProtocols.sort(
       compareProtocolsByVenueNumber
     );
@@ -263,7 +259,7 @@
   <div class="wielolokalowy">
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
       <ModifiedBaseList
-        {firstListName}
+        listName={firstListName}
         collection={collectionOfRealPropertiesWithoutAssignedProtocols}
         headerDictionary={firstListHeaderDictionary}
         {firstTableRowsClassName}
@@ -274,7 +270,7 @@
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
       <ModifiedBaseList
-        {secondListName}
+        listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={secondListHeaderDictionary}
         {secondTableRowsClassName}
@@ -287,7 +283,7 @@
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
       <ModifiedBaseList
-        {secondListName}
+        listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={secondListHeaderDictionary}
         {secondTableRowsClassName}
@@ -309,7 +305,7 @@
     {/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
       <ModifiedBaseList
-        {secondListName}
+        listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={singleFamilyBuildingHeaderDictionary}
         {secondTableRowsClassName}
@@ -322,7 +318,7 @@
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
       <ModifiedBaseList
-        {secondListName}
+        listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={singleFamilyBuildingHeaderDictionary}
         {secondTableRowsClassName}
