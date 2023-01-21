@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import BaseList from "$lib/components/base/BaseList.svelte";
   import { openModal } from "svelte-modals";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
@@ -10,19 +9,13 @@
     getAllInspectionTasks,
     deleteInspectionTask,
   } from "$lib/stores/InspectionTask";
-  import {
-    deleteRealProperty,
-    compareRealPropertiesByVenueNumber,
-  } from "$lib/stores/RealProperty";
 
   let collection = [];
   let tableRowsClassName = "real-properties-base-list";
-  let building;
   let listName = "";
   let buildingTypeError = false;
   let baseListVisibility = false;
   let buildingInfoVisibility = false;
-  let buildingTypeErrorMessage;
   onMount(async () => {
     buildingTypeError = false;
     baseListVisibility = false;

@@ -16,6 +16,7 @@
   let href = `/tasks/getAll`;
   let originalInspectionTask;
   let building;
+  let showProtocolsButton = false;
   let UpdateInspectionTaskCommand = {
     id: "",
     taskDelegatorId: "",
@@ -28,18 +29,21 @@
   };
   onMount(async () => {
     let res = await getInspectionTaskById($page.params.task_id);
-    if (res instanceof Response) {
-      originalInspectionTask = await res.json();
+    if (res instanceof Error) return;
+    originalInspectionTask = await res.json();
 
-      UpdateInspectionTaskCommand = {
-        id: originalInspectionTask.id,
-        taskDelegatorId: originalInspectionTask.taskDelegator.id,
-        taskPerformerId: originalInspectionTask.taskPerformer.id,
-        status: originalInspectionTask.status,
-        buildingId: originalInspectionTask.building.id,
-        dueStartDateTime: originalInspectionTask.dueStartDateTime,
-      };
-    }
+    UpdateInspectionTaskCommand = {
+      id: originalInspectionTask.id,
+      taskDelegatorId: originalInspectionTask.taskDelegator.id,
+      taskPerformerId: originalInspectionTask.taskPerformer.id,
+      status: originalInspectionTask.status,
+      buildingId: originalInspectionTask.building.id,
+      dueStartDateTime: originalInspectionTask.dueStartDateTime,
+    };
+
+    if (UpdateInspectionTaskCommand.status == "zakonczone")
+      showProtocolsButton = true;
+
     let buildingResponse = await getBuildingById(
       originalInspectionTask.building.id
     );
@@ -49,6 +53,10 @@
     formVisibility = true;
   });
   const updateInspectionTask = async () => {
+    //TODO
+    //ZMIENIĆ DANE TASKDELEGATORA NA ID OSOBY ZALOGOWANEJ
+    UpdateInspectionTaskCommand.taskDelegatorId =
+      "DB789183-4BD0-4D3C-AF40-548AC88FBDEB";
     let differ = checkIfTasksDiffer(
       originalInspectionTask,
       UpdateInspectionTaskCommand
@@ -87,4 +95,16 @@
     {building}
     {editMode}
   />
+{/if}
+{#if showProtocolsButton}
+  <div
+    class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+  >
+    <a href="/tasks/details/${$page.params.task_id}/protocols">
+      <button
+        class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+        >Protokoły</button
+      >
+    </a>
+  </div>
 {/if}

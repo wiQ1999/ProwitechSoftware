@@ -2,7 +2,6 @@
   import InspectionTaskForm from "$lib/components/InspectionTaskForm.svelte";
   import { openModal } from "svelte-modals";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
-  import { page } from "$app/stores";
   import { postInspectionTask } from "$lib/stores/InspectionTask";
 
   let href = `/tasks/getAll`;
