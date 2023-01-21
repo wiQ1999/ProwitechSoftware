@@ -100,7 +100,7 @@
   <div
     class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
   >
-    <a href="/tasks/details/${$page.params.task_id}/protocols">
+    <a href="/tasks/details/{$page.params.task_id}/protocols">
       <button
         class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
         >Protokoły</button
