@@ -57,5 +57,5 @@ function formatDate(inputDate) {
 }
 export function prepareDateTime(inputDate) {
   let dateAsString = formatDate(inputDate);
-  return dateAsString + "T08:00";
+  return dateAsString + "T08:00:00";
 }

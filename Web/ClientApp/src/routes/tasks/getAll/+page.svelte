@@ -51,7 +51,7 @@
   }
 
   function detailHandler(event) {
-    goto(`/tasks/details/${event.row.id}`);
+    goto(`/tasks/details/${event.detail.row.id}`);
   }
 
   async function deleteHandler(event) {

@@ -61,21 +61,38 @@ export async function deleteInspectionTask(id) {
   }
 }
 
-export function checkIfInspectionTasksDiffer(
+export function checkIfTasksDiffer(
   inspectionTaskFromGet,
   updatedInspectionTask
 ) {
-  //   if (
-  //     inspectionTaskFromGet.propertyAddress.venueNumber !=
-  //     updatedInspectionTask.PropertyAddressWithVenueNumberDTO.venueNumber
-  //   )
-  //     return true;
-  //   if (
-  //     inspectionTaskFromGet.propertyAddress.staircaseNumber !=
-  //     updatedInspectionTask.PropertyAddressWithVenueNumberDTO.staircaseNumber
-  //   )
-  //     return true;
-  //   return false;
+  if (inspectionTaskFromGet.building.id != updatedInspectionTask.buildingId)
+    return true;
+  if (
+    inspectionTaskFromGet.taskDelegator.id !=
+    updatedInspectionTask.taskDelegatorId
+  )
+    return true;
+  if (
+    inspectionTaskFromGet.taskPerformer.id !=
+    updatedInspectionTask.taskPerformerId
+  )
+    return true;
+  if (
+    inspectionTaskFromGet.dueStartDateTime !=
+    updatedInspectionTask.dueStartDateTime
+  ) {
+    let dueStartTimeStrLength = inspectionTaskFromGet.dueStartDateTime.length;
+    let originalDueStartTimeWithoutZeros =
+      inspectionTaskFromGet.dueStartDateTime.substring(
+        0,
+        dueStartTimeStrLength - 3
+      );
+    if (
+      originalDueStartTimeWithoutZeros != updatedInspectionTask.dueStartDateTime
+    )
+      return true;
+  }
+  return false;
 }
 
 // export function compareRealPropertiesByVenueNumber(a, b) {

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import Map from "$lib/components/Map.svelte";
   import { getAllUsers } from "$lib/stores/Users";
   import { getAllBuildings } from "$lib/stores/Building";
   import { prepareDateTime } from "$lib/js-lib/helpers";

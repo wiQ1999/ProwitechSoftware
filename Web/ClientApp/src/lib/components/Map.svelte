@@ -143,7 +143,7 @@
 
 <style>
   .full-screen {
-    width: 75vw;
-    height: 75vh;
+    width: 50vw;
+    height: 50vh;
   }
 </style>
