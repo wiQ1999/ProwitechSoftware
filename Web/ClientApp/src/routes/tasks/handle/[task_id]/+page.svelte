@@ -37,12 +37,16 @@
   let inspectionTask;
   let allBuildingRealPropertiesCount;
   let submitButtonVisibility = false;
+  let singleFamilyBuildingType = false;
+  let multipleFamilyBuildingType = false;
   onMount(async () => {
     firstListVisibility = false;
     secondListVisibility = false;
     buildingInfoVisibility = false;
     buttonDisabled = true;
     submitButtonVisibility = false;
+    singleFamilyBuildingType = false;
+    multipleFamilyBuildingType = false;
 
     let buildingPrepared = await prepareBuildingInfo();
     let firstListPrepared = await prepareFirstList();
@@ -74,6 +78,8 @@
     if (buildingResponse instanceof Error) return false;
 
     let building = await buildingResponse.json();
+    if (building.type == "WIELOLOKALOWY") multipleFamilyBuildingType = true;
+    if (building.type == "JEDNOLOKALOWY") singleFamilyBuildingType = true;
     allBuildingRealPropertiesCount = building.properties.length;
     buildingInfo = `${building.buildingAddress.streetName} ${building.buildingAddress.buildingNumber}, ${building.buildingAddress.cityName}`;
     taskStatus = inspectionTask.status;
@@ -121,13 +127,25 @@
     "Numer protokołu": "number",
     "Numer lokalu": "inspectedProperty.propertyAddress.venueNumber",
     "Klatka schodowa": "inspectedProperty.propertyAddress.staircaseNumber",
+    Mieszkaniec: "resident.firstName",
+    _nazwisko: "resident.lastName",
+    "Numer telefonu": "resident.phoneNumber",
+  };
+  const singleFamilyBuildingHeaderDictionary = {
+    "Numer protokołu": "number",
+    Mieszkaniec: "resident.firstName",
+    _nazwisko: "resident.lastName",
+    "Numer telefonu": "resident.phoneNumber",
   };
 
   function FIRST_LIST_firstButtonHandler(event) {
-    goto(`/tasks/handle/${event.detail.row.id}`);
+    console.log("firstHandler");
+    // goto(`/protocols/create`);
   }
 
-  function secondButtonHandler(event) {}
+  function secondButtonHandler(event) {
+    console.log("secondHandler");
+  }
 
   async function SECOND_LIST_deleteHandler(event) {
     openModal(BaseConfirmPopUp, {
@@ -224,35 +242,98 @@
             : ""}</td
         >
       </tr>
+      {#if taskStatus == "zakończone" || taskStatus == "zakonczone"}
+        <tr>
+          <td>ZAKOŃCZONO</td>
+          <td
+            >{inspectionTask.endDateTime != "0001-01-01T00:00:00"
+              ? setResultFormatIfItIsDateTime(
+                  "endDateTime",
+                  inspectionTask.endDateTime
+                )
+              : ""}</td
+          >
+        </tr>
+      {/if}
     </table>
   </div>
   <div />
 {/if}
+{#if multipleFamilyBuildingType}
+  <div class="wielolokalowy">
+    {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
+      <ModifiedBaseList
+        {firstListName}
+        collection={collectionOfRealPropertiesWithoutAssignedProtocols}
+        headerDictionary={firstListHeaderDictionary}
+        {firstTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="DODAJ PROTOKÓŁ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={secondListHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        secondButtonVisibility={true}
+        secondButtonMessage="USUŃ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={secondListHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+  </div>
+{/if}
+{#if singleFamilyBuildingType}
+  <div class="jednolokalowy">
+    {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
+      <button
+        on:click|preventDefault={FIRST_LIST_firstButtonHandler}
+        class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+        >Dodaj protokół</button
+      >
+    {/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={singleFamilyBuildingHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        secondButtonVisibility={true}
+        secondButtonMessage="USUŃ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={singleFamilyBuildingHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+  </div>
+{/if}
 
-{#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
-  <ModifiedBaseList
-    {firstListName}
-    collection={collectionOfRealPropertiesWithoutAssignedProtocols}
-    headerDictionary={firstListHeaderDictionary}
-    {firstTableRowsClassName}
-    firstButtonVisibility={true}
-    firstButtonMessage="DODAJ PROTOKÓŁ"
-    on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-    on:secondButtonAction={secondButtonHandler}
-  />{/if}
-{#if secondListVisibility && collectionOfNewProtocols.length > 0}
-  <ModifiedBaseList
-    {secondListName}
-    collection={collectionOfNewProtocols}
-    headerDictionary={secondListHeaderDictionary}
-    {secondTableRowsClassName}
-    firstButtonVisibility={true}
-    firstButtonMessage="EDYTUJ"
-    secondButtonVisibility={true}
-    secondButtonMessage="USUŃ"
-    on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-    on:secondButtonAction={secondButtonHandler}
-  />{/if}
 {#if submitButtonVisibility}
   <button
     type="submit"

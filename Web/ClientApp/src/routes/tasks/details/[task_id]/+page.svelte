@@ -41,7 +41,10 @@
       dueStartDateTime: originalInspectionTask.dueStartDateTime,
     };
 
-    if (UpdateInspectionTaskCommand.status == "zakonczone")
+    if (
+      UpdateInspectionTaskCommand.status == "zakonczone" ||
+      UpdateInspectionTaskCommand.status == "zakończone"
+    )
       showProtocolsButton = true;
 
     let buildingResponse = await getBuildingById(

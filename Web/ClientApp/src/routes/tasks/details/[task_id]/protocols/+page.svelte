@@ -1,112 +1,126 @@
-<script>
-  import { onMount } from "svelte";
-  import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
-  import BaseList from "$lib/components/base/BaseList.svelte";
-  import { openModal } from "svelte-modals";
-  import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
-  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
-  import { getInspectionProtocolsOfParticularTask } from "$lib/stores/InspectionProtocol";
+<!-- TODO -->
+<!-- ZROBIĆ JAK BĘDZIESZ MIAŁA ZROBIONE "HANDLE" -->
 
-  let collection = [];
-  let tableRowsClassName = "real-properties-base-list";
-  let listName = "";
-  let baseListVisibility = false;
-  let buildingInfoVisibility = false;
-  onMount(async () => {
-    baseListVisibility = false;
-    console.log($page.params.task_id);
-
-    let protocolsResponse = await getInspectionProtocolsOfParticularTask(
-      $page.params.task_id
-    );
-    if (protocolsResponse instanceof Error) return;
-    let protocols = await protocolsResponse.json();
-    console.log(protocols);
-    // listName = "ZADANIA";
-    // collection = tasks;
-    // buildingInfoVisibility = true;
-    // baseListVisibility = true;
-  });
-
-  //   const headerDictionary = {
-  //     Budynek: "building.buildingAddress.streetName",
-  //     _nr: "building.buildingAddress.buildingNumber",
-  //     _miasto: "building.buildingAddress.cityName",
-  //     Delegujący: "taskDelegator.login",
-  //     Wykonujący: "taskPerformer.login",
-  //     Status: "status",
-  //     "Planowana data rozpoczęcia": "dueStartDateTime",
-  //     Rozpoczęto: "startDateTime",
-  //     Zakończono: "endDateTime",
-  //   };
-
-  //   function addHandler(event) {
-  //     goto(`/tasks/create`);
-  //   }
-
-  //   function detailHandler(event) {
-  //     goto(`/tasks/details/${event.detail.row.id}`);
-  //   }
-
-  //   async function deleteHandler(event) {
-  //     openModal(BaseConfirmPopUp, {
-  //       title: "Potwierdź akcję",
-  //       message: "Czy na pewno chcesz usunąć wybrane Zadanie?",
-  //       onOkay: async () => await deleteAndReload(event.detail.row.id),
-  //       undoSingleColorSelection: true,
-  //       selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
-  //     });
-  //   }
-
-  //   async function deleteAndReload(id) {
-  //     let response = await deleteInspectionTask(id);
-  //     if (response instanceof Response) {
-  //       openModal(BasePopUp, {
-  //         title: "Udana akcja",
-  //         message: "Pomyślnie usunięto wybrane Zadanie",
-  //         reloadRequired: true,
-  //       });
-  //     }
-  //   }
-
-  //   async function deleteSelectedHandler(event) {
-  //     const rows = event.detail.rows;
-  //     openModal(BaseConfirmPopUp, {
-  //       title: "Potwierdź akcję",
-  //       message: "Czy na pewno chcesz usunąć zaznaczone Zadania?",
-  //       onOkay: async () => await deleteSelectedAndReload(rows),
-  //       undoMultipleColorSelection: true,
-  //       selectedClassName: tableRowsClassName,
-  //     });
-  //   }
-  //   async function deleteSelectedAndReload(rows) {
-  //     if (rows == null) return;
-  //     let errorOccured = false;
-  //     let deleteResult;
-  //     for (let i = 0; i < rows.length; i++) {
-  //       deleteResult = await deleteInspectionTask(rows[i].id);
-  //       if (!(deleteResult instanceof Response)) errorOccured = true;
-  //     }
-  //     if (!errorOccured) {
-  //       openModal(BasePopUp, {
-  //         title: "Udana akcja",
-  //         message: "Pomyślnie usunięto zaznaczone Zadania",
-  //         reloadRequired: true,
-  //       });
-  //     }
-  //   }
-</script>
-
-<!-- {#if baseListVisibility}
-  <BaseList
-    {listName}
-    {collection}
-    {headerDictionary}
-    {tableRowsClassName}
-    on:listAdd={addHandler}
-    on:listDetail={detailHandler}
-    on:listDelete={deleteHandler}
-    on:listDeleteSelected={deleteSelectedHandler}
-  />{/if} -->
-HELLO
+<!-- <a href="/tasks/{userId}/performer_tasks">
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
+</a>
+{#if buildingInfoVisibility}
+  <div>
+    ZADANIE Z DNIA {setResultFormatIfItIsDateTime(
+      "dueStartDateTime",
+      inspectionTask.dueStartDateTime
+    )}
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td>BUDYNEK</td>
+        <td>{buildingInfo}</td>
+        <td>STATUS</td>
+        <td>{taskStatus}</td>
+      </tr>
+      <tr>
+        <td>ROZPOCZĘTO</td>
+        <td
+          >{inspectionTask.startDateTime != "0001-01-01T00:00:00"
+            ? setResultFormatIfItIsDateTime(
+                "startDateTime",
+                inspectionTask.startDateTime
+              )
+            : ""}</td
+        >
+      </tr>
+      {#if taskStatus == "zakończone" || taskStatus == "zakonczone"}
+        <tr>
+          <td>ZAKOŃCZONO</td>
+          <td
+            >{inspectionTask.endDateTime != "0001-01-01T00:00:00"
+              ? setResultFormatIfItIsDateTime(
+                  "endDateTime",
+                  inspectionTask.endDateTime
+                )
+              : ""}</td
+          >
+        </tr>
+      {/if}
+    </table>
+  </div>
+  <div />
+{/if}
+{#if multipleFamilyBuildingType}
+  <div class="wielolokalowy">
+    {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
+      <ModifiedBaseList
+        {firstListName}
+        collection={collectionOfRealPropertiesWithoutAssignedProtocols}
+        headerDictionary={firstListHeaderDictionary}
+        {firstTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="DODAJ PROTOKÓŁ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={secondListHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        secondButtonVisibility={true}
+        secondButtonMessage="USUŃ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={secondListHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+  </div>
+{/if}
+{#if singleFamilyBuildingType}
+  <div class="jednolokalowy">
+    {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
+      <button
+        on:click|preventDefault={FIRST_LIST_firstButtonHandler}
+        class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+        >Dodaj protokół</button
+      >
+    {/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={singleFamilyBuildingHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        secondButtonVisibility={true}
+        secondButtonMessage="USUŃ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+    {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
+      <ModifiedBaseList
+        {secondListName}
+        collection={collectionOfNewProtocols}
+        headerDictionary={singleFamilyBuildingHeaderDictionary}
+        {secondTableRowsClassName}
+        firstButtonVisibility={true}
+        firstButtonMessage="EDYTUJ"
+        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
+        on:secondButtonAction={secondButtonHandler}
+      />{/if}
+  </div>
+{/if} -->
