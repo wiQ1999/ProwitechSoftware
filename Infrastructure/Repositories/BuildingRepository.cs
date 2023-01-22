@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Guid> AddAsync(Building building, Guid buildingAddressId, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(Building building, CancellationToken cancellationToken)
         {
             if (await _dbContext.Buildings.AnyAsync(b => b.BuildingAddressId == building.BuildingAddressId))
                 throw new Exception($"Istnieje już budynek mający adres o Id: {building.BuildingAddressId}");
@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
                 throw new Exception($"Próba dodania niedozwolonego typu budynku: {building.Type}");
 
             var buildingAddressAssociatedWithNewBuilding = await _dbContext.BuildingAddresses
-                .FirstOrDefaultAsync(ba => ba.Id == buildingAddressId);
+                .FirstOrDefaultAsync(ba => ba.Id == building.BuildingAddressId);
             if (buildingAddressAssociatedWithNewBuilding != null)
             {
                 var buildingWithTheSameBuildingAddressData = await _dbContext.Buildings.Where(
@@ -42,7 +42,6 @@ namespace Infrastructure.Repositories
             
 
             await _dbContext.AddAsync(building, cancellationToken);
-            await _dbContext.SaveChangesAsync();
             return building.Id;
         }
         public async Task<IEnumerable<Building>> GetAllAsync(CancellationToken cancellationToken)
@@ -71,28 +70,28 @@ namespace Infrastructure.Repositories
             Include(b => b.Properties).
                 ThenInclude(p => p.PropertyAddress).
             FirstOrDefaultAsync(b => b.Id == id);
-            //return await _dbContext.Buildings.Where(b => b.Id == id).Include(b => b.Properties).FirstOrDefaultAsync();
         }
         public async Task UpdateBuildingAsync(Building building, CancellationToken cancellationToken)
         {
             _dbContext.Entry(building).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            Building? buildingToDelete = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            Building? buildingToDelete = await GetAsync(id, cancellationToken);
             if (buildingToDelete == null)
-                throw new Exception($"Brak Budynku o identyfikatorze {id}.");
-            
-            
-            //TODO sprawdz czy lokale budynku mają przypisane protokoły - jeśli TAK, nie wolno usuwać Building
-            //if(buildingToDelete.Properties!=null && buildingToDelete.Properties.Count > 0 && buildingToDelete.Properties.InspectionProtocols!=null)
-            //{
+                throw new Exception($"Nie można usunąć Budynku: Brak Budynku o identyfikatorze {id}.");
 
-            //}
-            //TODO sprawdź czy przy usuwaniu WIELOLOKALOWY usuwają się Properties oraz PropertiesAddresses
 
+            if (buildingToDelete.Properties != null)
+            {
+                if(await _dbContext.InspectionProtocols.AnyAsync(p=>p.InspectedProperty.BuildingId==buildingToDelete.Id))
+                    throw new Exception($"Nie można usunąć Budynku: Budynek zawiera przynajmniej jedną Nieruchomość," +
+                        $" do której przypisany jest Protokół przeglądu instalacji gazowej");
+            }
+            if(await _dbContext.InspectionTasks.AnyAsync(t=>t.BuildingId == buildingToDelete.Id))
+                throw new Exception($"Nie można usunąć Budynku: Budynek jest przypisany do przynajmniej jednego zadania");
+           
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
             if (buildingAddressIdToDelete != null)
             {
@@ -104,7 +103,7 @@ namespace Infrastructure.Repositories
             if (buildingToDelete == null)
                 throw new Exception($"Brak Budynku o identyfikatorze {id}.");
 
-            var buildingProperties = await _dbContext.Properties.Where(p => p.BuildingId == id).ToArrayAsync(cancellationToken);
+            var buildingProperties = await _dbContext.RealProperties.Where(p => p.BuildingId == id).ToArrayAsync(cancellationToken);
             foreach(var property in buildingProperties)
             {
                 var propAddress = await _dbContext.PropertyAddresses.FirstOrDefaultAsync(pa => pa.Id == property.PropertyAddressId, cancellationToken);
@@ -113,7 +112,6 @@ namespace Infrastructure.Repositories
             }
             
             _dbContext.Buildings.Remove(buildingToDelete);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

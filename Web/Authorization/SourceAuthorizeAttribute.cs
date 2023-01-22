@@ -15,7 +15,7 @@ public class SourcePermissionsAttribute : TypeFilterAttribute
     {
         Arguments = new object[]
         {
-            _claimProvider.CreateClaim(source, permissionProperty)
+            _claimProvider.CreatePermissionClaim(source, permissionProperty)
         };
     }
 
@@ -24,7 +24,7 @@ public class SourcePermissionsAttribute : TypeFilterAttribute
         : base(typeof(SourcePermissionsFilter))
     {
         var claims = permissionProperties.Select(pp
-            => _claimProvider.CreateClaim(source, pp));
+            => _claimProvider.CreatePermissionClaim(source, pp));
 
         Arguments = claims.ToArray<object>();
     }

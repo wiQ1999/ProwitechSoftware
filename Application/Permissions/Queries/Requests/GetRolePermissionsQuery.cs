@@ -3,5 +3,12 @@ using MediatR;
 
 namespace Application.Permissions.Queries.Requests;
 
-public record GetRolePermissionsQuery(Guid RoleId) 
-    : IRequest<IEnumerable<TranslatedPermissionDto>>;
+public record GetRolePermissionsQuery : IRequest<IEnumerable<TranslatedPermissionDto>>
+{
+    public Guid RoleId { get; init; }
+
+    public GetRolePermissionsQuery(Guid roleId)
+    {
+        RoleId = roleId;
+    }
+}

@@ -2,11 +2,12 @@
 using Application.Roles.DTOs;
 using Application.Users.DTOs;
 using AutoMapper;
-using Infrastructure.Common.Helpers;
+using Infrastructure.Helpers;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 
 namespace Application.Permissions.Profiles;
+
 public class TranslatedPermissionProfile : Profile
 {
     public TranslatedPermissionProfile()

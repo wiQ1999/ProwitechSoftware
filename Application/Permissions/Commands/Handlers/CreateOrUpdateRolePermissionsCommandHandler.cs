@@ -1,9 +1,7 @@
 ﻿using Application.Permissions.Commands.Requests;
 using AutoMapper;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
-using Infrastructure.Models.Enums;
-using Infrastructure.Models.Exceptions;
 using MediatR;
 
 namespace Application.Permissions.Commands.Handlers;
@@ -11,27 +9,23 @@ namespace Application.Permissions.Commands.Handlers;
 public class CreateOrUpdateRolePermissionsCommandHandler
     : IRequestHandler<CreateOrUpdateRolePermissionsCommand, Unit>
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IPermissionsRepository _permissionsRepository;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public CreateOrUpdateRolePermissionsCommandHandler(
-        IRoleRepository roleRepository,
-        IPermissionsRepository permissionsRepository,
-        IMapper mapper)
+        IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
     {
-        _roleRepository = roleRepository;
-        _permissionsRepository = permissionsRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<Unit> Handle(
         CreateOrUpdateRolePermissionsCommand request, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.GetRoleByIdAsync(request.RoleId, cancellationToken);
+        var role = await _unitOfWork.RolesRepository.GetByIdAsync(request.RoleId, cancellationToken);
 
-        var originalpermissions = await _permissionsRepository
-            .GetRolePermissionsAsync(request.RoleId, cancellationToken);
+        var originalpermissions = await _unitOfWork.PermissionsRepository
+            .GetByRoleIdAsync(request.RoleId, cancellationToken);
         var requestPermissions = request.Permissions
             .Select(p => _mapper.Map<Permission>(p));
 
@@ -44,8 +38,8 @@ public class CreateOrUpdateRolePermissionsCommandHandler
 
             if (originalPerm == null)
             {
-                await _permissionsRepository
-                    .CreatePermissionsAsync(requestPerm, cancellationToken);
+                await _unitOfWork.PermissionsRepository
+                    .CreateAsync(requestPerm, cancellationToken);
             }
             else if (IsPermissionsPropertiesDifferent(originalPerm, requestPerm))
             {
@@ -54,10 +48,12 @@ public class CreateOrUpdateRolePermissionsCommandHandler
                 originalPerm.Update = requestPerm.Update;
                 originalPerm.Delete = requestPerm.Delete;
 
-                await _permissionsRepository
-                    .UpdatePermissionsAsync(originalPerm, cancellationToken);
+                await _unitOfWork.PermissionsRepository
+                    .UpdateAsync(originalPerm, cancellationToken);
             }
         }
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

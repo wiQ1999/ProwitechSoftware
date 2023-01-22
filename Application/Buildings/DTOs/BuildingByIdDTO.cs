@@ -1,4 +1,4 @@
-﻿using Application.Properties.DTOs;
+﻿using Application.RealProperties.DTOs;
 using Application.PropertyManagers.DTOs;
 using Infrastructure.Models.Domain;
 using System;
@@ -16,7 +16,7 @@ namespace Application.Buildings.DTOs
         public string Type { get; set; }
         public PropertyManagerDTO? PropertyManager { get; set; }
 
-        public IEnumerable<PropertyInListDTO>? Properties { get; set; }
+        public IEnumerable<RealPropertyInListDTO>? Properties { get; set; }
 
     }
 }

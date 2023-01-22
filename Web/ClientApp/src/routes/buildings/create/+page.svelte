@@ -92,7 +92,6 @@
       bDTO,
       optionalArguments
     );
-
     if (buildingAddressPostResult instanceof Error) {
       // window.location.reload();
     } else if (buildingAddressPostResult instanceof Response) {
@@ -145,7 +144,10 @@
 </script>
 
 <a href="/buildings/getAll">
-  <button class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
 <div>
   {#if buildingAddressConfirmPopUpVisibility}

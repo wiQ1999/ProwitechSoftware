@@ -1,26 +1,27 @@
 ﻿using Application.Roles.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
-using Infrastructure.Models.Enums;
-using Infrastructure.Models.Exceptions;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
+
 public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public UpdateRoleCommandHandler(IRoleRepository roleRepository)
+    public UpdateRoleCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Unit> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
-        var role = await _roleRepository.GetRoleByIdAsync(request.Id, cancellationToken);
+        var role = await _unitOfWork.RolesRepository.GetByIdAsync(request.Id, cancellationToken);
 
         role.Name = request.Name;
 
-        await _roleRepository.UpdateRoleAsync(role, cancellationToken);
+        await _unitOfWork.RolesRepository.UpdateAsync(role, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

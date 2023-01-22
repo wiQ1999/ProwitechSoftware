@@ -11,17 +11,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Responses;
+using Infrastructure.Interfaces.UnitOfWork;
 
 namespace Application.BuildingAddresses.Commands.Handlers
 {
     public class CreateBuildingAddressCommandHandler : IRequestHandler<CreateBuildingAddressCommand, AddUpdateBuildingAddressReponse>
     {
-        private readonly IBuildingAddressRepository buildingAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper mapper;
 
-        public CreateBuildingAddressCommandHandler(IBuildingAddressRepository buildingAddressRepository, IMapper mapper)
+        public CreateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.buildingAddressRepository = buildingAddressRepository;
+            _unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
@@ -34,7 +35,8 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 || addBuildingAddressResponse.WebApiStatus==ProwitechWebAPIStatus.ADDED_DESPITE_COORDINATE_ISSUE.ToString())
             {
                 addBuildingAddressResponse.AddedBuildingAddress
-                    = await buildingAddressRepository.AddAsync(addBuildingAddressResponse.AddedBuildingAddress, cancellationToken);
+                    = await _unitOfWork.BuildingAddressRepository.AddAsync(addBuildingAddressResponse.AddedBuildingAddress, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             else if(addBuildingAddressResponse.WebApiStatus==ProwitechWebAPIStatus.NOT_ADDED_COORDINATES_TYPE_ISSUE.ToString()
                 && request.AddAddressWithoutCoordinates)
@@ -45,7 +47,8 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 addBuildingAddressResponse.AddedBuildingAddress.CoordinateType = null;
                 //addBuildingAddressResponse.AddedBuildingAddress.PostalCode = null;
                 addBuildingAddressResponse.AddedBuildingAddress
-                    = await buildingAddressRepository.AddAsync(addBuildingAddressResponse.AddedBuildingAddress, cancellationToken);
+                    = await _unitOfWork.BuildingAddressRepository.AddAsync(addBuildingAddressResponse.AddedBuildingAddress, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             return addBuildingAddressResponse;
         }

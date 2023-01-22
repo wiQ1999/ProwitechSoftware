@@ -1,4 +1,5 @@
-﻿using Application.Users.Commands.Requests;
+﻿using Application.Roles.Commands.Requests;
+using Application.Users.Commands.Requests;
 using Application.Users.Queries.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,4 +39,8 @@ public class UsersController : ApiControllerBase
     [HttpDelete("{id:Guid}")]
     public async Task<IActionResult> Delete(Guid id) =>
         Ok(await Mediator.Send(new DeleteUserCommand(id)));
+
+    [HttpDelete()]
+    public async Task<IActionResult> DeleteMany(DeleteManyUsersCommand command) =>
+        Ok(await Mediator.Send(command));
 }

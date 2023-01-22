@@ -13,17 +13,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Responses;
+using Infrastructure.Interfaces.UnitOfWork;
 
 namespace Application.BuildingAddresses.Commands.Handlers
 {
     public class UpdateBuildingAddressCommandHandler : IRequestHandler<UpdateBuildingAddressCommand, AddUpdateBuildingAddressReponse>
     {
-        private readonly IBuildingAddressRepository _buildingAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateBuildingAddressCommandHandler(IBuildingAddressRepository buildingAddressRepository, IMapper mapper)
+        public UpdateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            _buildingAddressRepository = buildingAddressRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -32,7 +33,7 @@ namespace Application.BuildingAddresses.Commands.Handlers
             var address = _mapper.Map<BuildingAddress>(request.AddressDTO);
 
 
-            var buildingAddressFromDB = await _buildingAddressRepository.GetAsync(request.Id, cancellationToken);
+            var buildingAddressFromDB = await _unitOfWork.BuildingAddressRepository.GetAsync(request.Id, cancellationToken);
             if (buildingAddressFromDB == null)
                 throw new Exception($"Nie znaleziono adresu budynku o identyfikatorze {request.Id}.");
 
@@ -41,9 +42,6 @@ namespace Application.BuildingAddresses.Commands.Handlers
             if (updateBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.ADDED_TO_DB.ToString()
             || updateBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.ADDED_DESPITE_COORDINATE_ISSUE.ToString())
             {
-                //buildingAddressFromDB = updateBuildingAddressResponse.AddedBuildingAddress.DeepCopy();
-                //buildingAddressFromDB.Id = request.Id;
-
                 buildingAddressFromDB.CityName = updateBuildingAddressResponse.AddedBuildingAddress.CityName;
                 buildingAddressFromDB.StreetName=updateBuildingAddressResponse.AddedBuildingAddress.StreetName;
                 buildingAddressFromDB.BuildingNumber = updateBuildingAddressResponse.AddedBuildingAddress.BuildingNumber;
@@ -52,13 +50,12 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 buildingAddressFromDB.CoordinateType = updateBuildingAddressResponse.AddedBuildingAddress.CoordinateType;
                 buildingAddressFromDB.PostalCode = updateBuildingAddressResponse.AddedBuildingAddress.PostalCode;
 
-                await _buildingAddressRepository.UpdateBuildingAddressAsync(buildingAddressFromDB, cancellationToken);
+                await _unitOfWork.BuildingAddressRepository.UpdateBuildingAddressAsync(buildingAddressFromDB, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             else if (updateBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.NOT_ADDED_COORDINATES_TYPE_ISSUE.ToString()
                 && request.UpdateWithoutCoords)
             {
-                //buildingAddressFromDB = updateBuildingAddressResponse.AddedBuildingAddress.DeepCopy();
-
                 buildingAddressFromDB.CityName = updateBuildingAddressResponse.AddedBuildingAddress.CityName;
                 buildingAddressFromDB.StreetName = updateBuildingAddressResponse.AddedBuildingAddress.StreetName;
                 buildingAddressFromDB.BuildingNumber = updateBuildingAddressResponse.AddedBuildingAddress.BuildingNumber;
@@ -67,7 +64,8 @@ namespace Application.BuildingAddresses.Commands.Handlers
                 buildingAddressFromDB.CoordinateType = null;
                 buildingAddressFromDB.PostalCode = updateBuildingAddressResponse.AddedBuildingAddress.PostalCode;
                 updateBuildingAddressResponse.WebApiStatus = ProwitechWebAPIStatus.ADDED_TO_DB_WITHOUT_COORDINATES.ToString();
-                await _buildingAddressRepository.UpdateBuildingAddressAsync(buildingAddressFromDB, cancellationToken);
+                await _unitOfWork.BuildingAddressRepository.UpdateBuildingAddressAsync(buildingAddressFromDB, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             updateBuildingAddressResponse.AddedBuildingAddress.Id=buildingAddressFromDB.Id;
             return updateBuildingAddressResponse;

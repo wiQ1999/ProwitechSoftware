@@ -4,6 +4,7 @@ using Application.Buildings.DTOs;
 using Application.Buildings.Queries.Requests;
 using AutoMapper;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,18 @@ namespace Application.Buildings.Queries.Handlers
 {
     public class GetAllBuildingsQueryHandler : IRequestHandler<GetAllBuildingsQuery, IEnumerable<AllBuildingsDTO>>
     {
-        private readonly IBuildingRepository _buildingRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetAllBuildingsQueryHandler(IBuildingRepository buildingRepository, IMapper mapper)
+        public GetAllBuildingsQueryHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
         {
-            _buildingRepository = buildingRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<AllBuildingsDTO>> Handle(GetAllBuildingsQuery request, CancellationToken cancellationToken)
         {
-            var buildings = await _buildingRepository.GetAllAsync(cancellationToken);
+            var buildings = await _unitOfWork.BuildingRepository.GetAllAsync(cancellationToken);
             var buldingsDTOs = _mapper.Map<List<AllBuildingsDTO>>(buildings);
             return buldingsDTOs;
         }

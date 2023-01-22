@@ -1,25 +1,30 @@
 ﻿using Application.Roles.Commands.Requests;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 
 namespace Application.Roles.Commands.Handlers;
+
 public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Guid>
 {
-    private readonly IRoleRepository _roleRepository;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-    public CreateRoleCommandHandler(IRoleRepository roleRepository)
+    public CreateRoleCommandHandler(IRepositoriesUnitOfWork unitOfWork)
     {
-        _roleRepository = roleRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
         Role role = new() 
         { 
-            Name = request.Name 
+            Name = request.Name
         };
 
-        return await _roleRepository.CreateRoleAsync(role, cancellationToken);
+        var guid = await _unitOfWork.RolesRepository.CreateAsync(role, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return guid;
     }
 }

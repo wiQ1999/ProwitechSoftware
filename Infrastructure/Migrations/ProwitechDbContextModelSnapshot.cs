@@ -115,137 +115,144 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("A_Gazomierz_kurek_przed_gazomierzem")
+                    b.Property<string>("A_01_Gazomierz_umiejscowienie")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Gazomierz_szafka_wentylowana")
+                    b.Property<string>("A_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Gazomierz_szczelnosc")
+                    b.Property<string>("A_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Gazomierz_umiejscowienie")
+                    b.Property<string>("A_06_Gazomierz_kurek_przed_gazomierzem")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika")
+                    b.Property<string>("A_10_Przewody_przebieg_inst_gaz_przez_pokoje")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr")
+                    b.Property<string>("A_11_Przewody_pion_inst_gaz_w_mieszkaniu")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Inne_uwagi")
+                    b.Property<string>("A_12_Prawidlowosc_kuchenka_gazowa_typ")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Kubatura_warunku_techniczne")
+                    b.Property<string>("A_13_Prawidlowosc_kuchenka_gazowa_stan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_M_Przewody_przebieg")
+                    b.Property<string>("A_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_M_Przewody_rodzaj")
+                    b.Property<string>("A_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_M_Przewody_sposob_prowadzenia")
+                    b.Property<string>("A_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy")
+                    b.Property<string>("A_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa")
+                    b.Property<string>("A_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_gazowy_podgrzewacz_cwu_stan")
+                    b.Property<string>("A_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kociol_co_z_kurkiek_i_rura")
+                    b.Property<string>("A_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy")
+                    b.Property<string>("A_21_Prawidlowosc_terma_gazowa_stan")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna")
+                    b.Property<string>("A_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj")
+                    b.Property<string>("A_23_Prawidlowosc_terma_gazowa_rura_spalinowa")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan")
+                    b.Property<string>("A_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_stan")
+                    b.Property<string>("A_25_Kubatura_warunku_techniczne")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_kuchenka_gazowa_typ")
+                    b.Property<string>("A_32_Wyniki_stan_szczelnosci")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("A_Prawidlowosc_terma_gazowa_kurek_odcinajacy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("A_Prawidlowosc_terma_gazowa_rura_spalinowa")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("A_Prawidlowosc_terma_gazowa_stan")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("A_Propan_butan")
+                    b.Property<bool>("B_A_02_Gazomierz_szafka_wentylowana")
                         .HasColumnType("bit");
 
-                    b.Property<string>("A_Przewody_pion_inst_gaz_w_mieszkaniu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("A_Przewody_przebieg_inst_gaz_przez_pokoje")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("A_Wentylacja_inne_pomieszczenia")
+                    b.Property<bool>("B_A_03_Gazomierz_szczelnosc")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wentylacja_kuchnia")
+                    b.Property<bool>("B_A_26_Wentylacja_kuchnia")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wentylacja_lazienka")
+                    b.Property<bool>("B_A_27_Wentylacja_lazienka")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem")
+                    b.Property<bool>("B_A_28_Wentylacja_inne_pomieszczenia")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wentylacja_nawiew_kuchnia")
+                    b.Property<bool>("B_A_29_Wentylacja_nawiew_kuchnia")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wentylacja_nawiew_lazienka")
+                    b.Property<bool>("B_A_30_Wentylacja_nawiew_lazienka")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("A_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci")
+                    b.Property<bool>("B_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem")
                         .HasColumnType("bit");
 
-                    b.Property<string>("A_Wyniki_stan_szczelnosci")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("B_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("B_A_34_Propan_butan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Inne_uwagi")
+                        .HasMaxLength(600)
+                        .HasColumnType("nvarchar(600)");
 
                     b.Property<Guid>("InspectedPropertyId")
                         .HasColumnType("uniqueidentifier");
@@ -259,11 +266,26 @@ namespace Infrastructure.Migrations
                     b.Property<Guid?>("InspectionTaskId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("M_A_07_Przewody_rodzaj")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("M_A_08_Przewody_przebieg")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("M_A_09_Przewody_sposob_prowadzenia")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ResidentId")
+                    b.Property<Guid?>("ResidentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -357,146 +379,125 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c70dc02d-cb2a-4c19-8c60-bb4cf6240954"),
+                            Id = new Guid("d46f3e57-d352-4dff-bbf5-fa0187605bb1"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("fc433f74-7b14-4eb6-929f-15ea9f1ae786"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5742c7fd-94bd-4ac4-912f-c8ce46b5bbae"),
+                            Id = new Guid("ff58a69b-fec5-4d40-a80b-8772c88f6837"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("fc433f74-7b14-4eb6-929f-15ea9f1ae786"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5edacfc0-d370-4ff6-ad0e-30f0c0b61ab7"),
+                            Id = new Guid("1bbbee29-8032-4cb0-95d8-523ea85c0d65"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            RoleId = new Guid("fc433f74-7b14-4eb6-929f-15ea9f1ae786"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("d2cfe8d8-4366-44d6-9d64-2edbb0113414"),
+                            Id = new Guid("909a023f-4e71-4ec7-a667-f91a90b63c6a"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("b93e2927-47d6-42c0-bf95-3a587b0e680c"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("5e09f7bd-6f96-4dcc-9382-909d55f7cb98"),
+                            Id = new Guid("cea5481a-523c-4bda-b6ff-4d04aa4be369"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("b93e2927-47d6-42c0-bf95-3a587b0e680c"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("daa4764e-e02a-44d0-9421-1374d33dd749"),
+                            Id = new Guid("156854ed-8cb3-4b5e-9236-1f10689d607b"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            RoleId = new Guid("b93e2927-47d6-42c0-bf95-3a587b0e680c"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("e19bfa5b-a187-4fbd-9c16-98665325f0de"),
+                            Id = new Guid("be103e5a-4e5d-43c1-88d6-65fb8766e2ea"),
                             Create = false,
                             Delete = false,
                             Read = true,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833"),
                             Source = "Roles",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("385b4aec-0b0d-4cac-8203-bb0c24078a33"),
+                            Id = new Guid("3842107c-ff76-4901-9884-0269c2bde4a8"),
                             Create = false,
                             Delete = false,
                             Read = true,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833"),
                             Source = "Users",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("dec0e7a9-f1c0-4b5d-a846-8353e4b269e4"),
+                            Id = new Guid("59c85e18-91a0-4133-82be-5c8bed77d631"),
                             Create = false,
                             Delete = false,
                             Read = false,
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833"),
                             Source = "Permissions",
                             Update = false
                         },
                         new
                         {
-                            Id = new Guid("35e64eee-de67-4a4a-a4ad-a64e9305bbfb"),
+                            Id = new Guid("9bc215f2-525b-49b7-aa69-5672c320af59"),
                             Read = false,
                             Source = "Roles",
-                            UserId = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4")
+                            UserId = new Guid("afcae8be-7d40-47ec-b0e6-a12f9391b474")
                         },
                         new
                         {
-                            Id = new Guid("b460e062-02b3-44ca-9344-97ddf46ae8b7"),
+                            Id = new Guid("0a6d0ab6-54cb-471c-b4f1-02c41004abf0"),
                             Read = false,
                             Source = "Users",
-                            UserId = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4")
+                            UserId = new Guid("afcae8be-7d40-47ec-b0e6-a12f9391b474")
                         },
                         new
                         {
-                            Id = new Guid("09d218c6-f2b5-45c9-b423-4e0d748328e1"),
+                            Id = new Guid("49f9632e-e526-4e07-ad20-e8d32e18bc9a"),
                             Create = true,
                             Source = "Roles",
                             Update = true,
-                            UserId = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078")
+                            UserId = new Guid("18aaf8d7-2b5a-4fe5-b14c-01f9cb29f0b9")
                         },
                         new
                         {
-                            Id = new Guid("0cc6e628-3bb1-458e-aa06-8942257cbbcd"),
+                            Id = new Guid("10da4589-9144-47bd-8d85-29902a0ea7bf"),
                             Create = true,
                             Delete = true,
                             Source = "Users",
                             Update = true,
-                            UserId = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078")
+                            UserId = new Guid("18aaf8d7-2b5a-4fe5-b14c-01f9cb29f0b9")
                         });
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Domain.Property", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BuildingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PropertyAddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BuildingId");
-
-                    b.HasIndex("PropertyAddressId");
-
-                    b.ToTable("Properties");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Domain.PropertyAddress", b =>
@@ -537,6 +538,27 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FullAddressId");
 
                     b.ToTable("PropertyManagers");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Domain.RealProperty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PropertyAddressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("PropertyAddressId");
+
+                    b.ToTable("RealProperties");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Domain.Resident", b =>
@@ -583,17 +605,17 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("81d07c98-343a-48a2-9452-02627c8a3567"),
+                            Id = new Guid("fc433f74-7b14-4eb6-929f-15ea9f1ae786"),
                             Name = "Administrator"
                         },
                         new
                         {
-                            Id = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040"),
+                            Id = new Guid("b93e2927-47d6-42c0-bf95-3a587b0e680c"),
                             Name = "Szef"
                         },
                         new
                         {
-                            Id = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0"),
+                            Id = new Guid("c77232f3-7681-410d-8916-bcbf5250b833"),
                             Name = "Pracownik"
                         });
                 });
@@ -623,8 +645,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(30)
@@ -645,58 +667,58 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("abc8fccc-314b-423b-b9e6-d782f51430ae"),
+                            Id = new Guid("a16e60d8-5e64-4c24-8d98-0c010431deac"),
                             Email = "",
                             FirstName = "admin",
                             LastName = "",
                             Login = "admin",
-                            Password = "admin",
+                            Password = "AQAAAAIAAYagAAAAEEjDNYOizs2XqIILQxXvyluJs4nVo2vybTETSGjSO/S0nPXoDPbuDuSAlsUitDUNEA==",
                             PhoneNumber = "",
-                            RoleId = new Guid("81d07c98-343a-48a2-9452-02627c8a3567")
+                            RoleId = new Guid("fc433f74-7b14-4eb6-929f-15ea9f1ae786")
                         },
                         new
                         {
-                            Id = new Guid("537c41d9-d2b0-4445-8822-12c86a254330"),
+                            Id = new Guid("ee499277-8a67-45c8-9b67-3465bc94c3bb"),
                             Email = "k.tumiel@gmail.com",
                             FirstName = "Krzysztof",
                             LastName = "Tumiel",
-                            Login = "k.tumiel",
-                            Password = "",
+                            Login = "boss",
+                            Password = "AQAAAAIAAYagAAAAEOLYItq3N8NHPyo/HHygC3E7k8e3otc8IvSYFmuO73BskrF5cHgEZKzhQwVynVCNww==",
                             PhoneNumber = "123 456 789",
-                            RoleId = new Guid("d50fef84-4ee8-4a62-b7a9-934862d99040")
+                            RoleId = new Guid("b93e2927-47d6-42c0-bf95-3a587b0e680c")
                         },
                         new
                         {
-                            Id = new Guid("ac12db6f-39fb-485e-b075-bd9474f089be"),
+                            Id = new Guid("5050b5e1-9480-4bda-8250-3a60f2e75e78"),
                             Email = "j.kowalski@gmail.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
                             Login = "w1",
-                            Password = "",
+                            Password = "AQAAAAIAAYagAAAAEODdVktzfP6To5AkFRNswjElhlcZzAq5j3EuDYtMbdk2Rv6/O5H3jHqsI0ZUnwWYWQ==",
                             PhoneNumber = "+48 321 654 987",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833")
                         },
                         new
                         {
-                            Id = new Guid("23f13fb1-ab2e-40ca-bc41-9de751c039f4"),
+                            Id = new Guid("afcae8be-7d40-47ec-b0e6-a12f9391b474"),
                             Email = "z.pietka@gmail.com",
                             FirstName = "Zdzisław",
                             LastName = "Piętka",
                             Login = "w2",
-                            Password = "",
+                            Password = "AQAAAAIAAYagAAAAEAabiO2crPNKtykkocch8mRrvtZGkCjRqDbNXBUMHlqkxHzLPpGkEzt8GI06aXaMiA==",
                             PhoneNumber = "987654321",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833")
                         },
                         new
                         {
-                            Id = new Guid("eeee14cf-0f5f-42cb-b002-5201bd5d7078"),
+                            Id = new Guid("18aaf8d7-2b5a-4fe5-b14c-01f9cb29f0b9"),
                             Email = "m.wioslo@gmail.com",
                             FirstName = "Marek",
                             LastName = "Wiosło",
                             Login = "w3",
-                            Password = "",
+                            Password = "AQAAAAIAAYagAAAAECOxSYhPtAPPNmdjnlVkLjvIXdqGujn7o2LRM2/d8Ayj9chrHOH9qe6G+o+P/9QwfQ==",
                             PhoneNumber = "+48 312645978",
-                            RoleId = new Guid("41c24085-b185-4ee2-8199-84eb63b81ae0")
+                            RoleId = new Guid("c77232f3-7681-410d-8916-bcbf5250b833")
                         });
                 });
 
@@ -738,7 +760,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Domain.InspectionProtocol", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Domain.Property", "InspectedProperty")
+                    b.HasOne("Infrastructure.Models.Domain.RealProperty", "InspectedProperty")
                         .WithMany()
                         .HasForeignKey("InspectedPropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -758,8 +780,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Models.Domain.Resident", "Resident")
                         .WithMany()
                         .HasForeignKey("ResidentId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("InspectedProperty");
 
@@ -811,7 +832,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Domain.Property", b =>
+            modelBuilder.Entity("Infrastructure.Models.Domain.PropertyManager", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Domain.FullAddress", "FullAddress")
+                        .WithMany()
+                        .HasForeignKey("FullAddressId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("FullAddress");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Domain.RealProperty", b =>
                 {
                     b.HasOne("Infrastructure.Models.Domain.Building", "Building")
                         .WithMany("Properties")
@@ -827,16 +858,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Building");
 
                     b.Navigation("PropertyAddress");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Domain.PropertyManager", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Domain.FullAddress", "FullAddress")
-                        .WithMany()
-                        .HasForeignKey("FullAddressId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("FullAddress");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Domain.User", b =>

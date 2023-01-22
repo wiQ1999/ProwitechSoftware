@@ -9,7 +9,7 @@ export class HttpMethodError extends Error {
     this.errorsList = errors;
   }
 }
-export function handleError(error, actionName) {
+export function handleError(error, actionName, reloadRequired = false) {
   let alert_message = "";
   if (error instanceof HttpMethodError) {
     let displayErrors = "";
@@ -27,6 +27,6 @@ export function handleError(error, actionName) {
   openModal(BasePopUp, {
     title: "Błąd",
     message: alert_message,
-    reloadRequired: true,
+    reloadRequired: reloadRequired,
   });
 }

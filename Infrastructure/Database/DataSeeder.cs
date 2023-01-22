@@ -1,15 +1,19 @@
 ﻿using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database;
+
 public class DataSeeder
 {
-    public ModelBuilder ModelBuilder { get; }
+    private readonly ModelBuilder ModelBuilder;
+    private readonly IPasswordHasher<User> _hasher;
 
-    public DataSeeder(ModelBuilder modelBuilder)
+    public DataSeeder(ModelBuilder modelBuilder, IPasswordHasher<User> hasher)
     {
         ModelBuilder = modelBuilder;
+        _hasher = hasher;
     }
     
     public void DevSeed()
@@ -25,11 +29,11 @@ public class DataSeeder
 
         #region Users
 
-        User admin = CreateUser("admin", "admin", "admin", string.Empty, string.Empty, string.Empty, adminRole);
-        User boss = CreateUser("k.tumiel", string.Empty, "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", bossRole);
-        User worker1 = CreateUser("w1", string.Empty, "Jan", "Kowalski", "j.kowalski@gmail.com", "+48 321 654 987", workerRole);
-        User worker2 = CreateUser("w2", string.Empty, "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", workerRole);
-        User worker3 = CreateUser("w3", string.Empty, "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", workerRole);
+        User admin = CreateUser("admin", "admin", string.Empty, string.Empty, string.Empty, adminRole);
+        User boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", bossRole);
+        User worker1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", "+48 321 654 987", workerRole);
+        User worker2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", workerRole);
+        User worker3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", workerRole);
         ModelBuilder.Entity<User>().HasData(admin, boss, worker1, worker2, worker3);
 
         #endregion
@@ -68,17 +72,18 @@ public class DataSeeder
         #endregion
     }
 
-    private Role CreateRole(string name) 
+    private static Role CreateRole(string name) 
         => new() { 
             Id = Guid.NewGuid(),
             Name = name 
         };
 
-    private User CreateUser(string login, string pwd, string fName, string lName, string email, string pNumber, Role role) 
-        => new() { 
-            Id = Guid.NewGuid(), 
-            Login = login, 
-            Password = pwd, 
+    private User CreateUser(string login, string fName, string lName, string email, string pNumber, Role role)
+    {
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            Login = login,
             FirstName = fName,
             LastName = lName,
             Email = email,
@@ -86,13 +91,18 @@ public class DataSeeder
             RoleId = role.Id
         };
 
-    private Permission CreatePermissionForRole(Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
+        user.Password = _hasher.HashPassword(user, "zaq1@WSX");
+
+        return user;
+    }
+
+    private static Permission CreatePermissionForRole(Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
         => CreatePermission(null, role, source, c, r, u, d);
 
-    private Permission CreatePermissionForUser(User? user, AppSource source, bool? c, bool? r, bool? u, bool? d)
+    private static Permission CreatePermissionForUser(User? user, AppSource source, bool? c, bool? r, bool? u, bool? d)
         => CreatePermission(user, null, source, c, r, u, d);
 
-    private Permission CreatePermission(User? user, Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
+    private static Permission CreatePermission(User? user, Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
         => new() { 
             Id = Guid.NewGuid(),
             Source = source,

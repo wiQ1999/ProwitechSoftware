@@ -1,5 +1,6 @@
 ﻿using Application.PropertyManagers.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using MediatR;
 using System;
@@ -12,23 +13,23 @@ namespace Application.PropertyManagers.Commands.Handlers
 {
     public class DeletePropertyManagerCommandHandler : IRequestHandler<DeletePropertyManagerCommand>
     {
-        private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IFullAddressRepository _fullAddressRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public DeletePropertyManagerCommandHandler(IPropertyManagerRepository propertyManagerRepository, IFullAddressRepository fullAddressRepository)
+        public DeletePropertyManagerCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _propertyManagerRepository = propertyManagerRepository;
-            _fullAddressRepository = fullAddressRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(DeletePropertyManagerCommand request, CancellationToken cancellationToken)
         {
-            PropertyManager pm = await _propertyManagerRepository.GetAsync(request.Id, cancellationToken);
+            PropertyManager? pm = await _unitOfWork.PropertyManagerRepository.GetAsync(request.Id, cancellationToken);
             if(pm!=null && pm.FullAddress != null)
             {
-                await _fullAddressRepository.DeleteAsync(pm.FullAddressId.Value, cancellationToken);
+                await _unitOfWork.FullAddressRepository.DeleteAsync(pm.FullAddressId!.Value, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
-            await _propertyManagerRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.PropertyManagerRepository.DeleteAsync(request.Id, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

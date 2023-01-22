@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Services;
 using Application.Permissions.DTOs;
 using AutoMapper;
-using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using Infrastructure.Models.Exceptions;
@@ -10,21 +10,13 @@ namespace Application.Permissions.Services;
 
 public class PermissionsSelector : IPermissionsSelector
 {
-    private readonly IRoleRepository _roleRepository;
-    private readonly IUsersRepository _usersRepository;
-    private readonly IPermissionsRepository _permissionsRepository;
+    private readonly IRepositoriesUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly List<AppSource> _sources;
 
-    public PermissionsSelector(
-        IRoleRepository roleRepository, 
-        IUsersRepository usersRepository,
-        IPermissionsRepository permissionRepository,
-        IMapper mapper)
+    public PermissionsSelector(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
     {
-        _roleRepository = roleRepository;
-        _usersRepository = usersRepository;
-        _permissionsRepository = permissionRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _sources = Enum.GetValues(typeof(AppSource))
             .Cast<AppSource>().ToList();
@@ -40,10 +32,10 @@ public class PermissionsSelector : IPermissionsSelector
     private async Task<IEnumerable<Permission>> GetAllRolePermissionsWithoutMapping(
         Guid roleId, CancellationToken cancellationToken)
     {
-        await _roleRepository.GetRoleByIdAsync(roleId, cancellationToken);
+        await _unitOfWork.RolesRepository.GetByIdAsync(roleId, cancellationToken);
 
-        var permissions = (await _permissionsRepository
-            .GetRolePermissionsAsync(roleId, cancellationToken)).ToList();
+        var permissions = (await _unitOfWork.PermissionsRepository
+            .GetByRoleIdAsync(roleId, cancellationToken)).ToList();
 
         var nullPermissionProp = permissions.FirstOrDefault(p 
             => p.Create == null || p.Read == null || p.Update == null || p.Delete == null);
@@ -96,10 +88,10 @@ public class PermissionsSelector : IPermissionsSelector
     private async Task<IEnumerable<Permission>> GetAllUserPermissionsWithoutMapping(
         Guid userId, CancellationToken cancellationToken)
     {
-        await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
+        await _unitOfWork.UsersRepository.GetByIdAsync(userId, cancellationToken);
 
-        var permissions = (await _permissionsRepository
-            .GetUserPermissionsAsync(userId, cancellationToken)).ToList();
+        var permissions = (await _unitOfWork.PermissionsRepository
+            .GetByUserIdAsync(userId, cancellationToken)).ToList();
 
         if (permissions.Count == _sources.Count)
             return OrderBySource(permissions);
@@ -134,7 +126,7 @@ public class PermissionsSelector : IPermissionsSelector
     private async Task<IEnumerable<Permission>> GetCompleteUserAndRolePermissionsWithoutMapping(
         Guid userId, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
+        var user = await _unitOfWork.UsersRepository.GetByIdAsync(userId, cancellationToken);
 
         var userPermissions = (await GetAllUserPermissionsWithoutMapping(
             userId, cancellationToken)).ToList();

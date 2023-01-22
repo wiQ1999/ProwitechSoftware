@@ -1,5 +1,6 @@
 ﻿using Application.InspectionTasks.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using MediatR;
@@ -13,11 +14,11 @@ namespace Application.InspectionTasks.Commands.Handlers
 {
     public class CreateInspectionTaskCommandHandler : IRequestHandler<CreateInspectionTaskCommand, Guid>
     {
-        private readonly IInspectionTaskRepository _inspectionTaskRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public CreateInspectionTaskCommandHandler(IInspectionTaskRepository inspectionTaskRepository)
+        public CreateInspectionTaskCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _inspectionTaskRepository = inspectionTaskRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> Handle(CreateInspectionTaskCommand request, CancellationToken cancellationToken)
@@ -30,7 +31,9 @@ namespace Application.InspectionTasks.Commands.Handlers
                 BuildingId = request.BuildingId,
                 DueStartDateTime = request.DueStartDateTime
             };
-            return await _inspectionTaskRepository.AddAsync(iT, cancellationToken);
+            var iTAdded= await _unitOfWork.InspectionTaskRepository.AddAsync(iT, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return iTAdded;
         }
     }
 }

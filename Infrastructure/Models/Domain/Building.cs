@@ -16,7 +16,7 @@ namespace Infrastructure.Models.Domain
 
         public Guid? PropertyManagerId { get; set; }
         public PropertyManager? PropertyManager { get; set; }
-        public ICollection<Property>? Properties { get; set; }
+        public ICollection<RealProperty>? Properties { get; set; }
 
 
     }

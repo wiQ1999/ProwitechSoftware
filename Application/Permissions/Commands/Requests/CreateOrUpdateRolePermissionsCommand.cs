@@ -5,6 +5,6 @@ namespace Application.Permissions.Commands.Requests;
 
 public record CreateOrUpdateRolePermissionsCommand : IRequest
 {
-    public Guid RoleId { get; set; }
-    public IEnumerable<TranslatedPermissionDto> Permissions { get; set; } = null!;
+    public Guid RoleId { get; init; }
+    public IEnumerable<TranslatedPermissionDto> Permissions { get; init; } = default!;
 }

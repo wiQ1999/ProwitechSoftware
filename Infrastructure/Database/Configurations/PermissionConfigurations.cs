@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Database.Configurations;
+
 public class PermissionConfigurations : IEntityTypeConfiguration<Permission>
 {
     public void Configure(EntityTypeBuilder<Permission> builder)

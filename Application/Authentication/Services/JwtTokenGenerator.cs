@@ -15,7 +15,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly IClaimProvider _claimProvider;
     private readonly JwtSettings _jwtSettings;
-    private SigningCredentials _signingCredentials = null!;
+    private SigningCredentials _signingCredentials = default!;
     private List<Claim> _claims = new();
 
     public JwtTokenGenerator(
@@ -55,17 +55,12 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     {
         _claims = new();
 
-        AddClaim(user.Id.ToString());
-        AddClaimIfNotNullOrEmpty(user.Login);
-        AddClaimIfNotNullOrEmpty(user.FirstName);
-        AddClaimIfNotNullOrEmpty(user.LastName);
-        AddClaimIfNotNullOrEmpty(user.Email);
-
-        if (user.Role != null)
-        {
-            AddClaim(user.Role.Id.ToString(), "RoleId");
-            AddClaimIfNotNullOrEmpty(user.Role.Name, "RoleName");
-        }
+        AddClaimIfNotNullOrEmpty("id", user.Id.ToString());
+        AddClaimIfNotNullOrEmpty("login", user.Login);
+        AddClaimIfNotNullOrEmpty("firstName", user.FirstName);
+        AddClaimIfNotNullOrEmpty("lastName", user.LastName);
+        AddClaimIfNotNullOrEmpty("roleId", user.Role?.Id.ToString());
+        AddClaimIfNotNullOrEmpty("roleName", user.Role?.Name);
 
         foreach (var permission in permissions)
         {
@@ -80,24 +75,18 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         }
     }
 
-    private void AddClaim(string value, string? type = null)
-    {
-        string claimType = type ?? nameof(value);
-        var claim = new Claim(claimType, value);
-        _claims.Add(claim);
-    }
-
-    private void AddClaimIfNotNullOrEmpty(string value, string? type = null)
+    private void AddClaimIfNotNullOrEmpty(string type, string? value)
     {
         if (!string.IsNullOrEmpty(value))
-            AddClaim(value, type);
+        {
+            var claim = _claimProvider.CreateClaim(type, value);
+            _claims.Add(claim);
+        }
     }
 
-    private void AddClaimForPermission(
-        PermissionDto permission, PermissionProperty permissionProperty)
+    private void AddClaimForPermission(PermissionDto permission, PermissionProperty permissionProperty)
     {
-        var claim = _claimProvider
-            .CreateClaim(permission.Source, permissionProperty);
+        var claim = _claimProvider.CreatePermissionClaim(permission.Source, permissionProperty);
         _claims.Add(claim);
     }
 }

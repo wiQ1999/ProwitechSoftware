@@ -1,5 +1,6 @@
 ﻿using Application.Buildings.Commands.Requests;
 using Infrastructure.Interfaces.Repositories;
+using Infrastructure.Interfaces.UnitOfWork;
 using Infrastructure.Models.Domain;
 using Infrastructure.Models.Enums;
 using MediatR;
@@ -14,31 +15,23 @@ namespace Application.Buildings.Commands.Handlers
 {
     public class CreateBuildingCommandHandler : IRequestHandler<CreateBuildingCommand, Guid>
     {
-        private readonly IBuildingAddressRepository _buildingAddressRepository;
-        private readonly IPropertyManagerRepository _propertyManagerRepository;
-        private readonly IBuildingRepository _buildingRepository;
-        private readonly IPropertyAddressRepository _propertyAddressRepository;
-        private readonly IPropertyRepository _propertyRepository;
+        private readonly IRepositoriesUnitOfWork _unitOfWork;
 
-        public CreateBuildingCommandHandler(IBuildingAddressRepository buildingAddressRepository, IPropertyManagerRepository propertyManagerRepository, IBuildingRepository buildingRepository, IPropertyAddressRepository propertyAddressRepository, IPropertyRepository propertyRepository)
+        public CreateBuildingCommandHandler(IRepositoriesUnitOfWork unitOfWork)
         {
-            _buildingAddressRepository = buildingAddressRepository;
-            _propertyManagerRepository = propertyManagerRepository;
-            _buildingRepository = buildingRepository;
-            _propertyAddressRepository = propertyAddressRepository;
-            _propertyRepository = propertyRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> Handle(CreateBuildingCommand request, CancellationToken cancellationToken)
         {
             if (request.PropertyManagerId != Guid.Empty)
             {
-                var pmFromDB = await _propertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
+                var pmFromDB = await _unitOfWork.PropertyManagerRepository.GetAsync(request.PropertyManagerId, cancellationToken);
                 if (pmFromDB == null)
                     throw new Exception($"Brak w bazie danych Zarządcy Nieruchomości o Id: {request.PropertyManagerId}");
             }
             
-            var baFromDB = await _buildingAddressRepository.GetAsync(request.BuildingAddressId, cancellationToken);
+            var baFromDB = await _unitOfWork.BuildingAddressRepository.GetAsync(request.BuildingAddressId, cancellationToken);
             if (baFromDB== null)
                 throw new Exception($"Brak w bazie danych Adresu Budynku o Id: {request.BuildingAddressId}");
 
@@ -60,19 +53,22 @@ namespace Application.Buildings.Commands.Handlers
                 };
             }
             
-            var buildingId= await _buildingRepository.AddAsync(building, request.BuildingAddressId, cancellationToken);
+            var buildingId= await _unitOfWork.BuildingRepository.AddAsync(building, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             if(building.Type==BuildingType.JEDNOLOKALOWY.ToString())
             {
                 PropertyAddress propertyAddress = new PropertyAddress();
-                var propertyAddressId= await _propertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                var propertyAddressId= await _unitOfWork.PropertyAddressRepository.AddAsync(propertyAddress, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                Property property = new Property()
+                RealProperty property = new RealProperty()
                 {
                     BuildingId = buildingId,
-                    PropertyAddressId = propertyAddressId
+                    PropertyAddressId = propertyAddressId,
+                    PropertyAddress = propertyAddress
                 };
-                await _propertyRepository.AddAsync(property, cancellationToken);
-
+                await _unitOfWork.RealPropertyRepository.AddAsync(property, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
             return buildingId;
         }

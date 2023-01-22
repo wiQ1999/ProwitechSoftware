@@ -27,21 +27,12 @@ namespace Infrastructure.Repositories
         public async Task<BuildingAddress> AddAsync(BuildingAddress address, CancellationToken cancellationToken)
         {
             address.Id = Guid.NewGuid();
-            await _dbContext.AddAsync(address);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _dbContext.AddAsync(address, cancellationToken);
             return address;
         }
         public async Task UpdateBuildingAddressAsync(BuildingAddress address, CancellationToken cancellationToken)
         {
-            if (await _dbContext.BuildingAddresses.AnyAsync(
-                b => b.CityName.ToUpper() == address.CityName.ToUpper()
-                && b.StreetName.ToUpper() == address.StreetName.ToUpper()
-                && b.BuildingNumber.ToUpper() == address.BuildingNumber.ToUpper()
-                && b.Id!=address.Id
-                ))
-                throw new Exception($"W bazie danych istnieje już podany adres!");
             _dbContext.Entry(address).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
@@ -49,16 +40,14 @@ namespace Infrastructure.Repositories
             if (baFromDB == null)
                 throw new Exception($"Brak Adresu Budynku o identyfikatorze {id}.");
             _dbContext.BuildingAddresses.Remove(baFromDB);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task<BuildingAddress?> FindBuildingAddress(BuildingAddress address, CancellationToken cancellationToken)
         {
-            BuildingAddress? baFromDB = await _dbContext.BuildingAddresses
+            return await _dbContext.BuildingAddresses
                 .FirstOrDefaultAsync(
                 b => b.CityName.ToUpper() == address.CityName.ToUpper()
                 && b.StreetName.ToUpper() == address.StreetName.ToUpper()
                 && b.BuildingNumber.ToUpper() == address.BuildingNumber.ToUpper());
-            return baFromDB;
         }
 
     }
