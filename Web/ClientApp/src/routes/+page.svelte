@@ -4,7 +4,11 @@
     setToken,
     getToken,
     clearToken,
-    readPermissionPropertiesFor,
+    getPermissionsFor,
+    hasCreatePermissionFor,
+    hasReadPermissionFor,
+    hasUpdatePermissionFor,
+    hasDeletePermissionFor,
   } from "$lib/js-lib/authorizationManager.js";
 
   let login = "";
@@ -29,9 +33,33 @@
     clearToken();
   }
 
-  function readPermissionProperties() {
-    console.log("readPermissionProperties");
-    const result = readPermissionPropertiesFor("users");
+  function getPermissionsForHanlder() {
+    console.log("getPermissionsForHanlder");
+    const result = getPermissionsFor("roles");
+    console.log(result);
+  }
+
+  function hasCreatePermissionForHandler() {
+    console.log("hasCreatePermissionFor");
+    const result = hasCreatePermissionFor("roles");
+    console.log(result);
+  }
+
+  function hasReadPermissionForHandler() {
+    console.log("hasReadPermissionFor");
+    const result = hasReadPermissionFor("roles");
+    console.log(result);
+  }
+
+  function hasUpdatePermissionForHandler() {
+    console.log("hasUpdatePermissionForHandler");
+    const result = hasUpdatePermissionFor("roles");
+    console.log(result);
+  }
+
+  function hasDeletePermissionForHandler() {
+    console.log("hasDeletePermissionForHandler");
+    const result = hasDeletePermissionFor("roles");
     console.log(result);
   }
 </script>
@@ -40,7 +68,23 @@
 <br />
 <button on:click={clearCookie}>CLEAR</button>
 <br />
-<button on:click={readPermissionProperties}>readPermissionProperties</button>
+<button on:click={getPermissionsForHanlder}>getPermissionsFor</button>
+<br />
+<button on:click={hasCreatePermissionForHandler}
+  >hasCreatePermissionForHandler</button
+>
+<br />
+<button on:click={hasReadPermissionForHandler}
+  >hasReadPermissionForHandler</button
+>
+<br />
+<button on:click={hasUpdatePermissionForHandler}
+  >hasUpdatePermissionForHandler</button
+>
+<br />
+<button on:click={hasDeletePermissionForHandler}
+  >hasDeletePermissionForHandler</button
+>
 
 <main>
   <slot>
