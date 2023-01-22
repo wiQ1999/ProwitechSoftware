@@ -14,9 +14,9 @@
     },
     number: "",
     inspectionProtocolDTO: {
-      inspectionTaskId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      inspectionTaskId: null,
       inspectionDateTime: "2023-01-22T16:27:32.460Z",
-      inspectedPropertyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      inspectedPropertyId: null,
       inspectionPerformerId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       a_01_Gazomierz_umiejscowienie: "",
       b_A_02_Gazomierz_szafka_wentylowana: true,
@@ -91,7 +91,7 @@
       submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły Protokołu";
     }
-    // await prepareForm();
+    await prepareForm();
     formVisibility = true;
   });
   async function prepareForm() {
@@ -138,13 +138,13 @@
     let buildingResponse = await getBuildingById(buildingObj.id);
     if (buildingResponse instanceof Error) return;
     buildingGotById = await buildingResponse.json();
-    console.log(buildingGotById);
     if (buildingObj.type == "JEDNOLOKALOWY") {
       CreateInspectionProtocolCommand.inspectedPropertyId =
         buildingGotById.properties[0].id;
     } else {
       realProperties = buildingGotById.properties;
     }
+    console.log(realProperties);
   }
 
   function changeEditingStatus() {
@@ -178,20 +178,41 @@
     }
 
     let multiple_07 = "";
-    let multiple_08;
-    let multiple_09;
+    let multiple_08 = "";
+    let multiple_09 = "";
 
-    for (let elem of m_A_07_Przewody_rodzaj_array) {
-      multiple_07 += elem;
-      multiple_07 += ",";
-    }
-
-    console.log(CreateInspectionProtocolCommand.a_01_Gazomierz_umiejscowienie);
     console.log(m_A_07_Przewody_rodzaj_array);
-    console.log(multiple_07);
+    for (var i = 0; i < m_A_07_Przewody_rodzaj_array.length; i++) {
+      multiple_07 += m_A_07_Przewody_rodzaj_array[i] + ",";
+    }
+    for (let elem of m_A_08_Przewody_przebieg_array) {
+      multiple_08 += elem;
+      multiple_08 += ",";
+    }
+    for (let elem of m_A_09_Przewody_sposob_prowadzenia_array) {
+      multiple_09 += elem;
+      multiple_09 += ",";
+    }
     console.log(
-      CreateInspectionProtocolCommand.b_A_02_Gazomierz_szafka_wentylowana
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
     );
+    console.log(
+      CreateInspectionProtocolCommand.inspectionProtocolDTO
+        .inspectionPerformerId
+    );
+    //TODO IF CREATION THROUGH TASK
+    // CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
+    // "030B7529-173C-41A8-953D-75BA46B7FC21";
+    CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_07_Przewody_rodzaj =
+      multiple_07;
+
+    CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_08_Przewody_przebieg =
+      multiple_08;
+    CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_09_Przewody_sposob_prowadzenia =
+      multiple_09;
+
+    CreateInspectionProtocolCommand.number = "2023_01_22_P_01";
+    await onSubmit();
   }
 </script>
 
@@ -200,7 +221,7 @@
     on:submit|preventDefault={async () => await onBeforeSubmit()}
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
   >
-    <!-- <legend class="font-bold text-lg py-5"> {upper_message} </legend>
+    <legend class="font-bold text-lg py-5"> {upper_message} </legend>
     {#if editMode}
       <button
         on:click|preventDefault={() => changeEditingStatus()}
@@ -225,7 +246,8 @@
       {#if chosenBuildingType == "WIELOLOKALOWY"}
         <label for="inspection-protocol-real-property">Nieruchomość:</label>
         <select
-          bind:value={CreateInspectionProtocolCommand.inspectedPropertyId}
+          bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
+            .inspectedPropertyId}
           class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         >
           {#each realProperties as realProperty}
@@ -241,7 +263,8 @@
         >Wykonujący Inspekcję</label
       >
       <select
-        bind:value={CreateInspectionProtocolCommand.taskPerformerId}
+        bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
+          .inspectionPerformerId}
         disabled={readMode}
         required
         class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
@@ -252,7 +275,31 @@
           </option>
         {/each}
       </select>
-    {/if} -->
+    {/if}
+    <label for="resident-first-name">Imię mieszkańca</label>
+    <input
+      type="text"
+      name="resident-first-name"
+      maxlength="600"
+      bind:value={CreateInspectionProtocolCommand.residentDTO.firstName}
+      class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+    />
+    <label for="resident-last-name">Nazwisko mieszkańca</label>
+    <input
+      type="text"
+      name="resident-first-last"
+      maxlength="600"
+      bind:value={CreateInspectionProtocolCommand.residentDTO.lastName}
+      class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+    />
+    <label for="resident-phone-number">Telefon</label>
+    <input
+      type="text"
+      name="resident-phone-number"
+      maxlength="9"
+      bind:value={CreateInspectionProtocolCommand.residentDTO.phoneNumber}
+      class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+    />
 
     <!--  ------------------------------------------- ||||| CZĘŚĆ I - GAZOMIERZ ||||| ------------------------------------------- -->
     <div class="part-1-gazomierz">
@@ -269,7 +316,8 @@
             type="radio"
             name="a_01_Gazomierz_umiejscowienie"
             required
-            bind:group={CreateInspectionProtocolCommand.a_01_Gazomierz_umiejscowienie}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_01_Gazomierz_umiejscowienie}
             value={"klatka schodowa"}
           />
           klatka schodowa
@@ -278,7 +326,8 @@
           <input
             type="radio"
             name="a_01_Gazomierz_umiejscowienie"
-            bind:group={CreateInspectionProtocolCommand.a_01_Gazomierz_umiejscowienie}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_01_Gazomierz_umiejscowienie}
             value={"korytarz"}
           />
           korytarz
@@ -287,7 +336,8 @@
           <input
             type="radio"
             name="a_01_Gazomierz_umiejscowienie"
-            bind:group={CreateInspectionProtocolCommand.a_01_Gazomierz_umiejscowienie}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_01_Gazomierz_umiejscowienie}
             value={"kuchnia/łazienka"}
           />
           kuchnia/łazienka
@@ -296,7 +346,8 @@
           <input
             type="radio"
             name="a_01_Gazomierz_umiejscowienie"
-            bind:group={CreateInspectionProtocolCommand.a_01_Gazomierz_umiejscowienie}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_01_Gazomierz_umiejscowienie}
             value={"inne"}
           />
           inne
@@ -314,7 +365,8 @@
             type="radio"
             name="b_A_02_Gazomierz_szafka_wentylowana"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_02_Gazomierz_szafka_wentylowana}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_02_Gazomierz_szafka_wentylowana}
             value={true}
           />
           jest
@@ -323,7 +375,8 @@
           <input
             type="radio"
             name="b_A_02_Gazomierz_szafka_wentylowana"
-            bind:group={CreateInspectionProtocolCommand.b_A_02_Gazomierz_szafka_wentylowana}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_02_Gazomierz_szafka_wentylowana}
             value={false}
           />
           brak
@@ -342,7 +395,8 @@
             type="radio"
             name="b_A_03_Gazomierz_szczelnosc"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_03_Gazomierz_szczelnosc}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_03_Gazomierz_szczelnosc}
             value={true}
           />
           szczelny
@@ -351,7 +405,8 @@
           <input
             type="radio"
             name="b_A_03_Gazomierz_szczelnosc"
-            bind:group={CreateInspectionProtocolCommand.b_A_03_Gazomierz_szczelnosc}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_03_Gazomierz_szczelnosc}
             value={false}
           />
           nieszczelny
@@ -369,7 +424,8 @@
             type="radio"
             name="a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika"
             required
-            bind:group={CreateInspectionProtocolCommand.a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika}
             value={"prawidłowe"}
           />
           prawidłowe
@@ -378,7 +434,8 @@
           <input
             type="radio"
             name="a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika"
-            bind:group={CreateInspectionProtocolCommand.a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika}
             value={"nieprawidłowe"}
           />
           nieprawidłowe
@@ -398,7 +455,8 @@
             type="radio"
             name="a_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr"
             required
-            bind:group={CreateInspectionProtocolCommand.a_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr}
             value={"prawidłowe"}
           />
           prawidłowe
@@ -407,7 +465,8 @@
           <input
             type="radio"
             name="a_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr"
-            bind:group={CreateInspectionProtocolCommand.a_04_Gazomierz_usytuowanie_w_stosunku_do_1_go_odbiornika}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_05_Gazomierz_usytuowanie_w_stosunku_do_licznika_energii_elektr}
             value={"nieprawidłowe"}
           />
           nieprawidłowe
@@ -425,7 +484,8 @@
             type="radio"
             name="a_06_Gazomierz_kurek_przed_gazomierzem"
             required
-            bind:group={CreateInspectionProtocolCommand.a_06_Gazomierz_kurek_przed_gazomierzem}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_06_Gazomierz_kurek_przed_gazomierzem}
             value={"kulowy"}
           />
           kulowy
@@ -434,7 +494,8 @@
           <input
             type="radio"
             name="a_06_Gazomierz_kurek_przed_gazomierzem"
-            bind:group={CreateInspectionProtocolCommand.a_06_Gazomierz_kurek_przed_gazomierzem}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_06_Gazomierz_kurek_przed_gazomierzem}
             value={"stożkowy"}
           />
           stożkowy
@@ -583,7 +644,8 @@
             type="radio"
             name="a_10_Przewody_przebieg_inst_gaz_przez_pokoje"
             required
-            bind:group={CreateInspectionProtocolCommand.a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
             value={"nie przebiega"}
           />
           nie przebiega
@@ -592,7 +654,8 @@
           <input
             type="radio"
             name="a_10_Przewody_przebieg_inst_gaz_przez_pokoje"
-            bind:group={CreateInspectionProtocolCommand.a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
             value={"skręcona"}
           />
           skręcona
@@ -601,7 +664,8 @@
           <input
             type="radio"
             name="a_10_Przewody_przebieg_inst_gaz_przez_pokoje"
-            bind:group={CreateInspectionProtocolCommand.a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_10_Przewody_przebieg_inst_gaz_przez_pokoje}
             value={"spawana"}
           />
           spawana
@@ -619,7 +683,8 @@
             type="radio"
             name="a_11_Przewody_pion_inst_gaz_w_mieszkaniu"
             required
-            bind:group={CreateInspectionProtocolCommand.a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
             value={"stalowy spawany"}
           />
           stalowy spawany
@@ -628,7 +693,8 @@
           <input
             type="radio"
             name="a_11_Przewody_pion_inst_gaz_w_mieszkaniu"
-            bind:group={CreateInspectionProtocolCommand.a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
             value={"stalowy skręcany"}
           />
           stalowy skręcany
@@ -637,7 +703,8 @@
           <input
             type="radio"
             name="a_11_Przewody_pion_inst_gaz_w_mieszkaniu"
-            bind:group={CreateInspectionProtocolCommand.a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_11_Przewody_pion_inst_gaz_w_mieszkaniu}
             value={"inny"}
           />
           inny
@@ -660,7 +727,8 @@
               type="radio"
               name="a_12_Prawidlowosc_kuchenka_gazowa_typ"
               required
-              bind:group={CreateInspectionProtocolCommand.a_12_Prawidlowosc_kuchenka_gazowa_typ}
+              bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+                .a_12_Prawidlowosc_kuchenka_gazowa_typ}
               value={"4-palnikowa"}
             />
             4-palnikowa
@@ -669,7 +737,8 @@
             <input
               type="radio"
               name="a_12_Prawidlowosc_kuchenka_gazowa_typ"
-              bind:group={CreateInspectionProtocolCommand.a_12_Prawidlowosc_kuchenka_gazowa_typ}
+              bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+                .a_12_Prawidlowosc_kuchenka_gazowa_typ}
               value={"2/3-palnikowa"}
             />
             2/3-palnikowa
@@ -688,7 +757,8 @@
               type="radio"
               name="a_13_Prawidlowosc_kuchenka_gazowa_stan"
               required
-              bind:group={CreateInspectionProtocolCommand.a_13_Prawidlowosc_kuchenka_gazowa_stan}
+              bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+                .a_13_Prawidlowosc_kuchenka_gazowa_stan}
               value={"dobra"}
             />
             dobra
@@ -697,7 +767,8 @@
             <input
               type="radio"
               name="a_13_Prawidlowosc_kuchenka_gazowa_stan"
-              bind:group={CreateInspectionProtocolCommand.a_13_Prawidlowosc_kuchenka_gazowa_stan}
+              bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+                .a_13_Prawidlowosc_kuchenka_gazowa_stan}
               value={"do wymiany"}
             />
             do wymiany
@@ -716,7 +787,8 @@
             type="radio"
             name="a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj"
             required
-            bind:group={CreateInspectionProtocolCommand.a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj}
             value={"sztywne"}
           />
           sztywne
@@ -725,7 +797,8 @@
           <input
             type="radio"
             name="a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj"
-            bind:group={CreateInspectionProtocolCommand.a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj}
             value={"wąż (atestowany) do wymiany"}
           />
           wąż (atestowany) do wymiany
@@ -743,7 +816,8 @@
             type="radio"
             name="a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan"
             required
-            bind:group={CreateInspectionProtocolCommand.a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan}
             value={"szczelne"}
           />
           szczelne
@@ -752,7 +826,8 @@
           <input
             type="radio"
             name="a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan"
-            bind:group={CreateInspectionProtocolCommand.a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_15_Prawidlowosc_kuchenka_gazowa_podlaczenie_stan}
             value={"nieszczelne"}
           />
           nieszczelne
@@ -770,7 +845,8 @@
             type="radio"
             name="a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy"
             required
-            bind:group={CreateInspectionProtocolCommand.a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
             value={"dobry"}
           />
           dobry
@@ -779,7 +855,8 @@
           <input
             type="radio"
             name="a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
             value={"brak"}
           />
           brak
@@ -788,7 +865,8 @@
           <input
             type="radio"
             name="a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_16_Prawidlowosc_kuchenka_gazowa_kurek_odcinajacy}
             value={"do wymiany"}
           />
           do wymiany
@@ -806,7 +884,8 @@
             type="radio"
             name="a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna"
             required
-            bind:group={CreateInspectionProtocolCommand.a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna}
             value={"normatywna"}
           />
           normatywna
@@ -815,7 +894,8 @@
           <input
             type="radio"
             name="a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna"
-            bind:group={CreateInspectionProtocolCommand.a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_17_Prawidlowosc_kuchenka_gazowa_odleglosc_od_okna}
             value={"nieprawidłowa"}
           />
           nieprawidłowa
@@ -833,7 +913,8 @@
             type="radio"
             name="a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan"
             required
-            bind:group={CreateInspectionProtocolCommand.a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
             value={"sprawny"}
           />
           sprawny
@@ -842,7 +923,8 @@
           <input
             type="radio"
             name="a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan"
-            bind:group={CreateInspectionProtocolCommand.a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
             value={"do regulacji"}
           />
           do regulacji
@@ -851,7 +933,8 @@
           <input
             type="radio"
             name="a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan"
-            bind:group={CreateInspectionProtocolCommand.a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_18_Prawidlowosc_gazowy_podgrzewacz_cwu_stan}
             value={"do wymiany"}
           />
           do wymiany
@@ -869,7 +952,8 @@
             type="radio"
             name="a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy"
             required
-            bind:group={CreateInspectionProtocolCommand.a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
             value={"sprawny"}
           />
           sprawny
@@ -878,7 +962,8 @@
           <input
             type="radio"
             name="a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
             value={"do wymiany"}
           />
           do wymiany
@@ -887,7 +972,8 @@
           <input
             type="radio"
             name="a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_19_Prawidlowosc_gazowy_podgrzewacz_cwu_kurek_odcinajacy}
             value={"brak"}
           />
           brak
@@ -905,7 +991,8 @@
             type="radio"
             name="a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa"
             required
-            bind:group={CreateInspectionProtocolCommand.a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
             value={"jest"}
           />
           jest
@@ -914,7 +1001,8 @@
           <input
             type="radio"
             name="a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa"
-            bind:group={CreateInspectionProtocolCommand.a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
             value={"brak"}
           />
           brak
@@ -923,7 +1011,8 @@
           <input
             type="radio"
             name="a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa"
-            bind:group={CreateInspectionProtocolCommand.a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_20_Prawidlowosc_gazowy_podgrzewacz_cwu_rura_spalinowa}
             value={"do wymiany"}
           />
           do wymiany
@@ -941,7 +1030,8 @@
             type="radio"
             name="a_21_Prawidlowosc_terma_gazowa_stan"
             required
-            bind:group={CreateInspectionProtocolCommand.a_21_Prawidlowosc_terma_gazowa_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_21_Prawidlowosc_terma_gazowa_stan}
             value={"sprawna"}
           />
           sprawna
@@ -950,7 +1040,8 @@
           <input
             type="radio"
             name="a_21_Prawidlowosc_terma_gazowa_stan"
-            bind:group={CreateInspectionProtocolCommand.a_21_Prawidlowosc_terma_gazowa_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_21_Prawidlowosc_terma_gazowa_stan}
             value={"do regulacji"}
           />
           do regulacji
@@ -959,7 +1050,8 @@
           <input
             type="radio"
             name="a_21_Prawidlowosc_terma_gazowa_stan"
-            bind:group={CreateInspectionProtocolCommand.a_21_Prawidlowosc_terma_gazowa_stan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_21_Prawidlowosc_terma_gazowa_stan}
             value={"do wymiany"}
           />
           do wymiany
@@ -977,7 +1069,8 @@
             type="radio"
             name="a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy"
             required
-            bind:group={CreateInspectionProtocolCommand.a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
             value={"sprawny"}
           />
           sprawny
@@ -986,7 +1079,8 @@
           <input
             type="radio"
             name="a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
             value={"do wymiany"}
           />
           do wymiany
@@ -995,7 +1089,8 @@
           <input
             type="radio"
             name="a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy"
-            bind:group={CreateInspectionProtocolCommand.a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_22_Prawidlowosc_terma_gazowa_kurek_odcinajacy}
             value={"brak"}
           />
           brak
@@ -1013,7 +1108,8 @@
             type="radio"
             name="a_23_Prawidlowosc_terma_gazowa_rura_spalinowa"
             required
-            bind:group={CreateInspectionProtocolCommand.a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
             value={"jest"}
           />
           jest
@@ -1022,7 +1118,8 @@
           <input
             type="radio"
             name="a_23_Prawidlowosc_terma_gazowa_rura_spalinowa"
-            bind:group={CreateInspectionProtocolCommand.a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
             value={"brak"}
           />
           brak
@@ -1031,7 +1128,8 @@
           <input
             type="radio"
             name="a_23_Prawidlowosc_terma_gazowa_rura_spalinowa"
-            bind:group={CreateInspectionProtocolCommand.a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_23_Prawidlowosc_terma_gazowa_rura_spalinowa}
             value={"do wymiany"}
           />
           do wymiany
@@ -1051,7 +1149,8 @@
             type="radio"
             name="a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura"
             required
-            bind:group={CreateInspectionProtocolCommand.a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura}
             value={"sprawny"}
           />
           sprawny
@@ -1060,7 +1159,8 @@
           <input
             type="radio"
             name="a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura"
-            bind:group={CreateInspectionProtocolCommand.a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_24_Prawidlowosc_kociol_co_z_kurkiem_i_rura}
             value={"niesprawny"}
           />
           niesprawny
@@ -1085,7 +1185,8 @@
             type="radio"
             name="a_25_Kubatura_warunku_techniczne"
             required
-            bind:group={CreateInspectionProtocolCommand.a_25_Kubatura_warunku_techniczne}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_25_Kubatura_warunku_techniczne}
             value={"spełnia"}
           />
           spełnia
@@ -1094,7 +1195,8 @@
           <input
             type="radio"
             name="a_25_Kubatura_warunku_techniczne"
-            bind:group={CreateInspectionProtocolCommand.a_25_Kubatura_warunku_techniczne}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_25_Kubatura_warunku_techniczne}
             value={"nie spełnia"}
           />
           nie spełnia
@@ -1114,7 +1216,8 @@
             type="radio"
             name="b_A_26_Wentylacja_kuchnia"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_26_Wentylacja_kuchnia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_26_Wentylacja_kuchnia}
             value={true}
           />
           jest
@@ -1123,7 +1226,8 @@
           <input
             type="radio"
             name="b_A_26_Wentylacja_kuchnia"
-            bind:group={CreateInspectionProtocolCommand.b_A_26_Wentylacja_kuchnia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_26_Wentylacja_kuchnia}
             value={false}
           />
           brak
@@ -1139,7 +1243,8 @@
             type="radio"
             name="b_A_27_Wentylacja_lazienka"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_27_Wentylacja_lazienka}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_27_Wentylacja_lazienka}
             value={true}
           />
           jest
@@ -1148,7 +1253,8 @@
           <input
             type="radio"
             name="b_A_27_Wentylacja_lazienka"
-            bind:group={CreateInspectionProtocolCommand.b_A_27_Wentylacja_lazienka}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_27_Wentylacja_lazienka}
             value={false}
           />
           brak
@@ -1166,7 +1272,8 @@
             type="radio"
             name="b_A_28_Wentylacja_inne_pomieszczenia"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_28_Wentylacja_inne_pomieszczenia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_28_Wentylacja_inne_pomieszczenia}
             value={true}
           />
           jest
@@ -1175,7 +1282,8 @@
           <input
             type="radio"
             name="b_A_28_Wentylacja_inne_pomieszczenia"
-            bind:group={CreateInspectionProtocolCommand.b_A_28_Wentylacja_inne_pomieszczenia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_28_Wentylacja_inne_pomieszczenia}
             value={false}
           />
           brak
@@ -1193,7 +1301,8 @@
             type="radio"
             name="b_A_29_Wentylacja_nawiew_kuchnia"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_29_Wentylacja_nawiew_kuchnia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_29_Wentylacja_nawiew_kuchnia}
             value={true}
           />
           jest
@@ -1202,7 +1311,8 @@
           <input
             type="radio"
             name="b_A_29_Wentylacja_nawiew_kuchnia"
-            bind:group={CreateInspectionProtocolCommand.b_A_29_Wentylacja_nawiew_kuchnia}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_29_Wentylacja_nawiew_kuchnia}
             value={false}
           />
           brak
@@ -1220,7 +1330,8 @@
             type="radio"
             name="b_A_30_Wentylacja_nawiew_lazienka"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_30_Wentylacja_nawiew_lazienka}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_30_Wentylacja_nawiew_lazienka}
             value={true}
           />
           jest
@@ -1229,7 +1340,8 @@
           <input
             type="radio"
             name="b_A_30_Wentylacja_nawiew_lazienka"
-            bind:group={CreateInspectionProtocolCommand.b_A_30_Wentylacja_nawiew_lazienka}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_30_Wentylacja_nawiew_lazienka}
             value={false}
           />
           brak
@@ -1247,7 +1359,8 @@
             type="radio"
             name="b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem}
             value={true}
           />
           jest
@@ -1256,7 +1369,8 @@
           <input
             type="radio"
             name="b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem"
-            bind:group={CreateInspectionProtocolCommand.b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_31_Wentylacja_nawiew_Zet_w_pomieszczeniu_z_kotlem}
             value={false}
           />
           brak
@@ -1278,7 +1392,8 @@
             type="radio"
             name="a_32_Wyniki_stan_szczelnosci"
             required
-            bind:group={CreateInspectionProtocolCommand.a_32_Wyniki_stan_szczelnosci}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_32_Wyniki_stan_szczelnosci}
             value={"dobry"}
           />
           dobry
@@ -1287,7 +1402,8 @@
           <input
             type="radio"
             name="a_32_Wyniki_stan_szczelnosci"
-            bind:group={CreateInspectionProtocolCommand.a_32_Wyniki_stan_szczelnosci}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .a_32_Wyniki_stan_szczelnosci}
             value={"zły"}
           />
           zły
@@ -1305,7 +1421,8 @@
             type="radio"
             name="b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci}
             value={true}
           />
           tak
@@ -1314,7 +1431,8 @@
           <input
             type="radio"
             name="b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci"
-            bind:group={CreateInspectionProtocolCommand.b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_33_Wyniki_instalacja_wymaga_usuniecia_nieszczelnosci}
             value={false}
           />
           nie
@@ -1332,7 +1450,8 @@
             type="radio"
             name="b_A_34_Propan_butan"
             required
-            bind:group={CreateInspectionProtocolCommand.b_A_34_Propan_butan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_34_Propan_butan}
             value={true}
           />
           tak
@@ -1341,7 +1460,8 @@
           <input
             type="radio"
             name="b_A_34_Propan_butan"
-            bind:group={CreateInspectionProtocolCommand.b_A_34_Propan_butan}
+            bind:group={CreateInspectionProtocolCommand.inspectionProtocolDTO
+              .b_A_34_Propan_butan}
             value={false}
           />
           nie
@@ -1354,11 +1474,13 @@
         class="question-inne_uwagi min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
       >
         <label for="inne_uwagi">[35] Inne uwagi</label>
+        <!-- <textarea maxlength="600" /> -->
         <input
           type="text"
           name="inne_uwagi"
           maxlength="600"
-          bind:value={CreateInspectionProtocolCommand.inne_uwagi}
+          bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
+            .inne_uwagi}
         />
       </div>
     </div>

@@ -7,7 +7,7 @@ import {
 } from "$lib/js-lib/httpMethods";
 import { handleError } from "$lib/js-lib/errors";
 
-const path = "/InspectionTask";
+const path = "/InspectionProtocol";
 
 export async function postInspectionProtocol(CreateInspectionProtocolCommand) {
   let response;
