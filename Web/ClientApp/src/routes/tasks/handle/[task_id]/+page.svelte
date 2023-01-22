@@ -17,6 +17,7 @@
   import { getBuildingById } from "$lib/stores/Building";
   import ModifiedBaseList from "$lib/components/base/ModifiedBaseList.svelte";
   import { setResultFormatIfItIsDateTime } from "$lib/js-lib/helpers";
+  import Map from "$lib/components/Map.svelte";
 
   let collectionOfRealPropertiesWithoutAssignedProtocols = [];
   let collectionOfNewProtocols = [];
@@ -35,10 +36,12 @@
   let taskProtocols;
   let taskStatus;
   let inspectionTask;
+  let building;
   let allBuildingRealPropertiesCount;
   let submitButtonVisibility = false;
   let singleFamilyBuildingType = false;
   let multipleFamilyBuildingType = false;
+  let mapVisibility = false;
   onMount(async () => {
     firstListVisibility = false;
     secondListVisibility = false;
@@ -47,6 +50,7 @@
     submitButtonVisibility = false;
     singleFamilyBuildingType = false;
     multipleFamilyBuildingType = false;
+    mapVisibility = false;
 
     let buildingPrepared = await prepareBuildingInfo();
     let firstListPrepared = await prepareFirstList();
@@ -56,6 +60,7 @@
       firstListVisibility = true;
       secondListVisibility = true;
       buildingInfoVisibility = true;
+      mapVisibility = true;
     }
     if (
       collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
@@ -77,7 +82,7 @@
     let buildingResponse = await getBuildingById(inspectionTask.building.id);
     if (buildingResponse instanceof Error) return false;
 
-    let building = await buildingResponse.json();
+    building = await buildingResponse.json();
     if (building.type == "WIELOLOKALOWY") multipleFamilyBuildingType = true;
     if (building.type == "JEDNOLOKALOWY") singleFamilyBuildingType = true;
     allBuildingRealPropertiesCount = building.properties.length;
@@ -222,7 +227,7 @@
   <div>
     <table>
       <tr>
-        <td>BUDYNEK</td>
+        <td>BUDYNEK {building.type} przy ul.</td>
         <td>{buildingInfo}</td>
         <td>STATUS</td>
         <td>{taskStatus}</td>
@@ -255,6 +260,8 @@
   </div>
   <div />
 {/if}
+{#if mapVisibility}
+  <Map {building} displayLink={true} />{/if}
 {#if multipleFamilyBuildingType}
   <div class="wielolokalowy">
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
