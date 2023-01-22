@@ -27,18 +27,11 @@ namespace Infrastructure.Repositories
         public async Task<BuildingAddress> AddAsync(BuildingAddress address, CancellationToken cancellationToken)
         {
             address.Id = Guid.NewGuid();
-            await _dbContext.AddAsync(address);
+            await _dbContext.AddAsync(address, cancellationToken);
             return address;
         }
         public async Task UpdateBuildingAddressAsync(BuildingAddress address, CancellationToken cancellationToken)
         {
-            if (await _dbContext.BuildingAddresses.AnyAsync(
-                b => b.CityName.ToUpper() == address.CityName.ToUpper()
-                && b.StreetName.ToUpper() == address.StreetName.ToUpper()
-                && b.BuildingNumber.ToUpper() == address.BuildingNumber.ToUpper()
-                && b.Id!=address.Id
-                ))
-                throw new Exception($"W bazie danych istnieje już podany adres!");
             _dbContext.Entry(address).State = EntityState.Modified;
         }
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)

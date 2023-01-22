@@ -61,9 +61,8 @@ namespace Application.RealProperties.Helpers
 
         public async Task CheckIfRealPropertyAlreadyExists(RealProperty property, bool creationMode, CancellationToken cancellationToken)
         {
-            if (await _unitOfWork.RealPropertyRepository.CheckIfRealPropertyAlreadyExists(property, cancellationToken))
+            if (await _unitOfWork.RealPropertyRepository.CheckIfRealPropertyAlreadyExists(property, creationMode, cancellationToken))
             {
-
                 if (creationMode)
                 {
                     await _unitOfWork.PropertyAddressRepository.DeleteAsync(property.PropertyAddressId.Value, cancellationToken);

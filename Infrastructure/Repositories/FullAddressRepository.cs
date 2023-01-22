@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         public async Task<Guid> AddAsync(FullAddress fullAddress, CancellationToken cancellationToken)
         {
 
-            await _dbContext.AddAsync(fullAddress);
+            await _dbContext.AddAsync(fullAddress, cancellationToken);
             return fullAddress.Id;
         }
 

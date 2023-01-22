@@ -230,7 +230,8 @@
       if (updateSuccess) {
         otherBuildingDataChanged = true;
       } else {
-        otherBuildingDataChanged = false;
+        return;
+        // otherBuildingDataChanged = false;
       }
     } else {
       otherBuildingDataChanged = false;
@@ -335,12 +336,28 @@
   {/if}
 </div>
 
-<div class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
+<div
+  class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+>
   Kod pocztowy budynku
   <p class="font-bold">{postalCode}</p>
-  <a href="/buildings/details/{data.id}/postal-code"
+  <a href="/buildings/details/{data.id}/postal-code">
+    <button
+      class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+      >Edytuj kod pocztowy</button
     >
-    <button class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md">Edytuj kod pocztowy</button>
-    </a
-  >
+  </a>
 </div>
+
+{#if originalBuildingType == "WIELOLOKALOWY"}
+  <div
+    class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+  >
+    <a href="/buildings/details/{data.id}/real-properties/getAll">
+      <button
+        class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+        >Lokale</button
+      >
+    </a>
+  </div>
+{/if}

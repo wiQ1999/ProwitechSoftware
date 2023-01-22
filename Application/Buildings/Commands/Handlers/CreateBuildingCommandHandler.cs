@@ -53,7 +53,7 @@ namespace Application.Buildings.Commands.Handlers
                 };
             }
             
-            var buildingId= await _unitOfWork.BuildingRepository.AddAsync(building, request.BuildingAddressId, cancellationToken);
+            var buildingId= await _unitOfWork.BuildingRepository.AddAsync(building, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             if(building.Type==BuildingType.JEDNOLOKALOWY.ToString())
             {

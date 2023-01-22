@@ -31,24 +31,29 @@ namespace Application.RealProperties.Commands.Handlers
             if (building == null)
                 throw new Exception($"Nie można utworzyć Nieruchomości: Brak w bazie danych Budynku o Id: {request.BuildingId}");
 
-            var propertyAfterUpdate = new RealProperty()
-            {
-                BuildingId = request.BuildingId,
-                PropertyAddress = new PropertyAddress()
-                {
-                    VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber,
-                    StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber,
-                },
-                PropertyAddressId=realProperty.PropertyAddressId
-            };
+            //var propertyAfterUpdate = new RealProperty()
+            //{
+            //    Id=request.Id,
+            //    BuildingId = request.BuildingId,
+            //    PropertyAddress = new PropertyAddress()
+            //    {
+            //        VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber,
+            //        StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber,
+            //    },
+            //    PropertyAddressId=realProperty.PropertyAddressId
+            //};
+
+            realProperty.BuildingId = request.BuildingId;
+            realProperty.PropertyAddress!.VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber;
+            realProperty.PropertyAddress.StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber;
 
             bool creationMode = false;
             RealPropertyHelper propertyHelper = new RealPropertyHelper(_unitOfWork);
-            await propertyHelper.CheckIfRealPropertyAlreadyExists(propertyAfterUpdate, creationMode, cancellationToken);
+            await propertyHelper.CheckIfRealPropertyAlreadyExists(realProperty, creationMode, cancellationToken);
 
-            realProperty.BuildingId = building.Id;
-            realProperty.PropertyAddress!.VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber;
-            realProperty.PropertyAddress.StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber;
+            //realProperty.BuildingId = building.Id;
+            //realProperty.PropertyAddress!.VenueNumber = request.PropertyAddressWithVenueNumberDTO.VenueNumber;
+            //realProperty.PropertyAddress.StaircaseNumber = request.PropertyAddressWithVenueNumberDTO.StaircaseNumber;
 
             await _unitOfWork.RealPropertyRepository.UpdateAsync(realProperty, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

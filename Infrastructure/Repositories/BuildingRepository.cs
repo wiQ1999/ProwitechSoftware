@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Guid> AddAsync(Building building, Guid buildingAddressId, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(Building building, CancellationToken cancellationToken)
         {
             if (await _dbContext.Buildings.AnyAsync(b => b.BuildingAddressId == building.BuildingAddressId))
                 throw new Exception($"Istnieje już budynek mający adres o Id: {building.BuildingAddressId}");
@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
                 throw new Exception($"Próba dodania niedozwolonego typu budynku: {building.Type}");
 
             var buildingAddressAssociatedWithNewBuilding = await _dbContext.BuildingAddresses
-                .FirstOrDefaultAsync(ba => ba.Id == buildingAddressId);
+                .FirstOrDefaultAsync(ba => ba.Id == building.BuildingAddressId);
             if (buildingAddressAssociatedWithNewBuilding != null)
             {
                 var buildingWithTheSameBuildingAddressData = await _dbContext.Buildings.Where(
@@ -78,20 +78,20 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            Building? buildingToDelete = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            Building? buildingToDelete = await GetAsync(id, cancellationToken);
             if (buildingToDelete == null)
-                throw new Exception($"Brak Budynku o identyfikatorze {id}.");
-            
-            
-            //TODO sprawdz czy lokale budynku mają przypisane protokoły - jeśli TAK, nie wolno usuwać Building
-            //if(buildingToDelete.Properties!=null && buildingToDelete.Properties.Count > 0 && buildingToDelete.Properties.InspectionProtocols!=null)
-            //{
+                throw new Exception($"Nie można usunąć Budynku: Brak Budynku o identyfikatorze {id}.");
 
-            //}
 
-            //TODO nie wolno usunąć budynku, który jest w jakimś zadaniu (?)
-            //TODO sprawdź czy przy usuwaniu WIELOLOKALOWY usuwają się Properties oraz PropertiesAddresses
-
+            if (buildingToDelete.Properties != null)
+            {
+                if(await _dbContext.InspectionProtocols.AnyAsync(p=>p.InspectedProperty.BuildingId==buildingToDelete.Id))
+                    throw new Exception($"Nie można usunąć Budynku: Budynek zawiera przynajmniej jedną Nieruchomość," +
+                        $" do której przypisany jest Protokół przeglądu instalacji gazowej");
+            }
+            if(await _dbContext.InspectionTasks.AnyAsync(t=>t.BuildingId == buildingToDelete.Id))
+                throw new Exception($"Nie można usunąć Budynku: Budynek jest przypisany do przynajmniej jednego zadania");
+           
             Guid? buildingAddressIdToDelete = buildingToDelete.BuildingAddressId;
             if (buildingAddressIdToDelete != null)
             {
