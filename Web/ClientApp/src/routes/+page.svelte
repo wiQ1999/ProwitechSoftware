@@ -1,90 +1,28 @@
 <script>
+  import { goto } from "$app/navigation";
+  import { openModal } from "svelte-modals";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import { getAuthenticated } from "$lib/stores/Authentication";
-  import {
-    setToken,
-    getToken,
-    clearToken,
-    getPermissionsFor,
-    hasCreatePermissionFor,
-    hasReadPermissionFor,
-    hasUpdatePermissionFor,
-    hasDeletePermissionFor,
-  } from "$lib/js-lib/authorizationManager.js";
+  import { setToken } from "$lib/js-lib/authManager.js";
 
   let login = "";
   let pwd = "";
 
   async function submitHandler() {
     const json = await getAuthenticated(login, pwd);
-    if (json.isGenerated) setToken(json.token);
-    else {
-      console.log("Login failed.");
+
+    if (json.isGenerated) {
+      setToken(json.token);
+      goto("/users");
+    } else {
+      openModal(BasePopUp, {
+        title: "Błąd logowania",
+        message: "Niepoprawny login lub hasło",
+        reloadRequired: true,
+      });
     }
   }
-
-  function getCookie() {
-    console.log("GET");
-    const token = getToken();
-    console.log(token);
-  }
-
-  function clearCookie() {
-    console.log("CLEAR");
-    clearToken();
-  }
-
-  function getPermissionsForHanlder() {
-    console.log("getPermissionsForHanlder");
-    const result = getPermissionsFor("roles");
-    console.log(result);
-  }
-
-  function hasCreatePermissionForHandler() {
-    console.log("hasCreatePermissionFor");
-    const result = hasCreatePermissionFor("roles");
-    console.log(result);
-  }
-
-  function hasReadPermissionForHandler() {
-    console.log("hasReadPermissionFor");
-    const result = hasReadPermissionFor("roles");
-    console.log(result);
-  }
-
-  function hasUpdatePermissionForHandler() {
-    console.log("hasUpdatePermissionForHandler");
-    const result = hasUpdatePermissionFor("roles");
-    console.log(result);
-  }
-
-  function hasDeletePermissionForHandler() {
-    console.log("hasDeletePermissionForHandler");
-    const result = hasDeletePermissionFor("roles");
-    console.log(result);
-  }
 </script>
-
-<button on:click={getCookie}>GET</button>
-<br />
-<button on:click={clearCookie}>CLEAR</button>
-<br />
-<button on:click={getPermissionsForHanlder}>getPermissionsFor</button>
-<br />
-<button on:click={hasCreatePermissionForHandler}
-  >hasCreatePermissionForHandler</button
->
-<br />
-<button on:click={hasReadPermissionForHandler}
-  >hasReadPermissionForHandler</button
->
-<br />
-<button on:click={hasUpdatePermissionForHandler}
-  >hasUpdatePermissionForHandler</button
->
-<br />
-<button on:click={hasDeletePermissionForHandler}
-  >hasDeletePermissionForHandler</button
->
 
 <main>
   <slot>
@@ -115,9 +53,10 @@
             placeholder="Podaj hasło"
             id="password"
             required
+            pattern=".&#123;8,}"
             title="Musi zawierać co najmniej osiem znaków"
             bind:value={pwd}
-          /><!--pattern=".&#123;8,}" -->
+          />
           <div class="bg-[#ecf2f5] w-[100%] py-[1%] px-[2%] mt-4">
             <input
               class="w-1/5 px-3 py-4 border-2 border-solid border-[#005f85] text-white bg-[#007acc] relative left-[40%] cursor-pointer"
