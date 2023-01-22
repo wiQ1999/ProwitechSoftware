@@ -29,11 +29,11 @@ public class DataSeeder
 
         #region Users
 
-        User admin = CreateUser("admin", "admin", "admin", string.Empty, string.Empty, string.Empty, adminRole);
-        User boss = CreateUser("boss", "boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", bossRole);
-        User worker1 = CreateUser("w1", "w1", "Jan", "Kowalski", "j.kowalski@gmail.com", "+48 321 654 987", workerRole);
-        User worker2 = CreateUser("w2", "w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", workerRole);
-        User worker3 = CreateUser("w3", "w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", workerRole);
+        User admin = CreateUser("admin", "admin", string.Empty, string.Empty, string.Empty, adminRole);
+        User boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", bossRole);
+        User worker1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", "+48 321 654 987", workerRole);
+        User worker2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", workerRole);
+        User worker3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", workerRole);
         ModelBuilder.Entity<User>().HasData(admin, boss, worker1, worker2, worker3);
 
         #endregion
@@ -78,7 +78,7 @@ public class DataSeeder
             Name = name 
         };
 
-    private User CreateUser(string login, string pwd, string fName, string lName, string email, string pNumber, Role role)
+    private User CreateUser(string login, string fName, string lName, string email, string pNumber, Role role)
     {
         var user = new User()
         {
@@ -91,7 +91,7 @@ public class DataSeeder
             RoleId = role.Id
         };
 
-        user.Password = _hasher.HashPassword(user, pwd);
+        user.Password = _hasher.HashPassword(user, "zaq1@WSX");
 
         return user;
     }
