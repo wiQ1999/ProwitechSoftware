@@ -3,9 +3,12 @@
   import {
     putInspectionProtocol,
     getInspectionProtocolById,
+    protocolsDiffer,
   } from "$lib/stores/InspectionProtocol";
   import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import { openModal } from "svelte-modals";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
 
   let UpdateInspectionProtocolCommand = {
     id: null,
@@ -65,15 +68,33 @@
     if (res instanceof Error) return;
     originalInspectionProtocol = await res.json();
     console.log(originalInspectionProtocol);
-    UpdateInspectionProtocolCommand = originalInspectionProtocol;
+    UpdateInspectionProtocolCommand = structuredClone(
+      originalInspectionProtocol
+    );
     formVisibility = true;
   });
-  const createProtocol = async () => {
-    let result = await postInspectionProtocol(UpdateInspectionProtocolCommand);
+  const updateProtocol = async () => {
+    if (
+      !protocolsDiffer(
+        originalInspectionProtocol,
+        UpdateInspectionProtocolCommand
+      )
+    ) {
+      openModal(BasePopUp, {
+        title: "Brak akcji",
+        message: "Nowe dane protokołu nie różnią się od poprzednich",
+        reloadRequired: false,
+      });
+      return;
+    }
+    let result = await putInspectionProtocol(
+      UpdateInspectionProtocolCommand.id,
+      UpdateInspectionProtocolCommand
+    );
     if (result instanceof Response) {
       openModal(BasePopUp, {
         title: "Sukces",
-        message: "Pomyślnie dodano Protokół",
+        message: "Pomyślnie edytowano Protokół",
         reloadRequired: false,
         redirectionRequired: true,
         redirectionHref: href,
@@ -85,7 +106,7 @@
 {#if formVisibility}
   <InspectionProtocolForm
     creationThroughTask={false}
-    onSubmit={createProtocol}
+    onSubmit={updateProtocol}
     CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
     editMode={true}
   />

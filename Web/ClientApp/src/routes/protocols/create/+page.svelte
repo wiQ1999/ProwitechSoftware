@@ -1,6 +1,8 @@
 <script>
   import InspectionProtocolForm from "$lib/components/InspectionProtocolForm.svelte";
   import { postInspectionProtocol } from "$lib/stores/InspectionProtocol";
+  import { openModal } from "svelte-modals";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
 
   let CreateInspectionProtocolCommand = {
     residentDTO: {

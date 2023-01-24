@@ -63,7 +63,7 @@ namespace Infrastructure.Repositories
         {
            Resident? residentWithTheSameDataFromDB = await _dbContext.Residents.FirstOrDefaultAsync(
                 r =>
-                r.Id!=newResident.Id
+                r.Id!= oldResident.Id
                 && r.FirstName == newResident.FirstName
                 && r.LastName == newResident.LastName
                 && r.PhoneNumber == newResident.PhoneNumber, cancellationToken);
@@ -93,7 +93,7 @@ namespace Infrastructure.Repositories
             oldResident.LastName= newResident.LastName;
             oldResident.PhoneNumber = newResident.PhoneNumber;
             
-            UpdateAsync(oldResident, cancellationToken);
+            await UpdateAsync(oldResident, cancellationToken);
             return oldResident.Id;
         }
     }
