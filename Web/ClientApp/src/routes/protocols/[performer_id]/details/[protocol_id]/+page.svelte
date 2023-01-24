@@ -1,12 +1,17 @@
 <script>
   import InspectionProtocolForm from "$lib/components/InspectionProtocolForm.svelte";
-  import { postInspectionProtocol } from "$lib/stores/InspectionProtocol";
-  import { openModal } from "svelte-modals";
+  import {
+    putInspectionProtocol,
+    getInspectionProtocolById,
+    protocolsDiffer,
+  } from "$lib/stores/InspectionProtocol";
   import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import { openModal } from "svelte-modals";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
 
-  let CreateInspectionProtocolCommand = {
+  let UpdateInspectionProtocolCommand = {
+    id: null,
     residentDTO: {
       firstName: "",
       lastName: "",
@@ -55,36 +60,41 @@
       inne_uwagi: "",
     },
   };
-  let href = `/tasks/handle/${$page.params.task_id}/`;
+  let href = "/protocols/getAll";
   let formVisibility = false;
+  let originalInspectionProtocol;
   onMount(async () => {
-    formVisibility = false;
-    CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
-      $page.params.task_id;
-    CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
-      $page.params.property_id;
-    //TODO ZMIENIĆ NA ID ZALOGOWANEGO UŻYTKOWNIKA
-    CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
-      "030b7529-173c-41a8-953d-75ba46b7fc21";
+    let res = await getInspectionProtocolById($page.params.protocol_id);
+    if (res instanceof Error) return;
+    originalInspectionProtocol = await res.json();
+    console.log(originalInspectionProtocol);
+    UpdateInspectionProtocolCommand = structuredClone(
+      originalInspectionProtocol
+    );
     formVisibility = true;
   });
-  const createProtocol = async () => {
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId
+  const updateProtocol = async () => {
+    if (
+      !protocolsDiffer(
+        originalInspectionProtocol,
+        UpdateInspectionProtocolCommand
+      )
+    ) {
+      openModal(BasePopUp, {
+        title: "Brak akcji",
+        message: "Nowe dane protokołu nie różnią się od poprzednich",
+        reloadRequired: false,
+      });
+      return;
+    }
+    let result = await putInspectionProtocol(
+      UpdateInspectionProtocolCommand.id,
+      UpdateInspectionProtocolCommand
     );
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
-    );
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
-        .inspectionPerformerId
-    );
-
-    let result = await postInspectionProtocol(CreateInspectionProtocolCommand);
     if (result instanceof Response) {
       openModal(BasePopUp, {
         title: "Sukces",
-        message: "Pomyślnie dodano Protokół",
+        message: "Pomyślnie edytowano Protokół",
         reloadRequired: false,
         redirectionRequired: true,
         redirectionHref: href,
@@ -93,11 +103,19 @@
   };
 </script>
 
+<a href="/protocols/{$page.params.performer_id}/performer_protocols">
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
+</a>
+
 {#if formVisibility}
   <InspectionProtocolForm
-    creationThroughTask={true}
-    propertyId={$page.params.property_id}
-    onSubmit={createProtocol}
-    {CreateInspectionProtocolCommand}
+    creationThroughTask={false}
+    onSubmit={updateProtocol}
+    CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
+    editMode={true}
+    performerLookUp={true}
   />
 {/if}

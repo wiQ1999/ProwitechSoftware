@@ -140,8 +140,9 @@
   };
 
   function FIRST_LIST_firstButtonHandler(event) {
-    console.log("firstHandler");
-    // goto(`/protocols/create`);
+    goto(
+      `/protocols/task/${$page.params.task_id}/property/${event.detail.row.id}/create`
+    );
   }
 
   function secondButtonHandler(event) {

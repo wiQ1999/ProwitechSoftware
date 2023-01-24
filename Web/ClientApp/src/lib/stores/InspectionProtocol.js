@@ -104,6 +104,17 @@ export async function getProtocolBiggestNumberForToday(dateFormatted) {
     return err;
   }
 }
+export async function getPerformerProtocols(performerId) {
+  let route = `/InspectionProtocol/performerProtocols/${performerId}`;
+  let response;
+  try {
+    response = await genericCustomGet(route);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Protokołów wybranego Wykonującego Inspekcję");
+    return err;
+  }
+}
 export function protocolsDiffer(oldProtocol, newProtocol) {
   if (
     oldProtocol.residentDTO.firstName.toUpperCase() !=

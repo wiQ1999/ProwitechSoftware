@@ -58,8 +58,9 @@
     },
   };
   export let editMode = false;
-  export let taskId = null;
-  // export let propertyId = null;
+  // export let taskId = null;
+  export let performerLookUp = false;
+  export let propertyId = null;
   export let creationThroughTask = false;
   let formVisibility;
   let upper_message = "Dodaj Protokół";
@@ -71,7 +72,6 @@
   let buildings = [];
   let realProperties = [];
   let chosenBuilding;
-  let chosenBuildingType = "";
   let today = prepareDateTime(new Date());
   let numberDate = formatDate(new Date(), false, true);
 
@@ -97,15 +97,21 @@
       submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły Protokołu";
     }
+
+    // if (creationThroughTask) {
+    //   //TODO POBRAĆ ID ZALOGOWANEGO UŻYTKOWNIKA
+    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
+    //     "030B7529-173C-41A8-953D-75BA46B7FC21";
+    //   // console.log(CreateInspectionProtocolCommand);
+    // }
+
     await prepareForm();
     formVisibility = true;
   });
   async function prepareForm() {
     let downloadBuildingsSuccess = true;
-    if (!creationThroughTask) {
-      await downloadUsers();
-      downloadBuildingsSuccess = await downloadBuildingsAndRealProperties();
-    }
+    await downloadUsers();
+    downloadBuildingsSuccess = await downloadBuildingsAndRealProperties();
     if (editMode) setMultipleValues();
     if (downloadBuildingsSuccess) formVisibility = true;
   }
@@ -154,12 +160,19 @@
     return false;
   }
   async function prepareChosenBuildingBasedOnEditMode() {
+    let realProperty;
     if (editMode) {
-      let realProperty;
       let realPropertyResponse = await getRealPropertyById(
         CreateInspectionProtocolCommand.inspectionProtocolDTO
           .inspectedPropertyId
       );
+      if (realPropertyResponse instanceof Error) return false;
+      realProperty = await realPropertyResponse.json();
+      let buildingFromDBId = realProperty.building.id;
+
+      chosenBuilding = setChosenBuilding(buildingFromDBId);
+    } else if (creationThroughTask) {
+      let realPropertyResponse = await getRealPropertyById(propertyId);
       if (realPropertyResponse instanceof Error) return false;
       realProperty = await realPropertyResponse.json();
       let buildingFromDBId = realProperty.building.id;
@@ -172,6 +185,15 @@
     return await setRealProperties(chosenBuilding);
   }
   async function setRealProperties(chosenBuilding) {
+    // if (creationThroughTask) {
+    //   console.log("SET REAL PROPERTIES");
+    //   console.log(propertyId);
+    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
+    //     propertyId;
+    //   realProperties = buildingGotById.properties;
+    //   return true;
+    // }
+
     let buildingGotById;
     let buildingResponse = await getBuildingById(chosenBuilding.id);
     if (buildingResponse instanceof Error) return false;
@@ -181,6 +203,10 @@
         buildingGotById.properties[0].id;
     } else {
       realProperties = buildingGotById.properties;
+    }
+    if (creationThroughTask) {
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
+        propertyId;
     }
     return true;
   }
@@ -283,9 +309,9 @@
       }
     }
 
-    if (creationThroughTask)
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
-        taskId;
+    // if (creationThroughTask)
+    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
+    //     taskId;
 
     await onSubmit();
   }
@@ -304,54 +330,53 @@
         >{button_turn_on_edition_message}</button
       >
     {/if}
-    {#if !creationThroughTask}
-      <label for="inspection-protocol-building" class="block">Budynek</label>
-      <select
-        disabled={readMode}
-        bind:value={chosenBuilding}
-        required
-        on:change={async () =>
-          getRealPropertiesOfChosenBuilding(chosenBuilding)}
-        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-      >
-        {#each buildings as b}
-          <option value={b}>{b.streetName} {b.number} | {b.cityName}</option>
-        {/each}
-      </select>
-      {#if chosenBuilding.type == "WIELOLOKALOWY"}
-        <label for="inspection-protocol-real-property">Nieruchomość:</label>
-        <select
-          bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
-            .inspectedPropertyId}
-          disabled={readMode}
-          class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-        >
-          {#each realProperties as realProperty}
-            <option value={realProperty.id}
-              >{realProperty.propertyAddress.venueNumber}
-              {realProperty.propertyAddress.staircaseNumber}
-            </option>
-          {/each}
-        </select>
-      {/if}
-
-      <label for="inspection-task-performer" class="block"
-        >Wykonujący Inspekcję</label
-      >
+    <!-- {#if !creationThroughTask} -->
+    <label for="inspection-protocol-building" class="block">Budynek</label>
+    <select
+      disabled={readMode || creationThroughTask}
+      bind:value={chosenBuilding}
+      required
+      on:change={async () => getRealPropertiesOfChosenBuilding(chosenBuilding)}
+      class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+    >
+      {#each buildings as b}
+        <option value={b}>{b.streetName} {b.number} | {b.cityName}</option>
+      {/each}
+    </select>
+    {#if chosenBuilding.type == "WIELOLOKALOWY"}
+      <label for="inspection-protocol-real-property">Nieruchomość:</label>
       <select
         bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
-          .inspectionPerformerId}
-        disabled={readMode}
-        required
+          .inspectedPropertyId}
+        disabled={readMode || creationThroughTask}
         class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       >
-        {#each users as user}
-          <option value={user.id}
-            >{user.firstName} {user.lastName} {user.login}
+        {#each realProperties as realProperty}
+          <option value={realProperty.id}
+            >{realProperty.propertyAddress.venueNumber}
+            {realProperty.propertyAddress.staircaseNumber}
           </option>
         {/each}
       </select>
     {/if}
+
+    <label for="inspection-task-performer" class="block"
+      >Wykonujący Inspekcję</label
+    >
+    <select
+      bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
+        .inspectionPerformerId}
+      disabled={readMode || performerLookUp || creationThroughTask}
+      required
+      class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+    >
+      {#each users as user}
+        <option value={user.id}
+          >{user.firstName} {user.lastName} {user.login}
+        </option>
+      {/each}
+    </select>
+    <!-- {/if} -->
     <label for="resident-first-name">Imię mieszkańca</label>
     <input
       type="text"

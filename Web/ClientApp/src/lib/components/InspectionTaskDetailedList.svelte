@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
-
+  import { openModal } from "svelte-modals";
+  import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   export let collection = [];
   export let headerDictionary = {};
   export let tableRowsClassName = "base-list";
@@ -14,6 +15,17 @@
 
   function firstButtonAction(row) {
     dispatch("firstButtonAction", { row });
+  }
+  function beforeFirstButtonAction(row) {
+    if (todayIsEarlierThanDueStartDateTime(row)) {
+      openModal(BasePopUp, {
+        title: "UPS!",
+        message: "Jest zbyt wcześnie, by rozpocząć zadanie!",
+        reloadRequired: false,
+      });
+      return;
+    }
+    firstButtonAction(row);
   }
 
   function secondButtonAction(row) {
@@ -101,9 +113,8 @@
         <td>
           {#if firstButtonVisibility}
             <button
-              on:click={firstButtonAction(row)}
+              on:click={beforeFirstButtonAction(row)}
               class="bg-blue-400 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
-              disabled={todayIsEarlierThanDueStartDateTime(row)}
             >
               {setButtonMessage(row)}
             </button>
