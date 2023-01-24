@@ -1,4 +1,5 @@
 ﻿
+using Application.InspectionProtocols.DTOs;
 using Application.InspectionProtocols.Queries.Requests;
 using Infrastructure.Interfaces.UnitOfWork;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.InspectionProtocols.Queries.Handlers
 {
-    public class GetBiggestProtocolNumberQueryHandler : IRequestHandler<GetBiggestProtocolNumberQuery, string>
+    public class GetBiggestProtocolNumberQueryHandler : IRequestHandler<GetBiggestProtocolNumberQuery, BiggestNumberDTO>
     {
         private readonly IRepositoriesUnitOfWork _unitOfWork;
 
@@ -19,9 +20,14 @@ namespace Application.InspectionProtocols.Queries.Handlers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> Handle(GetBiggestProtocolNumberQuery request, CancellationToken cancellationToken)
+        public async Task<BiggestNumberDTO> Handle(GetBiggestProtocolNumberQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.InspectionProtocolsRepository.GetTheBiggestProtocolNumber(request.DateTimeStr, cancellationToken);
+            var nr = await _unitOfWork.InspectionProtocolsRepository.GetTheBiggestProtocolNumber(request.DateTimeStr, cancellationToken);
+            var biggestNumber = new BiggestNumberDTO()
+            {
+                Number = nr
+            };
+            return biggestNumber;
         }
     }
 }

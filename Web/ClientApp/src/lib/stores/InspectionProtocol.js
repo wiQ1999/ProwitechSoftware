@@ -4,6 +4,7 @@ import {
   genericGetById,
   genericPost,
   genericPut,
+  genericCustomGet,
 } from "$lib/js-lib/httpMethods";
 import { handleError } from "$lib/js-lib/errors";
 
@@ -92,7 +93,17 @@ export function compareProtocolsByVenueNumber(a, b) {
   }
   return 0;
 }
-
+export async function getProtocolBiggestNumberForToday(dateFormatted) {
+  let route = `/InspectionProtocol/biggestProtocolNumber/${dateFormatted}`;
+  let response;
+  try {
+    response = await genericCustomGet(route);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Numeru Protokołu");
+    return err;
+  }
+}
 // export function checkIfTasksDiffer(
 //   inspectionTaskFromGet,
 //   updatedInspectionTask

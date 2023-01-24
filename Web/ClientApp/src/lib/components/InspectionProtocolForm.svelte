@@ -3,7 +3,8 @@
   import Map from "$lib/components/Map.svelte";
   import { getAllUsers } from "$lib/stores/Users";
   import { getAllBuildings, getBuildingById } from "$lib/stores/Building";
-  import { prepareDateTime } from "$lib/js-lib/helpers";
+  import { prepareDateTime, formatDate } from "$lib/js-lib/helpers";
+  import { getProtocolBiggestNumberForToday } from "$lib/stores/InspectionProtocol";
 
   export let onSubmit = async () => {};
   export let CreateInspectionProtocolCommand = {
@@ -71,6 +72,7 @@
   let chosenBuilding;
   let chosenBuildingType = "";
   let today = prepareDateTime(new Date());
+  let numberDate = formatDate(new Date(), false, true);
 
   let m_A_07_Przewody_rodzaj_array = [];
   let m_A_08_Przewody_przebieg_array = [];
@@ -98,7 +100,7 @@
     let downloadBuildingsSuccess = true;
     if (!creationThroughTask) {
       await downloadUsers();
-      downloadBuildingsSuccess = await downloadBuildings();
+      downloadBuildingsSuccess = await downloadBuildingsAndRealProperties();
     }
     if (downloadBuildingsSuccess) formVisibility = true;
   }
@@ -113,7 +115,7 @@
       });
     }
   }
-  async function downloadBuildings() {
+  async function downloadBuildingsAndRealProperties() {
     let buildingsResponse = await getAllBuildings();
     if (buildingsResponse instanceof Error) return false;
 
@@ -128,6 +130,18 @@
         type: element.type,
       });
     }
+
+    let buildingGotById;
+
+    let buildingResponse = await getBuildingById(buildings[0].id);
+    if (buildingResponse instanceof Error) return false;
+    buildingGotById = await buildingResponse.json();
+    if (buildings[0].type == "JEDNOLOKALOWY") {
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
+        buildingGotById.properties[0].id;
+    } else {
+      realProperties = buildingGotById.properties;
+    }
     return true;
   }
   async function getRealPropertiesOfChosenBuilding(buildingObj) {
@@ -139,7 +153,7 @@
     if (buildingResponse instanceof Error) return;
     buildingGotById = await buildingResponse.json();
     if (buildingObj.type == "JEDNOLOKALOWY") {
-      CreateInspectionProtocolCommand.inspectedPropertyId =
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
         buildingGotById.properties[0].id;
     } else {
       realProperties = buildingGotById.properties;
@@ -193,9 +207,9 @@
       multiple_09 += elem;
       multiple_09 += ",";
     }
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
-    );
+    // console.log(
+    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
+    // );
     console.log(
       CreateInspectionProtocolCommand.inspectionProtocolDTO
         .inspectionPerformerId
@@ -203,6 +217,7 @@
     //TODO IF CREATION THROUGH TASK
     // CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
     // "030B7529-173C-41A8-953D-75BA46B7FC21";
+
     CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_07_Przewody_rodzaj =
       multiple_07;
 
@@ -211,8 +226,13 @@
     CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_09_Przewody_sposob_prowadzenia =
       multiple_09;
 
-    CreateInspectionProtocolCommand.number = "2023_01_22_P_01";
-    await onSubmit();
+    let number = await getProtocolBiggestNumberForToday(numberDate);
+    if (number instanceof Response) {
+      let json = await number.json();
+      CreateInspectionProtocolCommand.number = json.number;
+    }
+
+    // await onSubmit();
   }
 </script>
 
@@ -281,6 +301,7 @@
       type="text"
       name="resident-first-name"
       maxlength="600"
+      required
       bind:value={CreateInspectionProtocolCommand.residentDTO.firstName}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
@@ -289,6 +310,7 @@
       type="text"
       name="resident-first-last"
       maxlength="600"
+      required
       bind:value={CreateInspectionProtocolCommand.residentDTO.lastName}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
@@ -297,6 +319,7 @@
       type="text"
       name="resident-phone-number"
       maxlength="9"
+      required
       bind:value={CreateInspectionProtocolCommand.residentDTO.phoneNumber}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />

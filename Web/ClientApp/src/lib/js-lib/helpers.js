@@ -41,7 +41,11 @@ export function chooseNewStringIfNewDiffersFromOld(oldStr, newStr) {
   return oldStr;
 }
 
-export function formatDate(inputDate, addTime = false) {
+export function formatDate(
+  inputDate,
+  addTime = false,
+  forGettingBiggestNumber = false
+) {
   let date, month, year, hour, minutes;
 
   date = inputDate.getDate();
@@ -59,6 +63,7 @@ export function formatDate(inputDate, addTime = false) {
     minutes = minutes.toString().padStart(2, "0");
     return `${year}-${month}-${date}T${hour}:${minutes}`;
   }
+  if (forGettingBiggestNumber) return `${year}_${month}_${date}`;
 
   // return `${date}/${month}/${year}`;
   return `${year}-${month}-${date}`;

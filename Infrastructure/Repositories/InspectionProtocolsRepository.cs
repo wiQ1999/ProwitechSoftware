@@ -175,22 +175,24 @@ namespace Infrastructure.Repositories
         public async Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation)
         {
             var simmilarProtocols = await _dbContext.InspectionProtocols.Where(p => p.Number.StartsWith(today)).ToArrayAsync(cancellation);
-            if (simmilarProtocols == null)
-                return String.Concat(today, "_P01");
+            if (simmilarProtocols != null && simmilarProtocols.Count()==0)
+                return String.Concat(today, "_P_01");
             uint number = 0;
             foreach(var protocol in simmilarProtocols)
             {
                 int PsymbolIndex = protocol.Number.IndexOf("P");
-                uint numberFound = UInt32.Parse(protocol.Number.Substring(PsymbolIndex));
+                var sub = protocol.Number.Substring(PsymbolIndex+2);
+                uint numberFound = UInt32.Parse(sub);
                 if (numberFound > number)
                     number = numberFound;
             }
+            number += 1;
             string createdNumber;
             if (number < 10)
                 createdNumber = number.ToString().PadLeft(2, '0');
             else
                 createdNumber = number.ToString();
-            return String.Concat(today + "_P" + createdNumber);
+            return String.Concat(today + "_P_" + createdNumber);
         }
         public async Task CheckIfInspectionProtocolWithThisNumberExists(Guid oldProtocolId, string newNumber, CancellationToken cancellation)
         {
