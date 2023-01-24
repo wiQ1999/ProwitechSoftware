@@ -145,9 +145,7 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             InspectionProtocol? protocolToDelete = await _dbContext.InspectionProtocols.FirstOrDefaultAsync(ip => ip.Id == id, cancellationToken);
-            if (protocolToDelete == null)
-                throw new Exception($"Nie można usunąć Protokołu Inspekcji: Brak Protokołu o ID: {id}");
-            _dbContext.InspectionProtocols.Remove(protocolToDelete);
+            _dbContext.InspectionProtocols.Remove(protocolToDelete!);
         }
         public async Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken)
         {
