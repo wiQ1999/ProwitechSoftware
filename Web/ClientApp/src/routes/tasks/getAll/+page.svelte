@@ -11,7 +11,7 @@
   } from "$lib/stores/InspectionTask";
 
   let collection = [];
-  let tableRowsClassName = "real-properties-base-list";
+  let tableRowsClassName = "inspection-tasks-base-list";
   let listName = "";
   let buildingTypeError = false;
   let baseListVisibility = false;
