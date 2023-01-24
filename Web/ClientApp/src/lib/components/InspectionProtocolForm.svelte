@@ -16,9 +16,9 @@
     number: "",
     inspectionProtocolDTO: {
       inspectionTaskId: null,
-      inspectionDateTime: "2023-01-22T16:27:32.460Z",
+      inspectionDateTime: null,
       inspectedPropertyId: null,
-      inspectionPerformerId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      inspectionPerformerId: null,
       a_01_Gazomierz_umiejscowienie: "",
       b_A_02_Gazomierz_szafka_wentylowana: true,
       b_A_03_Gazomierz_szczelnosc: true,
@@ -57,7 +57,7 @@
     },
   };
   export let editMode = false;
-  // export let taskId = null;
+  export let taskId = null;
   // export let propertyId = null;
   export let creationThroughTask = false;
   let formVisibility;
@@ -85,7 +85,10 @@
   let multipleRequiredMessage = "Zaznacz wymagane pole";
 
   onMount(async () => {
-    if (!editMode) CreateInspectionProtocolCommand.inspectionDateTime = today;
+    console.log(CreateInspectionProtocolCommand);
+    if (!editMode)
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionDateTime =
+        today;
 
     readMode = editMode;
 
@@ -137,6 +140,10 @@
     if (buildingResponse instanceof Error) return false;
     buildingGotById = await buildingResponse.json();
     if (buildings[0].type == "JEDNOLOKALOWY") {
+      // console.log(
+      //   CreateInspectionProtocolCommand.inspectionProtocolDTO
+      //     .inspectedPropertyId
+      // );
       CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
         buildingGotById.properties[0].id;
     } else {
@@ -145,7 +152,6 @@
     return true;
   }
   async function getRealPropertiesOfChosenBuilding(buildingObj) {
-    console.log("hello");
     chosenBuildingType = buildingObj.type;
     let buildingGotById;
 
@@ -158,7 +164,6 @@
     } else {
       realProperties = buildingGotById.properties;
     }
-    console.log(realProperties);
   }
 
   function changeEditingStatus() {
@@ -207,13 +212,6 @@
       multiple_09 += elem;
       multiple_09 += ",";
     }
-    // console.log(
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
-    // );
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
-        .inspectionPerformerId
-    );
     //TODO IF CREATION THROUGH TASK
     // CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
     // "030B7529-173C-41A8-953D-75BA46B7FC21";
@@ -231,8 +229,11 @@
       let json = await number.json();
       CreateInspectionProtocolCommand.number = json.number;
     }
+    if (creationThroughTask)
+      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
+        taskId;
 
-    // await onSubmit();
+    await onSubmit();
   }
 </script>
 

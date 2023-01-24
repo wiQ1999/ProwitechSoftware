@@ -11,7 +11,7 @@
     number: "",
     inspectionProtocolDTO: {
       inspectionTaskId: null,
-      inspectionDateTime: "2023-01-22T16:27:32.460Z",
+      inspectionDateTime: null,
       inspectedPropertyId: null,
       inspectionPerformerId: null,
       a_01_Gazomierz_umiejscowienie: "",

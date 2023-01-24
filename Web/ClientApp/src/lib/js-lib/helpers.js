@@ -68,9 +68,14 @@ export function formatDate(
   // return `${date}/${month}/${year}`;
   return `${year}-${month}-${date}`;
 }
-export function prepareDateTime(inputDate) {
-  let dateAsString = formatDate(inputDate);
-  return dateAsString + "T08:00:00";
+export function prepareDateTime(inputDate, initialDateTime = false) {
+  if (initialDateTime) {
+    let dateAsString = formatDate(inputDate);
+    return dateAsString + "T08:00:00";
+  } else {
+    let dateAsString = formatDate(inputDate, true);
+    return dateAsString;
+  }
 }
 export function setResultFormatIfItIsDateTime(propertyName, propertyValue) {
   if (propertyName.includes("DateTime")) {

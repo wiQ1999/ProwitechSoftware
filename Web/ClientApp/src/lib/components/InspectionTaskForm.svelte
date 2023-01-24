@@ -22,7 +22,7 @@
 
   let users = [];
   let buildings = [];
-  let today = prepareDateTime(new Date());
+  let today = prepareDateTime(new Date(), true);
 
   onMount(async () => {
     if (!editMode) CreateInspectionTaskCommand.dueStartDateTime = today;

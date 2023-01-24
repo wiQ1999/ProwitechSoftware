@@ -26,7 +26,16 @@ namespace Application.InspectionProtocols.Queries.Handlers
         public async Task<InspectionProtocolByIdDTO> Handle(GetInspectionProtocolByIdQuery request, CancellationToken cancellationToken)
         {
             var iP = await _unitOfWork.InspectionProtocolsRepository.GetAsync(request.Id, cancellationToken);
-            return _mapper.Map<InspectionProtocolByIdDTO>(iP);
+
+            CreateOrUpdateInspectionProtocolDTO protocol = _mapper.Map<CreateOrUpdateInspectionProtocolDTO>(iP);
+            InspectionProtocolByIdDTO iPDTO = new InspectionProtocolByIdDTO()
+            {
+                Id = iP.Id,
+                Number = iP.Number,
+                ResidentDTO = iP.Resident!,
+                InspectionProtocolDTO = protocol
+            };
+            return iPDTO;
         }
     }
 }
