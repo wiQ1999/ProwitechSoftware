@@ -30,7 +30,7 @@ namespace Application.InspectionProtocols.Commands.Handlers
         {
             var protocolId = request.Id;
             var protocolNumber = request.Number;
-            var updatedResident = _mapper.Map<Resident>(request.Resident);
+            var updatedResident = _mapper.Map<Resident>(request.ResidentDTO);
             var inspectionProtocolDTO = request.InspectionProtocolDTO;
 
             InspectionProtocol updatedProtocol = _mapper.Map<InspectionProtocol>(inspectionProtocolDTO);
@@ -52,7 +52,7 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
             InspectionProtocolCRUDHelper.CheckIfAllAnswersAreCorrect(inspectionProtocolDTO);
 
-
+            updatedResident.Id = Guid.Empty;
             var residentId = await _unitOfWork.ResidentsRepository.UpdateOrGetOrCreateResident(updatedResident, oldResidentFromDB, protocolId, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -30,6 +30,13 @@ namespace Web.Controllers
                 return BadRequest();
             return Ok(await Mediator.Send(command));
         }
+        [HttpPut("{id:Guid}/changeStatusToInProgress")]
+        public async Task<IActionResult> changeStatusToInProgress(Guid id, ChangeTaskStatusCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+            return Ok(await Mediator.Send(command));
+        }
 
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id) =>

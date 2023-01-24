@@ -74,7 +74,6 @@
         staircaseNumber: null,
       },
     });
-    console.log(propertyManagers);
     formVisibility = true;
 
     // getAllPropertyManagers

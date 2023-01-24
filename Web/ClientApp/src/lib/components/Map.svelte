@@ -115,20 +115,18 @@
           <td>Numer budynku</td>
           <td>{building.buildingAddress.buildingNumber}</td>
         </tr>
-        {#if inaccurateCoordinates}
-          <tr>
-            <td colspan="2"
-              >UWAGA: WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ DOKŁADNE. SPRAWDŹ
-              DOKŁADNIE, DOKĄD JEDZIESZ.</td
-            >
-          </tr>
-        {/if}
       </table>
     </div>
   {/if}
   {#if lackOfCoordinates}
     <div class="lack-of-coordinates">
       BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
+    </div>
+  {/if}
+  {#if inaccurateCoordinates}
+    <div>
+      UWAGA: WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ DOKŁADNE. SPRAWDŹ
+      DOKŁADNIE, DOKĄD JEDZIESZ.
     </div>
   {/if}
   {#if mapVisibility}
@@ -143,7 +141,7 @@
 
 <style>
   .full-screen {
-    width: 75vw;
-    height: 75vh;
+    width: 50vw;
+    height: 50vh;
   }
 </style>

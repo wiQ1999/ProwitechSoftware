@@ -125,29 +125,27 @@ namespace Infrastructure.Repositories
         public async Task<InspectionProtocol> GetAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbContext.InspectionProtocols.
-                Include(ip=>ip.InspectionPerformer).
-                Include(ip=>ip.InspectionTask).
-                    ThenInclude(t=>t.TaskDelegator).
-                Include(ip => ip.InspectionTask).
-                    ThenInclude(t => t.TaskPerformer).
-                Include(ip => ip.InspectionTask).
-                    ThenInclude(t => t.Building).
-                        ThenInclude(b=>b.BuildingAddress).
+                //Include(ip=>ip.InspectionPerformer).
+                //Include(ip=>ip.InspectionTask).
+                //    ThenInclude(t=>t.TaskDelegator).
+                //Include(ip => ip.InspectionTask).
+                //    ThenInclude(t => t.TaskPerformer).
+                //Include(ip => ip.InspectionTask).
+                //    ThenInclude(t => t.Building).
+                //        ThenInclude(b=>b.BuildingAddress).
                 Include(ip=>ip.Resident).
-                Include(ip => ip.InspectedProperty).
-                    ThenInclude(p => p.Building).
-                        ThenInclude(b => b.BuildingAddress).
-                Include(ip => ip.InspectedProperty).
-                    ThenInclude(p => p.PropertyAddress).
+                //Include(ip => ip.InspectedProperty).
+                //    ThenInclude(p => p.Building).
+                //        ThenInclude(b => b.BuildingAddress).
+                //Include(ip => ip.InspectedProperty).
+                //    ThenInclude(p => p.PropertyAddress).
                     FirstOrDefaultAsync(ip=>ip.Id == id, cancellationToken);
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             InspectionProtocol? protocolToDelete = await _dbContext.InspectionProtocols.FirstOrDefaultAsync(ip => ip.Id == id, cancellationToken);
-            if (protocolToDelete == null)
-                throw new Exception($"Nie można usunąć Protokołu Inspekcji: Brak Protokołu o ID: {id}");
-            _dbContext.InspectionProtocols.Remove(protocolToDelete);
+            _dbContext.InspectionProtocols.Remove(protocolToDelete!);
         }
         public async Task<IEnumerable<InspectionProtocol>> GetInspectionProtocolsOfParticularPerformer(Guid userId, CancellationToken cancellationToken)
         {
@@ -177,22 +175,24 @@ namespace Infrastructure.Repositories
         public async Task<string> GetTheBiggestProtocolNumber(string today, CancellationToken cancellation)
         {
             var simmilarProtocols = await _dbContext.InspectionProtocols.Where(p => p.Number.StartsWith(today)).ToArrayAsync(cancellation);
-            if (simmilarProtocols == null)
-                return String.Concat(today, "_P01");
+            if (simmilarProtocols != null && simmilarProtocols.Count()==0)
+                return String.Concat(today, "_P_01");
             uint number = 0;
             foreach(var protocol in simmilarProtocols)
             {
                 int PsymbolIndex = protocol.Number.IndexOf("P");
-                uint numberFound = UInt32.Parse(protocol.Number.Substring(PsymbolIndex));
+                var sub = protocol.Number.Substring(PsymbolIndex+2);
+                uint numberFound = UInt32.Parse(sub);
                 if (numberFound > number)
                     number = numberFound;
             }
+            number += 1;
             string createdNumber;
             if (number < 10)
                 createdNumber = number.ToString().PadLeft(2, '0');
             else
                 createdNumber = number.ToString();
-            return String.Concat(today + "_P" + createdNumber);
+            return String.Concat(today + "_P_" + createdNumber);
         }
         public async Task CheckIfInspectionProtocolWithThisNumberExists(Guid oldProtocolId, string newNumber, CancellationToken cancellation)
         {

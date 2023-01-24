@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-
+  import { setResultFormatIfItIsDateTime } from "$lib/js-lib/helpers";
   export let collection = [];
   export let headerDictionary = {};
   export let tableRowsClassName = "base-list";
@@ -86,7 +86,7 @@
       result = Reflect.get(result, props[i]);
     }
 
-    return result ?? "";
+    return setResultFormatIfItIsDateTime(property, result) ?? "";
   }
 </script>
 
@@ -128,7 +128,7 @@
         />
       </th>
       {#each getHeaderNames() as header}
-        <th class="pl-2">{header}</th>
+        <th class="pl-2">{header.startsWith("_") ? "" : header}</th>
       {/each}
     </tr>
     {#each collection as row, i}
