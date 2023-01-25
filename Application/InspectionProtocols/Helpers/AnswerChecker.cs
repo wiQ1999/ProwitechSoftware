@@ -20,6 +20,7 @@ namespace Application.InspectionProtocols.Helpers
             string[] answers = givenAnswer.Split(',');
             foreach (var a in answers)
             {
+                if (a == "") continue;
                 if (!ibaseAnswer.GetAnswers().Contains(a))
                     throw new NotAllowedProtocolAnswerException(a, ibaseAnswer.GetQuestion());
             }

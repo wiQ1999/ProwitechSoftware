@@ -64,5 +64,10 @@
       </p>
     {/if}
     <br />
+    <button
+      on:click|preventDefault={() => window.location.reload()}
+      class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+      >Kontynuuj</button
+    >
   {/if}
 </div>

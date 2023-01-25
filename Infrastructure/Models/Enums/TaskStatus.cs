@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Enums
 {
-    public enum InspectionTaskStatus
+    public static class InspectionTaskStatus
     {
-        NEW = 0,
-        IN_PROGRESS= 1,
-        FINISHED= 2
+        static public readonly string NEW = "nowe";
+        static public readonly string IN_PROGRESS = "w toku";
+        static public readonly string FINISHED = "zakończone";
     }
 }

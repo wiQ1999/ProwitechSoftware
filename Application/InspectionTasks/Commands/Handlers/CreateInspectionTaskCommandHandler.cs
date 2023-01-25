@@ -27,7 +27,7 @@ namespace Application.InspectionTasks.Commands.Handlers
             {
                 TaskDelegatorId = request.TaskDelegatorId,
                 TaskPerformerId = request.TaskPerformerId,
-                Status=InspectionTaskStatus.NEW.ToString(),
+                Status=InspectionTaskStatus.NEW,
                 BuildingId = request.BuildingId,
                 DueStartDateTime = request.DueStartDateTime
             };

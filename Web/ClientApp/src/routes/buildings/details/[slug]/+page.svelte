@@ -33,6 +33,7 @@
   import BuildingForm from "$lib/components/BuildingForm.svelte";
   import EditBuildingAddressPopUp from "$lib/components/EditBuildingAddressPopUp.svelte";
   import { AddUpdateBuildingAddressRequestResult } from "$lib/js-lib/helpers";
+  import { getBuildingProtocols } from "$lib/stores/InspectionProtocol";
 
   //dane pobrane z getBuildingById - pierwotne i podlegające zmianie
   let originalBuildingDTO;
@@ -54,6 +55,7 @@
   let errorDivVisibility;
   let updatedBuildingPopUpVisibility;
   let showBuildingPopUpMessage;
+  let protocolsButtonVisibility;
   //---------------------------------------
   let buildingAddressId;
 
@@ -71,38 +73,16 @@
   onMount(async () => {
     updatedBuildingPopUpVisibility = false;
     editBuildingAddressPopUpVisibility = false;
+    protocolsButtonVisibility = await prepareProtocolsButton(data.id);
     await prepareForm(data.id);
   });
-  //data --> pobierane dane z URLa przez funkcję load (w pliku +page.js w bieżącym folderze)
-  //-----------------------------------------------------------------------------------------
-  // STRUKTURA GET_BUILDING_BY_ID:
-  //   {
-  //   "id": "fbd74583-a8b5-4954-67c9-08dacb03ff5f",
-  //   "buildingAddress": {
-  //     "id": "41896088-6304-4dce-bafa-96e671b7c75a",
-  //     "cityName": "Poznań",
-  //     "streetName": "św. Marcin",
-  //     "buildingNumber": "99",
-  //     "longitude": null,
-  //     "latitude": null,
-  //     "coordinateType": null,
-  //     "postalCode": "61-804"
-  //   },
-  //   "type": "wielolokalowy",
-  //   "locals": [],
-  //   "propertyManager": {
-  //     "id": "38974075-73ac-46dd-34e4-08dacaf3e376",
-  //     "name": "Poznanskie Betlejem",
-  //     "phoneNumber": "+48 756 4563 212",
-  //     "fullAddress": {
-  //       "id": "a7de7d5b-6f3b-4f0c-c160-08dacaf3e366",
-  //       "buildingAddressId": "b0046c21-eb1c-4980-8f78-fd1431ff6bcc",
-  //       "buildingAddress": null,
-  //       "localNumber": "6",
-  //       "staircaseNumber": "c"
-  //     }
-  //   }
-  // }
+  async function prepareProtocolsButton(buildingId) {
+    let protocolsResponse = await getBuildingProtocols(buildingId);
+    if (protocolsResponse instanceof Error) return false;
+    let protocols = await protocolsResponse.json();
+    if (protocols.length > 0) return true;
+    return false;
+  }
 
   async function prepareForm(buildingId) {
     let buildingResponse = await getBuildingById(buildingId);
@@ -326,7 +306,45 @@
         )}
       editMode={true}
       building={originalBuildingDTO}
-    />{/if}
+    />
+    <div
+      class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+    >
+      Kod pocztowy budynku
+      <p class="font-bold">{postalCode}</p>
+      <a href="/buildings/details/{data.id}/postal-code">
+        <button
+          class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+          >Edytuj kod pocztowy</button
+        >
+      </a>
+    </div>
+
+    {#if originalBuildingType == "WIELOLOKALOWY"}
+      <div
+        class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+      >
+        <a href="/buildings/details/{data.id}/real-properties/getAll">
+          <button
+            class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+            >Lokale</button
+          >
+        </a>
+      </div>
+    {/if}
+    {#if protocolsButtonVisibility}
+      <div
+        class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+      >
+        <a href="/buildings/details/{data.id}/protocols">
+          <button
+            class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
+            >Protokoły</button
+          >
+        </a>
+      </div>
+    {/if}
+  {/if}
   {#if updatedBuildingPopUpVisibility}
     <ShowBuildingPopUp
       {BuildingDTO}
@@ -335,29 +353,3 @@
     />
   {/if}
 </div>
-
-<div
-  class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
->
-  Kod pocztowy budynku
-  <p class="font-bold">{postalCode}</p>
-  <a href="/buildings/details/{data.id}/postal-code">
-    <button
-      class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-      >Edytuj kod pocztowy</button
-    >
-  </a>
-</div>
-
-{#if originalBuildingType == "WIELOLOKALOWY"}
-  <div
-    class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
-  >
-    <a href="/buildings/details/{data.id}/real-properties/getAll">
-      <button
-        class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-        >Lokale</button
-      >
-    </a>
-  </div>
-{/if}

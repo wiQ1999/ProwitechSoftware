@@ -61,7 +61,8 @@ export async function deleteBuilding(id) {
     response = await genericDelete("/Building", id);
     return response;
   } catch (err) {
-    handleError(err, "usuwanie Budynku");
+    let reloadRequired = true;
+    handleError(err, "usuwanie Budynku", reloadRequired);
     return err;
   }
 }

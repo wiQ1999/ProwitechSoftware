@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Responses;
 using Infrastructure.Interfaces.UnitOfWork;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.BuildingAddresses.Commands.Handlers
 {
@@ -21,11 +22,13 @@ namespace Application.BuildingAddresses.Commands.Handlers
     {
         private readonly IRepositoriesUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public UpdateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<AddUpdateBuildingAddressReponse> Handle(UpdateBuildingAddressCommand request, CancellationToken cancellationToken)
@@ -37,7 +40,7 @@ namespace Application.BuildingAddresses.Commands.Handlers
             if (buildingAddressFromDB == null)
                 throw new Exception($"Nie znaleziono adresu budynku o identyfikatorze {request.Id}.");
 
-            GoogleGeocodingClient client = new GoogleGeocodingClient(address);
+            GoogleGeocodingClient client = new GoogleGeocodingClient(address, _configuration);
             AddUpdateBuildingAddressReponse updateBuildingAddressResponse = await client.SetCoordinatesAndPostalCode(request.UpdateWithNotAccurateCoords);
             if (updateBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.ADDED_TO_DB.ToString()
             || updateBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.ADDED_DESPITE_COORDINATE_ISSUE.ToString())
