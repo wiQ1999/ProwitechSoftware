@@ -185,15 +185,6 @@
     return await setRealProperties(chosenBuilding);
   }
   async function setRealProperties(chosenBuilding) {
-    // if (creationThroughTask) {
-    //   console.log("SET REAL PROPERTIES");
-    //   console.log(propertyId);
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
-    //     propertyId;
-    //   realProperties = buildingGotById.properties;
-    //   return true;
-    // }
-
     let buildingGotById;
     let buildingResponse = await getBuildingById(chosenBuilding.id);
     if (buildingResponse instanceof Error) return false;
@@ -238,8 +229,8 @@
     } else {
       button_turn_on_edition_message = "Włącz edycję";
     }
-    if (readMode) upper_message = "Szczegóły Zadania";
-    else upper_message = "Edycja Zadania";
+    if (readMode) upper_message = "Szczegóły Protokołu";
+    else upper_message = "Edycja Protokołu";
   }
   function multipleValuesAreNotSet() {
     let lackOfAnswerFound = false;
@@ -309,9 +300,7 @@
       }
     }
 
-    // if (creationThroughTask)
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
-    //     taskId;
+  
 
     await onSubmit();
   }

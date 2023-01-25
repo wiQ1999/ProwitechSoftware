@@ -115,6 +115,17 @@ export async function getPerformerProtocols(performerId) {
     return err;
   }
 }
+export async function getBuildingProtocols(buildingId) {
+  let route = `/InspectionProtocol/buildingProtocols/${buildingId}`;
+  let response;
+  try {
+    response = await genericCustomGet(route);
+    return response;
+  } catch (err) {
+    handleError(err, "pobieranie Protokołów wybranego Budynku");
+    return err;
+  }
+}
 export function protocolsDiffer(oldProtocol, newProtocol) {
   if (
     oldProtocol.residentDTO.firstName.toUpperCase() !=

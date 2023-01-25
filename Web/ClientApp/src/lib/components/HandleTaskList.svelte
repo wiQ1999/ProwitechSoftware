@@ -17,7 +17,14 @@
   }
 
   function secondButtonAction(row) {
+    let id = `${tableRowsClassName}-${row.id}`;
+    markOutSelectedRow(id);
     dispatch("secondButtonAction", { row });
+  }
+  function markOutSelectedRow(id) {
+    console.log("************");
+    console.log(id);
+    document.getElementById(id).style.backgroundColor = "red";
   }
 
   function getHeaderNames() {

@@ -13,7 +13,7 @@
 
     if (json.isGenerated) {
       setToken(json.token);
-      goto("/users");
+      window.location.href = "/users";
     } else {
       openModal(BasePopUp, {
         title: "Błąd logowania",

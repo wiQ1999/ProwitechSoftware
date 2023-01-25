@@ -10,13 +10,15 @@ using System.Web;
 using Microsoft.AspNetCore.WebUtilities;
 using Infrastructure.Responses.BuildingAddressController;
 using Infrastructure.Responses;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.GoogleAPI
 {
     public class GoogleGeocodingClient
     {
         private const string baseAddress = $"https://maps.googleapis.com/maps/api/geocode/";
-        private const string apiKey = "AIzaSyC5f4Vto2rwP0J72ANp6sWJAxlZvKqRmAw";
+        private string apiKey;
+        //= "AIzaSyC5f4Vto2rwP0J72ANp6sWJAxlZvKqRmAw";
 
         private HttpClient client;
         private BuildingAddress postedAddress;
@@ -63,10 +65,11 @@ namespace Infrastructure.GoogleAPI
                 else return ProwitechWebAPIStatus.NOT_ADDED_ERROR;
             }
         }
-        public GoogleGeocodingClient(BuildingAddress postedAddress)
+        public GoogleGeocodingClient(BuildingAddress postedAddress, IConfiguration configuration)
         {
             client = new HttpClient();
             this.postedAddress = postedAddress;
+            this.apiKey = configuration["googleGeocodingAPIkey"];
         }
         private Uri CreateUrl(BuildingAddress buildingAddress, string outputFormat)
         {

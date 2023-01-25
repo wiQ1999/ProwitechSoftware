@@ -2,21 +2,29 @@
   import { openModal } from "svelte-modals";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import { onMount } from "svelte";
+  import { getToken } from "$lib/js-lib/authManager";
+  import HandleTaskList from "$lib/components/HandleTaskList.svelte";
 
   import InspectionTaskForm from "$lib/components/InspectionTaskForm.svelte";
   import {
     getInspectionTaskById,
     putInspectionTask,
     checkIfTasksDiffer,
+    getTaskProtocols,
   } from "$lib/stores/InspectionTask";
   import { getBuildingById } from "$lib/stores/Building";
+  import { compareProtocolsByVenueNumber } from "$lib/stores/InspectionProtocol";
   let editMode = true;
   let formVisibility = false;
   let href = `/tasks/getAll`;
   let originalInspectionTask;
   let building;
-  let showProtocolsButton = false;
+  let showProtocolsList = false;
+  let listName;
+  let collectionOfProtocols = [];
+  let tableRowsClassName = "task-details-protocols-list";
   let UpdateInspectionTaskCommand = {
     id: "",
     taskDelegatorId: "",
@@ -27,10 +35,32 @@
     startDateTime: "",
     endDateTime: "",
   };
+  let chosenHeadersList;
+  const headerDictionaryForMultipleProperties = {
+    "Numer protokołu": "number",
+    "Numer lokalu": "inspectedProperty.propertyAddress.venueNumber",
+    "Klatka schodowa": "inspectedProperty.propertyAddress.staircaseNumber",
+    Mieszkaniec: "resident.firstName",
+    _nazwisko: "resident.lastName",
+    "Numer telefonu": "resident.phoneNumber",
+  };
+  const headerDictionaryForSingleProperty = {
+    "Numer protokołu": "number",
+    Mieszkaniec: "resident.firstName",
+    _nazwisko: "resident.lastName",
+    "Numer telefonu": "resident.phoneNumber",
+  };
   onMount(async () => {
+    let userData = getToken();
+    console.log(userData);
     let res = await getInspectionTaskById($page.params.task_id);
     if (res instanceof Error) return;
     originalInspectionTask = await res.json();
+    console.log(originalInspectionTask);
+
+    if (originalInspectionTask.building.type == "JEDNOLOKALOWY")
+      chosenHeadersList = headerDictionaryForSingleProperty;
+    else chosenHeadersList = headerDictionaryForMultipleProperties;
 
     UpdateInspectionTaskCommand = {
       id: originalInspectionTask.id,
@@ -44,8 +74,9 @@
     if (
       UpdateInspectionTaskCommand.status == "zakonczone" ||
       UpdateInspectionTaskCommand.status == "zakończone"
-    )
-      showProtocolsButton = true;
+    ) {
+      showProtocolsList = await prepareListOfProtocols();
+    }
 
     let buildingResponse = await getBuildingById(
       originalInspectionTask.building.id
@@ -55,11 +86,25 @@
     }
     formVisibility = true;
   });
+  async function prepareListOfProtocols() {
+    let taskProtocolsResponse = await getTaskProtocols($page.params.task_id);
+
+    if (taskProtocolsResponse instanceof Error) return false;
+
+    let taskProtocols = await taskProtocolsResponse.json();
+    listName = "Utworzone protokoły";
+    collectionOfProtocols = taskProtocols.sort(compareProtocolsByVenueNumber);
+    return true;
+  }
+  function firstButtonHandler(event) {
+    let propertyId = event.detail.row.inspectedProperty.id;
+    goto(
+      `/protocols/task/${$page.params.task_id}/property/${propertyId}/protocol/${event.detail.row.id}/details/advanced`
+    );
+  }
   const updateInspectionTask = async () => {
-    //TODO
-    //ZMIENIĆ DANE TASKDELEGATORA NA ID OSOBY ZALOGOWANEJ
-    UpdateInspectionTaskCommand.taskDelegatorId =
-      "DB789183-4BD0-4D3C-AF40-548AC88FBDEB";
+    let userData = getToken();
+    UpdateInspectionTaskCommand.taskDelegatorId = userData.id;
     let differ = checkIfTasksDiffer(
       originalInspectionTask,
       UpdateInspectionTaskCommand
@@ -99,15 +144,14 @@
     {editMode}
   />
 {/if}
-{#if showProtocolsButton}
-  <div
-    class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
-  >
-    <a href="/tasks/details/{$page.params.task_id}/protocols">
-      <button
-        class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-        >Protokoły</button
-      >
-    </a>
-  </div>
+{#if showProtocolsList}
+  <HandleTaskList
+    {listName}
+    collection={collectionOfProtocols}
+    headerDictionary={chosenHeadersList}
+    {tableRowsClassName}
+    firstButtonVisibility={true}
+    firstButtonMessage="EDYTUJ"
+    on:firstButtonAction={firstButtonHandler}
+  />
 {/if}
