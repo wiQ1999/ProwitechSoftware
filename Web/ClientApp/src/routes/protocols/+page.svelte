@@ -1,6 +1,7 @@
 <script>
-  //TODO ZMIENIAJ HREF W NAVBARZE W ZALEŻNOŚCI OD TEGO, KTO ZALOGOWANY
-  let personLoggedInId = "030B7529-173C-41A8-953D-75BA46B7FC21";
+  import { getToken } from "$lib/js-lib/authManager";
+  let userData = getToken();
+  let personLoggedInId = userData.id;
 </script>
 
 <a href="/protocols/getAll">

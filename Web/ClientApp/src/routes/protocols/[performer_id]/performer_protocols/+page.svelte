@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import ModifiedBaseList from "$lib/components/base/ModifiedBaseList.svelte";
+  import HandleTaskList from "$lib/components/HandleTaskList.svelte";
   import { openModal } from "svelte-modals";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
@@ -10,6 +10,7 @@
     getPerformerProtocols,
     deleteInspectionProtocol,
   } from "$lib/stores/InspectionProtocol";
+  import { getToken } from "$lib/js-lib/authManager";
 
   let collection = [];
   let tableRowsClassName = "inspection-protocols-base-list";
@@ -25,8 +26,8 @@
     );
     if (protocolResponse instanceof Error) return;
     let protocols = await protocolResponse.json();
-    //TODO POBRAĆ DANE ZALOGOWANEGO UŻYTKOWNIKA
-    listName = "ALOJZY PTYŚ - PROTOKOŁY";
+    let userData = getToken();
+    listName = `${userData.firstName} ${userData.lastName} - PROTOKOŁY`;
     collection = protocols;
     baseListVisibility = true;
   });
@@ -63,7 +64,7 @@
 </a>
 
 {#if baseListVisibility}
-  <ModifiedBaseList
+  <HandleTaskList
     {listName}
     {collection}
     {headerDictionary}

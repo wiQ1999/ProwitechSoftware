@@ -3,6 +3,7 @@
   import { openModal } from "svelte-modals";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import { postInspectionTask } from "$lib/stores/InspectionTask";
+  import { getToken } from "$lib/js-lib/authManager";
 
   let href = `/tasks/getAll`;
   let CreateInspectionTaskCommand = {
@@ -12,9 +13,9 @@
     dueStartDateTime: "",
   };
   const createInspectionTask = async () => {
-    //TODO pobierz Id osoby zalogowanej jako delegatora
-    CreateInspectionTaskCommand.taskDelegatorId =
-      "DB789183-4BD0-4D3C-AF40-548AC88FBDEB";
+    let userData = getToken();
+    let userId = userData.id;
+    CreateInspectionTaskCommand.taskDelegatorId = userId;
     let result = await postInspectionTask(CreateInspectionTaskCommand);
     if (result instanceof Response) {
       openModal(BasePopUp, {

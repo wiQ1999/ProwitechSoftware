@@ -185,15 +185,6 @@
     return await setRealProperties(chosenBuilding);
   }
   async function setRealProperties(chosenBuilding) {
-    // if (creationThroughTask) {
-    //   console.log("SET REAL PROPERTIES");
-    //   console.log(propertyId);
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
-    //     propertyId;
-    //   realProperties = buildingGotById.properties;
-    //   return true;
-    // }
-
     let buildingGotById;
     let buildingResponse = await getBuildingById(chosenBuilding.id);
     if (buildingResponse instanceof Error) return false;

@@ -3,6 +3,7 @@
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import { getToken } from "$lib/js-lib/authManager";
 
   import InspectionTaskForm from "$lib/components/InspectionTaskForm.svelte";
   import {
@@ -56,10 +57,8 @@
     formVisibility = true;
   });
   const updateInspectionTask = async () => {
-    //TODO
-    //ZMIENIĆ DANE TASKDELEGATORA NA ID OSOBY ZALOGOWANEJ
-    UpdateInspectionTaskCommand.taskDelegatorId =
-      "DB789183-4BD0-4D3C-AF40-548AC88FBDEB";
+    let userData = getToken();
+    UpdateInspectionTaskCommand.taskDelegatorId = userData.id;
     let differ = checkIfTasksDiffer(
       originalInspectionTask,
       UpdateInspectionTaskCommand

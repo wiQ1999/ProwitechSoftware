@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
   import InspectionTaskDetailedList from "$lib/components/InspectionTaskDetailedList.svelte";
   import { openModal } from "svelte-modals";
+  import { getToken } from "$lib/js-lib/authManager";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import {
@@ -16,17 +17,15 @@
   let tableRowsClassName = "performer-tasks-base-list";
   let listName = "";
   let baseListVisibility = false;
-  let notAdminId = "030B7529-173C-41A8-953D-75BA46B7FC21";
+  let userId;
   onMount(async () => {
     baseListVisibility = false;
-    //TODO POBRAĆ ZADANIA ZALOGOWANEGO UŻYTKOWNIKA
-    let taskResponse = await getInspectionTasksOfParticularPerformer(
-      notAdminId
-    );
+    let userData = getToken();
+    userId = userData.id;
+    let taskResponse = await getInspectionTasksOfParticularPerformer(userId);
     if (taskResponse instanceof Error) return;
     let tasks = await taskResponse.json();
-    //TODO NAZWA LIST NAME = IMIĘ + NAZWISKO ZALOGOWANEGO + ZADANIA
-    listName = "ALOJZY PTYŚ - ZADANIA";
+    listName = `${userData.firstName} ${userData.lastName} - ZADANIA`;
     collection = tasks.sort(compareTasksStatutes);
     baseListVisibility = true;
   });
