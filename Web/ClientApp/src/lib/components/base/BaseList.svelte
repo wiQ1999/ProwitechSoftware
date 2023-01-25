@@ -91,12 +91,12 @@
 </script>
 
 <br />
-<div class="absolute ml-[2.5%] opacity-30 z-[-1] text-black text-[40px]">
+<div class="absolute ml-[2.5%] lg:mt-16 mt-14 opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide">
   {listName}
 </div>
 <button
   on:click={onAdd}
-  class="mx-auto mb-[2%] p-4 rounded-sm w-1/2 bg-[#007acc] text-white font-semibold flex justify-center"
+  class="mx-auto mb-[3%] p-4 rounded-md w-[50%] bg-[#007acc] text-white font-semibold flex justify-center"
   >Dodaj</button
 >
 
@@ -116,10 +116,10 @@
   >
 {/if}
 <table
-  class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2"
+  class="mb-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[95%] text-left pl-2 lg:text-base md:text-sm text-xs"
 >
   <tbody class="[&>*:nth-child(even)]:bg-[#dee8f5]">
-    <tr class="text-sm font-bold border-b-2 border-slate-600 p-2">
+    <tr class="font-bold border-b-2 border-slate-600 p-2">
       <th class="text-center border-r-2 border-slate-600">
         <input
           type="checkbox"
@@ -141,12 +141,12 @@
           />
         </td>
         {#each getHeaderProperties() as property}
-          <td class="pl-2">{getDataFrmRow(row, property)}</td>
+          <td class="pl-2 border-r-2 border-slate-600">{getDataFrmRow(row, property)}</td>
         {/each}
         <td>
           <button
             on:click={onDetail(row)}
-            class="bg-blue-400 decoration-none text-white font-semibold text-sm py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
+            class="bg-blue-400 decoration-none text-white font-semibold lg:text-sm text-xs py-2 my-1 rounded-sm justify-center cursor-pointer flex w-[90%] h-[50%]"
           >
             Szczegóły
           </button>
@@ -165,5 +165,5 @@
 </table>
 
 {#if collection.length == 0}
-  Brak rekordów
+  <div class="mb-[2%] mx-auto w-[95%] text-left pl-2 lg:text-base md:text-sm text-xs">Brak rekordów </div>
 {/if}

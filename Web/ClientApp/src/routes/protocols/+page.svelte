@@ -16,18 +16,20 @@
 </script>
 
 {#if buttonsVisibility}
+<div class="inline-flex w-[100%] justify-center gap-[10%]" >
   {#if buttonAllProtocolsVisibility}
     <a href="/protocols/getAll">
       <button
-        class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+      class="xl:p-[130px] lg:p-[90px] p-[40px]  rounded-sm bg-[#007acc] text-2xl text-white uppercase font-semibold"
         >Wszystkie protokoły</button
       >
     </a>
   {/if}
   <a href="/protocols/{userId}/performer_protocols">
     <button
-      class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+    class="xl:p-[130px] lg:p-[90px] p-[40px]  rounded-sm bg-[#007acc] text-2xl text-white uppercase font-semibold"
       >Moje protokoły</button
     >
   </a>
+</div>
 {/if}

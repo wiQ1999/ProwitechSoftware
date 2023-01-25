@@ -54,13 +54,14 @@
 </script>
 
 {#if formVisibility}
-  <div>
+  <div class="text-center lg:my-16 my-14 opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide">
     {buildingInfo}
   </div>
   <form
     on:submit|preventDefault={async () => await onSubmit()}
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
   >
+  
     <fieldset class="border-none">
       <legend class="font-bold text-lg py-5"> {upper_message} </legend>
       {#if editMode}
