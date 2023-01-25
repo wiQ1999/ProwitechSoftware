@@ -70,6 +70,7 @@
     UpdateInspectionProtocolCommand = structuredClone(
       originalInspectionProtocol
     );
+
     formVisibility = true;
   });
   const updateProtocol = async () => {
@@ -102,7 +103,7 @@
   };
 </script>
 
-<a href="/tasks/handle/{$page.params.task_id}">
+<a href="/tasks/details/{$page.params.task_id}">
   <button
     class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
     >Powrót</button
@@ -111,7 +112,7 @@
 
 {#if formVisibility}
   <InspectionProtocolForm
-    creationThroughTask={true}
+    creationThroughTask={false}
     onSubmit={updateProtocol}
     CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
     editMode={true}
