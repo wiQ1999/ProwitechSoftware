@@ -21,12 +21,12 @@
     buildingsVisibility = hasCreatePermissionFor("buildings");
     propertyManagersVisibility = hasCreatePermissionFor("propertyManagers");
     if (hasCreatePermissionFor("inspectionTasks")) {
-      tasksHref = "/tasks/getAll";
+      tasksHref = "/tasks";
     } else {
       tasksHref = `/tasks/${userId}/performer_tasks`;
     }
     if (hasCreatePermissionFor("inspectionProtocols")) {
-      protocolsHref = "/protocols/getAll";
+      protocolsHref = "/protocols";
     } else {
       protocolsHref = `/protocols/${userId}/performer_protocols`;
     }

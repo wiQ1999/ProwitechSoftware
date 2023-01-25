@@ -3,7 +3,7 @@
   import { goto } from "$app/navigation";
   import InspectionTaskDetailedList from "$lib/components/InspectionTaskDetailedList.svelte";
   import { openModal } from "svelte-modals";
-  import { getToken } from "$lib/js-lib/authManager";
+  import { getToken, hasCreatePermissionFor } from "$lib/js-lib/authManager";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import {
@@ -18,6 +18,7 @@
   let listName = "";
   let baseListVisibility = false;
   let userId;
+  let goBackButtonVisibility = false;
   onMount(async () => {
     baseListVisibility = false;
     let userData = getToken();
@@ -28,6 +29,10 @@
     listName = `${userData.firstName} ${userData.lastName} - ZADANIA`;
     collection = tasks.sort(compareTasksStatutes);
     baseListVisibility = true;
+    goBackButtonVisibility = false;
+    if (hasCreatePermissionFor("inspectionProtocols")) {
+      goBackButtonVisibility = true;
+    }
   });
   function compareTasksStatutes(taskA, taskB) {
     let statusA = taskA.status;
@@ -122,13 +127,14 @@
   }
 </script>
 
-<a href="/tasks">
-  <button
-    class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
-    >Powrót</button
-  >
-</a>
-
+{#if goBackButtonVisibility}
+  <a href="/tasks">
+    <button
+      class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+      >Powrót</button
+    >
+  </a>
+{/if}
 {#if baseListVisibility}
   <InspectionTaskDetailedList
     {listName}

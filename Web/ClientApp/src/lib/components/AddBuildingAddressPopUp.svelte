@@ -107,7 +107,7 @@
       </div>
     {/if}
     {#if result_window_show}
-      <div class="result-window">
+      <div class="result-window w-[100%] h-[50%]">
         {result_message}
         {#if buttonContinueVisibility}
           <button

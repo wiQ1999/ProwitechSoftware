@@ -27,7 +27,9 @@
   // }
   export let PropertyManagerDTO;
   export let message;
-  console.log(PropertyManagerDTO);
+  function reload() {
+    window.location.reload();
+  }
 </script>
 
 <div
@@ -64,5 +66,10 @@
       <span class="font-semibold">{PropertyManagerDTO.phoneNumber}</span>
     </p>
     <br />
+    <button
+      on:click|preventDefault={() => reload()}
+      class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+      >OK</button
+    >
   {/if}
 </div>

@@ -76,7 +76,7 @@
     if (displayLink) {
       contentString =
         contentString +
-        `<a href="https://maps.google.com?q=${location.lat},${location.lng}">Wyznacz trasę</a>`;
+        `<a href="https://maps.google.com?q=${location.lat},${location.lng}" target="_blank">Wyznacz trasę</a>`;
     }
     const marker = new google.maps.Marker({
       position: location,

@@ -106,7 +106,11 @@
       {/each}
     </tr>
     {#each collection as row, i}
-      <tr id="{tableRowsClassName}-{row.id}" class={tableRowsClassName}>
+      <tr
+        id="{tableRowsClassName}-{row.id}"
+        class={tableRowsClassName}
+        style={row.status == "nowe" ? "background-color:green;" : ""}
+      >
         {#each getHeaderProperties() as property}
           <td class="pl-2">{getDataFrmRow(row, property)}</td>
         {/each}

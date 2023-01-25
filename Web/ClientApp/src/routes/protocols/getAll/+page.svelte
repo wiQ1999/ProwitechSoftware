@@ -107,7 +107,6 @@
     >Powrót</button
   >
 </a>
-
 {#if baseListVisibility}
   <BaseList
     {listName}
