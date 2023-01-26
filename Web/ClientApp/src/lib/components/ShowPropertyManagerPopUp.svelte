@@ -1,35 +1,11 @@
 <script>
-  // struktura propertyManageraDTO (GET)
-  // {
-  //   "id": "c9ddf3b2-517d-4ca8-1d90-08daf254a448",
-  //   "name": "Admico",
-  //   "phoneNumber": "555555555",
-  //   "fullAddress": {
-  //     "id": "46c83a7e-0842-4ead-b2a3-08daf254a437",
-  //     "buildingAddressId": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
-  //     "buildingAddress": {
-  //       "id": "9bf0c610-95d4-4c51-abb7-f6c7cb031de2",
-  //       "cityName": "Bydgoszcz",
-  //       "streetName": "Sienkiewicza",
-  //       "buildingNumber": "22",
-  //       "longitude": 18.0014692,
-  //       "latitude": 53.130996,
-  //       "coordinateType": "ROOFTOP",
-  //       "postalCode": "85-000"
-  //     },
-  //     "propertyAddressId": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
-  //     "propertyAddress": {
-  //       "id": "a6daebf1-c1a0-4a89-525b-08daf254a42b",
-  //       "venueNumber": "33",
-  //       "staircaseNumber": "12"
-  //     }
-  //   }
-  // }
+  import { goto } from "$app/navigation";
   export let PropertyManagerDTO;
   export let message;
-  function reload() {
-    window.location.reload();
+  function redirect() {
+    goto("/propertyManagers/getAll");
   }
+  export let buttonVisibility = false;
 </script>
 
 <div
@@ -66,10 +42,12 @@
       <span class="font-semibold">{PropertyManagerDTO.phoneNumber}</span>
     </p>
     <br />
-    <button
-      on:click|preventDefault={() => reload()}
-      class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
-      >OK</button
-    >
+    {#if buttonVisibility}
+      <button
+        on:click|preventDefault={() => redirect()}
+        class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+        >OK</button
+      >
+    {/if}
   {/if}
 </div>

@@ -265,7 +265,7 @@
   <div />
 {/if}
 {#if mapVisibility}
-  <Map {building} displayLink={true} />{/if}
+  <Map {building} displayLink={true} mapForTask={true} />{/if}
 {#if problemWithBuildingPropertiesVisibility}
   <div class="building-properties-not-created">
     DO BUDYNKU NIE PRZYPISANO ŻADNYCH LOKALI - SKONTAKTUJ SIĘ Z SZEFEM

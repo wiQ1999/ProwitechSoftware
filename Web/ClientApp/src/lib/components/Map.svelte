@@ -6,6 +6,7 @@
   export let building;
   export let displayLink = false;
   export let displayBuildingInfo = false;
+  export let mapForTask = false;
 
   let loadError;
   let container;
@@ -123,7 +124,7 @@
       BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
     </div>
   {/if}
-  {#if inaccurateCoordinates}
+  {#if inaccurateCoordinates && mapForTask}
     <div>
       UWAGA: WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ DOKŁADNE. SPRAWDŹ
       DOKŁADNIE, DOKĄD JEDZIESZ.

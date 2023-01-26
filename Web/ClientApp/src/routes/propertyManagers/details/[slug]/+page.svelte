@@ -241,6 +241,7 @@
     }
     formVisibility = false;
     showPropertyManagerPopUpMessage = message;
+    editBuildingAddressPopUpVisibility = false;
     updatedPropertyManagerPopUpVisibility = true;
   }
 

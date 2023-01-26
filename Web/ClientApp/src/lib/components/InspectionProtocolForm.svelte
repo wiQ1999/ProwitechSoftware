@@ -300,8 +300,6 @@
       }
     }
 
-  
-
     await onSubmit();
   }
 </script>
@@ -322,7 +320,7 @@
     <!-- {#if !creationThroughTask} -->
     <label for="inspection-protocol-building" class="block">Budynek</label>
     <select
-      disabled={readMode || creationThroughTask}
+      disabled={readMode || creationThroughTask || performerLookUp}
       bind:value={chosenBuilding}
       required
       on:change={async () => getRealPropertiesOfChosenBuilding(chosenBuilding)}
@@ -337,7 +335,7 @@
       <select
         bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
           .inspectedPropertyId}
-        disabled={readMode || creationThroughTask}
+        disabled={readMode || creationThroughTask || performerLookUp}
         class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       >
         {#each realProperties as realProperty}
@@ -1661,7 +1659,7 @@
           maxlength="600"
           bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
             .inne_uwagi}
-            class="bg-gray-100 border-gray-400 border-[1px]"
+          class="bg-gray-100 border-gray-400 border-[1px]"
         />
       </div>
     </div>
