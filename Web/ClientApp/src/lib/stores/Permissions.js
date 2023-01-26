@@ -10,7 +10,6 @@ export async function postOrPutForRole(roleId, dto) {
     return await response.json();
   } catch (err) {
     handleError(err, "Aktualziacja uprawnień dla roli.");
-    return err;
   }
 }
 
@@ -21,7 +20,6 @@ export async function getForRole(roleId) {
   }
   catch (err) {
     handleError(err, "Pobieranie uprawnień dla roli.");
-    return err;
   }
 }
 
@@ -31,7 +29,6 @@ export async function postOrPutForUser(userId, dto) {
     return await response.json();
   } catch (err) {
     handleError(err, "Aktualziacja uprawnień dla użytkownika.");
-    return err;
   }
 }
 
@@ -42,6 +39,5 @@ export async function getForUser(userId) {
   }
   catch (err) {
     handleError(err, "Pobieranie uprawnień dla użytkownika.");
-    return err;
   }
 }
