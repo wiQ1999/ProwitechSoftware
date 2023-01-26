@@ -93,7 +93,9 @@
 </script>
 
 <br />
-<div class="ml-[2.5%] opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide">
+<div
+  class="ml-[2.5%] opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide"
+>
   {listName}
 </div>
 <table
@@ -109,10 +111,12 @@
       <tr
         id="{tableRowsClassName}-{row.id}"
         class={tableRowsClassName}
-        style={row.status == "nowe" ? "background-color:green;" : ""}
+        style={row.status == "nowe" ? "background-color:#82bd7b;" : ""}
       >
         {#each getHeaderProperties() as property}
-          <td class="pl-2 border-r-2 border-slate-600">{getDataFrmRow(row, property)}</td>
+          <td class="pl-2 border-r-2 border-slate-600"
+            >{getDataFrmRow(row, property)}</td
+          >
         {/each}
         <td>
           {#if firstButtonVisibility}
@@ -140,5 +144,9 @@
 </table>
 
 {#if collection.length == 0}
-  <div class="mb-[2%] mx-auto w-[95%] text-left pl-2 lg:text-base md:text-sm text-xs">Brak rekordów</div>
+  <div
+    class="mb-[2%] mx-auto w-[95%] text-left pl-2 lg:text-base md:text-sm text-xs"
+  >
+    Brak rekordów
+  </div>
 {/if}

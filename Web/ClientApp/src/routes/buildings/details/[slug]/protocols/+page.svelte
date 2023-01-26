@@ -156,4 +156,5 @@
     on:listDetail={detailHandler}
     on:listDelete={deleteHandler}
     on:listDeleteSelected={deleteSelectedHandler}
+    addButtonVisibility={false}
   />{/if}

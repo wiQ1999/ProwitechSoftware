@@ -251,6 +251,7 @@
     }
     formVisibility = false;
     showBuildingPopUpMessage = message;
+    editBuildingAddressPopUpVisibility = false;
     updatedBuildingPopUpVisibility = true;
   }
 

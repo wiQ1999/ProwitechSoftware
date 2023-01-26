@@ -2,7 +2,11 @@
   import { Modals, closeModal } from "svelte-modals";
   import { onMount } from "svelte";
   import "../app.css";
-  import { getToken, hasCreatePermissionFor, clearToken } from "$lib/js-lib/authManager";
+  import {
+    getToken,
+    hasCreatePermissionFor,
+    clearToken,
+  } from "$lib/js-lib/authManager";
   import { goto } from "$app/navigation";
   let usersVisibility = false;
   let rolesVisibility = false;
@@ -34,11 +38,9 @@
     navbarVisibility = true;
   });
 
-
   function logoutHandler() {
     clearToken();
-    goto(`/login`);
-
+    window.location.href = "/login";
   }
 </script>
 
@@ -107,11 +109,13 @@
       >
       <div class="absolute right-[5%] font-semibold">
         Witaj, username <br />
-      <button class="font-normal border-black border-2 p-2" on:click={logoutHandler}>
-        Wyloguj
-      </button>
-    </div>
-    
+        <button
+          class="font-normal border-black border-2 p-2"
+          on:click={logoutHandler}
+        >
+          Wyloguj
+        </button>
+      </div>
     </nav>
   {/if}
 </header>
