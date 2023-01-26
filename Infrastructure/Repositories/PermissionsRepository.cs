@@ -23,20 +23,25 @@ public class PermissionsRepository : GenericRepository<Permission>, IPermissions
 
     public override async Task<Guid> CreateAsync(Permission permission, CancellationToken cancellationToken)
     {
-        await ThrowIfNotValid(permission, cancellationToken);
+        ThrowIfNotValid(permission);
+        await ThrowIfNotUnique(permission, cancellationToken);
         return await base.CreateAsync(permission, cancellationToken);
     }
 
-    private async Task ThrowIfNotValid(Permission permission, CancellationToken cancellationToken)
+    private void ThrowIfNotValid(Permission permission)
     {
         bool isHostsNull = permission.RoleId == null && permission.UserId == null;
         bool isHostsNotNull = permission.RoleId != null && permission.UserId != null;
 
         if (isHostsNull || isHostsNotNull)
-            throw new RequiredValueException("Uprawnienie musi być przypisane do roli lub użytkownika.");
+            throw new RequiredValueException("Uprawnienie musi być przypisane do roli lub użytkownika.");       
+    }
 
-        bool isHostSourceNotUnique = await DbSet.AnyAsync(
-            p => p.Source == permission.Source && (p.RoleId == permission.RoleId || p.UserId == permission.UserId),
+    private async Task ThrowIfNotUnique(Permission permission, CancellationToken cancellationToken)
+    {
+        bool isHostSourceNotUnique = await DbSet.AnyAsync(p =>
+            p.Source == permission.Source &&
+            (p.RoleId == permission.RoleId || p.UserId == permission.UserId),
             cancellationToken);
 
         if (isHostSourceNotUnique)
@@ -45,7 +50,7 @@ public class PermissionsRepository : GenericRepository<Permission>, IPermissions
 
     public override async Task UpdateAsync(Permission permission, CancellationToken cancellationToken)
     {
-        await ThrowIfNotValid(permission, cancellationToken);
+        ThrowIfNotValid(permission);
         await base.UpdateAsync(permission, cancellationToken);
     }
 }
