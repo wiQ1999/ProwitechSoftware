@@ -72,74 +72,89 @@
     }
 </script>
 
-
-
-<form on:submit|preventDefault={submitHandler} class="w-1/2 mt-[10px] mb-10 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center">
-    
-
+<form
+    on:submit|preventDefault={submitHandler}
+    class="w-1/2 mt-[10px] mb-10 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
+>
     <fieldset class="border-none">
-    <legend class="font-bold text-2xl py-5" >Szczegóły użytkownika</legend>
-    
+        <legend class="font-bold text-2xl py-5">Szczegóły użytkownika</legend>
 
-    <label for="login" class="block">Login</label>
-    <input
-        name="login"
-        type="text"
-        bind:value={user.login}
-        disabled={!isEditing}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-    />
-    <br />
-    <label for="firstName" class="block">Imię</label>
-    <input
-        name="firstName"
-        type="text"
-        bind:value={user.firstName}
-        disabled={!isEditing}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-    />
-    <br />
-    <label for="lastName" class="block">Nazwisko</label>
-    <input
-        name="lastName"
-        type="text"
-        bind:value={user.lastName}
-        disabled={!isEditing}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-    />
-    <br />
-    <label for="email" class="block">Email</label>
-    <input
-        name="email"
-        type="text"
-        bind:value={user.email}
-        disabled={!isEditing}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-    />
-    <br />
-    <label for="phoneNumber" class="block">Numer telefonu</label>
-    <input
-        name="phoneNumber"
-        type="text"
-        bind:value={user.phoneNumber}
-        disabled={!isEditing}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-    />
-    <br />
-    <label for="role" class="block">Rola</label>
-    <select name="role" on:input={roleInputHangler} disabled={!isEditing} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
-        {#each roles as role}
-            {#if user.role != null && user.role.id == role.id}
-                <option value={role.id} selected>{role.name}</option>
-            {:else}
-                <option value={role.id}>{role.name}</option>
-            {/if}
-        {/each}
-    </select>
-    {#if isEditing}
-        <button type="submit" class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400">Zapisz</button>
-    {:else}
-        <button on:click|preventDefault={editHandler} class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400">Edytuj</button>
-    {/if}
-</fieldset>
+        <label for="login" class="block">Login</label>
+        <input
+            name="login"
+            type="text"
+            bind:value={user.login}
+            disabled={!isEditing}
+            required
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        />
+        <br />
+        <label for="firstName" class="block">Imię</label>
+        <input
+            name="firstName"
+            type="text"
+            bind:value={user.firstName}
+            disabled={!isEditing}
+            required
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        />
+        <br />
+        <label for="lastName" class="block">Nazwisko</label>
+        <input
+            name="lastName"
+            type="text"
+            bind:value={user.lastName}
+            disabled={!isEditing}
+            required
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        />
+        <br />
+        <label for="email" class="block">Email</label>
+        <input
+            name="email"
+            type="text"
+            bind:value={user.email}
+            disabled={!isEditing}
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        />
+        <br />
+        <label for="phoneNumber" class="block">Numer telefonu</label>
+        <input
+            name="phoneNumber"
+            type="text"
+            bind:value={user.phoneNumber}
+            disabled={!isEditing}
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        />
+        <br />
+        <label for="role" class="block">Rola</label>
+        <select
+            name="role"
+            on:input={roleInputHangler}
+            disabled={!isEditing}
+            required
+            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        >
+            {#each roles as role}
+                {#if user.role != null && user.role.id == role.id}
+                    <option value={role.id} selected>{role.name}</option>
+                {:else}
+                    <option value={role.id}>{role.name}</option>
+                {/if}
+            {/each}
+        </select>
+        {#if isEditing}
+            <button
+                type="submit"
+                class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400"
+                >Zapisz</button
+            >
+        {:else}
+            <button
+                on:click|preventDefault={editHandler}
+                class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400"
+                >Edytuj</button
+            >
+        {/if}
+    </fieldset>
 </form>

@@ -9,7 +9,7 @@ export async function postOrPutForRole(roleId, dto) {
     const response = await genericPost("/Permissions/Role/" + roleId, dto);
     return await response.json();
   } catch (err) {
-    handleError(err, "Dodawanie Roli");
+    handleError(err, "Aktualziacja uprawnień dla roli.");
     return err;
   }
 }
@@ -20,7 +20,28 @@ export async function getForRole(roleId) {
     return await response.json();
   }
   catch (err) {
-    handleError(err, "Pobieranie wszystkich Ról");
+    handleError(err, "Pobieranie uprawnień dla roli.");
+    return err;
+  }
+}
+
+export async function postOrPutForUser(userId, dto) {
+  try {
+    const response = await genericPost("/Permissions/User/" + userId, dto);
+    return await response.json();
+  } catch (err) {
+    handleError(err, "Aktualziacja uprawnień dla użytkownika.");
+    return err;
+  }
+}
+
+export async function getForUser(userId) {
+  try {
+    const response = await genericGetById("/Permissions/User", userId);
+    return await response.json();
+  }
+  catch (err) {
+    handleError(err, "Pobieranie uprawnień dla użytkownika.");
     return err;
   }
 }
