@@ -24,7 +24,7 @@
     }
   </script>
   
-      <section class="flex flex-col justify-center items-center flex-2/3">
+      <section class="absolute my-[10%] w-[100%] mx-auto">
         <div
           class="w-3/4 mx-auto my-0 pt-8 bg-white border-2 border-silver border-solid"
         >

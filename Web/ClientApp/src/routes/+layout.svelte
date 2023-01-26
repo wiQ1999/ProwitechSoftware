@@ -42,12 +42,18 @@
     clearToken();
     window.location.href = "/login";
   }
+
+  function openMenu() {
+        let button = document.getElementById('openableButtonNavbar');
+        if(!button.hidden) button.hidden = true;
+        else button.hidden = false;
+        }
 </script>
 
 <header class="flex flex-col">
   {#if navbarVisibility}
     <nav
-      class="bg-white py-[4%] my-2 mx-4 rounded-lg justify-center flex content-center xl:gap-[50px] lg:gap-[30px] sm:gap-[15px] gap-[10px] border-4 border-[#007acc] shadow-lg"
+      class="bg-white py-[4%] my-2 mx-4 rounded-lg justify-center flex content-center 2xl:gap-[50px] xl:gap-[30px] md:gap-[15px] gap-[10px] border-4 border-[#007acc] shadow-lg"
     >
       <a
         href="/"
@@ -107,15 +113,22 @@
     before:absolute before:content-[attr(data-item)] before:text-[#007acc] before:top-0 before:left-0 before:bottom-0 before:w-0 before:overflow-hidden before:hover:w-[100%]"
         >Protokoły</a
       >
-      <div class="absolute right-[5%] font-semibold">
-        Witaj, username <br />
+      <div class="font-semibold lg:ml-3 ml-1 w-[10%] text-right 2xl:hidden">
         <button
-          class="font-normal border-black border-2 p-2"
-          on:click={logoutHandler}
+          class="font-normal lg:p-3 p-1 bg-gray-300"
+          on:click={openMenu}
         >
-          Wyloguj
+        <i class="fa fa-align-justify lg:w-[100%]"></i>
         </button>
+        <div on:mouseleave={openMenu} id="openableButtonNavbar" hidden class="relative text-center bg-gray-300 lg:p-2 p-1"> 
+          Witaj, dupa<br />
+          <button class="font-bold hover:bg-gray-400 w-[100%]" on:click|preventDefault={logoutHandler}>Wyloguj</button>
       </div>
+      </div>
+      <div class="bg-gray-300 p-2 absolute right-[3%] hidden 2xl:block"> 
+        Witaj, dupa<br />
+        <button class="font-bold hover:bg-gray-400 w-[100%]" on:click|preventDefault={logoutHandler}>Wyloguj</button>
+    </div>
     </nav>
   {/if}
 </header>

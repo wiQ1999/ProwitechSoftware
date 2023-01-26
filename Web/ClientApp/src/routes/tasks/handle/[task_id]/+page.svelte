@@ -222,30 +222,28 @@
   >
 </a>
 {#if buildingInfoVisibility}
-  <div>
-    ZADANIE Z DNIA {setResultFormatIfItIsDateTime(
-      "dueStartDateTime",
-      inspectionTask.dueStartDateTime
-    )}
-  </div>
-  <div>
-    <table>
+  
+  <div class="my-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[50%] text-center">
+    <div class="mb-[2%] text-center text-2xl mt-4 font-semibold">
+      ZADANIE Z DNIA {setResultFormatIfItIsDateTime(
+        "dueStartDateTime",
+        inspectionTask.dueStartDateTime
+      )}
+    </div>
+    <table class="mx-auto">
       <tr>
-        <td>BUDYNEK {building.type} przy ul.</td>
-        <td>{buildingInfo}</td>
-        <td>STATUS</td>
-        <td>{taskStatus}</td>
+        <td class="p-2"><b>BUDYNEK {building.type} </b> przy ul. <b>{buildingInfo} </b></td>
       </tr>
       <tr>
-        <td>ROZPOCZĘTO</td>
-        <td
-          >{inspectionTask.startDateTime != "0001-01-01T00:00:00"
-            ? setResultFormatIfItIsDateTime(
-                "startDateTime",
-                inspectionTask.startDateTime
-              )
-            : ""}</td
-        >
+        <td class="p-2">STATUS: <b>{taskStatus} </b></td>
+      </tr>
+      <tr>
+        <td class="p-2">ROZPOCZĘTO <b>{inspectionTask.startDateTime != "0001-01-01T00:00:00"
+          ? setResultFormatIfItIsDateTime(
+              "startDateTime",
+              inspectionTask.startDateTime
+            )
+          : ""} </b></td>
       </tr>
       {#if taskStatus == "zakończone" || taskStatus == "zakonczone"}
         <tr>
@@ -312,7 +310,7 @@
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
       <button
         on:click|preventDefault={SINGLE_FAMILY_BUILDING_buttonHandler}
-        class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+        class="ml-[2%] mb-[2%] rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
         >Dodaj protokół</button
       >
     {/if}
@@ -343,9 +341,11 @@
 {/if}
 
 {#if submitButtonVisibility}
+<div class="text-center">
   <button
     type="submit"
     on:click|preventDefault={finishTask}
-    class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400 disabled:bg-gray-400"
-    disabled={buttonDisabled}>Zakończ zadanie</button
-  >{/if}
+    class="py-5 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center hover:bg-blue-400 disabled:bg-gray-400"
+    disabled={buttonDisabled}>Zakończ zadanie</button>
+</div>
+{/if}
