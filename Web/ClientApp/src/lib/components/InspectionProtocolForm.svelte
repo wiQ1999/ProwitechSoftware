@@ -185,15 +185,6 @@
     return await setRealProperties(chosenBuilding);
   }
   async function setRealProperties(chosenBuilding) {
-    // if (creationThroughTask) {
-    //   console.log("SET REAL PROPERTIES");
-    //   console.log(propertyId);
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId =
-    //     propertyId;
-    //   realProperties = buildingGotById.properties;
-    //   return true;
-    // }
-
     let buildingGotById;
     let buildingResponse = await getBuildingById(chosenBuilding.id);
     if (buildingResponse instanceof Error) return false;
@@ -238,8 +229,8 @@
     } else {
       button_turn_on_edition_message = "Włącz edycję";
     }
-    if (readMode) upper_message = "Szczegóły Zadania";
-    else upper_message = "Edycja Zadania";
+    if (readMode) upper_message = "Szczegóły Protokołu";
+    else upper_message = "Edycja Protokołu";
   }
   function multipleValuesAreNotSet() {
     let lackOfAnswerFound = false;
@@ -309,10 +300,6 @@
       }
     }
 
-    // if (creationThroughTask)
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId =
-    //     taskId;
-
     await onSubmit();
   }
 </script>
@@ -333,7 +320,7 @@
     <!-- {#if !creationThroughTask} -->
     <label for="inspection-protocol-building" class="block">Budynek</label>
     <select
-      disabled={readMode || creationThroughTask}
+      disabled={readMode || creationThroughTask || performerLookUp}
       bind:value={chosenBuilding}
       required
       on:change={async () => getRealPropertiesOfChosenBuilding(chosenBuilding)}
@@ -348,7 +335,7 @@
       <select
         bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
           .inspectedPropertyId}
-        disabled={readMode || creationThroughTask}
+        disabled={readMode || creationThroughTask || performerLookUp}
         class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       >
         {#each realProperties as realProperty}
@@ -1672,6 +1659,7 @@
           maxlength="600"
           bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
             .inne_uwagi}
+          class="bg-gray-100 border-gray-400 border-[1px]"
         />
       </div>
     </div>
@@ -1679,7 +1667,7 @@
     {#if !readMode}
       <button
         type="submit"
-        class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400"
+        class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] my-3 justify-center cursor-pointer hover:bg-blue-400"
         >{submitButtonMessage}</button
       >
     {/if}

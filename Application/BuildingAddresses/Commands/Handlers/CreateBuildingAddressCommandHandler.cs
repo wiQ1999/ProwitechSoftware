@@ -12,24 +12,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Responses;
 using Infrastructure.Interfaces.UnitOfWork;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.BuildingAddresses.Commands.Handlers
 {
     public class CreateBuildingAddressCommandHandler : IRequestHandler<CreateBuildingAddressCommand, AddUpdateBuildingAddressReponse>
     {
         private readonly IRepositoriesUnitOfWork _unitOfWork;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public CreateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper)
+        public CreateBuildingAddressCommandHandler(IRepositoriesUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<AddUpdateBuildingAddressReponse> Handle(CreateBuildingAddressCommand request, CancellationToken cancellationToken)
         {
-            var address = mapper.Map<BuildingAddress>(request.AddressDTO);
-            GoogleGeocodingClient client = new GoogleGeocodingClient(address);
+            var address = _mapper.Map<BuildingAddress>(request.AddressDTO);
+            GoogleGeocodingClient client = new GoogleGeocodingClient(address, _configuration);
             AddUpdateBuildingAddressReponse addBuildingAddressResponse = await client.SetCoordinatesAndPostalCode(request.ForceDespiteCoordIssue);
             if (addBuildingAddressResponse.WebApiStatus == ProwitechWebAPIStatus.ADDED_TO_DB.ToString()
                 || addBuildingAddressResponse.WebApiStatus==ProwitechWebAPIStatus.ADDED_DESPITE_COORDINATE_ISSUE.ToString())

@@ -6,6 +6,7 @@
   export let building;
   export let displayLink = false;
   export let displayBuildingInfo = false;
+  export let mapForTask = false;
 
   let loadError;
   let container;
@@ -76,7 +77,7 @@
     if (displayLink) {
       contentString =
         contentString +
-        `<a href="https://maps.google.com?q=${location.lat},${location.lng}">Wyznacz trasę</a>`;
+        `<a href="https://maps.google.com?q=${location.lat},${location.lng}" target="_blank">Wyznacz trasę</a>`;
     }
     const marker = new google.maps.Marker({
       position: location,
@@ -123,7 +124,7 @@
       BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
     </div>
   {/if}
-  {#if inaccurateCoordinates}
+  {#if inaccurateCoordinates && mapForTask}
     <div>
       UWAGA: WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ DOKŁADNE. SPRAWDŹ
       DOKŁADNIE, DOKĄD JEDZIESZ.

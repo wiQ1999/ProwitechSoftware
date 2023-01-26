@@ -24,10 +24,10 @@
 {#if isOpen}
   <div
     role="dialog"
-    class="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center bg-black/70"
+    class="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center bg-black/70 z-10"
   >
     <div
-      class="min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
+      class="min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between z-10"
     >
       <h2 class="text-center text-2xl">{title}</h2>
       <p class="text-center mt-4">{message}</p>

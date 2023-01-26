@@ -109,42 +109,54 @@
 </script>
 
 <div class="w-[100%] h-[100%] fixed m-0 p-0 top-0 left-0 bg-black/70">
-<div class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl p-[2%]">
-  {#if question_window_show}
-    <div class="question-window">
-      <p> {corrdinates_not_found_message} </p>
-      <button
-        on:click|preventDefault={() =>
-          displayUpdateOutcome(
-            updateBuildingAddressDTO,
-            force_option.optionalArguments
-          )}>{force_option.info}</button
-      >
-      <button
-        on:click|preventDefault={() =>
-          displayUpdateOutcome(
-            updateBuildingAddressDTO,
-            only_address_option.optionalArguments,
-            true
-          )}>{only_address_option.info}</button
-      >
-      <a href="/" class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer">{abandon_option.info}</a>
-    </div>
-  {/if}
-  {#if result_window_show}
-    <div class="result-window">
-      {result_message}
-      {#if buttonContinueVisibility}
-        <button on:click|preventDefault={async () => await returnToParent()} class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
-          >Kontynuuj</button
+  <div
+    class="w-[50%] h-[50%] relative my-[10%] mx-auto bg-white rounded-2xl p-[2%]"
+  >
+    {#if question_window_show}
+      <div class="question-window">
+        <p>{corrdinates_not_found_message}</p>
+        <button
+          class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
+          on:click|preventDefault={() =>
+            displayUpdateOutcome(
+              updateBuildingAddressDTO,
+              force_option.optionalArguments
+            )}>{force_option.info}</button
         >
-      {/if}
-      {#if buttonErrorVisibility}
-        <button on:click|preventDefault={() => window.location.reload()} class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
-          >Spróbuj ponownie</button
+        <button
+          class="bg-red-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounder-md border-0 flex justify-center cursor-pointer"
+          on:click|preventDefault={() =>
+            displayUpdateOutcome(
+              updateBuildingAddressDTO,
+              only_address_option.optionalArguments,
+              true
+            )}>{only_address_option.info}</button
         >
-      {/if}
-    </div>
-  {/if}
-</div>
+        <a
+          href="/"
+          class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+          >{abandon_option.info}</a
+        >
+      </div>
+    {/if}
+    {#if result_window_show}
+      <div class="result-window">
+        {result_message}
+        {#if buttonContinueVisibility}
+          <button
+            on:click|preventDefault={async () => await returnToParent()}
+            class="bg-green-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+            >Kontynuuj</button
+          >
+        {/if}
+        {#if buttonErrorVisibility}
+          <button
+            on:click|preventDefault={() => window.location.reload()}
+            class="bg-yellow-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
+            >Spróbuj ponownie</button
+          >
+        {/if}
+      </div>
+    {/if}
+  </div>
 </div>

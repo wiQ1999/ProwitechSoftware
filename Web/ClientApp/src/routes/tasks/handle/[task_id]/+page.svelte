@@ -13,10 +13,14 @@
     getTaskProtocols,
     changeInspectionTaskStatus,
   } from "$lib/stores/InspectionTask";
-  import { compareProtocolsByVenueNumber } from "$lib/stores/InspectionProtocol";
+  import {
+    compareProtocolsByVenueNumber,
+    deleteInspectionProtocol,
+  } from "$lib/stores/InspectionProtocol";
   import { getBuildingById } from "$lib/stores/Building";
-  import ModifiedBaseList from "$lib/components/base/ModifiedBaseList.svelte";
+  import HandleTaskList from "$lib/components/HandleTaskList.svelte";
   import { setResultFormatIfItIsDateTime } from "$lib/js-lib/helpers";
+  import { getToken } from "$lib/js-lib/authManager";
   import Map from "$lib/components/Map.svelte";
 
   let collectionOfRealPropertiesWithoutAssignedProtocols = [];
@@ -28,8 +32,7 @@
   let firstListVisibility = false;
   let secondListVisibility = false;
   let buttonDisabled = true;
-  //TO DO ZMIENIĆ NA ID ZALOGOWANEGO USERA
-  let userId = "030B7529-173C-41A8-953D-75BA46B7FC21";
+  let userId;
   let realPropertiesWithoutProtocols;
   let buildingInfo;
   let buildingInfoVisibility = false;
@@ -42,7 +45,10 @@
   let singleFamilyBuildingType = false;
   let multipleFamilyBuildingType = false;
   let mapVisibility = false;
+  let problemWithBuildingPropertiesVisibility = false;
   onMount(async () => {
+    let userData = getToken();
+    userId = userData.id;
     firstListVisibility = false;
     secondListVisibility = false;
     buildingInfoVisibility = false;
@@ -51,6 +57,7 @@
     singleFamilyBuildingType = false;
     multipleFamilyBuildingType = false;
     mapVisibility = false;
+    problemWithBuildingPropertiesVisibility = false;
 
     let buildingPrepared = await prepareBuildingInfo();
     let firstListPrepared = await prepareFirstList();
@@ -70,6 +77,12 @@
       buttonDisabled = false;
     if (taskStatus == "w toku") {
       submitButtonVisibility = true;
+    }
+    if (
+      collectionOfRealPropertiesWithoutAssignedProtocols.length == 0 &&
+      collectionOfNewProtocols.length == 0
+    ) {
+      problemWithBuildingPropertiesVisibility = true;
     }
   });
 
@@ -145,53 +158,42 @@
     );
   }
 
-  function secondButtonHandler(event) {
-    console.log("secondHandler");
+  function SECOND_LIST_firstButtonHandler(event) {
+    let propertyId = event.detail.row.inspectedProperty.id;
+    goto(
+      `/protocols/task/${$page.params.task_id}/property/${propertyId}/protocol/${event.detail.row.id}/details`
+    );
+  }
+  const SINGLE_FAMILY_BUILDING_buttonHandler = () => {
+    let propertyId = collectionOfRealPropertiesWithoutAssignedProtocols[0].id;
+    goto(
+      `/protocols/task/${$page.params.task_id}/property/${propertyId}/create`
+    );
+  };
+  function showMap() {
+    mapVisibility = true;
   }
 
-  async function SECOND_LIST_deleteHandler(event) {
+  function SECOND_LIST_deleteHandler(event) {
+    mapVisibility = false;
     openModal(BaseConfirmPopUp, {
       title: "Potwierdź akcję",
-      message: "Czy na pewno chcesz usunąć wybrane Zadanie?",
+      message: "Czy na pewno chcesz usunąć wybrany Protokół?",
       onOkay: async () => await deleteAndReload(event.detail.row.id),
       undoSingleColorSelection: true,
-      selectedElementHtmlDomId: `${tableRowsClassName}-${event.detail.row.id}`,
+      selectedElementHtmlDomId: `${secondTableRowsClassName}-${event.detail.row.id}`,
+      actionAfterCancelRequired: true,
+      actionAfterCancel: () => showMap(),
     });
   }
 
   async function deleteAndReload(id) {
-    let response = await deleteInspectionTask(id);
+    mapVisibility = false;
+    let response = await deleteInspectionProtocol(id);
     if (response instanceof Response) {
       openModal(BasePopUp, {
         title: "Udana akcja",
-        message: "Pomyślnie usunięto wybrane Zadanie",
-        reloadRequired: true,
-      });
-    }
-  }
-
-  async function SECOND_LIST_deleteSelectedHandler(event) {
-    const rows = event.detail.rows;
-    openModal(BaseConfirmPopUp, {
-      title: "Potwierdź akcję",
-      message: "Czy na pewno chcesz usunąć zaznaczone Zadania?",
-      onOkay: async () => await deleteSelectedAndReload(rows),
-      undoMultipleColorSelection: true,
-      selectedClassName: tableRowsClassName,
-    });
-  }
-  async function deleteSelectedAndReload(rows) {
-    if (rows == null) return;
-    let errorOccured = false;
-    let deleteResult;
-    for (let i = 0; i < rows.length; i++) {
-      deleteResult = await deleteInspectionTask(rows[i].id);
-      if (!(deleteResult instanceof Response)) errorOccured = true;
-    }
-    if (!errorOccured) {
-      openModal(BasePopUp, {
-        title: "Udana akcja",
-        message: "Pomyślnie usunięto zaznaczone Zadania",
+        message: "Pomyślnie usunięto wybrany Protokół",
         reloadRequired: true,
       });
     }
@@ -203,6 +205,7 @@
       true
     );
     if (updateSuccess instanceof Error) return false;
+    mapVisibility = false;
     openModal(BasePopUp, {
       title: "Udana akcja",
       message: "Zakończono Zadanie",
@@ -262,11 +265,16 @@
   <div />
 {/if}
 {#if mapVisibility}
-  <Map {building} displayLink={true} />{/if}
+  <Map {building} displayLink={true} mapForTask={true} />{/if}
+{#if problemWithBuildingPropertiesVisibility}
+  <div class="building-properties-not-created">
+    DO BUDYNKU NIE PRZYPISANO ŻADNYCH LOKALI - SKONTAKTUJ SIĘ Z SZEFEM
+  </div>
+{/if}
 {#if multipleFamilyBuildingType}
   <div class="wielolokalowy">
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
-      <ModifiedBaseList
+      <HandleTaskList
         listName={firstListName}
         collection={collectionOfRealPropertiesWithoutAssignedProtocols}
         headerDictionary={firstListHeaderDictionary}
@@ -274,31 +282,28 @@
         firstButtonVisibility={true}
         firstButtonMessage="DODAJ PROTOKÓŁ"
         on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-        on:secondButtonAction={secondButtonHandler}
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
-      <ModifiedBaseList
+      <HandleTaskList
         listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={secondListHeaderDictionary}
-        {secondTableRowsClassName}
+        tableRowsClassName={secondTableRowsClassName}
         firstButtonVisibility={true}
         firstButtonMessage="EDYTUJ"
         secondButtonVisibility={true}
         secondButtonMessage="USUŃ"
-        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-        on:secondButtonAction={secondButtonHandler}
+        on:firstButtonAction={SECOND_LIST_firstButtonHandler}
+        on:secondButtonAction={SECOND_LIST_deleteHandler}
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
-      <ModifiedBaseList
+      <HandleTaskList
         listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={secondListHeaderDictionary}
-        {secondTableRowsClassName}
         firstButtonVisibility={true}
         firstButtonMessage="EDYTUJ"
-        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-        on:secondButtonAction={secondButtonHandler}
+        on:firstButtonAction={SECOND_LIST_firstButtonHandler}
       />{/if}
   </div>
 {/if}
@@ -306,34 +311,33 @@
   <div class="jednolokalowy">
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
       <button
-        on:click|preventDefault={FIRST_LIST_firstButtonHandler}
+        on:click|preventDefault={SINGLE_FAMILY_BUILDING_buttonHandler}
         class="mx-auto mb-[2%] p-16 rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
         >Dodaj protokół</button
       >
     {/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && taskStatus == "w toku"}
-      <ModifiedBaseList
+      <HandleTaskList
         listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={singleFamilyBuildingHeaderDictionary}
-        {secondTableRowsClassName}
+        tableRowsClassName={secondTableRowsClassName}
         firstButtonVisibility={true}
         firstButtonMessage="EDYTUJ"
         secondButtonVisibility={true}
         secondButtonMessage="USUŃ"
-        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-        on:secondButtonAction={secondButtonHandler}
+        on:firstButtonAction={SECOND_LIST_firstButtonHandler}
+        on:secondButtonAction={SECOND_LIST_deleteHandler}
       />{/if}
     {#if secondListVisibility && collectionOfNewProtocols.length > 0 && (taskStatus == "zakonczone" || taskStatus == "zakończone")}
-      <ModifiedBaseList
+      <HandleTaskList
         listName={secondListName}
         collection={collectionOfNewProtocols}
         headerDictionary={singleFamilyBuildingHeaderDictionary}
-        {secondTableRowsClassName}
+        tableRowsClassName={secondTableRowsClassName}
         firstButtonVisibility={true}
         firstButtonMessage="EDYTUJ"
-        on:firstButtonAction={FIRST_LIST_firstButtonHandler}
-        on:secondButtonAction={secondButtonHandler}
+        on:firstButtonAction={SECOND_LIST_firstButtonHandler}
       />{/if}
   </div>
 {/if}
@@ -342,6 +346,6 @@
   <button
     type="submit"
     on:click|preventDefault={finishTask}
-    class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400"
+    class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400 disabled:bg-gray-400"
     disabled={buttonDisabled}>Zakończ zadanie</button
   >{/if}

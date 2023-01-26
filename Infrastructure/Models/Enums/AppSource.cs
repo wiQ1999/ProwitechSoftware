@@ -9,5 +9,19 @@ public enum AppSource
     [Description("Użytkownicy")]
     Users,
     [Description("Uprawnienia")]
-    Permissions
+    Permissions,
+    [Description("Budynki")]
+    Buildings,
+    [Description("Protokoły")]
+    InspectionProtocols,
+    [Description("Zadania")]
+    InspectionTasks,
+    [Description("Adresy Nieruchomości")]
+    PropertyAddresses,
+    [Description("Zarządcy Nieruchomości")]
+    PropertyManagers,
+    [Description("Nieruchomości")]
+    RealProperties,
+    [Description("Mieszkańcy")]
+    Residents,
 }

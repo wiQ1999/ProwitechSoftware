@@ -9,6 +9,7 @@
     getAllInspectionTasks,
     deleteInspectionTask,
   } from "$lib/stores/InspectionTask";
+  import { hasCreatePermissionFor } from "$lib/js-lib/authManager";
 
   let collection = [];
   let tableRowsClassName = "inspection-tasks-base-list";
@@ -16,9 +17,14 @@
   let buildingTypeError = false;
   let baseListVisibility = false;
   let buildingInfoVisibility = false;
+  let goBackButtonVisibility = false;
   onMount(async () => {
     buildingTypeError = false;
     baseListVisibility = false;
+    goBackButtonVisibility = false;
+    if (hasCreatePermissionFor("inspectionProtocols")) {
+      goBackButtonVisibility = true;
+    }
 
     let taskResponse = await getAllInspectionTasks();
     if (taskResponse instanceof Error) return;
@@ -98,6 +104,14 @@
   }
 </script>
 
+{#if goBackButtonVisibility}
+  <a href="/tasks">
+    <button
+      class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+      >Powrót</button
+    >
+  </a>
+{/if}
 {#if baseListVisibility}
   <BaseList
     {listName}

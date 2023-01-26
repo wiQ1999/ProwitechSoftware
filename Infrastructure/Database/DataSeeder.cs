@@ -50,7 +50,12 @@ public class DataSeeder
         Permission bossRole_Roles = CreatePermissionForRole(bossRole, AppSource.Roles, true, true, true, true);
         Permission bossRole_Users = CreatePermissionForRole(bossRole, AppSource.Users, true, true, true, true);
         Permission bossRole_Permissions = CreatePermissionForRole(bossRole, AppSource.Permissions, true, true, true, true);
-        ModelBuilder.Entity<Permission>().HasData(bossRole_Roles, bossRole_Users, bossRole_Permissions);
+        Permission bossRole_Buildings = CreatePermissionForRole(bossRole, AppSource.Buildings, true, true, true, true);
+        Permission bossRole_PropertyManagers = CreatePermissionForRole(bossRole, AppSource.PropertyManagers, true, true, true, true);
+        Permission bossRole_InspectionTasks = CreatePermissionForRole(bossRole, AppSource.InspectionTasks, true, true, true, true);
+        Permission bossRole_InspectionProtocols = CreatePermissionForRole(bossRole, AppSource.InspectionProtocols, true, true, true, true);
+        ModelBuilder.Entity<Permission>().HasData
+            (bossRole_Roles, bossRole_Users, bossRole_Permissions, bossRole_Buildings, bossRole_PropertyManagers, bossRole_InspectionTasks, bossRole_InspectionProtocols);
 
         Permission workerRole_Roles = CreatePermissionForRole(workerRole, AppSource.Roles, false, true, false, false);
         Permission workerRole_Users = CreatePermissionForRole(workerRole, AppSource.Users, false, true, false, false);

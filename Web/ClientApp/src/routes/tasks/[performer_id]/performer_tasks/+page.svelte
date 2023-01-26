@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
   import InspectionTaskDetailedList from "$lib/components/InspectionTaskDetailedList.svelte";
   import { openModal } from "svelte-modals";
+  import { getToken, hasCreatePermissionFor } from "$lib/js-lib/authManager";
   import BaseConfirmPopUp from "$lib/components/base/BaseConfirmPopUp.svelte";
   import BasePopUp from "$lib/components/base/BasePopUp.svelte";
   import {
@@ -16,19 +17,22 @@
   let tableRowsClassName = "performer-tasks-base-list";
   let listName = "";
   let baseListVisibility = false;
-  let notAdminId = "030B7529-173C-41A8-953D-75BA46B7FC21";
+  let userId;
+  let goBackButtonVisibility = false;
   onMount(async () => {
     baseListVisibility = false;
-    //TODO POBRAĆ ZADANIA ZALOGOWANEGO UŻYTKOWNIKA
-    let taskResponse = await getInspectionTasksOfParticularPerformer(
-      notAdminId
-    );
+    let userData = getToken();
+    userId = userData.id;
+    let taskResponse = await getInspectionTasksOfParticularPerformer(userId);
     if (taskResponse instanceof Error) return;
     let tasks = await taskResponse.json();
-    //TODO NAZWA LIST NAME = IMIĘ + NAZWISKO ZALOGOWANEGO + ZADANIA
-    listName = "ALOJZY PTYŚ - ZADANIA";
+    listName = `${userData.firstName} ${userData.lastName} - ZADANIA`;
     collection = tasks.sort(compareTasksStatutes);
     baseListVisibility = true;
+    goBackButtonVisibility = false;
+    if (hasCreatePermissionFor("inspectionProtocols")) {
+      goBackButtonVisibility = true;
+    }
   });
   function compareTasksStatutes(taskA, taskB) {
     let statusA = taskA.status;
@@ -123,13 +127,14 @@
   }
 </script>
 
-<a href="/tasks">
-  <button
-    class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
-    >Powrót</button
-  >
-</a>
-
+{#if goBackButtonVisibility}
+  <a href="/tasks">
+    <button
+      class="bg-red-500 uppercase decoration-none text-black text-base font-semibold py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+      >Powrót</button
+    >
+  </a>
+{/if}
 {#if baseListVisibility}
   <InspectionTaskDetailedList
     {listName}
