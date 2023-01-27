@@ -13,12 +13,12 @@
     let rolePermissions = [];
     let userPermissions = [];
 
-    $: test = userPermissions.every((c) => c === true); // ? sumowanie i sprawdzićczy reaguje na zmianę
-
     onMount(async () => {
         const user = await getUserById($page.params.slug);
 
-        if (user.role) rolePermissions = await getForRole(user.role.id);
+        if (user.role) {
+            rolePermissions = await getForRole(user.role.id);
+        }
 
         userPermissions = await getForUser($page.params.slug);
     });
@@ -35,64 +35,39 @@
         }
     }
 
-    function tableOnChange() {
-        console.log("TABLE");
-    }
+    function changePreoprtyValue(index, property) {
+        const permission = userPermissions[index];
 
-    function mergePermissions(index, property) {
-        switch (property.toLower()) {
-            case "":
-                break;
-
-            default:
-                break;
+        if (property === "create") {
+            if (permission.create === null)
+                userPermissions[index].create = true;
+            else if (permission.create === true)
+                userPermissions[index].create = false;
+            else userPermissions[index].create = null;
+        } else if (property === "read") {
+            if (permission.read === null) userPermissions[index].read = true;
+            else if (permission.read === true)
+                userPermissions[index].read = false;
+            else userPermissions[index].read = null;
+        } else if (property === "update") {
+            if (permission.update === null)
+                userPermissions[index].update = true;
+            else if (permission.update === true)
+                userPermissions[index].update = false;
+            else userPermissions[index].update = null;
+        } else {
+            if (permission.delete === null)
+                userPermissions[index].delete = true;
+            else if (permission.delete === true)
+                userPermissions[index].delete = false;
+            else userPermissions[index].delete = null;
         }
-
-        return false;
     }
 </script>
 
 <h1>Uprawnienia użytkownika:</h1>
-{test}
-<form on:submit|preventDefault={submitHandler}>
-    <table on:change={tableOnChange}>
-        <tr>
-            <th>Zasób</th>
-            <th>Dodawanie</th>
-            <th>Odczytywanie</th>
-            <th>Aktualizowanie</th>
-            <th>Usuwanie</th>
-        </tr>
 
-        {#each userPermissions as userPerm}
-            <tr>
-                <td>{userPerm.source}</td>
-
-                <td>
-                    <input type="checkbox" bind:checked={userPerm.create} />
-                </td>
-                <td>
-                    <input type="checkbox" bind:checked={userPerm.read} />
-                </td>
-                <td>
-                    <input type="checkbox" bind:checked={userPerm.update} />
-                </td>
-                <td>
-                    <input type="checkbox" bind:checked={userPerm.delete} />
-                </td>
-            </tr>
-        {/each}
-    </table>
-
-    <button type="submit">Zapisz</button>
-</form>
-
-<br />
-<br />
-
-{#if rolePermissions.length > 0}
-    <h1>Scalone urpawnienia użytkownika i roli:</h1>
-
+<form on:submit|preventDefault={async () => submitHandler()}>
     <table>
         <tr>
             <th>Zasób</th>
@@ -102,39 +77,93 @@
             <th>Usuwanie</th>
         </tr>
 
-        {#each Array(rolePermissions.length) as _, i}
+        {#each userPermissions as userPerm, i}
             <tr>
-                <td>{rolePermissions[i].source}</td>
+                <td>{userPerm.source}</td>
 
                 <td>
-                    <input
-                        type="checkbox"
-                        checked={() => mergePermissions(i, "create")}
-                        disabled
-                    />
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "create")}
+                    >
+                        {#if userPermissions[i].create === null}
+                            <div style="color:gray">
+                                {#if rolePermissions.length > 0}
+                                    {rolePermissions[i].creat ? "TAK" : "NIE"}
+                                {:else}
+                                    BRAK
+                                {/if}
+                            </div>
+                        {:else}
+                            <div style="color:black">
+                                {userPermissions[i].create ? "TAK" : "NIE"}
+                            </div>
+                        {/if}
+                    </button>
                 </td>
                 <td>
-                    <input
-                        type="checkbox"
-                        checked={() => mergePermissions(i, "read")}
-                        disabled
-                    />
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "read")}
+                    >
+                        {#if userPermissions[i].read === null}
+                            <div style="color:gray">
+                                {#if rolePermissions.length > 0}
+                                    {rolePermissions[i].read ? "TAK" : "NIE"}
+                                {:else}
+                                    BRAK
+                                {/if}
+                            </div>
+                        {:else}
+                            <div style="color:black">
+                                {userPermissions[i].read ? "TAK" : "NIE"}
+                            </div>
+                        {/if}
+                    </button>
                 </td>
                 <td>
-                    <input
-                        type="checkbox"
-                        checked={() => mergePermissions(i, "update")}
-                        disabled
-                    />
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "update")}
+                    >
+                        {#if userPermissions[i].update === null}
+                            <div style="color:gray">
+                                {#if rolePermissions.length > 0}
+                                    {rolePermissions[i].update ? "TAK" : "NIE"}
+                                {:else}
+                                    BRAK
+                                {/if}
+                            </div>
+                        {:else}
+                            <div style="color:black">
+                                {userPermissions[i].update ? "TAK" : "NIE"}
+                            </div>
+                        {/if}
+                    </button>
                 </td>
                 <td>
-                    <input
-                        type="checkbox"
-                        checked={() => mergePermissions(i, "delete")}
-                        disabled
-                    />
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "delete")}
+                    >
+                        {#if userPermissions[i].delete === null}
+                            <div style="color:gray">
+                                {#if rolePermissions.length > 0}
+                                    {rolePermissions[i].delete ? "TAK" : "NIE"}
+                                {:else}
+                                    BRAK
+                                {/if}
+                            </div>
+                        {:else}
+                            <div style="color:black">
+                                {userPermissions[i].delete ? "TAK" : "NIE"}
+                            </div>
+                        {/if}
+                    </button>
                 </td>
             </tr>
         {/each}
     </table>
-{/if}
+
+    <button type="submit">Zapisz</button>
+</form>
