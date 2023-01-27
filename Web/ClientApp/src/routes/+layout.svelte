@@ -7,35 +7,37 @@
     hasCreatePermissionFor,
     clearToken,
   } from "$lib/js-lib/authManager";
-  import { goto } from "$app/navigation";
+
   let usersVisibility = false;
   let rolesVisibility = false;
   let buildingsVisibility = false;
   let propertyManagersVisibility = false;
-  let getAllProtocolsHref = false;
-  let getAllHref = false;
   let navbarVisibility = false;
   let tasksHref;
   let protocolsHref;
+  let token;
+
   onMount(() => {
-    let userData = getToken();
-    let userId = userData.id;
-    console.log(userData);
+    token = getToken();
     usersVisibility = hasCreatePermissionFor("users");
     rolesVisibility = hasCreatePermissionFor("roles");
     buildingsVisibility = hasCreatePermissionFor("buildings");
     propertyManagersVisibility = hasCreatePermissionFor("propertyManagers");
+
     if (hasCreatePermissionFor("inspectionTasks")) {
       tasksHref = "/tasks";
     } else {
-      tasksHref = `/tasks/${userId}/performer_tasks`;
+      tasksHref = `/tasks/${token?.id}/performer_tasks`;
     }
+
     if (hasCreatePermissionFor("inspectionProtocols")) {
       protocolsHref = "/protocols";
     } else {
-      protocolsHref = `/protocols/${userId}/performer_protocols`;
+      protocolsHref = `/protocols/${token?.id}/performer_protocols`;
     }
+
     navbarVisibility = true;
+    console.log(navbarVisibility);
   });
 
   function logoutHandler() {
@@ -123,7 +125,7 @@
           hidden
           class="relative text-center bg-gray-300 lg:p-2 p-1"
         >
-          Witaj, dupa<br />
+          Witaj, {token?.login ?? ""}<br />
           <button
             class="font-bold hover:bg-gray-400 w-[100%]"
             on:click|preventDefault={logoutHandler}>Wyloguj</button
@@ -131,7 +133,7 @@
         </div>
       </div>
       <div class="bg-gray-300 p-2 absolute right-[3%] hidden 2xl:block">
-        Witaj, dupa<br />
+        Witaj, {token?.login ?? ""}<br />
         <button
           class="font-bold hover:bg-gray-400 w-[100%]"
           on:click|preventDefault={logoutHandler}>Wyloguj</button

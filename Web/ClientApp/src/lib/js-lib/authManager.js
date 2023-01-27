@@ -33,6 +33,7 @@ export function getRawToken() {
  */
 export function getToken() {
     const decoded = getAndDecodeToken()
+    if (decoded === undefined) return
 
     const expiryDate = new Date(minDate)
     expiryDate.setSeconds(decoded.exp)
