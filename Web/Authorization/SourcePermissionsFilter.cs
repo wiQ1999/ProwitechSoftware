@@ -1,24 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
 namespace Web.Authorization;
 
 public class SourcePermissionsFilter : IAuthorizationFilter
 {
-    private readonly Claim _claim;
+    private readonly Claim[] _claims;
 
-	public SourcePermissionsFilter(Claim claim)
+	public SourcePermissionsFilter(Claim[] claims)
 	{
-		_claim = claim;
+		_claims = claims;
 	}
 
 	public void OnAuthorization(AuthorizationFilterContext context)
 	{
-        var hasClaim = context.HttpContext.User.Claims.Any(c
-            => c.Type == _claim.Type && c.Value == _claim.Value);
+		var claimsExist = _claims.All(c
+			=> context.HttpContext.User.Claims.Any(uc
+				=> uc.Type == c.Type && uc.Value == c.Value));
 
-        if (!hasClaim)
-            context.Result = new ForbidResult();
+		if (!claimsExist)
+			throw new Exception("Brak uprawnień");
     }
 }

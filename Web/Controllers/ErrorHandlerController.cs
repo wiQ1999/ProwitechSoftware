@@ -14,11 +14,13 @@ public class ErrorHandlerController : ApiControllerBase
     {
         Exception? exception = 
             HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+
         if (exception == null)
             return Problem();
 
         var response = await Mediator.Send(
             new GetHandledExceptionResponseQuerie(exception));
+
         return Problem(
             title: response.Title, 
             statusCode: (int)response.StatusCode, 

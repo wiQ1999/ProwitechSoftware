@@ -15,7 +15,7 @@ public class PermissionsController : ApiControllerBase
         Ok(await Mediator.Send(new GetRolePermissionsQuery(roleId)));
 
     [HttpPost("Role/{roleId:Guid}")]
-    [SourcePermissions(AppSource.Users, new[] { PermissionProperty.Create, PermissionProperty.Update })]
+    [SourcePermissions(AppSource.Permissions, new[] { PermissionProperty.Create, PermissionProperty.Update })]
     public async Task<IActionResult> AddOrUpdateForRole(Guid roleId, CreateOrUpdateRolePermissionsCommand command)
     {
         if (roleId != command.RoleId)
@@ -29,7 +29,7 @@ public class PermissionsController : ApiControllerBase
         Ok(await Mediator.Send(new GetUserPermissionsQuery(userId)));
 
     [HttpPost("User/{userId:Guid}")]
-    [SourcePermissions(AppSource.Users, new[] { PermissionProperty.Create, PermissionProperty.Update })]
+    [SourcePermissions(AppSource.Permissions, new[] { PermissionProperty.Create, PermissionProperty.Update })]
     public async Task<IActionResult> AddOrUpdateForRole(Guid userId, CreateOrUpdateUserPermissionsCommand command)
     {
         if (userId != command.UserId)
