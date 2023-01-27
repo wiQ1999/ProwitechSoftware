@@ -44,10 +44,10 @@
   }
 
   function openMenu() {
-        let button = document.getElementById('openableButtonNavbar');
-        if(!button.hidden) button.hidden = true;
-        else button.hidden = false;
-        }
+    let button = document.getElementById("openableButtonNavbar");
+    if (!button.hidden) button.hidden = true;
+    else button.hidden = false;
+  }
 </script>
 
 <header class="flex flex-col">
@@ -114,21 +114,29 @@
         >Protokoły</a
       >
       <div class="font-semibold lg:ml-3 ml-1 w-[10%] text-right 2xl:hidden">
-        <button
-          class="font-normal lg:p-3 p-1 bg-gray-300"
-          on:click={openMenu}
-        >
-        <i class="fa fa-align-justify lg:w-[100%]"></i>
+        <button class="font-normal lg:p-3 p-1 bg-gray-300" on:click={openMenu}>
+          <i class="fa fa-align-justify lg:w-[100%]" />
         </button>
-        <div on:mouseleave={openMenu} id="openableButtonNavbar" hidden class="relative text-center bg-gray-300 lg:p-2 p-1"> 
+        <div
+          on:mouseleave={openMenu}
+          id="openableButtonNavbar"
+          hidden
+          class="relative text-center bg-gray-300 lg:p-2 p-1"
+        >
           Witaj, dupa<br />
-          <button class="font-bold hover:bg-gray-400 w-[100%]" on:click|preventDefault={logoutHandler}>Wyloguj</button>
+          <button
+            class="font-bold hover:bg-gray-400 w-[100%]"
+            on:click|preventDefault={logoutHandler}>Wyloguj</button
+          >
+        </div>
       </div>
-      </div>
-      <div class="bg-gray-300 p-2 absolute right-[3%] hidden 2xl:block"> 
+      <div class="bg-gray-300 p-2 absolute right-[3%] hidden 2xl:block">
         Witaj, dupa<br />
-        <button class="font-bold hover:bg-gray-400 w-[100%]" on:click|preventDefault={logoutHandler}>Wyloguj</button>
-    </div>
+        <button
+          class="font-bold hover:bg-gray-400 w-[100%]"
+          on:click|preventDefault={logoutHandler}>Wyloguj</button
+        >
+      </div>
     </nav>
   {/if}
 </header>
@@ -144,13 +152,13 @@
 </main>
 
 <footer
-  class="bg-[#007acc] lg:text-lg md:text-base text-sm text-white text-center
+  class="bg-[#007acc] lg:text-mg md:text-base text-sm text-white text-center
              border-t-4 border-red-500
              fixed
              w-[100%]
              bottom-0
              p-1"
 >
-  Strona stworzona przez studentów WSB Poznań - Hannę Filipowską, Wiktora
-  Szczeszek oraz Huberta Nowaka. ©
+  Apliakcja realizowana w ramach pracy dyplomowej na Wyższej Szkole Bankowej w
+  Poznaniu. Wykonawcy: Filipowska Hanna, Nowak Hubert i Szczeszek Wiktor. ©
 </footer>
