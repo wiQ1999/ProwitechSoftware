@@ -5,14 +5,14 @@
     import { openModal } from "svelte-modals";
     import BasePopUp from "$lib/components/base/BasePopUp.svelte";
 
-    let permissions = [];
+    let rolePermissions = [];
 
     onMount(async () => {
-        permissions = await getForRole($page.params.slug);
+        rolePermissions = await getForRole($page.params.slug);
     });
 
     async function submitHandler() {
-        const dto = { roleId: $page.params.slug, permissions: permissions };
+        const dto = { roleId: $page.params.slug, permissions: rolePermissions };
         const result = await postOrPutForRole($page.params.slug, dto);
 
         if (result) {
@@ -22,9 +22,30 @@
             });
         }
     }
+
+    function changePreoprtyValue(index, property) {
+        const permission = rolePermissions[index];
+
+        if (property === "create") {
+            if (permission.create === true)
+                rolePermissions[index].create = false;
+            else rolePermissions[index].create = true;
+        } else if (property === "read") {
+            if (permission.read === true) rolePermissions[index].read = false;
+            else rolePermissions[index].read = true;
+        } else if (property === "update") {
+            if (permission.update === true)
+                rolePermissions[index].update = false;
+            else rolePermissions[index].update = true;
+        } else {
+            if (permission.delete === true)
+                rolePermissions[index].delete = false;
+            else rolePermissions[index].delete = true;
+        }
+    }
 </script>
 
-<h1>Uprawnienia dla roli</h1>
+<h1>Uprawnienia roli:</h1>
 
 <form on:submit|preventDefault={submitHandler}>
     <table>
@@ -36,29 +57,41 @@
             <th>Usuwanie</th>
         </tr>
 
-        {#each permissions as permission}
+        {#each rolePermissions as permission, i}
             <tr>
                 <td>{permission.source}</td>
-                <td
-                    ><input
-                        type="checkbox"
-                        bind:checked={permission.create}
-                    /></td
-                >
-                <td><input type="checkbox" bind:checked={permission.read} /></td
-                >
-                <td
-                    ><input
-                        type="checkbox"
-                        bind:checked={permission.update}
-                    /></td
-                >
-                <td
-                    ><input
-                        type="checkbox"
-                        bind:checked={permission.delete}
-                    /></td
-                >
+                <td>
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "create")}
+                    >
+                        <div>{rolePermissions[i].create ? "TAK" : "NIE"}</div>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "read")}
+                    >
+                        <div>{rolePermissions[i].read ? "TAK" : "NIE"}</div>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "update")}
+                    >
+                        <div>{rolePermissions[i].update ? "TAK" : "NIE"}</div>
+                    </button>
+                </td>
+                <td>
+                    <button
+                        type="button"
+                        on:click={() => changePreoprtyValue(i, "delete")}
+                    >
+                        <div>{rolePermissions[i].delete ? "TAK" : "NIE"}</div>
+                    </button>
+                </td>
             </tr>
         {/each}
     </table>

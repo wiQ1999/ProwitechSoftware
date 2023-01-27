@@ -41,7 +41,10 @@ public class PermissionsRepository : GenericRepository<Permission>, IPermissions
     {
         bool isHostSourceNotUnique = await DbSet.AnyAsync(p =>
             p.Source == permission.Source &&
-            (p.RoleId == permission.RoleId || p.UserId == permission.UserId),
+            (
+                (p.RoleId != null && p.RoleId == permission.RoleId) || 
+                (p.UserId != null && p.UserId == permission.UserId)
+            ),
             cancellationToken);
 
         if (isHostSourceNotUnique)

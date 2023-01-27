@@ -38,6 +38,8 @@ public class CreateOrUpdateUserPermissionsCommandHandler
 
             if (originalPerm == null)
             {
+                requestPerm.Id = Guid.NewGuid();
+
                 await _unitOfWork.PermissionsRepository
                     .CreateAsync(requestPerm, cancellationToken);
             }
