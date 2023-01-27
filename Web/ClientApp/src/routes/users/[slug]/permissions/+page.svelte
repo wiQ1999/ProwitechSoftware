@@ -89,7 +89,7 @@
                         {#if userPermissions[i].create === null}
                             <div style="color:gray">
                                 {#if rolePermissions.length > 0}
-                                    {rolePermissions[i].creat ? "TAK" : "NIE"}
+                                    {rolePermissions[i].create ? "TAK" : "NIE"}
                                 {:else}
                                     BRAK
                                 {/if}
