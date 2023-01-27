@@ -1,6 +1,8 @@
 ﻿using Application.Permissions.Commands.Requests;
 using Application.Permissions.Queries.Requests;
+using Infrastructure.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Web.Authorization;
 
 namespace Web.Controllers;
 
@@ -8,10 +10,12 @@ namespace Web.Controllers;
 public class PermissionsController : ApiControllerBase
 {
     [HttpGet("Role/{roleId:Guid}")]
+    [SourcePermissions(AppSource.Permissions, PermissionProperty.Read)]
     public async Task<IActionResult> GetForRole(Guid roleId) =>
         Ok(await Mediator.Send(new GetRolePermissionsQuery(roleId)));
 
     [HttpPost("Role/{roleId:Guid}")]
+    [SourcePermissions(AppSource.Users, new[] { PermissionProperty.Create, PermissionProperty.Update })]
     public async Task<IActionResult> AddOrUpdateForRole(Guid roleId, CreateOrUpdateRolePermissionsCommand command)
     {
         if (roleId != command.RoleId)
@@ -20,10 +24,12 @@ public class PermissionsController : ApiControllerBase
     }
 
     [HttpGet("User/{userId:Guid}")]
+    [SourcePermissions(AppSource.Permissions, PermissionProperty.Read)]
     public async Task<IActionResult> GetForUser(Guid userId) =>
         Ok(await Mediator.Send(new GetUserPermissionsQuery(userId)));
 
     [HttpPost("User/{userId:Guid}")]
+    [SourcePermissions(AppSource.Users, new[] { PermissionProperty.Create, PermissionProperty.Update })]
     public async Task<IActionResult> AddOrUpdateForRole(Guid userId, CreateOrUpdateUserPermissionsCommand command)
     {
         if (userId != command.UserId)
