@@ -1,5 +1,6 @@
 import { addOptionalParameters } from "./helpers";
 import { HttpMethodError } from "./errors";
+import { getRawToken } from "./authManager";
 
 export const apiAddress = "https://localhost:7186";
 
@@ -15,9 +16,7 @@ export async function genericPost(
   let fetchData = {
     method: "POST",
     body: JSON.stringify(bodyToJsonize),
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -39,9 +38,7 @@ export async function genericGetAll(route) {
 
   let fetchData = {
     method: "GET",
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -55,15 +52,14 @@ export async function genericGetAll(route) {
   }
   return response;
 }
+
 export async function genericGetById(route, id) {
   let halfUrl = route + "/" + id;
   let url = apiAddress.concat(halfUrl);
   let response;
   let fetchData = {
     method: "GET",
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -78,14 +74,13 @@ export async function genericGetById(route, id) {
   }
   return response;
 }
+
 export async function genericCustomGet(route) {
   let url = apiAddress.concat(route);
   let response;
   let fetchData = {
     method: "GET",
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -107,9 +102,7 @@ export async function genericDelete(route, id) {
   let response;
   let fetchData = {
     method: "DELETE",
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -124,6 +117,7 @@ export async function genericDelete(route, id) {
   }
   return response;
 }
+
 export async function genericPut(
   route,
   id,
@@ -138,9 +132,7 @@ export async function genericPut(
   let fetchData = {
     method: "PUT",
     body: JSON.stringify(bodyToJsonize),
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -156,15 +148,14 @@ export async function genericPut(
 
   return response;
 }
+
 export async function genericCustomPut(route, bodyToJsonize) {
   let response;
   let url = apiAddress.concat(route);
   let fetchData = {
     method: "PUT",
     body: JSON.stringify(bodyToJsonize),
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
 
   response = await fetch(url, fetchData);
@@ -180,15 +171,14 @@ export async function genericCustomPut(route, bodyToJsonize) {
 
   return response;
 }
+
 export async function genericPutWithAdditionalUrl(halfUrl, bodyToJsonize) {
   let response;
 
   let fetchData = {
     method: "PUT",
     body: JSON.stringify(bodyToJsonize),
-    headers: new Headers({
-      "content-type": "application/json",
-    }),
+    headers: createHeader(),
   };
   let url = apiAddress.concat(halfUrl);
   response = await fetch(url, fetchData);
@@ -203,4 +193,17 @@ export async function genericPutWithAdditionalUrl(halfUrl, bodyToJsonize) {
   }
 
   return response;
+}
+
+function createHeader() {
+  return new Headers({
+    "content-type": "application/json",
+    "Authorization": getBearerToken()
+  })
+}
+
+function getBearerToken() {
+  const token = getRawToken();
+
+  if (token) return "Bearer " + token;
 }

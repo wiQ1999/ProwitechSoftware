@@ -20,6 +20,14 @@ export function setToken(token) {
 }
 
 /**
+ * Gets not decoded JWT Token.
+ * @returns {string|undefined} JWT token if exist.
+ */
+export function getRawToken() {
+    return Cookies.get(cookieName);
+}
+
+/**
  * Gets and decodes JWT token from cookies.
  * @returns {object|undefined} decoded JWT token if exist.
  */
