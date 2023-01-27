@@ -13,7 +13,6 @@ export async function postUser(userDto) {
     return response.json();
   } catch (err) {
     handleError(err, "dodawanie Użytkownika");
-    return err;
   }
 }
 
@@ -21,10 +20,8 @@ export async function getAllUsers() {
   try {
     const response = await genericGetAll("/Users");
     return await response.json();
-  }
-  catch (err) {
+  } catch (err) {
     handleError(err, "pobieranie wszystkich Użytkowników");
-    return err;
   }
 }
 
@@ -43,7 +40,6 @@ export async function putUser(id, user) {
     return response.json();
   } catch (err) {
     handleError(err, "Aktualizacja Użytkownika");
-    return err;
   }
 }
 
@@ -53,7 +49,6 @@ export async function putUserPassword(id, pwdDto) {
     return response.json();
   } catch (err) {
     handleError(err, "Aktualizacja hasła Użytkownika");
-    return err;
   }
 }
 
@@ -63,6 +58,5 @@ export async function deleteUser(id) {
     return await response.json();
   } catch (err) {
     handleError(err, "usuwanie Użytkownika na podstawie ID");
-    return err;
   }
 }

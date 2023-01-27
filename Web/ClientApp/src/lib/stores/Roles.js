@@ -13,7 +13,6 @@ export async function postRole(name) {
     return await response.json();
   } catch (err) {
     handleError(err, "Dodawanie Roli");
-    return err;
   }
 }
 
@@ -21,10 +20,8 @@ export async function getAllRoles() {
   try {
     const response = await genericGetAll("/Roles");
     return await response.json();
-  }
-  catch (err) {
+  } catch (err) {
     handleError(err, "Pobieranie wszystkich Ról");
-    return err;
   }
 }
 
@@ -34,7 +31,6 @@ export async function getRoleById(id) {
     return await response.json();
   } catch (err) {
     handleError(err, "Pobieranie Roli na podstawie ID");
-    return err;
   }
 }
 
@@ -44,7 +40,6 @@ export async function putRole(id, roleDto) {
     return await response.json();
   } catch (err) {
     handleError(err, "Aktualizacja Roli");
-    return err;
   }
 }
 
@@ -55,5 +50,4 @@ export async function deleteRole(id) {
   } catch (err) {
     handleError(err, "Usuwanie Roli na podstawie ID");
   }
-  return response;
 }

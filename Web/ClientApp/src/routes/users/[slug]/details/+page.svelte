@@ -5,28 +5,19 @@
     import { getUserById, putUser } from "$lib/stores/Users";
     import { getAllRoles } from "$lib/stores/Roles";
 
-    let baseUser;
-    let user = {
-        id: null,
-        login: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        phoneNumber: null,
-        role: {
-            id: null,
-            name: null,
-        },
-    };
+    let baseUser = {};
+    let user = {};
     let roles = [];
     let isEditing = false;
 
     onMount(async () => {
         baseUser = await getUserById($page.params.slug);
-        user = Object.assign({}, baseUser);
+        user = { ...baseUser };
         roles = await getAllRoles();
 
-        formNameStore.update(() => user?.login ?? "");
+        user.role = roles.find((r) => r.id === user.role?.id);
+
+        formNameStore.update(() => user.login ?? "");
     });
 
     async function submitHandler() {
@@ -37,11 +28,15 @@
                 lastName: user.lastName,
                 email: user.email,
                 phoneNumber: user.phoneNumber,
-                roleId: user.role.id,
+                roleId: user.role?.id,
                 id: user.id,
             };
-            await putUser(user.id, dto);
-            baseUser = Object.assign({}, user);
+
+            const result = await putUser(user.id, dto);
+
+            if (result) {
+                baseUser = { ...user };
+            }
         }
         changeEditingStatus();
     }
@@ -58,17 +53,16 @@
         );
     }
 
+    function clearRoleInputHandler() {
+        user.role = null;
+    }
+
     function editHandler() {
         changeEditingStatus();
     }
 
     function changeEditingStatus() {
         isEditing = !isEditing;
-    }
-
-    function roleInputHangler(event) {
-        let role = roles.find((r) => r.id == event.target.value);
-        user.role = role;
     }
 </script>
 
@@ -88,27 +82,31 @@
             required
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         />
+
         <br />
+
         <label for="firstName" class="block">Imię</label>
         <input
             name="firstName"
             type="text"
             bind:value={user.firstName}
             disabled={!isEditing}
-            required
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         />
+
         <br />
+
         <label for="lastName" class="block">Nazwisko</label>
         <input
             name="lastName"
             type="text"
             bind:value={user.lastName}
             disabled={!isEditing}
-            required
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         />
+
         <br />
+
         <label for="email" class="block">Email</label>
         <input
             name="email"
@@ -117,7 +115,9 @@
             disabled={!isEditing}
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         />
+
         <br />
+
         <label for="phoneNumber" class="block">Numer telefonu</label>
         <input
             name="phoneNumber"
@@ -126,35 +126,43 @@
             disabled={!isEditing}
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
         />
+
         <br />
-        <label for="role" class="block">Rola</label>
-        <select
-            name="role"
-            on:input={roleInputHangler}
-            disabled={!isEditing}
-            required
-            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-        >
-            {#each roles as role}
-                {#if user.role != null && user.role.id == role.id}
-                    <option value={role.id} selected>{role.name}</option>
-                {:else}
-                    <option value={role.id}>{role.name}</option>
-                {/if}
-            {/each}
-        </select>
+
+        <div>
+            <label for="role" class="block">Rola</label>
+            <select
+                name="role"
+                bind:value={user.role}
+                disabled={!isEditing}
+                class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+            >
+                {#each roles as role}
+                    <option value={role}>{role.name}</option>
+                {/each}
+            </select>
+
+            <button
+                type="button"
+                on:click={clearRoleInputHandler}
+                disabled={!isEditing}
+                >X
+            </button>
+        </div>
+
         {#if isEditing}
             <button
                 type="submit"
                 class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400"
-                >Zapisz</button
-            >
+                >Zapisz
+            </button>
         {:else}
             <button
-                on:click|preventDefault={editHandler}
+                type="button"
+                on:click={editHandler}
                 class="w-[100%] border-2 border-[#0078c8] p-2 mb-5 hover:bg-blue-400"
-                >Edytuj</button
-            >
+                >Edytuj
+            </button>
         {/if}
     </fieldset>
 </form>

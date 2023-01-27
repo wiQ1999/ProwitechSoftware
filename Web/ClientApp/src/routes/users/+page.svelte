@@ -13,10 +13,10 @@
   });
 
   const headerDictionary = {
+    login: "login",
     Imię: "firstName",
     Nazwisko: "lastName",
     Email: "email",
-    "Numer tel.": "phoneNumber",
     Rola: "role.name",
   };
 
