@@ -300,6 +300,8 @@
     <ShowPropertyManagerPopUp
       {PropertyManagerDTO}
       message={showPropertyManagerPopUpMessage}
+      editMode={true}
+      buttonVisibility={true}
     />
   {/if}
 </div>

@@ -24,6 +24,9 @@
   let buildings = [];
   let today = prepareDateTime(new Date(), true);
 
+  let inspectionTaskWithoutChanges = null;
+  let inspectionTaskForEdition = null;
+
   onMount(async () => {
     if (!editMode) CreateInspectionTaskCommand.dueStartDateTime = today;
     //TODO sprawdzić, kto wszedł tutaj, jeśli nie admin, pokaż błąd
@@ -56,15 +59,22 @@
     if (editMode) {
       submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły Zadania";
+      multiplyObjects();
     }
     formVisibility = true;
   });
+  function multiplyObjects() {
+    inspectionTaskWithoutChanges = structuredClone(CreateInspectionTaskCommand);
+    inspectionTaskForEdition = structuredClone(CreateInspectionTaskCommand);
+  }
   function changeEditingStatus() {
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
+      CreateInspectionTaskCommand = inspectionTaskWithoutChanges;
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      CreateInspectionTaskCommand = inspectionTaskForEdition;
     }
     if (readMode) upper_message = "Szczegóły Zadania";
     else upper_message = "Edycja Zadania";

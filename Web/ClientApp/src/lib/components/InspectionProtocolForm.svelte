@@ -62,6 +62,8 @@
   export let performerLookUp = false;
   export let propertyId = null;
   export let creationThroughTask = false;
+  let inspectionProtocolWithoutChanges = null;
+  let inspectionProtocolForEdition = null;
   let formVisibility;
   let upper_message = "Dodaj Protokół";
   let button_turn_on_edition_message = "Włącz edycję";
@@ -86,7 +88,6 @@
   let multipleRequiredMessage = "Zaznacz wymagane pole";
 
   onMount(async () => {
-    console.log(CreateInspectionProtocolCommand);
     if (!editMode)
       CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionDateTime =
         today;
@@ -98,21 +99,25 @@
       upper_message = "Szczegóły Protokołu";
     }
 
-    // if (creationThroughTask) {
-    //   //TODO POBRAĆ ID ZALOGOWANEGO UŻYTKOWNIKA
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
-    //     "030B7529-173C-41A8-953D-75BA46B7FC21";
-    //   // console.log(CreateInspectionProtocolCommand);
-    // }
-
     await prepareForm();
     formVisibility = true;
   });
+  function multiplyObjects() {
+    inspectionProtocolWithoutChanges = structuredClone(
+      CreateInspectionProtocolCommand
+    );
+    inspectionProtocolForEdition = structuredClone(
+      CreateInspectionProtocolCommand
+    );
+  }
   async function prepareForm() {
     let downloadBuildingsSuccess = true;
     await downloadUsers();
     downloadBuildingsSuccess = await downloadBuildingsAndRealProperties();
-    if (editMode) setMultipleValues();
+    if (editMode) {
+      multiplyObjects();
+      setMultipleValues(CreateInspectionProtocolCommand);
+    }
     if (downloadBuildingsSuccess) formVisibility = true;
   }
   async function downloadUsers() {
@@ -126,15 +131,13 @@
       });
     }
   }
-  function setMultipleValues() {
+  function setMultipleValues(inspectionProtocolCommand) {
     let multiple_07 =
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
-        .m_A_07_Przewody_rodzaj;
+      inspectionProtocolCommand.inspectionProtocolDTO.m_A_07_Przewody_rodzaj;
     let multiple_08 =
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
-        .m_A_08_Przewody_przebieg;
+      inspectionProtocolCommand.inspectionProtocolDTO.m_A_08_Przewody_przebieg;
     let multiple_09 =
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
+      inspectionProtocolCommand.inspectionProtocolDTO
         .m_A_09_Przewody_sposob_prowadzenia;
 
     m_A_07_Przewody_rodzaj_array = multiple_07.split(",");
@@ -226,8 +229,12 @@
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
+      CreateInspectionProtocolCommand = inspectionProtocolWithoutChanges;
+      setMultipleValues(CreateInspectionProtocolCommand);
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      CreateInspectionProtocolCommand = inspectionProtocolForEdition;
+      setMultipleValues(CreateInspectionProtocolCommand);
     }
     if (readMode) upper_message = "Szczegóły Protokołu";
     else upper_message = "Edycja Protokołu";
@@ -281,6 +288,12 @@
         multiple_09 += ",";
       }
     }
+
+    console.log("************");
+    console.log(multiple_07);
+    console.log(multiple_08);
+    console.log(multiple_09);
+    console.log("************");
     //TODO IF CREATION THROUGH TASK
     // CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
     // "030B7529-173C-41A8-953D-75BA46B7FC21";
@@ -292,6 +305,10 @@
       multiple_08;
     CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_09_Przewody_sposob_prowadzenia =
       multiple_09;
+    console.log("###########");
+    console.log(CreateInspectionProtocolCommand);
+    console.log("###########");
+
     if (!editMode) {
       let number = await getProtocolBiggestNumberForToday(numberDate);
       if (number instanceof Response) {

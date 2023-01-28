@@ -36,7 +36,7 @@
       force: false,
       onlyAddress: false,
     };
-    
+
     buildingAddressPostResult = await postBuildingAddress(
       buildingAddressDTO,
       optionalArguments
@@ -124,7 +124,10 @@
 </script>
 
 <a href="/propertyManagers/getAll">
-  <button class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer">Powrót</button>
+  <button
+    class="bg-red-500 uppercase decoration-none text-black text-base py-[1%] mx-auto rounded-md flex w-[60%] justify-center cursor-pointer"
+    >Powrót</button
+  >
 </a>
 <div class="add-property-manager-form">
   {#if buildingAddressConfirmPopUpVisibility}
@@ -146,6 +149,7 @@
     <ShowPropertyManagerPopUp
       PropertyManagerDTO={PropertyManagerDTOToShow}
       message={showPropertyManagerPopUpMessage}
+      buttonVisibility={true}
     />
   {/if}
 </div>

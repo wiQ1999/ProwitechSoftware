@@ -74,6 +74,8 @@
     formVisibility = true;
   });
   const updateProtocol = async () => {
+    console.log(originalInspectionProtocol);
+    console.log(UpdateInspectionProtocolCommand);
     if (
       !protocolsDiffer(
         originalInspectionProtocol,

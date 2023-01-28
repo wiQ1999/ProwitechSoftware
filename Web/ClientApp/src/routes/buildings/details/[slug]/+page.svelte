@@ -118,6 +118,9 @@
     newPropertyManagerId,
     newBuildingType
   ) {
+    console.log(newBuildingAddressDTO);
+    console.log(newPropertyManagerId);
+    console.log(newBuildingType);
     await updateBuildingAddressOnly(
       newBuildingAddressDTO,
       originalBuildingAddressDTO
@@ -351,6 +354,8 @@
       {BuildingDTO}
       message1={showBuildingPopUpMessage}
       message2="podlegający pod Zarządcę Nieruchomości:"
+      buttonVisibility={true}
+      editMode={true}
     />
   {/if}
 </div>

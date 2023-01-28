@@ -172,7 +172,12 @@
     />{/if}
   {#if showBuildingPopUpVisibility}
     <div>
-      <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
+      <ShowBuildingPopUp
+        BuildingDTO={newBuildingData}
+        {message1}
+        {message2}
+        buttonVisibility={true}
+      />
     </div>
   {/if}
 </div>
