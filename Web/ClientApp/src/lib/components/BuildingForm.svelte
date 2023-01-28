@@ -97,7 +97,7 @@
   function changeEditingStatus() {
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
-      button_turn_on_edition_message = "Zakończ edycję";
+      button_turn_on_edition_message = "Wyłącz edycję";
       buildingAddressDTO = buildingAddressDTOForEdition;
       propertyManagerId = propertyManagerIdForEdition;
       buildingType = buildingTypeForEdition;
