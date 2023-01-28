@@ -18,7 +18,6 @@ namespace Infrastructure.GoogleAPI
     {
         private const string baseAddress = $"https://maps.googleapis.com/maps/api/geocode/";
         private string apiKey;
-        //= "AIzaSyC5f4Vto2rwP0J72ANp6sWJAxlZvKqRmAw";
 
         private HttpClient client;
         private BuildingAddress postedAddress;
