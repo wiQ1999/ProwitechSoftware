@@ -70,7 +70,7 @@
       mapVisibility = true;
     }
     if (
-      collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
+      collectionOfNewProtocols.length>0 && collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
       taskStatus != "zakończone" &&
       taskStatus != "zakonczone"
     )
