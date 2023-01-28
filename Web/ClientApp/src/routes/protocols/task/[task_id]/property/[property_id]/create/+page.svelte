@@ -70,17 +70,6 @@
     formVisibility = true;
   });
   const createProtocol = async () => {
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionTaskId
-    );
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectedPropertyId
-    );
-    console.log(
-      CreateInspectionProtocolCommand.inspectionProtocolDTO
-        .inspectionPerformerId
-    );
-
     let result = await postInspectionProtocol(CreateInspectionProtocolCommand);
     if (result instanceof Response) {
       openModal(BasePopUp, {
@@ -106,6 +95,6 @@
     creationThroughTask={true}
     propertyId={$page.params.property_id}
     onSubmit={createProtocol}
-    {CreateInspectionProtocolCommand}
+    bind:CreateInspectionProtocolCommand
   />
 {/if}

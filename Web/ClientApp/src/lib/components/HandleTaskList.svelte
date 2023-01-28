@@ -22,8 +22,6 @@
     dispatch("secondButtonAction", { row });
   }
   function markOutSelectedRow(id) {
-    console.log("************");
-    console.log(id);
     document.getElementById(id).style.backgroundColor = "red";
   }
 

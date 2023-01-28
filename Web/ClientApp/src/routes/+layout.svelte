@@ -20,7 +20,6 @@
   onMount(() => {
     let userData = getToken();
     let userId = userData.id;
-    console.log(userData);
     usersVisibility = hasCreatePermissionFor("users");
     rolesVisibility = hasCreatePermissionFor("roles");
     buildingsVisibility = hasCreatePermissionFor("buildings");

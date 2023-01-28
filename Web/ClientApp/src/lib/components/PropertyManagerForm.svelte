@@ -39,7 +39,6 @@
       submit_button_message = "ZATWIERDŹ";
       multiplyObjects();
     }
-    console.log(propertyManagerDTO);
   });
   function multiplyObjects() {
     buildingAddressDTOWithoutChanges = structuredClone(buildingAddressDTO);
@@ -51,12 +50,12 @@
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
-      buildingAddressDTO = buildingAddressDTOWithoutChanges;
-      propertyManagerDTO = propertyManagerDTOWithoutChanges;
-    } else {
-      button_turn_on_edition_message = "Włącz edycję";
       buildingAddressDTO = buildingAddressDTOForEdition;
       propertyManagerDTO = propertyManagerDTOForEdition;
+    } else {
+      button_turn_on_edition_message = "Włącz edycję";
+      buildingAddressDTO = buildingAddressDTOWithoutChanges;
+      propertyManagerDTO = propertyManagerDTOWithoutChanges;
     }
     if (readMode) form_upper_message = "Szczegóły Zarządcy Nieruchomości";
     else form_upper_message = "Edycja Zarządcy Nieruchomości";
@@ -83,11 +82,11 @@
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9] disabled:bg-[#e8eeef]"
     >
       {#each cities as city}
-        {#if city.id == "Poznań"}
+        <!-- {#if city.id == "Poznań"}
           <option value={city.id} selected>{city.name}</option>
-        {:else}
-          <option value={city.id}>{city.name}</option>
-        {/if}
+        {:else} -->
+        <option value={city.id}>{city.name}</option>
+        <!-- {/if} -->
       {/each}
     </select>
     <label for="property-manager-name" class="block"

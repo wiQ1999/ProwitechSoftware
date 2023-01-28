@@ -53,7 +53,6 @@
     }
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
-    console.log(propertyManagersResultJSON);
 
     for (let element of propertyManagersResultJSON) {
       propertyManagers.push({
@@ -104,6 +103,8 @@
       buildingType = buildingTypeForEdition;
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      propertyManagerIdForEdition = propertyManagerId;
+      buildingTypeForEdition = buildingType;
       buildingAddressDTO = buildingAddressDTOWithoutChanges;
       propertyManagerId = propertyManagerIdWithoutChanges;
       buildingType = buildingTypeWithoutChanges;

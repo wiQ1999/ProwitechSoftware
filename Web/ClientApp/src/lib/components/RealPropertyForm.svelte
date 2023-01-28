@@ -23,9 +23,10 @@
   let button_turn_on_edition_message = "Włącz edycję";
   let readMode = false;
   let submitButtonMessage = "DODAJ";
+  let realPropertyForEdition = null;
+  let realPropertyWithoutChanges = null;
 
   onMount(async () => {
-    console.log(CreateRealPropertyCommand);
     readMode = editMode;
 
     let buildingResponse = await getBuildingById($page.params.slug);
@@ -33,11 +34,12 @@
     if (buildingResponse instanceof Error) return;
 
     building = await buildingResponse.json();
-    console.log(building);
     buildingInfo = `${building.buildingAddress.streetName} ${building.buildingAddress.buildingNumber}, ${building.buildingAddress.cityName}`;
     if (editMode) {
       submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły Nieruchomości";
+      realPropertyForEdition = structuredClone(CreateRealPropertyCommand);
+      realPropertyWithoutChanges = structuredClone(CreateRealPropertyCommand);
     }
     formVisibility = true;
   });
@@ -45,8 +47,10 @@
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
+      CreateRealPropertyCommand = realPropertyForEdition;
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      CreateRealPropertyCommand = realPropertyWithoutChanges;
     }
     if (readMode) upper_message = "Szczegóły Nieruchomości";
     else upper_message = "Edycja Nieruchomości";
@@ -54,14 +58,15 @@
 </script>
 
 {#if formVisibility}
-  <div class="text-center lg:my-16 my-14 opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide">
+  <div
+    class="text-center lg:my-16 my-14 opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide"
+  >
     {buildingInfo}
   </div>
   <form
     on:submit|preventDefault={async () => await onSubmit()}
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
   >
-  
     <fieldset class="border-none">
       <legend class="font-bold text-lg py-5"> {upper_message} </legend>
       {#if editMode}

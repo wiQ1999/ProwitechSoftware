@@ -67,15 +67,12 @@
     let res = await getInspectionProtocolById($page.params.protocol_id);
     if (res instanceof Error) return;
     originalInspectionProtocol = await res.json();
-    console.log(originalInspectionProtocol);
     UpdateInspectionProtocolCommand = structuredClone(
       originalInspectionProtocol
     );
     formVisibility = true;
   });
   const updateProtocol = async () => {
-    console.log(originalInspectionProtocol);
-    console.log(UpdateInspectionProtocolCommand);
     if (
       !protocolsDiffer(
         originalInspectionProtocol,
@@ -116,7 +113,7 @@
   <InspectionProtocolForm
     creationThroughTask={false}
     onSubmit={updateProtocol}
-    CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
+    bind:CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
     editMode={true}
   />
 {/if}

@@ -66,7 +66,6 @@
           buildingAddressPostResultAgainJSON.addedBuildingAddress.id;
       } else {
         result_message = `Problem z dodaniem adresu: ${buildingAddressPostResultAgainJSON}`;
-        console.log(buildingAddressPostResultAgainJSON);
         buttonErrorVisibility = true;
         buttonContinueVisibility = false;
       }

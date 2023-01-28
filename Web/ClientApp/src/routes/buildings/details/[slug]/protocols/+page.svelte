@@ -43,7 +43,6 @@
     let protocolResponse = await getBuildingProtocols($page.params.slug);
     if (protocolResponse instanceof Error) return;
     let protocols = await protocolResponse.json();
-    console.log(protocols);
 
     collection = protocols;
     baseListVisibility = true;

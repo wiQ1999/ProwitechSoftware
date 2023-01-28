@@ -111,7 +111,6 @@
       originalBuildingAddressDTO =
         originalPropertyManagerDTO.fullAddress.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
-      console.log(updatePropertyManagerDTO);
       formVisibility = true;
     } else {
       errorDivVisibility = true;

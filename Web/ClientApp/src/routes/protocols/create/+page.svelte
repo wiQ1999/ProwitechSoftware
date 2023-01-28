@@ -71,5 +71,5 @@
 <InspectionProtocolForm
   creationThroughTask={false}
   onSubmit={createProtocol}
-  {CreateInspectionProtocolCommand}
+  bind:CreateInspectionProtocolCommand
 />

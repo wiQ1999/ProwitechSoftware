@@ -61,7 +61,6 @@
   }
 
   function preparePropertyManagerCommand() {
-    console.log(propertyManagerDTO);
     let PropertyManagerCommand;
 
     if (
@@ -96,7 +95,6 @@
   async function createPropertyManager() {
     buildingAddressConfirmPopUpVisibility = false;
     let PropertyManagerCommand = preparePropertyManagerCommand();
-    console.log(PropertyManagerCommand);
     let postPropertyManagerId = await postPropertyManager(
       PropertyManagerCommand
     );

@@ -65,7 +65,6 @@ export async function deleteInspectionProtocol(id) {
   }
 }
 export async function getInspectionProtocolsOfParticularTask(taskId) {
-  console.log(taskId);
   let route = "/InspectionProtocol/taskProtocols";
   let response;
   try {

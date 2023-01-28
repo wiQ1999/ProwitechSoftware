@@ -71,10 +71,10 @@
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
       button_turn_on_edition_message = "Zakończ edycję";
-      CreateInspectionTaskCommand = inspectionTaskWithoutChanges;
+      CreateInspectionTaskCommand = inspectionTaskForEdition;
     } else {
       button_turn_on_edition_message = "Włącz edycję";
-      CreateInspectionTaskCommand = inspectionTaskForEdition;
+      CreateInspectionTaskCommand = inspectionTaskWithoutChanges;
     }
     if (readMode) upper_message = "Szczegóły Zadania";
     else upper_message = "Edycja Zadania";
