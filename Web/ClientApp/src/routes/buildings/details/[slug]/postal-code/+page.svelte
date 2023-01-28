@@ -10,8 +10,6 @@
     let buildingResponse = await getBuildingById($page.params.slug);
     if (buildingResponse instanceof Response) {
       let building = await buildingResponse.json();
-
-      console.log(building);
       buildingAddressDTO = {
         id: building.buildingAddress.id,
         cityName: building.buildingAddress.cityName,

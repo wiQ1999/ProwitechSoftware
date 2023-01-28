@@ -41,7 +41,6 @@
         setMap();
       })
       .catch((err) => {
-        console.log(err);
         errorMessage = err;
         loadError = true;
       });

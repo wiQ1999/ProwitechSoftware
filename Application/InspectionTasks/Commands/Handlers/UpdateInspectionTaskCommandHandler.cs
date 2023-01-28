@@ -29,6 +29,8 @@ namespace Application.InspectionTasks.Commands.Handlers
             var taskFromDB = await _unitOfWork.InspectionTaskRepository.GetAsync(request.Id, cancellationToken);
             if (taskFromDB == null)
                 throw new Exception($"Nie można edytować Zadania: Nie istnieje Zadanie o Id: {request.Id}");
+            if (taskFromDB.Status==InspectionTaskStatus.IN_PROGRESS)
+                throw new Exception($"Nie można edytować Zadania: Zadanie zostało już rozpoczęte");
             await CheckIfUpdatedValuesAreAllowed(request, cancellationToken);
 
             taskFromDB.BuildingId = request.BuildingId;

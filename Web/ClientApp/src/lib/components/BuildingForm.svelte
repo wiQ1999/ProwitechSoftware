@@ -15,6 +15,13 @@
   let readMode = false;
   let upper_message = "Dodaj budynek";
   export let building = null;
+  let buildingAddressDTOWithoutChanges = null;
+  let propertyManagerIdWithoutChanges = null;
+  let buildingTypeWithoutChanges = null;
+
+  let buildingAddressDTOForEdition = null;
+  let propertyManagerIdForEdition = null;
+  let buildingTypeForEdition = null;
 
   let formVisibility;
   let propertyManagers = [];
@@ -42,10 +49,10 @@
     if (editMode) {
       submitButtonMessage = "ZATWIERDŹ";
       upper_message = "Szczegóły budynku";
+      multiplyObjects();
     }
 
     let propertyManagersResultJSON = await propertyManagersResult.json();
-    console.log(propertyManagersResultJSON);
 
     for (let element of propertyManagersResultJSON) {
       propertyManagers.push({
@@ -78,12 +85,29 @@
 
     // getAllPropertyManagers
   });
+  function multiplyObjects() {
+    buildingAddressDTOWithoutChanges = structuredClone(buildingAddressDTO);
+    propertyManagerIdWithoutChanges = structuredClone(propertyManagerId);
+    buildingTypeWithoutChanges = structuredClone(buildingType);
+
+    buildingAddressDTOForEdition = structuredClone(buildingAddressDTO);
+    propertyManagerIdForEdition = structuredClone(propertyManagerId);
+    buildingTypeForEdition = structuredClone(buildingType);
+  }
   function changeEditingStatus() {
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
-      button_turn_on_edition_message = "Zakończ edycję";
+      button_turn_on_edition_message = "Wyłącz edycję";
+      buildingAddressDTO = buildingAddressDTOForEdition;
+      propertyManagerId = propertyManagerIdForEdition;
+      buildingType = buildingTypeForEdition;
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      propertyManagerIdForEdition = propertyManagerId;
+      buildingTypeForEdition = buildingType;
+      buildingAddressDTO = buildingAddressDTOWithoutChanges;
+      propertyManagerId = propertyManagerIdWithoutChanges;
+      buildingType = buildingTypeWithoutChanges;
     }
     if (readMode) upper_message = "Szczegóły budynku";
     else upper_message = "Edycja budynku";
@@ -92,7 +116,6 @@
 </script>
 
 {#if formVisibility}
-  
   <form
     on:submit|preventDefault={async () => await onSubmit()}
     class="w-[50%] my-3 mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
@@ -100,14 +123,19 @@
     <fieldset class="border-none">
       <legend class="font-bold text-lg py-5"> {upper_message} </legend>
       {#if editMode}
-    <button
-      on:click|preventDefault={() => changeEditingStatus()}
-      class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white"
-      >{button_turn_on_edition_message}</button
-    >
-  {/if}
+        <button
+          on:click|preventDefault={() => changeEditingStatus()}
+          class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white"
+          >{button_turn_on_edition_message}</button
+        >
+      {/if}
       <label for="building-address-city-name" class="block">Miejscowość</label>
-      <select bind:value={buildingAddressDTO.cityName} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
+      <select
+        bind:value={buildingAddressDTO.cityName}
+        disabled={readMode}
+        required
+        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+      >
         {#each cities as city}
           <option value={city.id}>{city.name}</option>
         {/each}
@@ -118,7 +146,8 @@
         type="text"
         bind:value={buildingAddressDTO.streetName}
         disabled={readMode}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        required
+        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       />
       <label for="building-address-building-number" class="block"
         >Numer budynku</label
@@ -127,45 +156,55 @@
         type="text"
         bind:value={buildingAddressDTO.buildingNumber}
         disabled={readMode}
-        required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        required
+        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
       />
       <label for="building-type">Typ budynku</label>
 
-      <select bind:value={buildingType} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
+      <select
+        bind:value={buildingType}
+        disabled={readMode}
+        required
+        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+      >
         {#each buildingTypes as btype}
           <option value={btype.id}>{btype.name}</option>
         {/each}
       </select>
 
-    <label for="building-property-manager" class="block">Zarządca Nieruchomości</label>
-    <select bind:value={propertyManagerId} disabled={readMode} required class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]">
-
-      {#each propertyManagers as propman}
-        <option value={propman.id}
-          >{propman.name}
-          {#if propman.fullAddressInShort.streetName}
-          | {propman.fullAddressInShort.streetName}
-          {/if}
-          {#if propman.fullAddressInShort.buildingNumber}
-          {propman.fullAddressInShort.buildingNumber}
-          {/if}
-          {#if propman.fullAddressInShort.staircaseNumber}
-          kl. {propman.fullAddressInShort.staircaseNumber}
-          {/if}
-          {#if propman.fullAddressInShort.venueNumber}
-          m. {propman.fullAddressInShort.venueNumber}
-          {/if}
-          {#if propman.fullAddressInShort.postalCode}
-          | {propman.fullAddressInShort.postalCode}
-          {/if}
-          {#if propman.fullAddressInShort.cityName}
-          | {propman.fullAddressInShort.cityName}
-          {/if}
-          </option
-        >
-      {/each}
-    </select>
-
+      <label for="building-property-manager" class="block"
+        >Zarządca Nieruchomości</label
+      >
+      <select
+        bind:value={propertyManagerId}
+        disabled={readMode}
+        required
+        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+      >
+        {#each propertyManagers as propman}
+          <option value={propman.id}
+            >{propman.name}
+            {#if propman.fullAddressInShort.streetName}
+              | {propman.fullAddressInShort.streetName}
+            {/if}
+            {#if propman.fullAddressInShort.buildingNumber}
+              {propman.fullAddressInShort.buildingNumber}
+            {/if}
+            {#if propman.fullAddressInShort.staircaseNumber}
+              kl. {propman.fullAddressInShort.staircaseNumber}
+            {/if}
+            {#if propman.fullAddressInShort.venueNumber}
+              m. {propman.fullAddressInShort.venueNumber}
+            {/if}
+            {#if propman.fullAddressInShort.postalCode}
+              | {propman.fullAddressInShort.postalCode}
+            {/if}
+            {#if propman.fullAddressInShort.cityName}
+              | {propman.fullAddressInShort.cityName}
+            {/if}
+          </option>
+        {/each}
+      </select>
     </fieldset>
     {#if !readMode}
       <button
@@ -174,7 +213,6 @@
         >{submitButtonMessage}</button
       >
     {/if}
-    
   </form>
   {#if readMode}
     <Map {building} displayLink={false} />

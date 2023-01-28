@@ -16,7 +16,6 @@ export async function updateBuildingAddressPostalCode(
     Id: buildingAddressId,
     PostalCode: newPostalCode,
   };
-  console.log(UpdatePostalCodeCommand);
   let response;
   try {
     response = await genericPutWithAdditionalUrl(

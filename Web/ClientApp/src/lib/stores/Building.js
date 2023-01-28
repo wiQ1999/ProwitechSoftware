@@ -74,8 +74,6 @@ export async function updateBuilding(updateBuildingDTO) {
   return false;
 }
 async function putBuilding(updateBuildingDTO) {
-  console.log(updateBuildingDTO);
-
   let UpdateBuildingCommand;
   if (updateBuildingDTO.propertyManagerId) {
     UpdateBuildingCommand = {
@@ -89,7 +87,6 @@ async function putBuilding(updateBuildingDTO) {
       type: updateBuildingDTO.type,
     };
   }
-  console.log(UpdateBuildingCommand);
 
   let response;
   try {
@@ -100,7 +97,7 @@ async function putBuilding(updateBuildingDTO) {
     );
     return response;
   } catch (err) {
-    handleError(err, "Aktualizacja danych Budynku");
+    handleError(err, "Aktualizacja danych Budynku", true);
     return err;
   }
 }

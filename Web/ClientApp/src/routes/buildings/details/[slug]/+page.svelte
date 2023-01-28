@@ -88,7 +88,6 @@
     let buildingResponse = await getBuildingById(buildingId);
     if (buildingResponse instanceof Response) {
       originalBuildingDTO = await buildingResponse.json();
-      console.log(originalBuildingDTO);
       if (originalBuildingDTO.buildingAddress.postalCode != null) {
         postalCode = originalBuildingDTO.buildingAddress.postalCode;
         if (postalCode == "") postalCode = "BRAK";
@@ -187,6 +186,7 @@
     newType,
     buildingAddressChanged
   ) {
+    editBuildingAddressPopUpVisibility = false;
     let propertyManagerIdForBuildingUpdate = chooseNewStringIfNewDiffersFromOld(
       originalPropertyManagerId,
       newPropertyManagerId
@@ -205,7 +205,6 @@
         type: buildingTypeForUpdate,
         propertyManagerId: propertyManagerIdForBuildingUpdate,
       };
-      console.log(updateBuildingDTO);
       let updateSuccess = await updateBuilding(updateBuildingDTO);
       if (updateSuccess) {
         otherBuildingDataChanged = true;
@@ -351,6 +350,8 @@
       {BuildingDTO}
       message1={showBuildingPopUpMessage}
       message2="podlegający pod Zarządcę Nieruchomości:"
+      buttonVisibility={true}
+      editMode={true}
     />
   {/if}
 </div>

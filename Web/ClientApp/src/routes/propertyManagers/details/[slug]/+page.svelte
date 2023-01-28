@@ -111,7 +111,6 @@
       originalBuildingAddressDTO =
         originalPropertyManagerDTO.fullAddress.buildingAddress;
       updateBuildingAddressDTO = structuredClone(originalBuildingAddressDTO);
-      console.log(updatePropertyManagerDTO);
       formVisibility = true;
     } else {
       errorDivVisibility = true;
@@ -300,6 +299,8 @@
     <ShowPropertyManagerPopUp
       {PropertyManagerDTO}
       message={showPropertyManagerPopUpMessage}
+      editMode={true}
+      buttonVisibility={true}
     />
   {/if}
 </div>

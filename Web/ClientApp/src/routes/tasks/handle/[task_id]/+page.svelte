@@ -70,7 +70,7 @@
       mapVisibility = true;
     }
     if (
-      collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
+      collectionOfNewProtocols.length>0 && collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
       taskStatus != "zakończone" &&
       taskStatus != "zakonczone"
     )
@@ -112,7 +112,6 @@
 
     realPropertiesWithoutProtocols =
       await realPropertiesWithoutProtocolsResponse.json();
-    console.log(realPropertiesWithoutProtocols);
     firstListName =
       "Nieruchomości, które jeszcze nie zostały poddane inspekcji";
     collectionOfRealPropertiesWithoutAssignedProtocols =
@@ -125,7 +124,6 @@
     if (taskProtocolsResponse instanceof Error) return false;
 
     taskProtocols = await taskProtocolsResponse.json();
-    console.log(taskProtocols);
     secondListName = "Utworzone protokoły";
     collectionOfNewProtocols = taskProtocols.sort(
       compareProtocolsByVenueNumber

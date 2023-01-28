@@ -113,7 +113,7 @@
   <InspectionProtocolForm
     creationThroughTask={true}
     onSubmit={updateProtocol}
-    CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
+    bind:CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
     editMode={true}
     propertyId={$page.params.property_id}
   />

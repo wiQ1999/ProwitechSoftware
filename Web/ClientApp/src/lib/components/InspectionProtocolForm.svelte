@@ -62,6 +62,10 @@
   export let performerLookUp = false;
   export let propertyId = null;
   export let creationThroughTask = false;
+  let chosenBuildingForEdition = null;
+  let buildingFromDBId;
+  let inspectionProtocolWithoutChanges = null;
+  let inspectionProtocolForEdition = null;
   let formVisibility;
   let upper_message = "Dodaj Protokół";
   let button_turn_on_edition_message = "Włącz edycję";
@@ -86,7 +90,6 @@
   let multipleRequiredMessage = "Zaznacz wymagane pole";
 
   onMount(async () => {
-    console.log(CreateInspectionProtocolCommand);
     if (!editMode)
       CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionDateTime =
         today;
@@ -98,21 +101,25 @@
       upper_message = "Szczegóły Protokołu";
     }
 
-    // if (creationThroughTask) {
-    //   //TODO POBRAĆ ID ZALOGOWANEGO UŻYTKOWNIKA
-    //   CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
-    //     "030B7529-173C-41A8-953D-75BA46B7FC21";
-    //   // console.log(CreateInspectionProtocolCommand);
-    // }
-
     await prepareForm();
     formVisibility = true;
   });
+  function multiplyObjects() {
+    inspectionProtocolWithoutChanges = structuredClone(
+      CreateInspectionProtocolCommand
+    );
+    inspectionProtocolForEdition = structuredClone(
+      CreateInspectionProtocolCommand
+    );
+  }
   async function prepareForm() {
     let downloadBuildingsSuccess = true;
     await downloadUsers();
     downloadBuildingsSuccess = await downloadBuildingsAndRealProperties();
-    if (editMode) setMultipleValues();
+    if (editMode) {
+      multiplyObjects();
+      setMultipleValues();
+    }
     if (downloadBuildingsSuccess) formVisibility = true;
   }
   async function downloadUsers() {
@@ -168,14 +175,14 @@
       );
       if (realPropertyResponse instanceof Error) return false;
       realProperty = await realPropertyResponse.json();
-      let buildingFromDBId = realProperty.building.id;
+      buildingFromDBId = realProperty.building.id;
 
       chosenBuilding = setChosenBuilding(buildingFromDBId);
     } else if (creationThroughTask) {
       let realPropertyResponse = await getRealPropertyById(propertyId);
       if (realPropertyResponse instanceof Error) return false;
       realProperty = await realPropertyResponse.json();
-      let buildingFromDBId = realProperty.building.id;
+      buildingFromDBId = realProperty.building.id;
 
       chosenBuilding = setChosenBuilding(buildingFromDBId);
     } else {
@@ -225,9 +232,21 @@
   function changeEditingStatus() {
     readMode = !readMode;
     if (button_turn_on_edition_message == "Włącz edycję") {
-      button_turn_on_edition_message = "Zakończ edycję";
+      button_turn_on_edition_message = "Wyłącz edycję";
+      if (chosenBuildingForEdition != null) {
+        chosenBuilding = chosenBuildingForEdition;
+        setRealProperties(chosenBuilding);
+      }
+      CreateInspectionProtocolCommand = inspectionProtocolForEdition;
+      setMultipleValues();
     } else {
       button_turn_on_edition_message = "Włącz edycję";
+      assignMultipleValues();
+      CreateInspectionProtocolCommand = inspectionProtocolWithoutChanges;
+      chosenBuildingForEdition = chosenBuilding;
+      chosenBuilding = setChosenBuilding(buildingFromDBId);
+      setRealProperties(chosenBuilding);
+      setMultipleValues();
     }
     if (readMode) upper_message = "Szczegóły Protokołu";
     else upper_message = "Edycja Protokołu";
@@ -257,8 +276,7 @@
     }
     return lackOfAnswerFound;
   }
-  async function onBeforeSubmit() {
-    if (multipleValuesAreNotSet()) return;
+  function assignMultipleValues() {
     let multiple_07 = "";
     let multiple_08 = "";
     let multiple_09 = "";
@@ -281,9 +299,6 @@
         multiple_09 += ",";
       }
     }
-    //TODO IF CREATION THROUGH TASK
-    // CreateInspectionProtocolCommand.inspectionProtocolDTO.inspectionPerformerId =
-    // "030B7529-173C-41A8-953D-75BA46B7FC21";
 
     CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_07_Przewody_rodzaj =
       multiple_07;
@@ -292,6 +307,11 @@
       multiple_08;
     CreateInspectionProtocolCommand.inspectionProtocolDTO.m_A_09_Przewody_sposob_prowadzenia =
       multiple_09;
+  }
+  async function onBeforeSubmit() {
+    if (multipleValuesAreNotSet()) return;
+    assignMultipleValues();
+
     if (!editMode) {
       let number = await getProtocolBiggestNumberForToday(numberDate);
       if (number instanceof Response) {
@@ -332,19 +352,22 @@
     </select>
     {#if chosenBuilding.type == "WIELOLOKALOWY"}
       <label for="inspection-protocol-real-property">Nieruchomość:</label>
-      <select
-        bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
-          .inspectedPropertyId}
-        disabled={readMode || creationThroughTask || performerLookUp}
-        class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-      >
-        {#each realProperties as realProperty}
-          <option value={realProperty.id}
-            >{realProperty.propertyAddress.venueNumber}
-            {realProperty.propertyAddress.staircaseNumber}
-          </option>
-        {/each}
-      </select>
+      {#key chosenBuilding}
+        <select
+          required
+          bind:value={CreateInspectionProtocolCommand.inspectionProtocolDTO
+            .inspectedPropertyId}
+          disabled={readMode || creationThroughTask || performerLookUp}
+          class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+        >
+          {#each realProperties as realProperty}
+            <option value={realProperty.id}
+              >{realProperty.propertyAddress.venueNumber}
+              {realProperty.propertyAddress.staircaseNumber}
+            </option>
+          {/each}
+        </select>
+      {/key}
     {/if}
 
     <label for="inspection-task-performer" class="block"

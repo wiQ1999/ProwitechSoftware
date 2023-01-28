@@ -119,7 +119,6 @@
       let buildingPostResult = await postBuilding(baId, propId, bType);
       if (buildingPostResult instanceof Response) {
         let buildingId = await buildingPostResult.json();
-        // console.log(buildingId);
         await showNewBuilding(buildingId);
       } else if (buildingPostResult instanceof Error) {
         await deleteBuildingAddress(baId);
@@ -134,7 +133,6 @@
       newBuildingData = await newBuildingGetResult.json();
       message1 = "Udało się dodać do bazy danych Budynek o poniższych danych:";
       message2 = "Zarządcą powyższej Nieruchomości jest firma:";
-      console.log(newBuildingData);
     } else {
       newBuildingData = null;
     }
@@ -172,7 +170,12 @@
     />{/if}
   {#if showBuildingPopUpVisibility}
     <div>
-      <ShowBuildingPopUp BuildingDTO={newBuildingData} {message1} {message2} />
+      <ShowBuildingPopUp
+        BuildingDTO={newBuildingData}
+        {message1}
+        {message2}
+        buttonVisibility={true}
+      />
     </div>
   {/if}
 </div>

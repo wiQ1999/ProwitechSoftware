@@ -52,11 +52,9 @@
   };
   onMount(async () => {
     let userData = getToken();
-    console.log(userData);
     let res = await getInspectionTaskById($page.params.task_id);
     if (res instanceof Error) return;
     originalInspectionTask = await res.json();
-    console.log(originalInspectionTask);
 
     if (originalInspectionTask.building.type == "JEDNOLOKALOWY")
       chosenHeadersList = headerDictionaryForSingleProperty;

@@ -67,7 +67,6 @@
     let res = await getInspectionProtocolById($page.params.protocol_id);
     if (res instanceof Error) return;
     originalInspectionProtocol = await res.json();
-    console.log(originalInspectionProtocol);
     UpdateInspectionProtocolCommand = structuredClone(
       originalInspectionProtocol
     );
@@ -114,7 +113,7 @@
   <InspectionProtocolForm
     creationThroughTask={false}
     onSubmit={updateProtocol}
-    CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
+    bind:CreateInspectionProtocolCommand={UpdateInspectionProtocolCommand}
     editMode={true}
   />
 {/if}

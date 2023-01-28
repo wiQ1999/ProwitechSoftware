@@ -98,7 +98,6 @@
       buildingAddressId =
         updateBuildingAddressResultAgainJSON.addedBuildingAddress.id;
     } else {
-      console.log(updateBuildingAddressResultAgainJSON);
       result_message = `Problem z edycją adresu: ${updateBuildingAddressResultAgainJSON}`;
       buildingAddressId = null;
       buttonErrorVisibility = true;

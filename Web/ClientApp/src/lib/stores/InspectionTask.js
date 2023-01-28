@@ -142,8 +142,6 @@ export async function changeInspectionTaskStatus(
 ) {
   let date = new Date();
   let inputDateTime = formatDate(date, true);
-  console.log(inputDateTime);
-
   let changeTaskStatusCommand;
   if (inProgress) {
     changeTaskStatusCommand = {
@@ -160,7 +158,6 @@ export async function changeInspectionTaskStatus(
     };
   }
 
-  console.log(changeTaskStatusCommand);
   let route = `/InspectionTask/${taskId}/changeStatusToInProgress`;
   let response;
   try {
