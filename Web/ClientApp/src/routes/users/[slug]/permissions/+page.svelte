@@ -7,11 +7,12 @@
         getForUser,
         postOrPutForUser,
     } from "$lib/stores/Permissions";
-    import { openModal } from "svelte-modals";
-    import BasePopUp from "$lib/components/base/BasePopUp.svelte";
+    import BaseEditableForm from "$lib/components/base/BaseEditableForm.svelte";
 
     let rolePermissions = [];
+    let baseUserPermissions = [];
     let userPermissions = [];
+    let isEditing = false;
 
     onMount(async () => {
         const user = await getUserById($page.params.slug);
@@ -20,54 +21,67 @@
             rolePermissions = await getForRole(user.role.id);
         }
 
-        userPermissions = await getForUser($page.params.slug);
+        baseUserPermissions = await getForUser($page.params.slug);
+        userPermissions = JSON.parse(JSON.stringify(baseUserPermissions));
     });
 
-    async function submitHandler() {
-        const dto = { userId: $page.params.slug, permissions: userPermissions };
-        const result = await postOrPutForUser($page.params.slug, dto);
-
-        if (result) {
-            openModal(BasePopUp, {
-                title: "Zapisano uprawnienia",
-                message: "Zapisywanie uprawnień dla użytkownika powiodło się.",
-            });
+    async function onSubmitHandler() {
+        if (checkIfUserPermissionsChanged()) {
+            const dto = {
+                userId: $page.params.slug,
+                permissions: userPermissions,
+            };
+            await postOrPutForUser($page.params.slug, dto);
+            baseUserPermissions = JSON.parse(JSON.stringify(userPermissions));
         }
+
+        isEditing = false;
     }
 
-    function changePreoprtyValue(index, property) {
-        const permission = userPermissions[index];
+    function checkIfUserPermissionsChanged() {
+        for (let i = 0; i < userPermissions.length; i++) {
+            const userPerm = userPermissions[i];
+            const baseUserPerm = baseUserPermissions[i];
 
-        if (property === "create") {
-            if (permission.create === null)
-                userPermissions[index].create = true;
-            else if (permission.create === true)
-                userPermissions[index].create = false;
-            else userPermissions[index].create = null;
-        } else if (property === "read") {
-            if (permission.read === null) userPermissions[index].read = true;
-            else if (permission.read === true)
-                userPermissions[index].read = false;
-            else userPermissions[index].read = null;
-        } else if (property === "update") {
-            if (permission.update === null)
-                userPermissions[index].update = true;
-            else if (permission.update === true)
-                userPermissions[index].update = false;
-            else userPermissions[index].update = null;
-        } else {
-            if (permission.delete === null)
-                userPermissions[index].delete = true;
-            else if (permission.delete === true)
-                userPermissions[index].delete = false;
-            else userPermissions[index].delete = null;
+            if (
+                userPerm.create !== baseUserPerm.create ||
+                userPerm.read !== baseUserPerm.read ||
+                userPerm.update !== baseUserPerm.update ||
+                userPerm.delete !== baseUserPerm.delete
+            ) {
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    function onEditingStopHandler() {
+        userPermissions = JSON.parse(JSON.stringify(baseUserPermissions));
+    }
+
+    function changePropertyValue(index, property) {
+        const permission = userPermissions[index];
+        const propertyValue = Reflect.get(permission, property);
+
+        if (propertyValue === null) {
+            Reflect.set(userPermissions[index], property, true);
+        } else if (propertyValue === true) {
+            Reflect.set(userPermissions[index], property, false);
+        } else {
+            Reflect.set(userPermissions[index], property, null);
+        }
+
+        userPermissions[index] = userPermissions[index];
     }
 </script>
 
-<h1>Uprawnienia użytkownika:</h1>
-
-<form on:submit|preventDefault={async () => submitHandler()}>
+<BaseEditableForm
+    bind:isEditing
+    formName="Uprawnienia użytkownika"
+    {onEditingStopHandler}
+    {onSubmitHandler}
+>
     <table>
         <tr>
             <th>Zasób</th>
@@ -84,9 +98,10 @@
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "create")}
+                        on:click={() => changePropertyValue(i, "create")}
+                        disabled={!isEditing}
                     >
-                        {#if userPermissions[i].create === null}
+                        {#if userPerm.create === null}
                             <div style="color:gray">
                                 {#if rolePermissions.length > 0}
                                     {rolePermissions[i].create ? "TAK" : "NIE"}
@@ -96,7 +111,7 @@
                             </div>
                         {:else}
                             <div style="color:black">
-                                {userPermissions[i].create ? "TAK" : "NIE"}
+                                {userPerm.create ? "TAK" : "NIE"}
                             </div>
                         {/if}
                     </button>
@@ -104,9 +119,10 @@
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "read")}
+                        on:click={() => changePropertyValue(i, "read")}
+                        disabled={!isEditing}
                     >
-                        {#if userPermissions[i].read === null}
+                        {#if userPerm.read === null}
                             <div style="color:gray">
                                 {#if rolePermissions.length > 0}
                                     {rolePermissions[i].read ? "TAK" : "NIE"}
@@ -116,7 +132,7 @@
                             </div>
                         {:else}
                             <div style="color:black">
-                                {userPermissions[i].read ? "TAK" : "NIE"}
+                                {userPerm.read ? "TAK" : "NIE"}
                             </div>
                         {/if}
                     </button>
@@ -124,9 +140,10 @@
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "update")}
+                        on:click={() => changePropertyValue(i, "update")}
+                        disabled={!isEditing}
                     >
-                        {#if userPermissions[i].update === null}
+                        {#if userPerm.update === null}
                             <div style="color:gray">
                                 {#if rolePermissions.length > 0}
                                     {rolePermissions[i].update ? "TAK" : "NIE"}
@@ -136,7 +153,7 @@
                             </div>
                         {:else}
                             <div style="color:black">
-                                {userPermissions[i].update ? "TAK" : "NIE"}
+                                {userPerm.update ? "TAK" : "NIE"}
                             </div>
                         {/if}
                     </button>
@@ -144,9 +161,10 @@
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "delete")}
+                        on:click={() => changePropertyValue(i, "delete")}
+                        disabled={!isEditing}
                     >
-                        {#if userPermissions[i].delete === null}
+                        {#if userPerm.delete === null}
                             <div style="color:gray">
                                 {#if rolePermissions.length > 0}
                                     {rolePermissions[i].delete ? "TAK" : "NIE"}
@@ -156,7 +174,7 @@
                             </div>
                         {:else}
                             <div style="color:black">
-                                {userPermissions[i].delete ? "TAK" : "NIE"}
+                                {userPerm.delete ? "TAK" : "NIE"}
                             </div>
                         {/if}
                     </button>
@@ -164,6 +182,4 @@
             </tr>
         {/each}
     </table>
-
-    <button type="submit">Zapisz</button>
-</form>
+</BaseEditableForm>
