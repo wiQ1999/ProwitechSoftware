@@ -2,52 +2,72 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { getForRole, postOrPutForRole } from "$lib/stores/Permissions";
-    import { openModal } from "svelte-modals";
-    import BasePopUp from "$lib/components/base/BasePopUp.svelte";
+    import BaseEditableForm from "$lib/components/base/BaseEditableForm.svelte";
 
+    let baseRolePermissions = [];
     let rolePermissions = [];
+    let isEditing = false;
 
     onMount(async () => {
-        rolePermissions = await getForRole($page.params.slug);
+        baseRolePermissions = await getForRole($page.params.slug);
+        rolePermissions = JSON.parse(JSON.stringify(baseRolePermissions));
     });
 
-    async function submitHandler() {
-        const dto = { roleId: $page.params.slug, permissions: rolePermissions };
-        const result = await postOrPutForRole($page.params.slug, dto);
-
-        if (result) {
-            openModal(BasePopUp, {
-                title: "Zapisano uprawnienia",
-                message: "Zapisywanie uprawnień dla roli powiodło się.",
-            });
+    async function onSubmitHandler() {
+        if (checkIfRolePermissionsChanged()) {
+            const dto = {
+                roleId: $page.params.slug,
+                permissions: rolePermissions,
+            };
+            await postOrPutForRole($page.params.slug, dto);
+            baseRolePermissions = JSON.parse(JSON.stringify(rolePermissions));
         }
+
+        isEditing = false;
     }
 
-    function changePreoprtyValue(index, property) {
-        const permission = rolePermissions[index];
+    function checkIfRolePermissionsChanged() {
+        for (let i = 0; i < rolePermissions.length; i++) {
+            const rolePerm = rolePermissions[i];
+            const baseRolePerm = baseRolePermissions[i];
 
-        if (property === "create") {
-            if (permission.create === true)
-                rolePermissions[index].create = false;
-            else rolePermissions[index].create = true;
-        } else if (property === "read") {
-            if (permission.read === true) rolePermissions[index].read = false;
-            else rolePermissions[index].read = true;
-        } else if (property === "update") {
-            if (permission.update === true)
-                rolePermissions[index].update = false;
-            else rolePermissions[index].update = true;
-        } else {
-            if (permission.delete === true)
-                rolePermissions[index].delete = false;
-            else rolePermissions[index].delete = true;
+            if (
+                rolePerm.create !== baseRolePerm.create ||
+                rolePerm.read !== baseRolePerm.read ||
+                rolePerm.update !== baseRolePerm.update ||
+                rolePerm.delete !== baseRolePerm.delete
+            ) {
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    function onEditingStopHandler() {
+        rolePermissions = JSON.parse(JSON.stringify(baseRolePermissions));
+    }
+
+    function changePropertyValue(index, property) {
+        const permission = rolePermissions[index];
+        const propertyValue = Reflect.get(permission, property);
+
+        if (propertyValue) {
+            Reflect.set(rolePermissions[index], property, false);
+        } else {
+            Reflect.set(rolePermissions[index], property, true);
+        }
+
+        rolePermissions[index] = rolePermissions[index];
     }
 </script>
 
-<h1>Uprawnienia roli:</h1>
-
-<form on:submit|preventDefault={submitHandler}>
+<BaseEditableForm
+    bind:isEditing
+    formName="Uprawnienia roli"
+    {onSubmitHandler}
+    {onEditingStopHandler}
+>
     <table>
         <tr>
             <th>Zasób</th>
@@ -63,38 +83,40 @@
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "create")}
+                        on:click={() => changePropertyValue(i, "create")}
+                        disabled={!isEditing}
                     >
-                        <div>{rolePermissions[i].create ? "TAK" : "NIE"}</div>
+                        {permission.create ? "TAK" : "NIE"}
                     </button>
                 </td>
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "read")}
+                        on:click={() => changePropertyValue(i, "read")}
+                        disabled={!isEditing}
                     >
-                        <div>{rolePermissions[i].read ? "TAK" : "NIE"}</div>
+                        {rolePermissions[i].read ? "TAK" : "NIE"}
                     </button>
                 </td>
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "update")}
+                        on:click={() => changePropertyValue(i, "update")}
+                        disabled={!isEditing}
                     >
-                        <div>{rolePermissions[i].update ? "TAK" : "NIE"}</div>
+                        {rolePermissions[i].update ? "TAK" : "NIE"}
                     </button>
                 </td>
                 <td>
                     <button
                         type="button"
-                        on:click={() => changePreoprtyValue(i, "delete")}
+                        on:click={() => changePropertyValue(i, "delete")}
+                        disabled={!isEditing}
                     >
-                        <div>{rolePermissions[i].delete ? "TAK" : "NIE"}</div>
+                        {rolePermissions[i].delete ? "TAK" : "NIE"}
                     </button>
                 </td>
             </tr>
         {/each}
     </table>
-
-    <button type="submit">Zapisz</button>
-</form>
+</BaseEditableForm>
