@@ -12,8 +12,6 @@
   let rolesVisibility = false;
   let buildingsVisibility = false;
   let propertyManagersVisibility = false;
-  let tasksVisibility = false;
-  let protocolsVisibility = false;
   let navbarVisibility = false;
   let tasksHref;
   let protocolsHref;
@@ -37,11 +35,7 @@
     } else {
       protocolsHref = `/protocols/${token?.id}/performer_protocols`;
     }
-    if (token != null) {
-      tasksVisibility = true;
-      protocolsVisibility = true;
-    }
-    navbarVisibility = true;
+    if (token != null) navbarVisibility = true;
     console.log(navbarVisibility);
   });
 
@@ -105,24 +99,21 @@
           >Zarządcy</a
         >
       {/if}
-      {#if tasksVisibility}
-        <a
-          href={tasksHref}
-          data-item="Zadania"
-          class="decoration-none uppercase xl:text-2xl md:text-xl text-[#8f8f8f] font-semibold xl:tracking-widest md:tracking-wide tracking-tight relative
+
+      <a
+        href={tasksHref}
+        data-item="Zadania"
+        class="decoration-none uppercase xl:text-2xl md:text-xl text-[#8f8f8f] font-semibold xl:tracking-widest md:tracking-wide tracking-tight relative
     before:absolute before:content-[attr(data-item)] before:text-[#007acc] before:top-0 before:left-0 before:bottom-0 before:w-0 before:overflow-hidden before:hover:w-[100%]"
-          >Zadania</a
-        >
-      {/if}
-      {#if protocolsVisibility}
-        <a
-          href={protocolsHref}
-          data-item="Protokoły"
-          class="decoration-none uppercase xl:text-2xl md:text-xl text-[#8f8f8f] font-semibold xl:tracking-widest md:tracking-wide tracking-tight relative
+        >Zadania</a
+      >
+      <a
+        href={protocolsHref}
+        data-item="Protokoły"
+        class="decoration-none uppercase xl:text-2xl md:text-xl text-[#8f8f8f] font-semibold xl:tracking-widest md:tracking-wide tracking-tight relative
     before:absolute before:content-[attr(data-item)] before:text-[#007acc] before:top-0 before:left-0 before:bottom-0 before:w-0 before:overflow-hidden before:hover:w-[100%]"
-          >Protokoły</a
-        >
-      {/if}
+        >Protokoły</a
+      >
       <div class="font-semibold lg:ml-3 ml-1 w-[10%] text-right 2xl:hidden">
         <button class="font-normal lg:p-3 p-1 bg-gray-300" on:click={openMenu}>
           <i class="fa fa-align-justify lg:w-[100%]" />
