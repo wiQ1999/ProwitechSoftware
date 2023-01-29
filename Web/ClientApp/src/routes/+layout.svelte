@@ -7,6 +7,7 @@
     hasCreatePermissionFor,
     clearToken,
   } from "$lib/js-lib/authManager";
+  import { goto } from "$app/navigation";
 
   let usersVisibility = false;
   let rolesVisibility = false;
@@ -19,6 +20,10 @@
 
   onMount(() => {
     token = getToken();
+    // if (!token) {
+    //   goto("/login");
+    // }
+
     usersVisibility = hasCreatePermissionFor("users");
     rolesVisibility = hasCreatePermissionFor("roles");
     buildingsVisibility = hasCreatePermissionFor("buildings");
