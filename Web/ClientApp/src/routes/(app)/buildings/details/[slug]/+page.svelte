@@ -266,7 +266,40 @@
     \nOdnaleziono współrzędne dla adresu: ${AddUpdateBuildingAddressReponse.googleAPIFormattedAddress}.
     \nCzy chce je zachować?`;
   }
+
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+
+    function closeHandler() {
+        goto("/buildings/getAll");
+    }
+
+    function openMenu() {
+        let button = document.getElementById('openableButton');
+        if(!button.hidden) button.hidden = true;
+        else button.hidden = false;
+        }
 </script>
+
+<div class="absolute ml-[3%] mt-5 mr-[78%] w-[20%] text-left">
+  <button on:mouseenter={openMenu} on:mouseleave={openMenu} class="bg-blue-500 p-2 text-2xl"><i class="fa fa-align-justify"></i></button>
+  <div on:mouseenter={openMenu} on:mouseleave={openMenu} hidden id="openableButton" class="text-center bg-blue-500"> 
+      <!--kontener dla dużych ekranów wyświetlający się po lewej a dla mniejszych jako menu rozwijane?-->
+      <a href="/buildings/details/{$page.params.slug}">Szczegóły</a>
+      <br />
+      <a href="/buildings/details/{$page.params.slug}/postal-code">Kod pocztowy</a>
+      <br />
+      {#if protocolsButtonVisibility}
+      <a href="/buildings/details/{$page.params.slug}/protocols">Protokoły</a>
+      <br />
+      {/if}
+      {#if originalBuildingType == "WIELOLOKALOWY"}
+      <a href="/buildings/details/{$page.params.slug}/real-properties/getAll">Lokale</a>
+      <br />
+      {/if}
+      <button on:click|preventDefault={closeHandler} class="bg-red-500 w-[100%]">Zamknij</button>
+  </div>
+</div>
 
 <a href="/buildings/getAll">
   <button
@@ -307,43 +340,6 @@
       editMode={true}
       building={originalBuildingDTO}
     />
-    <div
-      class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
-    >
-      Kod pocztowy budynku
-      <p class="font-bold">{postalCode}</p>
-      <a href="/buildings/details/{data.id}/postal-code">
-        <button
-          class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-          >Edytuj kod pocztowy</button
-        >
-      </a>
-    </div>
-
-    {#if originalBuildingType == "WIELOLOKALOWY"}
-      <div
-        class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
-      >
-        <a href="/buildings/details/{data.id}/real-properties/getAll">
-          <button
-            class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-            >Lokale</button
-          >
-        </a>
-      </div>
-    {/if}
-    {#if protocolsButtonVisibility}
-      <div
-        class="w-1/2 my-[10px] mx-auto py-3 px-5 bg-[#f4f7f8] rounded-lg text-center"
-      >
-        <a href="/buildings/details/{data.id}/protocols">
-          <button
-            class="flex font-semibold border-2 border-[#0078c8] hover:bg-blue-400 mt-4 p-4 mx-auto rounded-md"
-            >Protokoły</button
-          >
-        </a>
-      </div>
-    {/if}
   {/if}
   {#if updatedBuildingPopUpVisibility}
     <ShowBuildingPopUp

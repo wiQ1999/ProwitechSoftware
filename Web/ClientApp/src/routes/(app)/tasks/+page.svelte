@@ -16,7 +16,7 @@
 </script>
 
 {#if buttonsVisibility}
-<div class="inline-flex w-[100%] justify-center gap-[10%]" >
+<div class="mt-[4%] inline-flex w-[100%] justify-center gap-[10%]" >
   {#if buttonAllTasksVisibility}
     <a href="/tasks/getAll">
       <button

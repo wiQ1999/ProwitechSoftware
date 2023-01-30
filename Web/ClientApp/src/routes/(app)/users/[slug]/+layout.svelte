@@ -24,6 +24,8 @@
         <br />
         <a href="/users/{$page.params.slug}/password-change">Zmiana hasła</a>
         <br />
+        <a href="/users/{$page.params.slug}/permissions">Uprawnienia</a>
+        <br />
         <b>Użytkownik {$formNameStore}</b>
         <br />
         <button on:click|preventDefault={closeHandler} class="bg-red-500 w-[100%]">Zamknij</button>

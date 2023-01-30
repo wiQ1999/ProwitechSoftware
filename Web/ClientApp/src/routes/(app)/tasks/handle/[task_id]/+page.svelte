@@ -263,7 +263,8 @@
 {#if mapVisibility}
   <Map {building} displayLink={true} mapForTask={true} />{/if}
 {#if problemWithBuildingPropertiesVisibility}
-  <div class="building-properties-not-created">
+  <div class="font-semibold border-2 w-[50%] border-slate-600 text-center py-6 mx-auto mb-4">
+    <img src="../../src/lib/images/exclamation-mark.png" alt="wykrzyknik" class="w-10 mx-auto py-1"/>
     DO BUDYNKU NIE PRZYPISANO ŻADNYCH LOKALI - SKONTAKTUJ SIĘ Z SZEFEM
   </div>
 {/if}
@@ -304,11 +305,11 @@
   </div>
 {/if}
 {#if singleFamilyBuildingType}
-  <div class="jednolokalowy">
+  <div class="flex justify-center text-center mx-auto">
     {#if firstListVisibility && collectionOfRealPropertiesWithoutAssignedProtocols.length > 0}
       <button
         on:click|preventDefault={SINGLE_FAMILY_BUILDING_buttonHandler}
-        class="ml-[2%] mb-[2%] rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center"
+        class="mb-[2%] rounded-sm w-1/4 bg-[#007acc] text-white font-semibold flex justify-center p-4"
         >Dodaj protokół</button
       >
     {/if}

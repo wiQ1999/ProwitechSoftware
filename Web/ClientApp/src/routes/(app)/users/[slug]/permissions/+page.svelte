@@ -82,78 +82,79 @@
     {onEditingStopHandler}
     {onSubmitHandler}
 >
-    <table>
-        <tr>
-            <th>Zasób</th>
-            <th>Dodawanie</th>
-            <th>Odczytywanie</th>
-            <th>Aktualizowanie</th>
+    <table class="w-[98%] p-[1%] border-2 border-black">
+        <tr class="border-b-2 border-black">
+            <th class="border-r-2 border-black">Zasób</th>
+            <th class="border-r-2 border-black">Dodawanie</th>
+            <th class="border-r-2 border-black">Odczytywanie</th>
+            <th class="border-r-2 border-black">Aktualizowanie</th>
             <th>Usuwanie</th>
         </tr>
 
         {#each userPermissions as userPerm, i}
             <tr>
-                <td>{userPerm.source}</td>
+                <td class="font-semibold border-r-2 border-black">{userPerm.source}</td>
 
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "create")}
                         disabled={!isEditing}
+                        
                     >
                         {#if userPerm.create === null}
-                            <div style="color:gray">
+                            <div class="text-gray-400">
                                 {#if rolePermissions.length > 0}
-                                    {rolePermissions[i].create ? "TAK" : "NIE"}
+                                    {rolePermissions[i].create ? "√" : "X"}
                                 {:else}
                                     BRAK
                                 {/if}
                             </div>
                         {:else}
-                            <div style="color:black">
-                                {userPerm.create ? "TAK" : "NIE"}
+                            <div class="text-black">
+                                {userPerm.create ? "√" : "X"}
                             </div>
                         {/if}
                     </button>
                 </td>
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "read")}
                         disabled={!isEditing}
                     >
                         {#if userPerm.read === null}
-                            <div style="color:gray">
+                            <div class="text-gray-400">
                                 {#if rolePermissions.length > 0}
-                                    {rolePermissions[i].read ? "TAK" : "NIE"}
+                                    {rolePermissions[i].read ? "√" : "X"}
                                 {:else}
                                     BRAK
                                 {/if}
                             </div>
                         {:else}
-                            <div style="color:black">
-                                {userPerm.read ? "TAK" : "NIE"}
+                            <div class="text-black">
+                                {userPerm.read ? "√" : "X"}
                             </div>
                         {/if}
                     </button>
                 </td>
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "update")}
                         disabled={!isEditing}
                     >
                         {#if userPerm.update === null}
-                            <div style="color:gray">
+                            <div class="text-gray-400">
                                 {#if rolePermissions.length > 0}
-                                    {rolePermissions[i].update ? "TAK" : "NIE"}
+                                    {rolePermissions[i].update ? "√" : "X"}
                                 {:else}
                                     BRAK
                                 {/if}
                             </div>
                         {:else}
-                            <div style="color:black">
-                                {userPerm.update ? "TAK" : "NIE"}
+                            <div class="text-black">
+                                {userPerm.update ? "√" : "X"}
                             </div>
                         {/if}
                     </button>
@@ -165,16 +166,16 @@
                         disabled={!isEditing}
                     >
                         {#if userPerm.delete === null}
-                            <div style="color:gray">
+                            <div class="text-gray-400">
                                 {#if rolePermissions.length > 0}
-                                    {rolePermissions[i].delete ? "TAK" : "NIE"}
+                                    {rolePermissions[i].delete ? "√" : "X"}
                                 {:else}
                                     BRAK
                                 {/if}
                             </div>
                         {:else}
-                            <div style="color:black">
-                                {userPerm.delete ? "TAK" : "NIE"}
+                            <div class="text-black">
+                                {userPerm.delete ? "√" : "X"}
                             </div>
                         {/if}
                     </button>
