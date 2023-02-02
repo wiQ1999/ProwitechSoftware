@@ -41,7 +41,7 @@
     },
   };
   let abandon_option = {
-    info: "NIE - zrezygnuj z edycji adresu i powróć do strony głównej",
+    info: "NIE - zrezygnuj z edycji adresu powróć do sekcji Wszystkie budynki",
   };
 
   async function displayUpdateOutcome(
@@ -132,7 +132,7 @@
             )}>{only_address_option.info}</button
         >
         <a
-          href="/"
+          href="/buildings/getAll"
           class="bg-blue-400 uppercase decoration-none text-black text-base py-[1%] my-[5%] mx-auto w-[100%] rounded-md border-0 flex justify-center cursor-pointer"
           >{abandon_option.info}</a
         >

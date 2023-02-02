@@ -119,20 +119,29 @@
     </div>
   {/if}
   {#if lackOfCoordinates}
-    <div class="font-semibold border-2 w-[50%] border-slate-600 text-center py-6">
-      <img src="../../src/lib/images/exclamation-mark.png" alt="wykrzyknik" class="w-10 mx-auto py-1"/>
-    BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
+    <div
+      class="font-semibold mx-auto border-2 w-[50%] border-slate-600 text-center py-6"
+    >
+      <img
+        src="../../src/lib/images/exclamation-mark.png"
+        alt="wykrzyknik"
+        class="w-10 mx-auto py-1"
+      />
+      BRAK WSPÓŁRZĘDNYCH, NIE MOGĘ WYŚWIETLIĆ MAPY
     </div>
   {/if}
   {#if inaccurateCoordinates && mapForTask}
     <div class="underline font-semibold mb-2">
-      UWAGA! <br/> 
-      WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ PRECYZYJNE. <br/> 
+      UWAGA! <br />
+      WSPÓŁRZĘDNE POBRANE Z BAZY DANYCH NIE SĄ PRECYZYJNE. <br />
       SPRAWDŹ DOKŁADNIE, DOKĄD JEDZIESZ.
     </div>
   {/if}
   {#if mapVisibility}
-    <div class="justify-center mx-auto full-screen border-2 border-black" bind:this={container} />
+    <div
+      class="justify-center mx-auto full-screen border-2 border-black"
+      bind:this={container}
+    />
   {/if}
   {#if loadError == true}
     <div>
