@@ -29,7 +29,7 @@
     },
   };
   let abandon_option = {
-    info: "NIE - zrezygnuj z dodawania adresu i powróć do strony głównej",
+    info: "NIE - zrezygnuj z dodawania adresu i powróć do sekcji Wszystkie budynki",
   };
   async function addBuildingAddress(optionalArguments, onlyAddress) {
     let buildingAddressPostResultAgain = await postBuildingAddressAgain(
