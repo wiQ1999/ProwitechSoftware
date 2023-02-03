@@ -60,7 +60,7 @@
       inne_uwagi: "",
     },
   };
-  let href = "/protocols/getAll";
+  let href = `/protocols/${$page.params.performer_id}/performer_protocols`;
   let formVisibility = false;
   let originalInspectionProtocol;
   onMount(async () => {

@@ -60,7 +60,6 @@
       inne_uwagi: "",
     },
   };
-  let href = "/protocols/getAll";
   let formVisibility = false;
   let originalInspectionProtocol;
   onMount(async () => {
@@ -94,9 +93,7 @@
       openModal(BasePopUp, {
         title: "Sukces",
         message: "Pomyślnie edytowano Protokół",
-        reloadRequired: false,
-        redirectionRequired: true,
-        redirectionHref: href,
+        reloadRequired: true,
       });
     }
   };

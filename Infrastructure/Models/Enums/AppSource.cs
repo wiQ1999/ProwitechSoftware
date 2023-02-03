@@ -12,16 +12,20 @@ public enum AppSource
     Permissions,
     [Description("Budynki")]
     Buildings,
-    [Description("Protokoły")]
-    InspectionProtocols,
+    [Description("Adresy Budynków")]
+    BuildingAddresses,
+    [Description("Wszystkie Protokoły")]
+    AllInspectionProtocols,
+    [Description("Protokoły wybranego Użytkownika")]
+    PersonalProtocols,
     [Description("Zadania")]
     InspectionTasks,
-    [Description("Adresy Nieruchomości")]
-    PropertyAddresses,
+    //[Description("Adresy Nieruchomości")]
+    //PropertyAddresses,
     [Description("Zarządcy Nieruchomości")]
     PropertyManagers,
     [Description("Nieruchomości")]
     RealProperties,
-    [Description("Mieszkańcy")]
-    Residents,
+    //[Description("Mieszkańcy")]
+    //Residents,
 }

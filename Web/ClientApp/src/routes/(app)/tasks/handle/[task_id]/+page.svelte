@@ -70,7 +70,8 @@
       mapVisibility = true;
     }
     if (
-      collectionOfNewProtocols.length>0 && collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
+      collectionOfNewProtocols.length > 0 &&
+      collectionOfNewProtocols.length == allBuildingRealPropertiesCount &&
       taskStatus != "zakończone" &&
       taskStatus != "zakonczone"
     )
@@ -220,8 +221,9 @@
   >
 </a>
 {#if buildingInfoVisibility}
-  
-  <div class="my-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[50%] text-center">
+  <div
+    class="my-[2%] mx-auto bg-white border-2 border-slate-600 rounded-sm w-[50%] text-center"
+  >
     <div class="mb-[2%] text-center text-2xl mt-4 font-semibold">
       ZADANIE Z DNIA {setResultFormatIfItIsDateTime(
         "dueStartDateTime",
@@ -230,18 +232,24 @@
     </div>
     <table class="mx-auto">
       <tr>
-        <td class="p-2"><b>BUDYNEK {building.type} </b> przy ul. <b>{buildingInfo} </b></td>
+        <td class="p-2"
+          ><b>BUDYNEK {building.type} </b> przy ul. <b>{buildingInfo} </b></td
+        >
       </tr>
       <tr>
         <td class="p-2">STATUS: <b>{taskStatus} </b></td>
       </tr>
       <tr>
-        <td class="p-2">ROZPOCZĘTO <b>{inspectionTask.startDateTime != "0001-01-01T00:00:00"
-          ? setResultFormatIfItIsDateTime(
-              "startDateTime",
-              inspectionTask.startDateTime
-            )
-          : ""} </b></td>
+        <td class="p-2"
+          >ROZPOCZĘTO <b
+            >{inspectionTask.startDateTime != "0001-01-01T00:00:00"
+              ? setResultFormatIfItIsDateTime(
+                  "startDateTime",
+                  inspectionTask.startDateTime
+                )
+              : ""}
+          </b></td
+        >
       </tr>
       {#if taskStatus == "zakończone" || taskStatus == "zakonczone"}
         <tr>
@@ -263,8 +271,14 @@
 {#if mapVisibility}
   <Map {building} displayLink={true} mapForTask={true} />{/if}
 {#if problemWithBuildingPropertiesVisibility}
-  <div class="font-semibold border-2 w-[50%] border-slate-600 text-center py-6 mx-auto mb-4">
-    <img src="../../src/lib/images/exclamation-mark.png" alt="wykrzyknik" class="w-10 mx-auto py-1"/>
+  <div
+    class="font-semibold border-2 w-[50%] border-slate-600 text-center py-6 mx-auto mb-4"
+  >
+    <img
+      src="../../src/lib/images/exclamation-mark.png"
+      alt="wykrzyknik"
+      class="w-10 mx-auto py-1"
+    />
     DO BUDYNKU NIE PRZYPISANO ŻADNYCH LOKALI - SKONTAKTUJ SIĘ Z SZEFEM
   </div>
 {/if}
@@ -340,11 +354,12 @@
 {/if}
 
 {#if submitButtonVisibility}
-<div class="text-center">
-  <button
-    type="submit"
-    on:click|preventDefault={finishTask}
-    class="py-5 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center hover:bg-blue-400 disabled:bg-gray-400"
-    disabled={buttonDisabled}>Zakończ zadanie</button>
-</div>
+  <div class="text-center">
+    <button
+      type="submit"
+      on:click|preventDefault={finishTask}
+      class="py-5 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center hover:bg-blue-400 disabled:bg-gray-400"
+      disabled={buttonDisabled}>Zakończ zadanie</button
+    >
+  </div>
 {/if}

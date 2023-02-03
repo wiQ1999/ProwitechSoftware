@@ -2,22 +2,27 @@
 using Application.BuildingAddresses.DTOs;
 using Application.BuildingAddresses.Queries.Requests;
 using Application.PropertyManagers.Commands.Requests;
+using Infrastructure.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Web.Authorization;
 
 namespace Web.Controllers
 {
-    [Route("[controller]")] // mapuje nazwe z nazwy kontrolera
+    [Route("[controller]")]
     public class BuildingAddressController : ApiControllerBase
     {
         [HttpGet]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Read)]
         public async Task<IActionResult> Get() =>
            Ok(await Mediator.Send(new GetAllBuildingAddressesQuery()));
 
         [HttpGet("{id:Guid}")]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Read)]
         public async Task<IActionResult> Get(Guid id) =>
             Ok(await Mediator.Send(new GetBuildingAddressByIdQuery(id)));
 
         [HttpPost]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Create)]
         public async Task<IActionResult> Create(AddBuildingAddressDTO addressDTO, bool? force, bool? onlyAddress)
         {
             bool forceNotNull = force.HasValue ? force.Value : false;
@@ -30,6 +35,7 @@ namespace Web.Controllers
             }));
         }
         [HttpPut("{id:Guid}")]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Update)]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBuildingAddressDTO address, bool? force, bool? onlyAddress)
         {
             bool forceNotNull = force.HasValue ? force.Value : false;
@@ -43,6 +49,7 @@ namespace Web.Controllers
             }));
         }
         [HttpPut("postalCode/{id:Guid}")]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Update)]
         public async Task<IActionResult> ChangePostalCode(Guid id, [FromBody] UpdatePostalCodeCommand command)
         {
             if (id != command.Id)
@@ -50,14 +57,9 @@ namespace Web.Controllers
             return Ok(await Mediator.Send(command));
         }
         [HttpDelete("{id:Guid}")]
+        [SourcePermissions(AppSource.BuildingAddresses, PermissionProperty.Delete)]
         public async Task<IActionResult> Delete(Guid id) =>
             Ok(await Mediator.Send(new DeleteBuildingAddressCommand() { Id = id }));
-
-        //[HttpPost("find")]
-        //public async Task<IActionResult> CheckIfBuildingAddressExists([FromBody] FindBuildingAddressQuery query)
-        //{
-        //    return Ok(await Mediator.Send(query));
-        //}
 
     }
 }
