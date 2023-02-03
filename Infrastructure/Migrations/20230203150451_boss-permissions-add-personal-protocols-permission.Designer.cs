@@ -4,6 +4,7 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ProwitechDbContext))]
-    partial class ProwitechDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230203150451_boss-permissions-add-personal-protocols-permission")]
+    partial class bosspermissionsaddpersonalprotocolspermission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,363 +381,193 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("358bd333-e751-449d-b724-266d07436edd"),
+                            Id = new Guid("8afbbc04-3b36-4196-a85b-a28352bab172"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("78de5652-3818-496c-bff3-7d341c7aec1c"),
+                            RoleId = new Guid("95a14e4e-5a9c-4f59-897a-9ffe8f053672"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("7ab2e5e3-e66d-4226-8b62-23783f75bf60"),
+                            Id = new Guid("7da85c2d-cb61-4ce3-ba1f-a199c826a67f"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("78de5652-3818-496c-bff3-7d341c7aec1c"),
+                            RoleId = new Guid("95a14e4e-5a9c-4f59-897a-9ffe8f053672"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("e63d55eb-dafd-44a0-8183-d96e1e6488a2"),
+                            Id = new Guid("46c4d209-a68d-467f-9d2a-e0e1992a0eb4"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("78de5652-3818-496c-bff3-7d341c7aec1c"),
+                            RoleId = new Guid("95a14e4e-5a9c-4f59-897a-9ffe8f053672"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("e7119637-0d5c-4223-94ed-78125da5d4af"),
+                            Id = new Guid("c729ebda-578c-446c-a843-2e3192ca0abf"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "Roles",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("e2af1d75-08d6-48b1-86da-5424f4ea3c1d"),
+                            Id = new Guid("6debf06e-f310-4cdd-8c4d-1985adbdd38c"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "Users",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("ed1c3653-1949-4846-9b13-3ee52580b7ba"),
+                            Id = new Guid("a74f7a64-40aa-4f96-a5fa-7125b286cc27"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "Permissions",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("504f890c-cda2-4008-ad49-1097906ec93c"),
+                            Id = new Guid("afdbf3a1-f259-4f69-9d78-a35a3fe62732"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "Buildings",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("06f8eee3-2a97-451c-b3eb-3e65a4d42b64"),
+                            Id = new Guid("1a0e6f35-c395-4122-a444-67b7c28fd63b"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "RealProperties",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("185b3978-dbbf-47a7-9b5d-b65d0b8b18e1"),
+                            Id = new Guid("34c3762f-8905-416c-9d2f-d000ae3317af"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "BuildingAddresses",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("d1b53e0b-ab4a-4c27-930a-099c2cccc9f5"),
+                            Id = new Guid("dd509f9c-a240-447c-b1e6-747aa6fd9ace"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "PropertyManagers",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("7586dc7a-fa97-4725-82f2-e340254a4570"),
+                            Id = new Guid("3dde2c01-3777-4a07-917b-d0caabee973d"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "InspectionTasks",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("526afc3d-64fa-4727-ab9f-db513f705ae9"),
+                            Id = new Guid("681f04db-628f-4ec4-97d3-007de489c69f"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "AllInspectionProtocols",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("d76959c5-16a4-4ba5-a649-76b4cd51d32a"),
+                            Id = new Guid("91118a63-2e23-4320-b0df-54b4dfcaf28b"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Source = "PersonalProtocols",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("9cfb6852-c3f9-4bb0-becd-b1cd7b408cb9"),
+                            Id = new Guid("f3aad585-f2a4-42a1-bb69-ae49aff567af"),
                             Create = false,
                             Delete = false,
                             Read = true,
-                            RoleId = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413"),
+                            RoleId = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4"),
                             Source = "InspectionTasks",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("3dc2cd3d-47d6-4d30-ba43-e754ef7599bc"),
+                            Id = new Guid("c5ce62d7-97d9-4a4f-b2dd-59c26b2ec85b"),
                             Create = true,
                             Delete = true,
                             Read = true,
-                            RoleId = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413"),
+                            RoleId = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4"),
                             Source = "PersonalProtocols",
                             Update = true
                         },
                         new
                         {
-                            Id = new Guid("4e9ee777-0456-414f-af33-eec110902b1f"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "BuildingAddresses",
-                            Update = false,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("3c9f88ac-6087-4cfd-8584-8c3f94d82919"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Buildings",
-                            Update = false,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("f083276b-8e32-4a81-9ae0-1170d5410058"),
-                            Create = true,
-                            Delete = true,
-                            Read = true,
-                            Source = "PersonalProtocols",
-                            Update = true,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("f6957675-5bc7-4285-9dd0-c9967f6626dd"),
+                            Id = new Guid("fc53dd59-0ac6-4d0a-b98b-a54ac0cfec57"),
                             Create = false,
                             Delete = false,
                             Read = true,
                             Source = "InspectionTasks",
                             Update = true,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
+                            UserId = new Guid("fffbf755-8169-46f0-8b36-d3666ffed5ff")
                         },
                         new
                         {
-                            Id = new Guid("5a706e53-9877-44e1-b626-4ec36ce6d398"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "PropertyManagers",
-                            Update = false,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("4dd91f9e-3af6-46f8-83dd-8004dada068b"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "RealProperties",
-                            Update = false,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("c8d639b0-c81d-4d63-bf38-12006ee69017"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Users",
-                            Update = false,
-                            UserId = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4")
-                        },
-                        new
-                        {
-                            Id = new Guid("7545d1ce-4aae-4dc4-ac50-a70ad13bf401"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "BuildingAddresses",
-                            Update = false,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
-                        },
-                        new
-                        {
-                            Id = new Guid("d4a276d5-3666-4d8b-b32c-fd2f10f41a50"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Buildings",
-                            Update = false,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
-                        },
-                        new
-                        {
-                            Id = new Guid("e91e7d66-3836-4fb6-9fb5-23a486e6dc2d"),
+                            Id = new Guid("92d02646-2a08-490b-9598-a974f529400f"),
                             Create = true,
                             Delete = true,
                             Read = true,
                             Source = "PersonalProtocols",
                             Update = true,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
+                            UserId = new Guid("fffbf755-8169-46f0-8b36-d3666ffed5ff")
                         },
                         new
                         {
-                            Id = new Guid("32ea8334-98cf-4d36-b1af-431f5eb0a2fa"),
+                            Id = new Guid("a05031f1-5a5f-485b-bac7-1392592a3c0c"),
                             Create = false,
                             Delete = false,
                             Read = true,
                             Source = "InspectionTasks",
                             Update = true,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
+                            UserId = new Guid("c3930eb7-c7aa-4c53-9d3e-863e7173a12a")
                         },
                         new
                         {
-                            Id = new Guid("c1dd4c6c-d94a-4a08-9a71-59a1eac32a67"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "PropertyManagers",
-                            Update = false,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
-                        },
-                        new
-                        {
-                            Id = new Guid("b79cad47-a245-4665-b649-245561dacc1e"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "RealProperties",
-                            Update = false,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
-                        },
-                        new
-                        {
-                            Id = new Guid("8c1e85ca-62dd-4545-8473-8618664ead08"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Users",
-                            Update = false,
-                            UserId = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45")
-                        },
-                        new
-                        {
-                            Id = new Guid("e7d05963-2e80-48ef-894d-101852b1d83b"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "BuildingAddresses",
-                            Update = false,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("5adc9a5f-09da-4187-8e92-8232ad7daef3"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Buildings",
-                            Update = false,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("b83526a9-65be-4003-891a-b5d9a11ccdd4"),
+                            Id = new Guid("bf3bfd43-1bf8-4df5-acef-fe7605686ff1"),
                             Create = true,
                             Delete = true,
                             Read = true,
                             Source = "PersonalProtocols",
                             Update = true,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("01fd8d9d-b1de-48c4-b501-25d1b31ea7d8"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "InspectionTasks",
-                            Update = true,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("230dad86-8ea9-4492-9ead-62f143cad6c4"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "PropertyManagers",
-                            Update = false,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("462afa39-52a8-49d4-8885-a5177561fd45"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "RealProperties",
-                            Update = false,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
-                        },
-                        new
-                        {
-                            Id = new Guid("cc9e682b-71e0-417e-ae4c-c5fb449543d6"),
-                            Create = false,
-                            Delete = false,
-                            Read = true,
-                            Source = "Users",
-                            Update = false,
-                            UserId = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1")
+                            UserId = new Guid("c3930eb7-c7aa-4c53-9d3e-863e7173a12a")
                         });
                 });
 
@@ -844,17 +676,17 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("78de5652-3818-496c-bff3-7d341c7aec1c"),
+                            Id = new Guid("95a14e4e-5a9c-4f59-897a-9ffe8f053672"),
                             Name = "Administrator"
                         },
                         new
                         {
-                            Id = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e"),
+                            Id = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452"),
                             Name = "Szef"
                         },
                         new
                         {
-                            Id = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413"),
+                            Id = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4"),
                             Name = "Pracownik"
                         });
                 });
@@ -906,58 +738,58 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e4044fcd-09fa-4b71-bc9f-2c8876e3dff8"),
+                            Id = new Guid("f387f845-13bf-4e19-a09d-b43e226ba95b"),
                             Email = "",
                             FirstName = "admin",
                             LastName = "",
                             Login = "admin",
-                            Password = "AQAAAAIAAYagAAAAEDljw4sISwsWP8r8gR9SW6Tl4LsyIVsZ/wUOFbRcZpERwtGWB8Z+NeOdvEgZq6zRXQ==",
+                            Password = "AQAAAAIAAYagAAAAEGOIc8FoEVTKWKHhXnijhzbk7FlRMCTwVFfp9coaSaRUX33xXHANIAMZShCAgTxqGw==",
                             PhoneNumber = "",
-                            RoleId = new Guid("78de5652-3818-496c-bff3-7d341c7aec1c")
+                            RoleId = new Guid("95a14e4e-5a9c-4f59-897a-9ffe8f053672")
                         },
                         new
                         {
-                            Id = new Guid("377a3576-01f6-4d0f-b526-809df29c449e"),
+                            Id = new Guid("4f08cc14-1181-4343-a6da-41ddb71c8377"),
                             Email = "k.tumiel@gmail.com",
                             FirstName = "Krzysztof",
                             LastName = "Tumiel",
                             Login = "boss",
-                            Password = "AQAAAAIAAYagAAAAEBwlz9s9MPknlHchQ2XRNUeG3hfhkV3cuXoCprDKsBo9sQbKTLHbcrlGxAjch4lSLQ==",
+                            Password = "AQAAAAIAAYagAAAAEJg0oWoNU5jc8XhnSYJOT4pmwz3kf6+1zl4hyFeh5NZhQScOWwSdTGKjXtCf7xPfMQ==",
                             PhoneNumber = "123 456 789",
-                            RoleId = new Guid("17996ef3-d75d-4660-855c-c2a013041f5e")
+                            RoleId = new Guid("674870f0-b39f-43dd-bcd2-b3f2f0bb2452")
                         },
                         new
                         {
-                            Id = new Guid("26f81b8c-23ca-4e8c-a7d5-ff521aa3a7c4"),
+                            Id = new Guid("74cbd864-03b1-44d8-bc5d-36959921297e"),
                             Email = "j.kowalski@gmail.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
                             Login = "w1",
-                            Password = "AQAAAAIAAYagAAAAEDeFf8Y3TUY7IDvaP04NWdHYm41py2+qMl4Y6zezCiCflcL1JHP1IpOebJWaSBGy7w==",
+                            Password = "AQAAAAIAAYagAAAAEFwRGPUK+BjglP2KAcx5nFqHyzmnovpq08BBDs2JAOk1NSaDZedZaIFvz0v6YYycVg==",
                             PhoneNumber = "+48 321 654 987",
-                            RoleId = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413")
+                            RoleId = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4")
                         },
                         new
                         {
-                            Id = new Guid("56fbcd8f-7da1-4328-883c-518f83b2ba45"),
+                            Id = new Guid("fffbf755-8169-46f0-8b36-d3666ffed5ff"),
                             Email = "z.pietka@gmail.com",
                             FirstName = "Zdzisław",
                             LastName = "Piętka",
                             Login = "w2",
-                            Password = "AQAAAAIAAYagAAAAEDDjafDyTJo7lZfqRHAtBtFUXzuljt2/qdHnqwQlMwqftoQ4QjN0EFOYpgkp6HZ9/A==",
+                            Password = "AQAAAAIAAYagAAAAEF0bjbyA6qg1V/F68F56dA6FE5aVlkSdjB0gAPHjzisGECT1pWB0LXPtFQyCqey8dg==",
                             PhoneNumber = "987654321",
-                            RoleId = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413")
+                            RoleId = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4")
                         },
                         new
                         {
-                            Id = new Guid("386a9595-2d97-4bcf-8d5d-193c97371fb1"),
+                            Id = new Guid("c3930eb7-c7aa-4c53-9d3e-863e7173a12a"),
                             Email = "m.wioslo@gmail.com",
                             FirstName = "Marek",
                             LastName = "Wiosło",
                             Login = "w3",
-                            Password = "AQAAAAIAAYagAAAAEP5tKnLwHlO8BC7R1L8IxeQrXutX5E8OoXMUO1iKGMOEZsQ7Znjyeos099HEZEkabA==",
+                            Password = "AQAAAAIAAYagAAAAEH4DH2BIBpwuODJcrhDiy6K8WXalowYQOjufWFy30CQ9NpxMAG37Br9Jskwv0sg2uQ==",
                             PhoneNumber = "+48 312645978",
-                            RoleId = new Guid("285710e0-b17d-4372-ac0e-ba1c350fa413")
+                            RoleId = new Guid("f224a458-dcbf-430b-9739-a272db5b8fe4")
                         });
                 });
 

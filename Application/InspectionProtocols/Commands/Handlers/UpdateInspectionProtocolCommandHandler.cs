@@ -67,8 +67,15 @@ namespace Application.InspectionProtocols.Commands.Handlers
 
             protocolFromDB.Resident = newOrOldResident;
             protocolFromDB.Number = protocolNumber;
+            if (request.InspectionProtocolDTO.InspectionTaskId != null)
+            {
+                protocolFromDB.InspectionTaskId = request.InspectionProtocolDTO.InspectionTaskId;
+                protocolFromDB.InspectionTask = await _unitOfWork.InspectionTaskRepository.GetAsync(protocolFromDB.InspectionTaskId.Value, cancellationToken);
+            }
             await _unitOfWork.InspectionProtocolsRepository.UpdateAsync(protocolFromDB, oldResidentFromDB.Id, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var checkAfterUpdate = await _unitOfWork.InspectionProtocolsRepository.GetAsync(protocolId, cancellationToken);
 
             return Unit.Value;
         }

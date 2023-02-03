@@ -4,6 +4,7 @@
   import {
     getToken,
     hasCreatePermissionFor,
+    hasReadPermissionFor,
     clearToken,
   } from "$lib/js-lib/authManager";
 
@@ -29,7 +30,7 @@
       tasksHref = `/tasks/${token?.id}/performer_tasks`;
     }
 
-    if (hasCreatePermissionFor("inspectionProtocols")) {
+    if (hasReadPermissionFor("allInspectionProtocols")) {
       protocolsHref = "/protocols";
     } else {
       protocolsHref = `/protocols/${token?.id}/performer_protocols`;
