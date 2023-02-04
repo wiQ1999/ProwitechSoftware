@@ -22,7 +22,9 @@ public static class ConfigureServices
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddScoped<IPermissionsSelector, PermissionsSelector>();
+
         services.AddScoped<IClaimProvider, ClaimProvider>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;
     }
@@ -35,8 +37,6 @@ public static class ConfigureServices
 
         services.Configure<JwtSettings>(
             configuration.GetSection(JwtSettings.SECTION_NAME));
-
-        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services.AddAuthentication(
             defaultScheme: JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options 

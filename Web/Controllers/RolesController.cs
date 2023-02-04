@@ -38,7 +38,7 @@ public class RolesController : ApiControllerBase
     public async Task<IActionResult> Delete(Guid id) =>
         Ok(await Mediator.Send(new DeleteRoleCommand(id)));
 
-    [HttpDelete()]
+    [HttpDelete]
     [SourcePermissions(AppSource.Roles, PermissionProperty.Delete)]
     public async Task<IActionResult> DeleteMany(DeleteManyRolesCommand command) =>
         Ok(await Mediator.Send(command));

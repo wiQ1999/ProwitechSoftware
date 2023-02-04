@@ -39,20 +39,26 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
     public IBuildingRepository BuildingRepository 
         => _buildingRepository ??= new BuildingRepository(_context);
 
-    public IFullAddressRepository FullAddressRepository => _fullAddressRepository??= new FullAddressRepository(_context);
+    public IFullAddressRepository FullAddressRepository
+        => _fullAddressRepository ??= new FullAddressRepository(_context);
 
-    public IInspectionTaskRepository InspectionTaskRepository => _inspectionTaskRepository??=new InspectionTaskRepository(_context);
+    public IInspectionTaskRepository InspectionTaskRepository
+        => _inspectionTaskRepository ??= new InspectionTaskRepository(_context);
 
-    public IPropertyAddressRepository PropertyAddressRepository => _propertyAddressRepository??=new PropertyAddressRepository(_context);
+    public IPropertyAddressRepository PropertyAddressRepository
+        => _propertyAddressRepository ??= new PropertyAddressRepository(_context);
 
-    public IPropertyManagerRepository PropertyManagerRepository => _propertyManagerRepository ??= new PropertyManagerRepository(_context);
+    public IPropertyManagerRepository PropertyManagerRepository
+        => _propertyManagerRepository ??= new PropertyManagerRepository(_context);
 
-    public IRealPropertyRepository RealPropertyRepository => _realPropertyRepository ??= new RealPropertyRepository(_context);
+    public IRealPropertyRepository RealPropertyRepository
+        => _realPropertyRepository ??= new RealPropertyRepository(_context);
 
     public IInspectionProtocolsRepository InspectionProtocolsRepository
         => _inspectionProtocolsRepository ??= new InspectionProtocolsRepository(_context);
 
-    public IResidentsRepository ResidentsRepository => _residentsRepository ??= new ResidentsRepository(_context);
+    public IResidentsRepository ResidentsRepository
+        => _residentsRepository ??= new ResidentsRepository(_context);
 
     public RepositoriesUnitOfWork(ProwitechDbContext context)
     {
@@ -60,7 +66,7 @@ public class RepositoriesUnitOfWork : IRepositoriesUnitOfWork
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
-        => await _context.SaveChangesAsync();
+        => await _context.SaveChangesAsync(cancellationToken);
 
     public void Dispose()
     {

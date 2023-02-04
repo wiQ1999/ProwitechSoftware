@@ -1,5 +1,4 @@
-﻿using Application.Roles.Commands.Requests;
-using Application.Users.Commands.Requests;
+﻿using Application.Users.Commands.Requests;
 using Application.Users.Queries.Requests;
 using Infrastructure.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +47,7 @@ public class UsersController : ApiControllerBase
     public async Task<IActionResult> Delete(Guid id) =>
         Ok(await Mediator.Send(new DeleteUserCommand(id)));
 
-    [HttpDelete()]
+    [HttpDelete]
     [SourcePermissions(AppSource.Users, PermissionProperty.Delete)]
     public async Task<IActionResult> DeleteMany(DeleteManyUsersCommand command) =>
         Ok(await Mediator.Send(command));
