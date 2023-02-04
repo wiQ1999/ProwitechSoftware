@@ -93,14 +93,14 @@
 
 <br />
 <div
-  class="absolute ml-[2.5%] lg:mt-16 mt-14 opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide"
+  class="absolute ml-[2.5%] opacity-50 z-[-1] text-black xl:text-[30px] md:text-lg text-sm tracking-wide"
 >
   {listName}
 </div>
 {#if addButtonVisibility}
   <button
     on:click={onAdd}
-    class="mx-auto mb-[3%] p-4 rounded-md w-[50%] bg-[#007acc] text-white font-semibold flex justify-center"
+    class="mx-auto mt-[4%] mb-[2%] p-4 rounded-md w-[50%] bg-[#007acc] text-white font-semibold flex justify-center"
     >Dodaj</button
   >
 {/if}

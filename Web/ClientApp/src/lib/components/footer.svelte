@@ -6,6 +6,6 @@
              bottom-0
              p-1"
 >
-    Apliakcja realizowana w ramach pracy dyplomowej na Wyższej Szkole Bankowej w
+    Aplikacja realizowana w ramach pracy dyplomowej na Wyższej Szkole Bankowej w
     Poznaniu. Wykonawcy: Filipowska Hanna, Nowak Hubert i Szczeszek Wiktor. ©
 </footer>

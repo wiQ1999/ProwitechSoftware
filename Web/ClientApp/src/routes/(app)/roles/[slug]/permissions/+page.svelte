@@ -68,52 +68,52 @@
     {onSubmitHandler}
     {onEditingStopHandler}
 >
-    <table>
-        <tr>
-            <th>Zasób</th>
-            <th>Dodawanie</th>
-            <th>Odczytywanie</th>
-            <th>Aktualizowanie</th>
+    <table class="w-[98%] p-[1%] border-2 border-black">
+        <tr class="border-b-2 border-black">
+            <th class="border-r-2 border-black">Zasób</th>
+            <th class="border-r-2 border-black">Dodawanie</th>
+            <th class="border-r-2 border-black">Odczytywanie</th>
+            <th class="border-r-2 border-black">Aktualizowanie</th>
             <th>Usuwanie</th>
         </tr>
 
         {#each rolePermissions as permission, i}
             <tr>
-                <td>{permission.source}</td>
-                <td>
+                <td class="font-semibold border-r-2 border-black">{permission.source}</td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "create")}
                         disabled={!isEditing}
                     >
-                        {permission.create ? "TAK" : "NIE"}
+                        {permission.create ? "√" : "X"}
                     </button>
                 </td>
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "read")}
                         disabled={!isEditing}
                     >
-                        {rolePermissions[i].read ? "TAK" : "NIE"}
+                        {rolePermissions[i].read ? "√" : "X"}
                     </button>
                 </td>
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "update")}
                         disabled={!isEditing}
                     >
-                        {rolePermissions[i].update ? "TAK" : "NIE"}
+                        {rolePermissions[i].update ? "√" : "X"}
                     </button>
                 </td>
-                <td>
+                <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "delete")}
                         disabled={!isEditing}
                     >
-                        {rolePermissions[i].delete ? "TAK" : "NIE"}
+                        {rolePermissions[i].delete ? "√" : "X"}
                     </button>
                 </td>
             </tr>

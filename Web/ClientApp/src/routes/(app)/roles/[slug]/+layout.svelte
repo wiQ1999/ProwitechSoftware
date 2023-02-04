@@ -23,9 +23,11 @@
     <div on:mouseenter={openMenu} on:mouseleave={openMenu} id="openableButton" hidden class="relative text-center bg-blue-500"> 
         <a href="/roles/{$page.params.slug}/details">Szczegóły</a>
         <br />
+        <a href="/roles/{$page.params.slug}/permissions">Uprawnienia</a>
+        <br />
         Rola: <b>{$formNameStore}</b>
         <br />
-        <button on:click|preventDefault={closeHandler}>Zamknij</button>
+        <button on:click|preventDefault={closeHandler} class="bg-red-500 w-[100%]">Zamknij</button>
     </div>
 </div>
 <div>

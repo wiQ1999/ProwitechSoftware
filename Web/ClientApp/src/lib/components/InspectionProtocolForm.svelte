@@ -259,23 +259,34 @@
     if (m_A_07_Przewody_rodzaj_array.length == 0) {
       showRequiredForMultiple_07 = true;
       lackOfAnswerFound = true;
+      requiredFocus();
     } else {
       showRequiredForMultiple_07 = false;
     }
     if (m_A_08_Przewody_przebieg_array.length == 0) {
       lackOfAnswerFound = true;
       showRequiredForMultiple_08 = true;
+      requiredFocus();
     } else {
       showRequiredForMultiple_08 = false;
     }
     if (m_A_09_Przewody_sposob_prowadzenia_array.length == 0) {
       showRequiredForMultiple_09 = true;
       lackOfAnswerFound = true;
+      requiredFocus();
     } else {
       showRequiredForMultiple_09 = false;
     }
     return lackOfAnswerFound;
   }
+
+  function requiredFocus() {
+    var required = document.getElementById("required");
+    required.tabIndex = "-1";
+    required.focus();
+    required.tabIndex
+  }
+
   function assignMultipleValues() {
     let multiple_07 = "";
     let multiple_08 = "";
@@ -417,10 +428,10 @@
       bind:value={CreateInspectionProtocolCommand.residentDTO.phoneNumber}
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
     />
-
+<div class="text-lg">
     <!--  ------------------------------------------- ||||| CZĘŚĆ I - GAZOMIERZ ||||| ------------------------------------------- -->
     <div class="part-1-gazomierz">
-      Część I - GAZOMIERZ
+      <span class="font-bold">Część I - GAZOMIERZ</span>
       <!--  ------------------------------------------- PYTANIE  a_01_Gazomierz_umiejscowienie ------------------------------------------- -->
       <div
         class="question-a_01_Gazomierz_umiejscowienie min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
@@ -637,7 +648,7 @@
 
     <!--  ------------------------------------------- ||||| CZĘŚĆ II - PRZEWODY ||||| ------------------------------------------- -->
     <div class="part-2-przewody">
-      Część II - PRZEWODY
+      <span class="font-bold">Część II - PRZEWODY</span>
       <!--  ------------------------------------------- PYTANIE  m_A_07_Przewody_rodzaj ------------------------------------------- -->
       <div
         class="question-m_A_07_Przewody_rodzaj min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
@@ -674,7 +685,7 @@
           zaciskowe
         </label>
         {#if showRequiredForMultiple_07}
-          <div class="checkbox-required-message">
+          <div class="text-red-500" id="required">
             {multipleRequiredMessage}
           </div>
         {/if}
@@ -715,7 +726,7 @@
           inne
         </label>
         {#if showRequiredForMultiple_08}
-          <div class="checkbox-required-message">
+          <div class="text-red-500" id="required">
             {multipleRequiredMessage}
           </div>
         {/if}
@@ -768,7 +779,7 @@
           brak dostępu
         </label>
         {#if showRequiredForMultiple_09}
-          <div class="checkbox-required-message">
+          <div class="text-red-500" id="required">
             {multipleRequiredMessage}
           </div>
         {/if}
@@ -857,15 +868,16 @@
           inny
         </label>
       </div>
+    </div>
       <!--  ------------------------------------------------------------------------------------------------------------------------ -->
 
       <!--  ----------------------- ||||| CZĘŚĆ III - PRAWIDŁOWOŚĆ DZIAŁANIA ODBIORNIKÓW GAZU ||||| ------------------------------------------- -->
-      <div class="part-3-prawidlowosc-dzialania-odbiornikow-gazu">
-        Część III - PRAWIDŁOWOŚĆ DZIAŁANIA ODBIORNIKÓW GAZU
-        <!--  ------------------------------------------- PYTANIE  a_12_Prawidlowosc_kuchenka_gazowa_typ-------------------------------- -->
-        <div
+    <div class="part-3-prawidlowosc-dzialania-odbiornikow-gazu">
+      <span class="font-bold">Część III - PRAWIDŁOWOŚĆ DZIAŁANIA ODBIORNIKÓW GAZU</span>
+      <!--  ------------------------------------------- PYTANIE  a_12_Prawidlowosc_kuchenka_gazowa_typ-------------------------------- -->
+      <div
           class="question-a_12_Prawidlowosc_kuchenka_gazowa_typ min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
-        >
+      >
           <label for="a_12_Prawidlowosc_kuchenka_gazowa_typ"
             >[12] Kuchenka gazowa - typ</label
           >
@@ -925,7 +937,6 @@
             do wymiany
           </label>
         </div>
-      </div>
       <!--  ------------------------------------ PYTANIE  a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj-------------------------------- -->
       <div
         class="question-a_14_Prawidlowosc_kuchenka_gazowa_podlaczenie_rodzaj min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
@@ -1351,7 +1362,7 @@
 
     <!--  ----- ||||| CZĘŚĆ IV - KUBATURA POMIESZCZEŃ, W KTÓRYCH EKSPLOATOWANE SĄ ODBIORNIKI GAZU ||||| ------------------------ -->
     <div class="part-4-kubatura-pomieszczen">
-      Część IV
+      <span class="font-bold">Część IV - KUBATURA POMIESZCZEŃ</span>
       <!--  --------------------------------- PYTANIE  a_25_Kubatura_warunku_techniczne---------------------------- -->
       <div
         class="question-a_25_Kubatura_warunku_techniczne min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
@@ -1387,12 +1398,12 @@
     </div>
     <!--  --------------------------------- ||||| CZĘŚĆ V - WENTYLACJA GRAWITACYJNA ||||| --------------------------------- -->
     <div class="part-5-kubatura-pomieszczen">
-      Część VI - WENTYLACJA GRAWITACYJNA
+      <span class="font-bold">Część V - WENTYLACJA GRAWITACYJNA</span>
       <!--  --------------------------------- PYTANIE  b_A_26_Wentylacja_kuchnia---------------------------- -->
       <div
         class="question-b_A_26_Wentylacja_kuchnia min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
       >
-        <label for="b_A_26_Wentylacja_kuchnia">[26] kuchnia</label>
+        <label for="b_A_26_Wentylacja_kuchnia">[26] Kuchnia</label>
         <label>
           <input
             type="radio"
@@ -1421,7 +1432,7 @@
       <div
         class="question-b_A_27_Wentylacja_lazienka min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
       >
-        <label for="b_A_27_Wentylacja_lazienka">[27] łazienka</label>
+        <label for="b_A_27_Wentylacja_lazienka">[27] Łazienka</label>
         <label>
           <input
             type="radio"
@@ -1451,7 +1462,7 @@
         class="question-b_A_28_Wentylacja_inne_pomieszczenia min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
       >
         <label for="b_A_28_Wentylacja_inne_pomieszczenia"
-          >[28] inne pomieszczenia, w których znajdują się odbiorniki gazu</label
+          >[28] Inne pomieszczenia, w których znajdują się odbiorniki gazu</label
         >
         <label>
           <input
@@ -1573,7 +1584,8 @@
     </div>
     <!--  --------------------------------- ||||| CZĘŚĆ VI - WYNIKI OKRESOWEJ KONTROLI ||||| --------------------------------- -->
     <div class="part-6-wyniki-okresowej-kontroli">
-      WYNIKI OKRESOWEJ KONTROLI
+      <span class="font-bold">Część VI - WYNIKI OKRESOWEJ KONTROLI</span>
+
       <!--  --------------------------------- PYTANIE  a_32_Wyniki_stan_szczelnosci---------------------------- -->
       <div
         class="question-a_32_Wyniki_stan_szczelnosci min-w-[240px] rounded-md p-4 bg-white flex flex-col justify-between"
@@ -1686,6 +1698,7 @@
         />
       </div>
     </div>
+  </div>
 
     {#if !readMode}
       <button
