@@ -60,6 +60,8 @@
         type="password"
         bind:value={user.password}
         required
+        pattern=".&#123;8,}"
+        title="Musi zawierać co najmniej osiem znaków"
         class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
     />
 
@@ -104,16 +106,21 @@
     <div>
         <label for="user.roleId" class="block">Rola</label>
         <div class="flex">
-        <select
-            bind:value={user.roleId}
-            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
-        >
-            {#each roles as role}
-                <option value={role.id}>{role.name}</option>
-            {/each}
-        </select>
+            <select
+                bind:value={user.roleId}
+                class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
+            >
+                {#each roles as role}
+                    <option value={role.id}>{role.name}</option>
+                {/each}
+            </select>
 
-        <button type="button" on:click={clearRoleInputHandler} class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-black disabled:bg-[#e8eeef] hover:bg-gray-200">X </button>
+            <button
+                type="button"
+                on:click={clearRoleInputHandler}
+                class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-black disabled:bg-[#e8eeef] hover:bg-gray-200"
+                >X
+            </button>
         </div>
     </div>
     <br />
