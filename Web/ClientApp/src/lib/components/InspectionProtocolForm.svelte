@@ -282,9 +282,10 @@
 
   function requiredFocus() {
     var required = document.getElementById("required");
-    required.tabIndex = "-1";
+    console.log(required);
+    required.setAttribute('tabIndex','-1');
     required.focus();
-    required.tabIndex
+    required.removeAttribute('tabIndex');
   }
 
   function assignMultipleValues() {
@@ -661,6 +662,7 @@
             disabled={readMode}
             bind:group={m_A_07_Przewody_rodzaj_array}
             value={"spawane"}
+            id="required"
           />
           spawane
         </label>
@@ -685,7 +687,7 @@
           zaciskowe
         </label>
         {#if showRequiredForMultiple_07}
-          <div class="text-red-500" id="required">
+          <div class="text-red-500">
             {multipleRequiredMessage}
           </div>
         {/if}
@@ -702,6 +704,7 @@
             disabled={readMode}
             bind:group={m_A_08_Przewody_przebieg_array}
             value={"klatka schodowa"}
+            id="required"
           />
           klatka schodowa
         </label>
@@ -745,6 +748,7 @@
             disabled={readMode}
             bind:group={m_A_09_Przewody_sposob_prowadzenia_array}
             value={"natynkowy"}
+            id="required"
           />
           natynkowy
         </label>
