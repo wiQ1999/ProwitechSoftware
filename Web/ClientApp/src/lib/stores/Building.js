@@ -31,7 +31,7 @@ export async function postBuilding(
     response = await genericPost("/Building", createBuildingCommand);
     return response;
   } catch (err) {
-    handleError(err, "dodawanie Budynku");
+    handleError(err, "dodawanie Budynku", true);
     return err;
   }
 }

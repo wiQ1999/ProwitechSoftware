@@ -13,7 +13,5 @@ namespace Infrastructure.Models.Domain
         public Building Building { get; set; }
         public Guid? PropertyAddressId { get; set; }
         public PropertyAddress? PropertyAddress { get; set; }
-        //public Guid InspectionProtocolId { get; set; }
-        //public InspectionProtocol? Protocol { get; set; }
     }
 }

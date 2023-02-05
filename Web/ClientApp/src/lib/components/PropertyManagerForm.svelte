@@ -79,6 +79,7 @@
     <select
       bind:value={buildingAddressDTO.cityName}
       disabled={readMode}
+      required
       class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9] disabled:bg-[#e8eeef]"
     >
       {#each cities as city}
