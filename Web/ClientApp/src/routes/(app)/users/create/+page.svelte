@@ -103,6 +103,7 @@
 
     <div>
         <label for="user.roleId" class="block">Rola</label>
+        <div class="flex">
         <select
             bind:value={user.roleId}
             class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] text-[#8a97a9] border-2 focus:border-[#0078c8]"
@@ -112,9 +113,9 @@
             {/each}
         </select>
 
-        <button type="button" on:click={clearRoleInputHandler}>X </button>
+        <button type="button" on:click={clearRoleInputHandler} class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-black disabled:bg-[#e8eeef] hover:bg-gray-200">X </button>
+        </div>
     </div>
-
     <br />
     <br />
 </form>

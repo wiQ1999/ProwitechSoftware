@@ -151,7 +151,7 @@
             type="button"
             on:click={clearRoleInputHandler}
             disabled={!isEditing}
-            class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-black disabled:bg-[#e8eeef] hover:bg-gray-200 "
+            class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-black disabled:bg-[#e8eeef] hover:bg-gray-200"
             >X
         </button>
     </div>
