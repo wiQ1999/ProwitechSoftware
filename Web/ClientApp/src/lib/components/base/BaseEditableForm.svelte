@@ -47,7 +47,7 @@
     {#if isEditing}
         <button
             type="submit"
-            class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] mb-3 justify-center cursor-pointer hover:bg-blue-400"
+            class="py-5 px-10 border-2 border-[#0078c8] font-semibold text-lg rounded-md w-[90%] my-3 justify-center cursor-pointer hover:bg-blue-400"
             >ZATWIERDŹ
         </button>
     {/if}
