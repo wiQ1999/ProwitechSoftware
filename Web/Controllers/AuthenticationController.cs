@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
 
-[AllowAnonymous]
 [Route("[controller]")]
 public class AuthenticationController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Login([FromQuery]LoginQuery query)
-        => Ok(await Mediator.Send(query));
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(string login, string password)
+        => Ok(await Mediator.Send(new LoginQuery(login, password)));
+
+    [HttpGet]
+    public async Task<IActionResult> RefreshToken(Guid userId, string currentToken)
+        => Ok(await Mediator.Send(new RefreshTokenQuery(userId, currentToken)));
 }

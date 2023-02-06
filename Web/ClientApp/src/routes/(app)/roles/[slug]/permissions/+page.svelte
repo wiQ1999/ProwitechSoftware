@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { getForRole, postOrPutForRole } from "$lib/stores/Permissions";
+    import { getAuthenticated } from "$lib/stores/Authentication";
     import BaseEditableForm from "$lib/components/base/BaseEditableForm.svelte";
 
     let baseRolePermissions = [];
@@ -14,14 +15,21 @@
     });
 
     async function onSubmitHandler() {
-        if (checkIfRolePermissionsChanged()) {
-            const dto = {
-                roleId: $page.params.slug,
-                permissions: rolePermissions,
-            };
-            await postOrPutForRole($page.params.slug, dto);
-            baseRolePermissions = JSON.parse(JSON.stringify(rolePermissions));
-        }
+        if (!checkIfRolePermissionsChanged()) return;
+
+        const dto = {
+            roleId: $page.params.slug,
+            permissions: rolePermissions,
+        };
+
+        const permissionsResult = await postOrPutForRole(
+            $page.params.slug,
+            dto
+        );
+
+        if (permissionsResult === undefined) return;
+
+        baseRolePermissions = JSON.parse(JSON.stringify(rolePermissions));
 
         isEditing = false;
     }
@@ -79,7 +87,9 @@
 
         {#each rolePermissions as permission, i}
             <tr>
-                <td class="font-semibold border-r-2 border-black">{permission.source}</td>
+                <td class="font-semibold border-r-2 border-black"
+                    >{permission.source}</td
+                >
                 <td class="border-r-2 border-black">
                     <button
                         type="button"

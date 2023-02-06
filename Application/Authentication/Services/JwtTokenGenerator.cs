@@ -1,8 +1,8 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Authentication.Models;
+using Application.Interfaces.Services;
 using Application.Permissions.DTOs;
 using Application.Users.DTOs;
 using Infrastructure.Models.Enums;
-using Infrastructure.Models.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
