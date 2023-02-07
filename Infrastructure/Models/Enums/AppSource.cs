@@ -20,12 +20,8 @@ public enum AppSource
     PersonalProtocols,
     [Description("Zadania")]
     InspectionTasks,
-    //[Description("Adresy Nieruchomości")]
-    //PropertyAddresses,
     [Description("Zarządcy Nieruchomości")]
     PropertyManagers,
     [Description("Nieruchomości")]
     RealProperties,
-    //[Description("Mieszkańcy")]
-    //Residents,
 }
