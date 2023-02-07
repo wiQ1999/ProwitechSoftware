@@ -31,7 +31,7 @@
             type="button"
             on:click={onEditingStopHandlerWithStatus}
             class="flex font-semibold bg-blue-400 mb-4 p-4 mx-auto rounded-md text-white"
-            >Zakończ edycję
+            >Wyłącz edycję
         </button>
     {:else}
         <button

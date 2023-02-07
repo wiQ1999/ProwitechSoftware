@@ -10,6 +10,7 @@
     let user = {};
     let roles = [];
     let isEditing = false;
+    let formName = "Szczegóły użytkownika";
 
     onMount(async () => {
         baseUser = await getUserById($page.params.slug);
@@ -59,7 +60,12 @@
         );
     }
 
+    function onEditingStartHandler() {
+        formName = "Edycja użytkownika";
+    }
+
     function onEditingStopHandler() {
+        formName = "Szczegóły użytkownika";
         user = { ...baseUser };
         updateRoleSelect();
     }
@@ -71,7 +77,8 @@
 
 <BaseEditableForm
     bind:isEditing
-    formName="Szczegóły użytkownika"
+    bind:formName
+    {onEditingStartHandler}
     {onEditingStopHandler}
     {onSubmitHandler}
 >
@@ -136,24 +143,24 @@
     <div>
         <label for="role" class="block">Rola</label>
         <div class="flex">
-        <select
-            name="role"
-            bind:value={user.role}
-            disabled={!isEditing}
-            class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
-        >
-            {#each roles as role}
-                <option value={role}>{role.name}</option>
-            {/each}
-        </select>
+            <select
+                name="role"
+                bind:value={user.role}
+                disabled={!isEditing}
+                class="text-base h-auto mb-8 outline-0 p-[15px] w-[100%] bg-[#e8eeef] border-2 focus:border-[#0078c8] disabled:text-[#8a97a9]"
+            >
+                {#each roles as role}
+                    <option value={role}>{role.name}</option>
+                {/each}
+            </select>
 
-        <button
-            type="button"
-            on:click={clearRoleInputHandler}
-            disabled={!isEditing}
-            class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-gray-400 disabled:bg-[#e8eeef] hover:bg-gray-200"
-            >X
-        </button>
-    </div>
+            <button
+                type="button"
+                on:click={clearRoleInputHandler}
+                disabled={!isEditing}
+                class="px-4 mb-8 font-bold border-silver border-2 disabled:font-normal disabled:text-gray-400 disabled:bg-[#e8eeef] hover:bg-gray-200"
+                >X
+            </button>
+        </div>
     </div>
 </BaseEditableForm>

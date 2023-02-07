@@ -1,27 +1,42 @@
 <script>
     import { onMount } from "svelte";
     import { page } from "$app/stores";
+    import { getRoleById } from "$lib/stores/Roles";
     import { getForRole, postOrPutForRole } from "$lib/stores/Permissions";
+    import { getAuthenticated } from "$lib/stores/Authentication";
     import BaseEditableForm from "$lib/components/base/BaseEditableForm.svelte";
 
+    let role = {};
     let baseRolePermissions = [];
     let rolePermissions = [];
     let isEditing = false;
+    let formName;
 
     onMount(async () => {
+        role = await getRoleById($page.params.slug);
+        formName = "Szczegóły uprawnień roli: " + role.name;
         baseRolePermissions = await getForRole($page.params.slug);
         rolePermissions = JSON.parse(JSON.stringify(baseRolePermissions));
     });
 
     async function onSubmitHandler() {
-        if (checkIfRolePermissionsChanged()) {
-            const dto = {
-                roleId: $page.params.slug,
-                permissions: rolePermissions,
-            };
-            await postOrPutForRole($page.params.slug, dto);
-            baseRolePermissions = JSON.parse(JSON.stringify(rolePermissions));
-        }
+        if (!checkIfRolePermissionsChanged()) return;
+
+        const dto = {
+            roleId: $page.params.slug,
+            permissions: rolePermissions,
+        };
+
+        const permissionsResult = await postOrPutForRole(
+            $page.params.slug,
+            dto
+        );
+
+        if (permissionsResult === undefined) return;
+
+        const authResult = await getAuthenticated();
+
+        baseRolePermissions = JSON.parse(JSON.stringify(rolePermissions));
 
         isEditing = false;
     }
@@ -44,7 +59,12 @@
         return false;
     }
 
+    function onEditingStartHandler() {
+        formName = "Edycja uprawnień roli: " + role.name;
+    }
+
     function onEditingStopHandler() {
+        formName = "Szczegóły uprawnień roli: " + role.name;
         rolePermissions = JSON.parse(JSON.stringify(baseRolePermissions));
     }
 
@@ -64,7 +84,8 @@
 
 <BaseEditableForm
     bind:isEditing
-    formName="Uprawnienia roli"
+    bind:formName
+    {onEditingStartHandler}
     {onSubmitHandler}
     {onEditingStopHandler}
 >
@@ -79,7 +100,9 @@
 
         {#each rolePermissions as permission, i}
             <tr>
-                <td class="font-semibold border-r-2 border-black">{permission.source}</td>
+                <td class="font-semibold border-r-2 border-black"
+                    >{permission.source}</td
+                >
                 <td class="border-r-2 border-black">
                     <button
                         type="button"

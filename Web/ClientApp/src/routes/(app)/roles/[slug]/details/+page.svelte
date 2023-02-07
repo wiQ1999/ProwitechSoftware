@@ -8,6 +8,7 @@
     let baseRole = {};
     let role = {};
     let isEditing = false;
+    let formName = "Szczegóły roli";
 
     onMount(async () => {
         baseRole = await getRoleById($page.params.slug);
@@ -29,14 +30,20 @@
         return !(role.id === baseRole.id && role.name === baseRole.name);
     }
 
+    function onEditingStartHandler() {
+        formName = "Edycja roli";
+    }
+
     function onEditingStopHandler() {
+        formName = "Szczegóły roli";
         role = { ...baseRole };
     }
 </script>
 
 <BaseEditableForm
     bind:isEditing
-    formName="Szczegóły roli"
+    bind:formName
+    {onEditingStartHandler}
     {onEditingStopHandler}
     {onSubmitHandler}
 >
