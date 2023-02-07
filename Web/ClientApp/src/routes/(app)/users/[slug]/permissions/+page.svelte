@@ -9,13 +9,16 @@
     } from "$lib/stores/Permissions";
     import BaseEditableForm from "$lib/components/base/BaseEditableForm.svelte";
 
+    let user = {};
     let rolePermissions = [];
     let baseUserPermissions = [];
     let userPermissions = [];
     let isEditing = false;
+    let formName;
 
     onMount(async () => {
-        const user = await getUserById($page.params.slug);
+        user = await getUserById($page.params.slug);
+        formName = "Szczegóły uprawnień użytkownika: " + user.login;
 
         if (user.role) {
             rolePermissions = await getForRole(user.role.id);
@@ -56,7 +59,12 @@
         return false;
     }
 
+    function onEditingStartHandler() {
+        formName = "Edycja uprawnień użytkownika: " + user.login;
+    }
+
     function onEditingStopHandler() {
+        formName = "Szczegóły uprawnień użytkownika: " + user.login;
         userPermissions = JSON.parse(JSON.stringify(baseUserPermissions));
     }
 
@@ -78,7 +86,8 @@
 
 <BaseEditableForm
     bind:isEditing
-    formName="Uprawnienia użytkownika"
+    bind:formName
+    {onEditingStartHandler}
     {onEditingStopHandler}
     {onSubmitHandler}
 >
@@ -93,14 +102,15 @@
 
         {#each userPermissions as userPerm, i}
             <tr>
-                <td class="font-semibold border-r-2 border-black">{userPerm.source}</td>
+                <td class="font-semibold border-r-2 border-black"
+                    >{userPerm.source}</td
+                >
 
                 <td class="border-r-2 border-black">
                     <button
                         type="button"
                         on:click={() => changePropertyValue(i, "create")}
                         disabled={!isEditing}
-                        
                     >
                         {#if userPerm.create === null}
                             <div class="text-gray-400">
