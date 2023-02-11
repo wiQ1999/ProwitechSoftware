@@ -20,20 +20,20 @@ public class DataSeeder
     {
         #region Roles
 
-        Role role_admin = CreateRole("Administrator");
-        Role role_boss = CreateRole("Szef");
-        Role role_worker = CreateRole("Pracownik");
+        var role_admin = CreateRole("Administrator");
+        var role_boss = CreateRole("Szef");
+        var role_worker = CreateRole("Pracownik");
         ModelBuilder.Entity<Role>().HasData(role_admin, role_boss, role_worker);
 
         #endregion
 
         #region Users
 
-        User user_admin = CreateUser("admin", "admin", "admin", null, null, role_admin);
-        User user_boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", role_boss);
-        User user_w1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", null, role_worker);
-        User user_w2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", role_worker);
-        User user_w3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", role_worker);
+        var user_admin = CreateUser("admin", "admin", "admin", null, null, role_admin);
+        var user_boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", role_boss);
+        var user_w1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", null, role_worker);
+        var user_w2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", role_worker);
+        var user_w3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", role_worker);
         ModelBuilder.Entity<User>().HasData(user_admin, user_boss, user_w1, user_w2, user_w3);
 
         #endregion
@@ -109,7 +109,76 @@ public class DataSeeder
 
         #endregion
 
+        #region BuildingAddresses
 
+        var buildingAddress_ba1 = CreateBuildingAddress("Poznań", "Polna", "20", 16.8960173, 52.4119704, "ROOFTOP", "61-001");
+        var buildingAddress_ba2 = CreateBuildingAddress("Poznań", "Szczepanowskiego", "15A", 16.8971863, 52.4172254, "ROOFTOP", "60-541");
+        var buildingAddress_ba3 = CreateBuildingAddress("Poznań", "Jana Batorego", "33", 16.9247511, 52.460836, "ROOFTOP", "61-001");
+        var buildingAddress_ba4 = CreateBuildingAddress("Poznań", "Polna", "20", null, null, null, "62");
+        var buildingAddress_ba5 = CreateBuildingAddress("Poznań", "Smerfowa", "56", 16.8960173, 52.4119704, "ROOFTOP", "61-001");
+        var buildingAddress_ba6 = CreateBuildingAddress("Poznań", "Szczepanowskiego", "15B", 16.897134, 52.4174434, "ROOFTOP", "60-541");
+        var buildingAddress_ba7 = CreateBuildingAddress("Poznań", "Szczepanowskiego", "4", 16.8975302, 52.4189875, "ROOFTOP", "60-541");
+        var buildingAddress_ba8 = CreateBuildingAddress("Poznań", "Jana Batorego", "33", 16.9247511, 52.460836, "ROOFTOP", "61-001");
+
+        ModelBuilder.Entity<BuildingAddress>().HasData(
+            buildingAddress_ba1,
+            buildingAddress_ba2,
+            buildingAddress_ba3,
+            buildingAddress_ba4,
+            buildingAddress_ba5,
+            buildingAddress_ba6,
+            buildingAddress_ba7,
+            buildingAddress_ba8
+        );
+
+        #endregion
+
+        #region PropertyManagers
+
+        var propertyAddress_pa1 = CreatePropertyAddress("4", "2");
+        var propertyAddress_pa2 = CreatePropertyAddress("12", null);
+
+        ModelBuilder.Entity<PropertyAddress>().HasData(propertyAddress_pa1, propertyAddress_pa2);
+
+        #endregion
+
+        #region FullAddresses
+
+        var fullAddress_fa1 = CreateFullAddress(buildingAddress_ba1, null);
+        var fullAddress_fa2 = CreateFullAddress(buildingAddress_ba2, propertyAddress_pa1);
+        var fullAddress_fa3 = CreateFullAddress(buildingAddress_ba3, propertyAddress_pa2);
+
+        ModelBuilder.Entity<FullAddress>().HasData(fullAddress_fa1, fullAddress_fa2, fullAddress_fa3);
+
+        #endregion
+
+        #region PropertyManagers
+
+        var propertyManager_pm1 = CreatePropertyManager("Robert Nowaczyk", "688233245", fullAddress_fa1);
+        var propertyManager_pm2 = CreatePropertyManager("Joanna Zabłąńska", "608884221", fullAddress_fa2);
+        var propertyManager_pm3 = CreatePropertyManager("Marek Wiosło", "722646194", fullAddress_fa3);
+
+        ModelBuilder.Entity<PropertyManager>().HasData(propertyManager_pm1, propertyManager_pm2, propertyManager_pm3);
+
+        #endregion
+
+        #region Buildings
+
+        var building_b1 = CreateBuilding(buildingAddress_ba4, "JEDNOLOKALOWY", propertyManager_pm1);
+        var building_b2 = CreateBuilding(buildingAddress_ba5, "JEDNOLOKALOWY", null);
+        var building_b3 = CreateBuilding(buildingAddress_ba6, "WIELOLOKALOWY", propertyManager_pm2);
+        var building_b4 = CreateBuilding(buildingAddress_ba7, "WIELOLOKALOWY", propertyManager_pm2);
+        var building_b5 = CreateBuilding(buildingAddress_ba8, "WIELOLOKALOWY", propertyManager_pm3);
+
+        ModelBuilder.Entity<Building>().HasData(
+            building_b1,
+            building_b2,
+            building_b3,
+            building_b4,
+            building_b5
+        );
+
+        #endregion
     }
 
     private static Role CreateRole(string name) 
@@ -152,5 +221,52 @@ public class DataSeeder
             Read = r,
             Update = u,
             Delete = d
+        };
+
+    private static PropertyManager CreatePropertyManager(string name, string pNumber, FullAddress? fullAddress)
+        => new()
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            PhoneNumber = pNumber,
+            FullAddressId = fullAddress?.Id
+        };
+
+    private static FullAddress CreateFullAddress(BuildingAddress bAddress, PropertyAddress? pAddress)
+        => new()
+        {
+            Id = Guid.NewGuid(),
+            BuildingAddressId = bAddress.Id,
+            PropertyAddressId = pAddress?.Id
+        };
+
+    private static BuildingAddress CreateBuildingAddress(string city, string street, string bNumer, double? longitude, double? latitude, string? cType, string? pCode)
+        => new()
+        {
+            Id = Guid.NewGuid(),
+            CityName = city,
+            StreetName = street,
+            BuildingNumber = bNumer,
+            Longitude = longitude,
+            Latitude = latitude,
+            CoordinateType = cType,
+            PostalCode = pCode
+        };
+
+    private static PropertyAddress CreatePropertyAddress(string? venue, string? staircase)
+        => new()
+        {
+            Id = Guid.NewGuid(),
+            VenueNumber = venue,
+            StaircaseNumber = staircase
+        };
+
+    private static Building CreateBuilding(BuildingAddress bAddress, string type, PropertyManager? pManager)
+        => new()
+        {
+            Id = Guid.NewGuid(),
+            BuildingAddressId = bAddress.Id,
+            Type = type,
+            PropertyManagerId = pManager?.Id
         };
 }
