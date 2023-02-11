@@ -20,21 +20,21 @@ public class DataSeeder
     {
         #region Roles
 
-        Role adminRole = CreateRole("Administrator");
-        Role bossRole = CreateRole("Szef");
-        Role workerRole = CreateRole("Pracownik");
-        ModelBuilder.Entity<Role>().HasData(adminRole, bossRole, workerRole);
+        Role role_admin = CreateRole("Administrator");
+        Role role_boss = CreateRole("Szef");
+        Role role_worker = CreateRole("Pracownik");
+        ModelBuilder.Entity<Role>().HasData(role_admin, role_boss, role_worker);
 
         #endregion
 
         #region Users
 
-        User admin = CreateUser("admin", "admin", string.Empty, string.Empty, string.Empty, adminRole);
-        User boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", bossRole);
-        User worker1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", "+48 321 654 987", workerRole);
-        User worker2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", workerRole);
-        User worker3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", workerRole);
-        ModelBuilder.Entity<User>().HasData(admin, boss, worker1, worker2, worker3);
+        User user_admin = CreateUser("admin", "admin", "admin", null, null, role_admin);
+        User user_boss = CreateUser("boss", "Krzysztof", "Tumiel", "k.tumiel@gmail.com", "123 456 789", role_boss);
+        User user_w1 = CreateUser("w1", "Jan", "Kowalski", "j.kowalski@gmail.com", null, role_worker);
+        User user_w2 = CreateUser("w2", "Zdzisław", "Piętka", "z.pietka@gmail.com", "987654321", role_worker);
+        User user_w3 = CreateUser("w3", "Marek", "Wiosło", "m.wioslo@gmail.com", "+48 312645978", role_worker);
+        ModelBuilder.Entity<User>().HasData(user_admin, user_boss, user_w1, user_w2, user_w3);
 
         #endregion
 
@@ -42,72 +42,74 @@ public class DataSeeder
 
         #region For roles
 
-        Permission adminRole_Roles = CreatePermissionForRole(adminRole, AppSource.Roles, true, true, true, true);
-        Permission adminRole_Users = CreatePermissionForRole(adminRole, AppSource.Users, true, true, true, true);
-        Permission adminRole_Permissions = CreatePermissionForRole(adminRole, AppSource.Permissions, true, true, true, true);
-        ModelBuilder.Entity<Permission>().HasData(adminRole_Roles, adminRole_Users, adminRole_Permissions);
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForRole(role_admin, AppSource.Roles,                    true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.Users,                    true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.Permissions,              true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.Buildings,                true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.BuildingAddresses,        true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.AllInspectionProtocols,   true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.PersonalProtocols,        true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.InspectionTasks,          true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.PropertyManagers,         true, true, true, true),
+            CreatePermissionForRole(role_admin, AppSource.RealProperties,           true, true, true, true)
+        );
 
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForRole(role_boss, AppSource.Roles,                     true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.Users,                     true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.Permissions,               true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.Buildings,                 true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.BuildingAddresses,         true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.AllInspectionProtocols,    true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.PersonalProtocols,         true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.InspectionTasks,           true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.PropertyManagers,          true, true, true, true),
+            CreatePermissionForRole(role_boss, AppSource.RealProperties,            true, true, true, true)
+        );
 
-        Permission bossRole_BuildingAddresses = CreatePermissionForRole(bossRole, AppSource.BuildingAddresses, true, true, true, true);
-        Permission bossRole_Buildings = CreatePermissionForRole(bossRole, AppSource.Buildings, true, true, true, true);
-        Permission bossRole_AllInspectionProtocols = CreatePermissionForRole(bossRole, AppSource.AllInspectionProtocols, true, true, true, true);
-        Permission bossRole_PersonalInspectionProtocols = CreatePermissionForRole(bossRole, AppSource.PersonalProtocols, true, true, true, true);
-        Permission bossRole_InspectionTasks = CreatePermissionForRole(bossRole, AppSource.InspectionTasks, true, true, true, true);
-        Permission bossRole_Permissions = CreatePermissionForRole(bossRole, AppSource.Permissions, true, true, true, true);
-        Permission bossRole_PropertyManagers = CreatePermissionForRole(bossRole, AppSource.PropertyManagers, true, true, true, true);
-        Permission bossRole_RealProperties = CreatePermissionForRole(bossRole, AppSource.RealProperties, true, true, true, true);
-        Permission bossRole_Roles = CreatePermissionForRole(bossRole, AppSource.Roles, true, true, true, true);
-        Permission bossRole_Users = CreatePermissionForRole(bossRole, AppSource.Users, true, true, true, true);
-       
-        ModelBuilder.Entity<Permission>().HasData
-            (bossRole_Roles, bossRole_Users, bossRole_Permissions, bossRole_Buildings, bossRole_RealProperties,
-            bossRole_BuildingAddresses, bossRole_PropertyManagers, bossRole_InspectionTasks, bossRole_AllInspectionProtocols, bossRole_PersonalInspectionProtocols);
-        
-        Permission workerRole_InspectionTasks = CreatePermissionForRole(workerRole, AppSource.InspectionTasks, false, true, true, false);
-        Permission workerRole_PersonalInspectionProtocols = CreatePermissionForRole(workerRole, AppSource.PersonalProtocols, true, true, true, true);
-
-
-        ModelBuilder.Entity<Permission>().HasData(workerRole_InspectionTasks, workerRole_PersonalInspectionProtocols);
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForRole(role_worker, AppSource.Roles,                   false, false, false, false),
+            CreatePermissionForRole(role_worker, AppSource.Users,                   false, false, false, false),
+            CreatePermissionForRole(role_worker, AppSource.Permissions,             false, false, false, false),
+            CreatePermissionForRole(role_worker, AppSource.Buildings,               false, true, false, false),
+            CreatePermissionForRole(role_worker, AppSource.BuildingAddresses,       false, true, false, false),
+            CreatePermissionForRole(role_worker, AppSource.AllInspectionProtocols,  false, false, false, false),
+            CreatePermissionForRole(role_worker, AppSource.PersonalProtocols,       true, true, true, false),
+            CreatePermissionForRole(role_worker, AppSource.InspectionTasks,         false, true, true, false),
+            CreatePermissionForRole(role_worker, AppSource.PropertyManagers,        false, true, false, false),
+            CreatePermissionForRole(role_worker, AppSource.RealProperties,          false, true, false, false)
+        );
 
         #endregion
 
         #region For users
 
-        Permission worker1_BuildingAddresses = CreatePermissionForUser(worker1, AppSource.BuildingAddresses, false, true, false, false);
-        Permission worker1_Buildings = CreatePermissionForUser(worker1, AppSource.Buildings, false, true, false, false);
-        Permission worker1_PersonalProtocols = CreatePermissionForUser(worker1, AppSource.PersonalProtocols, true, true, true, true);
-        Permission worker1_InspectionTasks = CreatePermissionForUser(worker1, AppSource.InspectionTasks, false, true, true, false);
-        Permission worker1_PropertyManagers = CreatePermissionForUser(worker1, AppSource.PropertyManagers, false, true, false, false);
-        Permission worker1_RealProperties = CreatePermissionForUser(worker1, AppSource.RealProperties, false, true, false, false);
-        Permission worker1_Users = CreatePermissionForUser(worker1, AppSource.Users, false, true, false, false);
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForUser(user_w1, AppSource.Users,                       null, true, null, null),
+            CreatePermissionForUser(user_w1, AppSource.PersonalProtocols,           null, null, null, true)
+        );
 
-        Permission worker2_BuildingAddresses = CreatePermissionForUser(worker2, AppSource.BuildingAddresses, false, true, false, false);
-        Permission worker2_Buildings = CreatePermissionForUser(worker2, AppSource.Buildings, false, true, false, false);
-        Permission worker2_PersonalProtocols = CreatePermissionForUser(worker2, AppSource.PersonalProtocols, true,true,true,true);
-        Permission worker2_InspectionTasks = CreatePermissionForUser(worker2, AppSource.InspectionTasks, false,true,true,false);
-        Permission worker2_PropertyManagers = CreatePermissionForUser(worker2, AppSource.PropertyManagers, false,true,false,false);
-        Permission worker2_RealProperties = CreatePermissionForUser(worker2, AppSource.RealProperties, false,true,false,false);
-        Permission worker2_Users = CreatePermissionForUser(worker2, AppSource.Users, false,true,false,false);
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForUser(user_w2, AppSource.Users,                       null, true, null, null)
+        );
 
-        Permission worker3_BuildingAddresses = CreatePermissionForUser(worker3, AppSource.BuildingAddresses, false, true, false, false);
-        Permission worker3_Buildings = CreatePermissionForUser(worker3, AppSource.Buildings, false, true, false, false);
-        Permission worker3_PersonalProtocols = CreatePermissionForUser(worker3, AppSource.PersonalProtocols, true, true, true, true);
-        Permission worker3_InspectionTasks = CreatePermissionForUser(worker3, AppSource.InspectionTasks, false, true, true, false);
-        Permission worker3_PropertyManagers = CreatePermissionForUser(worker3, AppSource.PropertyManagers, false, true, false, false);
-        Permission worker3_RealProperties = CreatePermissionForUser(worker3, AppSource.RealProperties, false, true, false, false);
-        Permission worker3_Users = CreatePermissionForUser(worker3, AppSource.Users, false, true, false, false);
-
-        ModelBuilder.Entity<Permission>().HasData
-            (worker1_BuildingAddresses, worker1_Buildings, worker1_PersonalProtocols, worker1_InspectionTasks, worker1_PropertyManagers, worker1_RealProperties, worker1_Users,
-            worker2_BuildingAddresses, worker2_Buildings, worker2_PersonalProtocols, worker2_InspectionTasks, worker2_PropertyManagers, worker2_RealProperties, worker2_Users,
-            worker3_BuildingAddresses, worker3_Buildings, worker3_PersonalProtocols, worker3_InspectionTasks, worker3_PropertyManagers, worker3_RealProperties, worker3_Users);
-
-
-
+        ModelBuilder.Entity<Permission>().HasData(
+            CreatePermissionForUser(user_w3, AppSource.Roles,                       null, true, null, null),
+            CreatePermissionForUser(user_w3, AppSource.Users,                       null, true, null, null),
+            CreatePermissionForUser(user_w3, AppSource.Buildings,                   null, null, true, null),
+            CreatePermissionForUser(user_w3, AppSource.BuildingAddresses,           null, null, true, null),
+            CreatePermissionForUser(user_w3, AppSource.PersonalProtocols,           null, null, null, true),
+            CreatePermissionForUser(user_w3, AppSource.InspectionTasks,             true, null, null, null),
+            CreatePermissionForUser(user_w3, AppSource.PropertyManagers,            null, null, true, null),
+            CreatePermissionForUser(user_w3, AppSource.RealProperties,              null, null, true, null)
+        );
 
         #endregion
 
         #endregion
+
+
     }
 
     private static Role CreateRole(string name) 
@@ -116,7 +118,7 @@ public class DataSeeder
             Name = name 
         };
 
-    private User CreateUser(string login, string fName, string lName, string email, string pNumber, Role role)
+    private User CreateUser(string login, string? fName, string? lName, string? email, string? pNumber, Role role)
     {
         var user = new User()
         {
@@ -134,10 +136,10 @@ public class DataSeeder
         return user;
     }
 
-    private static Permission CreatePermissionForRole(Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
+    private static Permission CreatePermissionForRole(Role role, AppSource source, bool c, bool r, bool u, bool d) 
         => CreatePermission(null, role, source, c, r, u, d);
 
-    private static Permission CreatePermissionForUser(User? user, AppSource source, bool? c, bool? r, bool? u, bool? d)
+    private static Permission CreatePermissionForUser(User user, AppSource source, bool? c, bool? r, bool? u, bool? d)
         => CreatePermission(user, null, source, c, r, u, d);
 
     private static Permission CreatePermission(User? user, Role? role, AppSource source, bool? c, bool? r, bool? u, bool? d) 
