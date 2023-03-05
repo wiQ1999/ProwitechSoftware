@@ -6,5 +6,4 @@ public interface IGenericRepository<TEntity>  :
     IGenericCreate<TEntity>, 
     IGenericUpdate<TEntity>,
     IGenericDelete
-    where TEntity : class
-{ }
+    where TEntity : class { }
