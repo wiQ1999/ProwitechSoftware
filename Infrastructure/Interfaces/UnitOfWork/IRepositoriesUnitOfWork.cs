@@ -9,9 +9,7 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IGenericRepository<Role> RolesRepository { get; }
     IUsersRepository UsersRepository { get; }
     IPermissionsRepository PermissionsRepository { get; }
-
     IBuildingAddressRepository BuildingAddressRepository { get; }
-    
     IBuildingRepository BuildingRepository { get; }
     IFullAddressRepository FullAddressRepository { get; }
     IInspectionTaskRepository InspectionTaskRepository { get; }
@@ -19,7 +17,6 @@ public interface IRepositoriesUnitOfWork : IDisposable
     IPropertyManagerRepository PropertyManagerRepository { get; }
     IRealPropertyRepository RealPropertyRepository { get; }
     IInspectionProtocolsRepository InspectionProtocolsRepository { get; }
-
     IResidentsRepository ResidentsRepository { get; }
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
